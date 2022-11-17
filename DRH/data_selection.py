@@ -5,7 +5,7 @@ import numpy as np
 from helper_functions import *
 
 # read data
-df = pd.read_csv("data/df_raw.csv")
+df = pd.read_csv("data/raw/df_raw.csv")
 
 ##### BASIC PREPROCESSING #####
 ## subset relevant columns
@@ -117,7 +117,11 @@ class civs:
         # need somehow to test whether this already happened
         # i.e. can we check whether it exists?
         self.create_mat(tol, nq)
+        
+        #x = self.d.merge(self.d_n_t, on = "related_q_id", how = "inner")
+        #x = x[["related_q_id", "related_q"]].drop_duplicates()
         # save stuff
+        x.to_csv(f"{path}n_20_tol_0_q.csv", index = False)
         np.savetxt(f"{path}n_20_tol_0.txt", self.A.astype(int), fmt="%i")
         self.d_n_t.to_csv(f"{path}n_20_tol_0.csv", index = False)
 
@@ -127,3 +131,9 @@ civdat.save_dat("data/clean/", 0, 20)
 # load it (looks good)
 d = pd.read_csv("data/clean/n_20_tol_0.csv")
 A = np.loadtxt("data/clean/n_20_tol_0.txt", dtype = "int")
+x = d.merge(df, on = "related_q_id", how = "inner")[["related_q_id", "related_q"]].drop_duplicates()
+x.to_csv("data/clean/n_20_tol_0_q.csv", index = False)
+
+# clean this more and make the class better
+# test everything a lot ...
+# make sure that Simon has the right stuff
