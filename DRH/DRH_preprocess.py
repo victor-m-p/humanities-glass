@@ -68,3 +68,6 @@ df_raw = pd.DataFrame(dct_raw)
 
 # write this 
 df_raw.to_csv("../data/df_raw.csv", index = False)
+
+# if name ...
+# nrow_()_ncol_()_n_()_s_()_tol_()

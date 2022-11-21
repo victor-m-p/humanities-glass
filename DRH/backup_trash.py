@@ -218,3 +218,72 @@ dntx = x.d_n_t
 # why are they not the same?
 # now they ARE the same 
 pd.concat([ydnt, dntx]).drop_duplicates(keep=False)
+
+
+
+
+###### main problem ########
+## what we have ##
+d1 = pd.DataFrame({
+    'entry_id': [174, 174, 174, 174, 174, 174, 175, 175, 175, 175],
+    'related_q_id': [400, 500, 600, 600, 500, 700, 400, 500, 600, 700],
+    'answers': [1, 1, 1, -1, -1, 1, 1, -1, 1, 1],
+    'weight': [1, 0.7, 0.5, 0.5, 0.3, 1, 1, 1, 1, 1]
+})
+
+def s_n_comb(d, N): 
+    d['id'] = d.set_index(['entry_id','related_q_id']).index.factorize()[0]
+    dct = {}
+    for index, row in d.iterrows():
+        id, s, n, a, w = int(row['id']), int(row['entry_id']), int(row['related_q_id']), int(row['answers']), row['weight']
+        dct.setdefault(id, []).append((s, n, a, w))
+    l = list(dct.values())
+    return [p for c in combinations(l, N) for p in product(*c)]
+
+def comb_to_df(comb):
+    ## prepare dataframe
+    vals = []
+    cols = []
+    for x in comb: 
+        subcols = []
+        subvals = []
+        w_ = 1
+        for y in x: 
+            s, n, a, w = y 
+            w_ *= w 
+            # values 
+            subvals.append(a)
+            # columns
+            subcols.append(n)
+        # values
+        subvals.insert(0, s)
+        subvals.append(w_)
+        vals.append(subvals)
+        # columns 
+        subcols.insert(0, 's')
+        subcols.append('w')
+        cols.append(subcols)
+    ### make sure that format is correct
+    if all((cols[i] == cols[i+1]) for i in range(len(cols)-1)):
+        cols = cols[0]
+    else: 
+        print('inconsistent column ordering')
+    dx = pd.DataFrame(vals, columns = cols)
+    dxx = dx.drop(columns = 's')
+    return dx, dxx
+
+def weight_format(d1): 
+    
+    df_lst = []
+    for s in d1['entry_id'].unique():
+        dsub = d1[d1['entry_id'] == s]
+        df_lst.append(dsub) 
+
+    N = len(d1['related_q_id'].unique())
+    comb_lst = []
+    for d in df_lst: 
+        comb_lst.extend(s_n_comb(d, N))
+    comb_lst
+
+    dx, dxx = comb_to_df(comb_lst)
+    return dx, dxx
