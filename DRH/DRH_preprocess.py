@@ -6,22 +6,14 @@ up using only that.
 '''
 
 import pandas as pd 
-from tqdm import tqdm
-import os
 import argparse 
 import json
-from pathlib import Path
 import re
-import pickle
 
 def load_file(infile):
-
     with open(infile, "r") as f: 
         data = json.load(f)
-
     return data
-
-json_raw = load_file("../data/drh_20221019.json")
 
 def json_to_dct(data):
     dct = {
@@ -57,17 +49,23 @@ def json_to_dct(data):
 def has_att(row, att): 
     has_attribute = True
     try: 
-        mentions_entity = row[att]
+        row[att]
     except KeyError: 
         has_attribute = False 
     return has_attribute
 
-# extract the data 
-dct_raw = json_to_dct(json_raw)
-df_raw = pd.DataFrame(dct_raw)
+def main(inpath):
+    # read file
+    json_raw = load_file(inpath) # data/x/drh_xxx.json
+    outpath = re.sub('.json', '.csv', inpath)
+    # extract the data 
+    dct_raw = json_to_dct(json_raw)
+    df_raw = pd.DataFrame(dct_raw)
+    # write file 
+    df_raw.to_csv(outpath, index = False) # data/y/DRH_raw.csv
 
-# write this 
-df_raw.to_csv("../data/df_raw.csv", index = False)
-
-# if name ...
-# nrow_()_ncol_()_n_()_s_()_tol_()
+if __name__ == '__main__':
+    ap = argparse.ArgumentParser()
+    ap.add_argument("-i", "--inpath", required=True, type=str, help="path to input file (pickle)")
+    args = vars(ap.parse_args())
+    main(inpath = args['inpath'])
