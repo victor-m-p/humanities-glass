@@ -25,7 +25,6 @@ def main(infile, outpath, n_questions, n_nan):
     civ.max_tolerance()
     civ.weight_format()
     civ.write_data(outpath) 
-    
  
 if __name__ == '__main__':
     ap = argparse.ArgumentParser()
