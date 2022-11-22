@@ -4,3 +4,5 @@ src/data/sim/samp*
 src/data/DRH/raw
 glassenv
 coniiis
+*DS_Store
+*/*DS_Store
