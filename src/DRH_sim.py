@@ -35,11 +35,12 @@ def corr_mean(sample):
     return corr, means 
 
 def main(n_nodes, n_samples, scale_h, scale_J, outpath): 
-    np.random.seed(124)
+    seed = 124
+    np.random.seed(seed)
     h, J = hJ(n_nodes, scale_h, scale_J)
     sample = sample_data(n_nodes, h, J, n_samples)
     corr, means = corr_mean(sample)
-    outstring = f'nnodes_{n_nodes}_hscale_{scale_h}_Jscale_{scale_J}_nsamp_{n_samples}.txt'
+    outstring = f'nnodes_{n_nodes}_hscale_{scale_h}_Jscale_{scale_J}_nsamp_{n_samples}_seed_{seed}.txt'
     outnames = ['h', 'J', 'corr', 'means', 'samp']
     outvars = [h, J, corr, means, sample]
     for outname, outvar in zip(outnames, outvars): 
