@@ -1,44 +1,8 @@
-import pandas as pd 
-import numpy as np 
-from sim_fun import p_dist, bin_states
 import itertools 
-import matplotlib.pyplot as plt
-import os
-import networkx as nx 
+import pandas as pd 
+import matplotlib.pyplot as plt 
 
-# setup
-s = 10000 # can we do exact instead of sample based for corr and means?
-n = 5
-scale = 1.0
-outpath = 'figs'
-
-# data generation
-np.random.seed(124)
-h = np.random.normal(scale=scale, size=n)
-J = np.random.normal(scale=scale, size=n*(n-1)//2)
-hJ = np.concatenate((h, J))
-
-# sample based on J, h
-p = p_dist(h, J) # probability of all states
-allstates = bin_states(n)
-sample = allstates[np.random.choice(range(2**n), # doesn't have to be a range
-                                    size=s, # how many samples
-                                    replace=True, # a value can be selected multiple times
-                                    p=p)] 
-
-# get raw correlations and raw mean 
-## does not make a difference for corr whether
-## it is coded as -1 or 0 I think. 
-corr = np.corrcoef(sample.T)
-m = corr.shape[0]
-corr = corr[np.triu_indices(m, 1)]
-means = np.mean(sample, axis = 0)
-
-## how do we generate data based on this?
-## i.e. can we show that we cannot reproduce
-## reasonable data from this?
-corr
-means
+# load data
 
 ## try for correlation data
 def node_edge_lst(n, corr_J, means_h): 
@@ -128,6 +92,9 @@ def plot_corr(G, labeldict, type, n, scale, outpath):
     plt.suptitle(f'{type}', fontsize = 20) # should be in the middle
     out = os.path.join(outpath, f'type_{type}_n_{n}_scale_{scale}.jpeg')
     plt.savefig(f'{out}')
+
+def main(): 
+    
 
 plot_corr(
     G = corr_G, 
