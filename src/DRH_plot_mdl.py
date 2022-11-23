@@ -10,18 +10,17 @@ import numpy as np
 import argparse 
 import io 
 
-inpath = 'data/DRH/mdl'
-filetype = '*.txt'
-globpath = os.path.join(inpath, filetype)
-filelst = glob.glob(globpath)
-x = filelst[0]
-regex_pattern = 'n_(\d+)_tol_(\d.\d+)'
-nh = int(re.search(regex_pattern, x)[1])
-nJ = int(nh*(nh-1)/2)
-A = np.loadtxt(x, delimiter = ',')
-J = A[:nJ] 
-h = A[nJ:]
-
+#inpath = 'data/DRH/mdl'
+#filetype = '*.txt'
+#globpath = os.path.join(inpath, filetype)
+#filelst = glob.glob(globpath)
+#x = filelst[0]
+#regex_pattern = 'n_(\d+)_tol_(\d.\d+)'
+#nh = int(re.search(regex_pattern, x)[1])
+#nJ = int(nh*(nh-1)/2)
+#A = np.loadtxt(x, delimiter = ',')
+#J = A[:nJ] 
+#h = A[nJ:]
 
 ## try for correlation data
 def node_edge_lst(n, corr_J, means_h): 
