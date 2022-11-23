@@ -3,6 +3,7 @@ import numpy as np
 import itertools
 from itertools import combinations, product
 import os 
+pd.options.mode.chained_assignment = None
 
 # for now outside the function
 def fill_grid(df, c1, c2, fill):
@@ -45,30 +46,13 @@ class Civilizations:
     # create variables based on column order
     def initialize(self):
         self.sc, self.sc_, self.nc, self.nc_, self.pc, self.ac = self.d.columns
-        self.check_cols()
         self.s_ref = self.d[[self.sc, self.sc_]].drop_duplicates()
         self.n_ref = self.d[[self.nc, self.nc_]].drop_duplicates()
-        self.status()
-         
-    def check_cols(self):
-        print(f"-COLUMNS-")
-        print(f"samples id: {self.sc}")
-        print(f"samples name: {self.sc_}")
-        print(f"nodes id: {self.nc}")
-        print(f"nodes name: {self.nc_}")
-        print(f"parent: {self.pc}")
-        print(f"answers: {self.ac}")
     
     # check status of the pipeline 
     def status(self):
-        print(f'-STATUS-')
-        print(f'd original (nodes, samples): ({len(self.d[self.nc].unique())}, {len(self.d[self.sc].unique())})')
-        if self.clean: 
-            print(f'd preprocessed (nodes, samples): ({len(self.dmain[self.nc].unique())}, {len(self.dmain[self.sc].unique())})')
-        else: 
-            print(f'd preprocessed: {self.clean}')
         print(f'tolerance: {self.tol}')
-        print(f'total: {self.ntot}')
+        print(f'number nodes: {self.ntot}')
         print(f'sorting column: {self.sortc}')    
         print(f'optimize column: {self.optimc}')
         
@@ -100,9 +84,7 @@ class Civilizations:
         d_yn_frac = d_yngv.merge(d_yngd, on = [self.nc, self.sc], how = 'inner')
         d_yn_frac[self.w] = d_yn_frac['count']/d_yn_frac['count_total']
         d_yn_frac = d_yn_frac[[self.nc, self.sc, self.ac, self.w]]
-        ############ TMP!!
-        self.d_yn_frac = d_yn_frac 
-        ############ TMP!!
+        
         ### then deal with nan ###
         d_yn_uniq = d_yn[[self.nc, self.sc]].drop_duplicates()
         n_s_grid = create_grid(d_yn_uniq, self.nc, self.sc)
@@ -117,21 +99,15 @@ class Civilizations:
         ### second case 
         d_na_frac = d_na_uniq
         d_na_frac[self.w] = 1.0
-        ############# TMP!!
         d_na_frac = d_na_frac.rename(columns = {self.ha: self.ac})
-        self.d_na_frac = d_na_frac
-        ############# TMP!!
         self.dfrac = pd.concat([d_yn_frac, d_na_frac]) 
-        
         
     # preprocess function
     def preprocess(self): 
         if not self.clean:
             self.dmain = self.d[self.d[self.pc].isna()] # only top-lvl (still fine)
             self.binary()
-            #self.dmain = self.dmain[[self.nc, self.sc, self.ac]]
             self.clean = True    
-        self.status()
 
     # right now sorts based on number of 
     def sort_vals(self): # c = specifying whether it is n (questions) or s (samples) 
@@ -149,9 +125,7 @@ class Civilizations:
             self.optimc = self.sc
         else: 
             "Something went wrong here..."
-        self.status() # but probably do not want the other info here...
     
-    # this should probably just run sort_vals as well...
     def n_best(self): # c = self.nc
         self.sort_vals()
         self.dbest = self.dsort[[self.sortc]].head(self.ntot)
@@ -165,14 +139,11 @@ class Civilizations:
         self.dgroup['frac'] = self.dgroup['count']/self.ntot 
         
     def max_tolerance(self):
-        #print(f"tolerance: {self.tol}")
         self.dtol = self.dgroup[self.dgroup['frac'] <= self.tol] # here?
         self.dmax = self.dbest.merge(self.dtol[[self.optimc]].drop_duplicates(), on = self.optimc, how = 'inner')
-        
-        ## testing 
         self.dmax = self.dmax.merge(self.dfrac, on = [self.sc, self.nc], how = 'inner')
         self.dmax = self.dmax[[self.sc, self.nc, self.ac, self.w]].drop_duplicates()
-        #self.dmax.sort_values([self.sc, self.nc], ascending = [True, True], inplace = True)
+        self.dmax.sort_values([self.sc, self.nc], ascending = [True, True], inplace = True) # maybe not needed
 
     def s_n_comb(self, d, N): 
         d['id'] = d.set_index([self.sc, self.nc]).index.factorize()[0]
@@ -191,7 +162,7 @@ class Civilizations:
             subcols = []
             subvals = []
             w_ = 1
-            for y in x: 
+            for y in sorted(x): 
                 s, n, a, w = y 
                 w_ *= w 
                 # values 
@@ -212,6 +183,7 @@ class Civilizations:
         else: 
             print('inconsistent column ordering')
         self.dcsv = pd.DataFrame(vals, columns = cols)
+        self.dcsv = self.dcsv.sort_values('s').reset_index(drop=True)
         self.dtxt = self.dcsv.drop(columns = 's')
 
     def weight_format(self): 
@@ -225,11 +197,11 @@ class Civilizations:
         comb_lst = []
         for d in df_lst: 
             comb_lst.extend(self.s_n_comb(d, N))
-        comb_lst
+        self.temp = comb_lst
 
         self.comb_to_df(comb_lst)
     
-    def write_data(self, path):
+    def write_data(self, mainpath, refpath):
         # extract unique s and n 
         s_uniq = self.dmax[[self.sc]].drop_duplicates()
         n_uniq = self.dmax[[self.nc]].drop_duplicates()
@@ -238,13 +210,15 @@ class Civilizations:
         # get information for writing 
         nrow, ncol = self.dtxt.shape
         stot = len(s_uniq)
+        tol = int(self.tol * self.ntot)
         # write files 
-        identifier = f"nrow_{nrow}_ncol_{ncol}_nuniq_{self.ntot}_suniq_{stot}_tol_{self.tol}"
-        csv_outname = os.path.join(path, f'pandas_{identifier}.csv')
-        txt_outname = os.path.join(path, f'matrix_{identifier}.txt')
-        s_outname = os.path.join(path, f'sref_{identifier}.csv')
-        n_outname = os.path.join(path, f'nref_{identifier}.csv')
-        print(f'writing files to folder {path} with name {identifier}')
+        identifier = f"nrow_{nrow}_ncol_{ncol}_nuniq_{self.ntot}_suniq_{stot}_maxna_{tol}"
+        csv_outname = os.path.join(refpath, f'main_{identifier}.csv')
+        txt_outname = os.path.join(mainpath, f'matrix_{identifier}.txt')
+        s_outname = os.path.join(refpath, f'sref_{identifier}.csv')
+        n_outname = os.path.join(refpath, f'nref_{identifier}.csv')
+        #print(f'writing main to folder {mainpath} with name {identifier}')
+        #print(f'writing references to folder {refpath} with name {identifier}')
         self.dcsv.to_csv(csv_outname, index = False)
         self.dtxt.to_csv(txt_outname, sep = ' ', header = False, index = False)
         s_out.to_csv(s_outname, index = False) 

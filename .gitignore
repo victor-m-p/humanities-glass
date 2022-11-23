@@ -1,7 +1,6 @@
 cantometrics
 torchx
-src/data/sim/samp*
-src/data/DRH/raw
+data/raw
 glassenv
 coniiis
 *DS_Store
