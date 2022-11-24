@@ -117,10 +117,10 @@ def main(threshold, inpath, outpath):
     filetype = '*.txt'
     globpath = os.path.join(inpath, filetype)
     filelst = glob.glob(globpath)
-    regex_pattern = 'n_(\d+)_tol_(\d.\d+)'
+    regex_pattern = 'nodes_(\d+)_maxna_(\d+)'
     for file in filelst: 
         p = re.search(regex_pattern, file)
-        nh, tol = int(p[1]), float(p[2])
+        nh, tol = int(p[1]), int(p[2])
         nJ = int(nh*(nh-1)/2)
         A = np.loadtxt(file, delimiter = ',')
         J_ = A[:nJ]

@@ -1,26 +1,8 @@
 import numpy as np
 import itertools 
 
-# taken from enumerate
+# taken from coniii enumerate
 def fast_logsumexp(X, coeffs=None):
-    """Simplified version of logsumexp to do correlation calculation in Ising equation
-    files. Scipy's logsumexp can be around 10x slower in comparison.
-    
-    Parameters
-    ----------
-    X : ndarray
-        Terms inside logs.
-    coeffs : ndarray
-        Factors in front of exponentials. 
-
-    Returns
-    -------
-    float
-        Value of magnitude of quantity inside log (the sum of exponentials).
-    float
-        Sign.
-    """
-
     Xmx = max(X)
     if coeffs is None:
         y = np.exp(X-Xmx).sum()
@@ -31,16 +13,7 @@ def fast_logsumexp(X, coeffs=None):
         return np.log(np.abs(y))+Xmx, -1.
     return np.log(y)+Xmx, 1.
 
-# could probably be made much quicker
-def keep_sign(x, condition):
-        if condition == True: 
-                return x
-        elif condition == False: 
-                return -x
-        else: 
-                return("Invalid argument")
-
-# the main function
+# still create J_combinations is slow for large number of nodes
 def p_dist(h, J):
     # setup 
     n_nodes = len(h)
@@ -54,44 +27,43 @@ def p_dist(h, J):
     parameter_arr = np.repeat(hJ[np.newaxis, :], n_rows, axis=0)
 
     ## True/False for h
-    h_combinations = list(itertools.product([True, False], repeat = n_nodes))
+    print('start h comb')
+    h_combinations = np.array(list(itertools.product([1, -1], repeat = n_nodes)))
+    
+    print('start J comb') 
+    ## True/False for J (most costly part is the line below)
+    J_combinations = np.array([list(itertools.combinations(i, 2)) for i in h_combinations])
+    J_combinations = np.add.reduce(J_combinations, 2) # if not == 0 then x == y
+    J_combinations[J_combinations != 0] = 1
+    J_combinations[J_combinations == 0] = -1
+    
+    # concatenate h, J
+    condition_arr = np.concatenate((h_combinations, J_combinations), axis = 1) # what if this was just +1 and -1
 
-    ## True/False for J 
-    J_list = []
-    for i in h_combinations: 
-        J_line = list(itertools.combinations(i, 2))
-        J_list.append(J_line)
-        
-    J_combinations = []
-    for i in J_list: 
-        J_line = [True if x == y else False for x, y in i]
-        J_combinations.append(J_line)
-
-    # combine these two things
-    J_array = np.array(J_combinations)
-    h_array = np.array(h_combinations)
-    condition_arr = np.concatenate((h_array, J_array), axis = 1) # what if this was just +1 and -1
-
-    lst_rows = []
-    for row_param, row_condition in zip(parameter_arr, condition_arr): 
-        flipped_row = [keep_sign(x, y) for x, y in zip(row_param, row_condition)]
-        lst_rows.append(flipped_row)
-
-    flipped_arr = np.array(lst_rows)
+    # multiply parameters with flips 
+    flipped_arr = parameter_arr * condition_arr 
+    
+    # sum along axis 1
     summed_arr = np.sum(flipped_arr, axis = 1) 
     
     ## logsumexp
+    print('start logsum')
     logsumexp_arr = fast_logsumexp(summed_arr)[0] # where is this function
-
+    
     ## last step
     for num, ele in enumerate(list(summed_arr)):
         Pout[num] = np.exp(ele - logsumexp_arr)
-
+    
     ## return stuff
     return Pout[::-1]
 
-def bin_states(n, sym=True):# taken from coniii
+# taken from conii 
+def bin_states(n, sym=True):
     v = np.array([list(np.binary_repr(i,width=n)) for i in range(2**n)]).astype(int)
     if sym is False:
         return v
     return v*2-1
+
+# stackoverflow
+def compute_HammingDistance(X):
+    return (X[:, None, :] != X).sum(2)
