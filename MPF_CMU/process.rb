@@ -29,7 +29,7 @@ set=`ls -alh /Users/simon/Desktop/humanities-glass/data/clean`.split("\n").colle
       ans.split("\n").select { |i| i.include?("params") }
 
       file_out=File.new(preface_new+trial[-1]+".mpf_params_NN#{nn}", 'w')
-      file_out.write(ans.split("\n").select { |i| i.include?("params") })
+      file_out.write(ans.split("\n").select { |i| i.include?("params") }[0])
       file_out.close
   
       print "n=#{trial[0]}; maxNA=#{trial[1]}; NN=#{nn}: #{ans.split("\n").select { |i| i.include?("Clock") }[0]}\n"    
