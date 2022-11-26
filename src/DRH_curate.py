@@ -17,10 +17,17 @@ def main(infile, outpath_main, outpath_ref, n_questions, n_nan):
     print(f'running N = {n_questions}, NAN tolerance = {n_nan}')
     # read data
     df = pd.read_csv(infile, low_memory=False) 
-    df = df[["entry_id", "entry_name", "related_q_id", "related_q", "related_parent_q", "answers"]] 
+    # prep
+    df = df[df['related_parent_q'].isna()] 
+    df = df[["entry_id", "entry_name", "related_q_id", "related_q", "answers"]] 
+    df.replace(
+        {'answers': 
+            {"Field doesn't know": 'Unknown', 
+            "I don't know": 'Unknown'}},
+        inplace = True)
     # run the pipeline 
     civ = Civilizations(df)
-    civ.preprocess()
+    civ.preprocess() # 
     civ.set_constraints(n_questions, n_nan/n_questions, "related_q_id")
     civ.n_best()
     civ.max_constraints()

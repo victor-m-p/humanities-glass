@@ -27,25 +27,29 @@ def create_grid(df, c1, c2):
 
     return d_comb
 
-## todo: only questions that are not 100% one thing
+## assumes: 
+### 1 = yes, -1 = no, 0 = nan
+### currently only tested with specifying the number of nodes - not samples
+### 
 class Civilizations:
     
     ha = 'has_answer'
     w = 'weight'
     
-    def __init__(self, d, minv=0, tol=0, ntot=0):
-        self.d = d
+    def __init__(self, df, minv=0, tol=0, ntot=0):
+        self.d = df.copy()
         self.minv = minv # value to minimize (unknown, nan) - 0 (should change...)
         self.tol = tol
         self.ntot = ntot 
         self.clean = False 
         self.sortc = False 
         self.optimc = False
+        self.solution = False
         self.initialize()
     
     # create variables based on column order
     def initialize(self):
-        self.sc, self.sc_, self.nc, self.nc_, self.pc, self.ac = self.d.columns
+        self.sc, self.sc_, self.nc, self.nc_, self.ac = self.d.columns
         self.s_ref = self.d[[self.sc, self.sc_]].drop_duplicates()
         self.n_ref = self.d[[self.nc, self.nc_]].drop_duplicates()
     
@@ -59,15 +63,13 @@ class Civilizations:
     # only binary questions (used in 'preprocess' function)
     def binary(self):
         # save typing 
-        d = self.dmain
+        d = self.d # hmm
          
         ## first only binary answers 
         conditions = [
-            (d[self.ac] == "Yes"),
+            (d[self.ac] == "Yes"), 
             (d[self.ac] == "No"),
-            (d[self.ac] == "Field doesn't know") 
-            | (d[self.ac] == "I don't know") 
-            | (d[self.ac] == "NaN")
+            (d[self.ac] == "Unknown") 
         ]
         choices = [1, -1, 0]
         d[self.ac] = np.select(conditions, choices, default=100)
@@ -105,7 +107,6 @@ class Civilizations:
     # preprocess function
     def preprocess(self): 
         if not self.clean:
-            self.dmain = self.d[self.d[self.pc].isna()] # only top-lvl (still fine)
             self.binary()
             self.clean = True    
 
@@ -185,6 +186,7 @@ class Civilizations:
         self.dcsv = pd.DataFrame(vals, columns = cols)
         self.dcsv = self.dcsv.sort_values('s').reset_index(drop=True)
         self.dtxt = self.dcsv.drop(columns = 's')
+        self.solution = True
 
     def weight_format(self): 
         
@@ -197,29 +199,32 @@ class Civilizations:
         comb_lst = []
         for d in df_lst: 
             comb_lst.extend(self.s_n_comb(d, N))
-        self.temp = comb_lst
+
+        if not comb_lst: 
+            print('No solution exists for specified constraints')
+            return 
 
         self.comb_to_df(comb_lst)
     
     def write_data(self, mainpath, refpath):
-        # extract unique s and n 
-        s_uniq = self.dmax[[self.sc]].drop_duplicates()
-        n_uniq = self.dmax[[self.nc]].drop_duplicates()
-        s_out = self.s_ref.merge(s_uniq, on = self.sc, how = 'inner').sort_values(self.sc)
-        n_out = self.n_ref.merge(n_uniq, on = self.nc, how = 'inner').sort_values(self.nc)
-        # get information for writing 
-        nrow, ncol = self.dtxt.shape
-        stot = len(s_uniq)
-        tol = int(self.tol * self.ntot)
-        # write files 
-        identifier = f"nrow_{nrow}_ncol_{ncol}_nuniq_{self.ntot}_suniq_{stot}_maxna_{tol}"
-        csv_outname = os.path.join(refpath, f'main_{identifier}.csv')
-        txt_outname = os.path.join(mainpath, f'matrix_{identifier}.txt')
-        s_outname = os.path.join(refpath, f'sref_{identifier}.csv')
-        n_outname = os.path.join(refpath, f'nref_{identifier}.csv')
-        #print(f'writing main to folder {mainpath} with name {identifier}')
-        #print(f'writing references to folder {refpath} with name {identifier}')
-        self.dcsv.to_csv(csv_outname, index = False)
-        self.dtxt.to_csv(txt_outname, sep = ' ', header = False, index = False)
-        s_out.to_csv(s_outname, index = False) 
-        n_out.to_csv(n_outname, index = False)
+        if self.solution: 
+            # extract unique s and n 
+            s_uniq = self.dmax[[self.sc]].drop_duplicates()
+            n_uniq = self.dmax[[self.nc]].drop_duplicates()
+            s_out = self.s_ref.merge(s_uniq, on = self.sc, how = 'inner').sort_values(self.sc)
+            n_out = self.n_ref.merge(n_uniq, on = self.nc, how = 'inner').sort_values(self.nc)
+            # get information for writing 
+            nrow, ncol = self.dtxt.shape
+            stot = len(s_uniq)
+            tol = int(self.tol * self.ntot)
+            # paths/names
+            identifier = f"nrow_{nrow}_ncol_{ncol}_nuniq_{self.ntot}_suniq_{stot}_maxna_{tol}"
+            csv_outname = os.path.join(refpath, f'main_{identifier}.csv')
+            txt_outname = os.path.join(mainpath, f'matrix_{identifier}.txt')
+            s_outname = os.path.join(refpath, f'sref_{identifier}.csv')
+            n_outname = os.path.join(refpath, f'nref_{identifier}.csv')
+            # write
+            self.dcsv.to_csv(csv_outname, index = False)
+            self.dtxt.to_csv(txt_outname, sep = ' ', header = False, index = False)
+            s_out.to_csv(s_outname, index = False) 
+            n_out.to_csv(n_outname, index = False)
