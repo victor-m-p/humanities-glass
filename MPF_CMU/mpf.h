@@ -23,6 +23,11 @@
 #define EPSILON 1e-16
 
 typedef struct {
+	unsigned long int config;
+	int *data_prox; // points to a location in the data prox vector
+} near_struct;
+
+typedef struct {
 	int *config_base; // base configuration (-1, +1, 0)
 	double mult; // multiplicity of base config (including blanks)
 
@@ -49,7 +54,8 @@ typedef struct {
 	int near_uniq; // total number of neighbours -- this will be constant for everyone
 	int n_prox; // number of neighbours of any point -- this will be constant for everyone
 	unsigned long int *near; // the list of neighbours, represented as unsigned long int for speed.
-	
+	near_struct **near_set;
+		
 	sample **obs_raw; // sample that is read in; this will be sorted and duplicate-filtered
 	sample **obs; // the observations that we actually work with
 	

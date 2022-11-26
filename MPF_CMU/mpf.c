@@ -49,6 +49,16 @@ int compare_states(const void* va, const void* vb) {
 	  return a < b ? -1 : a > b ? +1 : 0;	
 }
 
+int compare_states_near(const void* a, const void* b) {
+	unsigned long int va, vb;
+	sample **arg1, **arg2;
+ 	
+	va=((near_struct **)a)[0]->config;
+ 	vb=((near_struct **)b)[0]->config;
+	
+	return va < vb ? -1 : va > vb ? +1 : 0;	
+}
+
 int compare_states_base(const void* a, const void* b) {
 	int i;
 	sample **arg1, **arg2;
@@ -307,118 +317,150 @@ void init_params(all *data) {
 }
 
 void create_near(all *data, int n_step) { // creates nearest neighbours, removes duplicates
-	int i, j, k, kp, kpp, count, pos, num_near, count_uniq, dist;
+	int i, j, k, kp, kpp, count, pos, num_near, count_uniq, dist, t_count;
 	double running;
 	unsigned long int *near_temp;
 	
 	data->near=NULL;	
-
-	count=0;
+	data->near_set=NULL;
+	
 	data->n_prox=0;
 	if (n_step >= 1) {	
-			
-		for(i=0;i<data->uniq;i++) {
-			// printf("Datapoint %i has %i configs.\n", i, data->obs[i]->n_config);
-			
-			for(j=0;j<data->obs[i]->n_config;j++) {
-
-				data->near=(unsigned long int *)realloc(data->near, (count+data->n)*sizeof(unsigned long int));
-				for(k=0;k<data->n;k++) {
-					data->near[count]=(data->obs[i]->config[j] ^ (1 << k)); // XOR at that bit to flip it
-					count++;
-				}					
-			}
-			
-		}
 		data->n_prox += data->n;
 	}
 	if (n_step >= 2) {	
-			
-		for(i=0;i<data->uniq;i++) {
-			// printf("Datapoint %i has %i configs.\n", i, data->obs[i]->n_config);
-			
-			for(j=0;j<data->obs[i]->n_config;j++) {
-
-				data->near=(unsigned long int *)realloc(data->near, (count+data->n*(data->n-1)/2)*sizeof(unsigned long int));
-				for(k=0;k<(data->n-1);k++) {
-					for(kp=(k+1);kp<(data->n);kp++) {
-						data->near=(unsigned long int *)realloc(data->near, (count+1)*sizeof(unsigned long int));
-						data->near[count]=((data->obs[i]->config[j] ^ (1 << k)) ^ (1 << kp)); // XOR at that bit to flip it
-						count++;						
-					}
-				}					
-			}
-			
-		}
 		data->n_prox += data->n*(data->n-1)/2;		
 	}
 	if (n_step >= 3) {	
+		data->n_prox += data->n*(data->n-1)*(data->n-2)/6;				
+	}
+	
+	for(i=0;i<data->uniq;i++) {
+		data->obs[i]->prox=(int **)malloc(data->obs[i]->n_config*sizeof(int *));
+		for(j=0;j<data->obs[i]->n_config;j++) {
+			data->obs[i]->prox[j]=(int *)malloc(data->n_prox*sizeof(int));
+		}
+	}
+	
+	count=0;
+	if (n_step >= 1) {	
 			
 		for(i=0;i<data->uniq;i++) {
-			// printf("Datapoint %i has %i configs.\n", i, data->obs[i]->n_config);
 			
 			for(j=0;j<data->obs[i]->n_config;j++) {
-				data->near=(unsigned long int *)realloc(data->near, (count+data->n*(data->n-1)*(data->n-2)/6)*sizeof(unsigned long int));
-				for(k=0;k<(data->n-2);k++) {
-					for(kp=(k+1);kp<(data->n-1);kp++) {
-						for(kpp=(kp+1);kpp<(data->n);kpp++) {
-							data->near=(unsigned long int *)realloc(data->near, (count+1)*sizeof(unsigned long int));
-							data->near[count]=(((data->obs[i]->config[j] ^ (1 << k)) ^ (1 << kp))) ^ (1 << kpp); // XOR at that bit to flip it
-							count++;
-						}						
-					}
-				}					
+
+				data->near_set=(near_struct **)realloc(data->near_set, (count+data->n)*sizeof(near_struct *));
+				for(k=0;k<data->n;k++) {
+					data->near_set[count]=(near_struct *)malloc(sizeof(near_struct));
+					data->near_set[count]->config=(data->obs[i]->config[j] ^ (1 << k)); // XOR at that bit to flip it
+					data->near_set[count]->data_prox=&(data->obs[i]->prox[j][k]); // pointer to the proximate location
+					count++;
+				}				
 			}
 			
 		}
-		data->n_prox += data->n*(data->n-1)*(data->n-2)/6;				
+
+	}
+	
+	if (n_step >= 2) {
+
+		for(i=0;i<data->uniq;i++) {
+			// printf("Datapoint %i has %i configs.\n", i, data->obs[i]->n_config);
+
+			for(j=0;j<data->obs[i]->n_config;j++) {
+
+				data->near_set=(near_struct **)realloc(data->near_set, (count+data->n*(data->n-1)/2)*sizeof(near_struct *));
+				t_count=0;
+				for(k=0;k<(data->n-1);k++) {
+					for(kp=(k+1);kp<(data->n);kp++) {
+						data->near_set[count]=(near_struct *)malloc(sizeof(near_struct));
+						data->near_set[count]->config=((data->obs[i]->config[j] ^ (1 << k)) ^ (1 << kp)); // XOR at that bit to flip it
+						// printf("Setting %i pointer to %i %i %i\n", count, i, j, data->n+t_count);
+						data->near_set[count]->data_prox=&(data->obs[i]->prox[j][data->n+t_count]); // pointer to the proximate location
+						count++;
+						t_count++;
+					}
+				}
+			}
+
+		}
+
+	}
+	
+	if (n_step >= 3) {
+
+		for(i=0;i<data->uniq;i++) {
+			// printf("Datapoint %i has %i configs.\n", i, data->obs[i]->n_config);
+
+			for(j=0;j<data->obs[i]->n_config;j++) {
+
+				data->near_set=(near_struct **)realloc(data->near_set, (count+data->n*(data->n-1)*(data->n-2)/6)*sizeof(near_struct *));
+				t_count=0;
+				for(k=0;k<(data->n-2);k++) {
+					for(kp=(k+1);kp<(data->n-1);kp++) {
+						for(kpp=(kp+1);kpp<(data->n);kpp++) {
+							data->near_set[count]=(near_struct *)malloc(sizeof(near_struct));
+							data->near_set[count]->config=(((data->obs[i]->config[j] ^ (1 << k)) ^ (1 << kp))) ^ (1 << kpp); // XOR at that bit to flip it
+							data->near_set[count]->data_prox=&(data->obs[i]->prox[j][data->n+data->n*(data->n-1)/2+t_count]); // pointer to the proximate location
+							count++;
+							t_count++;
+						}
+					}
+				}
+			}
+
+		}
+
 	}
 	
 	num_near=count;
 	// for(i=0;i<count;i++) {
 	// 	printf("%i %li\n", i, data->near[i]);
 	// }
-	qsort(data->near, num_near, sizeof(unsigned long int), compare_states);
-		
+	qsort(data->near_set, num_near, sizeof(near_struct *), compare_states_near);
+	
 	count_uniq=1;
 	i=1;
 	while(i<num_near) {
-		if (compare_states(&(data->near[i]), &(data->near[i-1])) != 0) {
+		if (compare_states_near(&(data->near_set[i]), &(data->near_set[i-1])) != 0) {
 			count_uniq++;
 		}
 		i++;
 	}
 	near_temp=(unsigned long int *)malloc(count_uniq*sizeof(unsigned long int));
 	data->near_uniq=count_uniq;
-
+	
 	i=0;
 	pos=1;
-	near_temp[0]=data->near[0];
+	near_temp[0]=data->near_set[0]->config;
+	(*data->near_set[0]->data_prox)=0;
 	while(pos<num_near) {
-		if (compare_states(&(data->near[pos]), &(data->near[pos-1])) != 0) { // if the current one is different from the previous one then...
+		if (compare_states_near(&(data->near_set[pos]), &(data->near_set[pos-1])) != 0) { // if the current one is different from the previous one then...
 			i++; // increment the counter...
-			near_temp[i]=data->near[pos]; // save the new one...
+			near_temp[i]=data->near_set[pos]->config; // save the new one...
 		}
+		(*data->near_set[pos]->data_prox)=i; // whatever the current position in near, assign it to the current value of near_temp
 		pos++;
 	}
-	free(data->near);
+
+	for(i=0;i<num_near;i++) {
+		free(data->near_set[i]);
+	}
+	free(data->near_set);
 	data->near=near_temp;
 	
-	for(i=0;i<data->uniq;i++) {
-		data->obs[i]->prox=(int **)malloc(data->obs[i]->n_config*sizeof(int *));
-		for(j=0;j<data->obs[i]->n_config;j++) {
-			data->obs[i]->prox[j]=(int *)malloc(data->n_prox*sizeof(int));
-			count=0;
-			for(k=0;k<data->near_uniq;k++) {
-				dist=hamming(data->obs[i]->config[j], data->near[k]);
-				if ((dist > 0) && (dist <= n_step)) {
-					data->obs[i]->prox[j][count]=k;
-					count++;
-				}
-			}			
-		}
-	}
-
+	// for(i=0;i<data->uniq;i++) {
+	// 	for(j=0;j<data->obs[i]->n_config;j++) {
+	// 		print_vec(data->obs[i]->config[j]);
+	// 		printf(" has neighbours...\n");
+	// 		for(k=0;k<data->n_prox;k++) {
+	// 			printf("%i %i\n", k, data->obs[i]->prox[j][k]);
+	// 			print_vec(data->near[data->obs[i]->prox[j][k]]);
+	// 			printf("\n");
+	// 		}
+	// 	}
+	// }
+	
 	// compute the sparsity
 	data->sparsity=data->n_prox*exp(data->log_sparsity*log(10));
 	running=0;
