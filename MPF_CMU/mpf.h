@@ -83,6 +83,8 @@ typedef struct {
 gsl_rng *rng();
 
 all *new_data();
+void delete_data(all *data);
+
 void read_data(char *filename, all *data);
 void process_obs_raw(all *data);
 void init_params(all *data);
@@ -97,3 +99,4 @@ unsigned long int convert(int *list);
 
 void mcmc_sampler(unsigned long int *config, int iter, all *data);
 double full_kl(all *data, double *inferred, double *truth);
+double log_l(all *data, unsigned long int config, double *inferred);

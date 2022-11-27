@@ -116,6 +116,51 @@ all *new_data() {
 	return data;
 }
 
+void delete_data(all *data) {
+	int i, j;
+	
+	if (data->near != NULL) {
+		free(data->near);
+	}
+	
+	if (data->obs != NULL) {
+		if (data->uniq > 0) {
+			for(i=0;i<data->uniq;i++) {
+				free(data->obs[i]->config_base);
+				if (data->obs[i]->n_blanks > 0) {
+					free(data->obs[i]->blanks); // location of blanks					
+				}
+				free(data->obs[i]->config);
+				free(data->obs[i]->mult_sim);
+				for(j=0;j<data->obs[i]->n_config;j++) {
+					free(data->obs[i]->prox[j]);
+				}
+				free(data->obs[i]->prox);
+				free(data->obs[i]);
+			}		
+		}
+		free(data->obs);		
+	}
+	
+	if (data->obs_raw != NULL) {
+		for(i=0;i<data->m;i++) {
+			free(data->obs_raw[i]);
+		}
+		free(data->obs_raw);
+	}
+	
+	if (data->big_list != NULL) {
+		free(data->big_list);
+		free(data->ei);
+		free(data->nei);
+		free(data->dk);
+		for(i=0;i<data->n;i++) {
+			free(data->ij[i]);
+		}
+		free(data->ij);
+	}
+}
+
 void read_data(char *filename, all *data) {
 	int i, j, k, count, m, n, pos, count_uniq=0;
 	double running;
@@ -270,6 +315,21 @@ void process_obs_raw(all *data) {
 
 }
 
+void clear_data(all *data) {
+	int i, j;
+	
+	free(data->big_list);
+	for(i=0;i<data->uniq;i++) {
+		for(j=0;j<data->obs[i]->n_config;j++) {
+			
+		}
+		free(data->obs[i]);	
+	}
+	for(i=0;i<data->uniq;i++) {
+		free(data->obs[i]);	
+	}
+	
+}
 void init_params(all *data) {
 	int i, j, d, count;
 	double running;

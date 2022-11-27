@@ -51,6 +51,41 @@ void mcmc_sampler(unsigned long int *config, int iter, all *data) {
 	
 }
 
+double log_l(all *data, unsigned long int config, double *inferred) {
+	int i, n, ip, jp, sig_ip, sig_jp, count=0;
+	double z_inferred=0;
+	double e_inferred, e_loc;
+	double t0;
+
+	n=data->n;
+	// first compute the partition function -- we could actually save all the values to memory but it's faster not to; we have to do two loops; one calculates the two partition functions (normalizations) -- the second uses that normalization to compute the probabilities. Beware we are NOT doing checks for underflows/overflows in the exp calculation
+	for(i=0;i<(1 << n);i++) {
+		
+		e_inferred=0;
+		count=0;
+		for(ip=0;ip<n;ip++) {
+			e_inferred += VAL(i, ip)*inferred[data->h_offset+ip];
+			for(jp=(ip+1);jp<n;jp++) {
+				e_inferred += VAL(i, ip)*VAL(i, jp)*inferred[count]; // data->ij[ip][jp] -- for super-speed, we'll live on the edge
+				count++;
+			}
+		}
+		z_inferred += exp(e_inferred);	
+	}
+	
+	e_loc=0;
+	count=0;
+	for(ip=0;ip<n;ip++) {
+		e_loc += VAL(config, ip)*inferred[data->h_offset+ip];
+		for(jp=(ip+1);jp<n;jp++) {
+			e_loc += VAL(config, ip)*VAL(config, jp)*inferred[count]; // data->ij[ip][jp] -- for super-speed, we'll live on the edge
+			count++;
+		}
+	}
+	
+	return e_loc-log(z_inferred);
+}
+
 double full_kl(all *data, double *inferred, double *truth) { // intense, full-enumeration kl calculation... explodes exponentially
 	int i, n, ip, jp, sig_ip, sig_jp, count=0;
 	double z_inferred=0, z_truth=0, kl=0, max_catch=0;
@@ -66,14 +101,6 @@ double full_kl(all *data, double *inferred, double *truth) { // intense, full-en
 		e_inferred=0;
 		e_truth=0;
 		count=0;
-		for(ip=0;ip<n;ip++) {
-			sig_ip=(i & (1 << ip));
-			if (sig_ip) {
-				sig_ip=1;
-			} else {
-				sig_ip=-1;
-			}
-		}
 		for(ip=0;ip<n;ip++) {
 			sig_ip=(i & (1 << ip));
 			if (sig_ip) {
