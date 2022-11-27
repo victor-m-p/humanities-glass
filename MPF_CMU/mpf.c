@@ -685,7 +685,7 @@ void compute_k_general(all *data, int do_derivs) {
 								
 								fixed=1;
 								for(f=0;f<data->obs[d]->n_blanks;f++) {
-									if (data->obs[d]->blanks[f] == jp) { // and except the other blank ones...
+									if (data->obs[d]->blanks[f] == jp) { 
 										fixed=0;
 										break;
 									}
