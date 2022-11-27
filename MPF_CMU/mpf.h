@@ -94,3 +94,6 @@ void simple_minimizer(all *data);
 
 void print_vec(unsigned long a);
 unsigned long int convert(int *list);
+
+void mcmc_sampler(unsigned long int *config, int iter, all *data);
+double full_kl(all *data, double *inferred, double *truth);

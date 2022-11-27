@@ -1,11 +1,16 @@
 #include "mpf.h"
 // mpf -l [filename] [logsparsity] [NN] // load in data, simulate
-// mpf -g [filename] [n_obs] [n_nodes] [beta] // simulate data, save both parameters and 
+// mpf -c [filename] [logsparsity] [kfold] [NN] // cross-validation 
+// mpf -g [filename] [n_nodes] [n_obs] [beta] // generate data, save both parameters and data to files
+// mpf -t [filename] [logsparsity] [NN] // load in test data, fit, get KL divergence from truth
 
 int main (int argc, char *argv[]) {
-	double t0, old, ep=1e-2, acc;
+	double t0, beta, *big_list, *truth;
 	all *data;
-	int i, j;
+	int i, j, n_obs, n_nodes;
+	unsigned long int config;
+	char filename_sav[1000];
+    FILE *fp;
 	
 	t0=clock();
 
@@ -36,13 +41,100 @@ int main (int argc, char *argv[]) {
 					printf("%.10e]\n", data->big_list[i]);
 				}
 			}
+		}
+
+		if (argv[1][1] == 'c') { // cross validation
+			data=new_data();
+			read_data(argv[2], data);
+
 			
 		}
-		if (argv[1][1] == 's') {
+		
+		if (argv[1][1] == 'g') {
+			n_nodes=atoi(argv[3]);
+			n_obs=atoi(argv[4]);
+			beta=atof(argv[5]);
+	
+			data=new_data();
+			data->n=n_nodes;
+			data->m=n_obs;
+			init_params(data);
 			
+			for(i=0;i<data->n_params;i++) {
+				data->big_list[i]=gsl_ran_gaussian(data->r, 1.0)*beta;
+			}
+			
+			strcpy(filename_sav, argv[2]);
+			strcat(filename_sav, "_data.dat");
+		    fp = fopen(filename_sav, "w+");
+		    fprintf(fp, "%i\n%i\n", data->m, data->n);
+			for(j=0;j<data->m;j++) {
+				config=gsl_rng_uniform_int(data->r, (1 << data->n));
+				mcmc_sampler(&config, 1000, data);
+				for(i=0;i<data->n;i++) {
+					if (config & (1 << i)) {
+						fprintf(fp, "1");
+					} else {
+						fprintf(fp, "0");
+					}
+				}
+				fprintf(fp, " 1.0\n");
+			}
+		    fclose(fp);
+
+			strcpy(filename_sav, argv[2]);
+			strcat(filename_sav, "_params.dat");
+		    fp = fopen(filename_sav, "w+");
+			for(j=0;j<data->n_params;j++) {
+				fprintf(fp, "%.10e ", data->big_list[j]);
+			}
+		    fclose(fp);
 		}
-		if (argv[1][1] == 'o') {
+		if (argv[1][1] == 't') {
+			data=new_data();
 			
+			strcpy(filename_sav, argv[2]);
+			strcat(filename_sav, "_data.dat");
+			read_data(filename_sav, data);
+			process_obs_raw(data);
+						
+			init_params(data);
+			data->log_sparsity=atof(argv[3]);
+			create_near(data, atoi(argv[4]));
+			
+			printf("%i data vectors; %i total; %i NNs\n", data->uniq, data->n_all, data->near_uniq);
+									
+			simple_minimizer(data);
+			
+			printf("\n\nparams=[");
+			for(i=0;i<data->n_params;i++) {
+				if (i < (data->n_params-1)) {
+					printf("%.10e, ", data->big_list[i]);
+				} else {
+					printf("%.10e]\n", data->big_list[i]);
+				}
+			}
+
+			truth=(double *)malloc(data->n_params*sizeof(double));
+			strcpy(filename_sav, argv[2]);
+			strcat(filename_sav, "_params.dat");
+		    fp = fopen(filename_sav, "r");
+			for(j=0;j<data->n_params;j++) {
+				fscanf(fp, "%le ", &(truth[j]));
+			}
+		    fclose(fp);
+
+			printf("\n\ntruth=[");
+			for(i=0;i<data->n_params;i++) {
+				if (i < (data->n_params-1)) {
+					printf("%.10e, ", truth[i]);
+				} else {
+					printf("%.10e]\n", truth[i]);
+				}
+			}
+			
+			printf("KL divergence: %.10f\n", full_kl(data, data->big_list, truth));
+			// now compare to the true distribution
 		}
 	}
 	printf("Clock time: %14.12lf seconds.\n", (clock() - t0)/CLOCKS_PER_SEC);

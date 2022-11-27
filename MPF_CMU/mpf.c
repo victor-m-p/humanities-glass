@@ -116,19 +116,6 @@ all *new_data() {
 	return data;
 }
 
-void generate_data(all *data) {
-	int i, j, k, count, m, n, pos, count_uniq=0;
-	double running;
-	sample *current;
-	FILE *f_in;
-	char c;
-
-	global_length=data->n;
-	
-	data->obs_raw=(sample **)malloc(data->m*sizeof(sample *));
-	
-}
-
 void read_data(char *filename, all *data) {
 	int i, j, k, count, m, n, pos, count_uniq=0;
 	double running;
@@ -288,6 +275,11 @@ void init_params(all *data) {
 	double running;
 	gsl_rng *r;
 	
+	if (data->n_params < 0) {
+		data->n_params=data->n*(data->n+1)/2;
+		data->h_offset=data->n*(data->n-1)/2;
+	}
+	
 	if (data->big_list == NULL) {
 		data->big_list=(double *)malloc(data->n_params*sizeof(double));
 		data->old_list=(double *)malloc(data->n_params*sizeof(double));
@@ -314,6 +306,7 @@ void init_params(all *data) {
 		// printf("%i %lf\n", i, data->big_list[i]);
 	}
 
+	global_length=data->n;
 }
 
 void create_near(all *data, int n_step) { // creates nearest neighbours, removes duplicates

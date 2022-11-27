@@ -7,12 +7,15 @@ CC=gcc
 CFLAGS=-O3 `gsl-config --cflags`
 LFLAGS=`gsl-config --libs`
 
-OBJ = mpf.o
+OBJ = mpf.o mcmc.o
 
 all : main.c $(OBJ)
 	${CC} $^ -o mpf ${CFLAGS} ${LFLAGS}
 
 mpf.o: mpf.c
+	${CC} $^ ${CFLAGS} -c
+
+mcmc.o: mcmc.c
 	${CC} $^ ${CFLAGS} -c
 
 clean:
