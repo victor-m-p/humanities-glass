@@ -35,7 +35,7 @@ start=Time.now
 
   loc=cv_set.index { |i| i[1] == cv_set.collect { |j| j[1] }.max }
   loc_best=true_set.index { |i| i[1] == true_set.collect { |j| j[1] }.min }
-  loc_one=cv_set.index { |i| i[0] == 0.0 }
+  loc_one=cv_set.index { |i| i[0] == 1.0 }
 
   begin
     ans=[beta, entropy, true_set[0], true_set[loc_one], [cv_set[loc][0], true_set[loc][1]], true_set[loc_best]]

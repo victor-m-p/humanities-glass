@@ -13,10 +13,10 @@ set=`ls -alh /Users/simon/Desktop/humanities-glass/data/clean`.split("\n").colle
   [n, na, i]
 }.sort { |i,j| (i[0] <=> j[0]) == 0 ? i[1] <=> j[1] : i[0] <=> j[0] }
 
-set.each { |trial|
+set[1..-1].each { |trial|
 
   nn=1
-  scan=Array.new(32) { |i| (i-8)/16.0 }     
+  scan=Array.new(32+16) { |i| (i-8)/16.0 }     
 
   n_lines=`wc -l #{preface+trial[-1]}`.split(" ")[0].to_i
   n=trial[0]
