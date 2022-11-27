@@ -16,7 +16,7 @@ set=`ls -alh /Users/simon/Desktop/humanities-glass/data/clean`.split("\n").colle
 set.each { |trial|
 
   nn=1
-  scan=Array.new(64) { |i| i/16.0 }     
+  scan=Array.new(32) { |i| (i-8)/16.0 }     
 
   n_lines=`wc -l #{preface+trial[-1]}`.split(" ")[0].to_i
   n=trial[0]
