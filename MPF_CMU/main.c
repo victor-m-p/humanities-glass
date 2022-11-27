@@ -57,7 +57,9 @@ int main (int argc, char *argv[]) {
 			}
 			
 			printf("%i observations can be cross-validated.\n", num_no_na);
-			
+			if (num_no_na > 100) {
+				num_no_na=100;
+			}
 			for(in=0;in<num_no_na;in++) {
 				
 				data=new_data();

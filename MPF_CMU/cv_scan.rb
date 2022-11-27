@@ -1,3 +1,5 @@
+#!/opt/local/bin/ruby
+
 require 'parallel'
 load '../../ENT/ent.rb'
 n_proc=8
@@ -12,7 +14,9 @@ start=Time.now
 
   beta=((rand() < 0.5) ? rand()**2 : rand())
   if (beta < 0.1) then
-    scan=Array.new(64) { |i| i/16.0 }    
+    scan=Array.new(64) { |i| (i-1)/16.0 }    
+  else
+    scan=Array.new(64) { |i| (i-15)/16.0 }        
   end
   `./mpf -g test #{n_nodes} #{n_obs} #{beta}`
   scan[0]=-100
@@ -33,9 +37,15 @@ start=Time.now
   loc_best=true_set.index { |i| i[1] == true_set.collect { |j| j[1] }.min }
   loc_one=cv_set.index { |i| i[0] == 0.0 }
 
-  ans=[beta, entropy, true_set[0], true_set[loc_one], [cv_set[loc][0], true_set[loc][1]], true_set[loc_best]]
-  print "#{ans}\n"
-
+  begin
+    ans=[beta, entropy, true_set[0], true_set[loc_one], [cv_set[loc][0], true_set[loc][1]], true_set[loc_best]]
+    print "#{ans}\n"
+  rescue
+    print "#{loc_one} #{loc_best} #{loc}\n"
+    print "#{cv_set}\n"
+    print "#{true_set}\n"
+  end
+  
   set << ans
   file=File.new("saved_cv_tests.dat", 'w')
   file.write(Marshal.dump(set))
