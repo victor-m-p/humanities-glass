@@ -17,7 +17,7 @@ set=`ls -alh /Users/simon/Desktop/humanities-glass/data/clean`.split("\n").colle
     file=File.new(preface+trial[-1], 'r')
     str=""
     file.each_line { |set|
-      str << set.split(" ")[0..-2].collect { |i| i.to_i < 0 ? "0" : "1" }.join()+" "+set.split(" ")[-1]+"\n"
+      str << set.split(" ")[0..-2].collect { |i| (i.to_i == 0) ? "X" : ((i.to_i < 0) ? "0" : "1") }.join()+" "+set.split(" ")[-1]+"\n"
     }
     file.close
   

@@ -26,11 +26,19 @@ int main (int argc, char *argv[]) {
 			create_near(data, atoi(argv[4]));
 			
 			printf("%i data vectors; %i total; %i NNs\n", data->uniq, data->n_all, data->near_uniq);
+
+			// testing fix here...
+			// data->sparsity=0;
+			// for(i=0;i<data->n_params;i++) {
+			// 	data->big_list[i]=0.2;
+			// }
+			//
 			// compute_k_general(data, 1);
 			// for(i=0;i<data->n_params;i++) {
 			// 	printf("%lf ", data->dk[i]);
 			// }
 			// printf("\n");
+			//
 			// old=data->k;
 			// acc=0;
 			// ep=atof(argv[5]);
@@ -45,7 +53,7 @@ int main (int argc, char *argv[]) {
 			// 	data->big_list[i] += ep;
 			// }
 			// printf("\n");
-			// printf("MEAN ACC: %lf\n", acc/data->n_params);
+			// printf("MEAN ACC: %le\n", acc/data->n_params);
 									
 			simple_minimizer(data);
 			//

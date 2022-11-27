@@ -484,7 +484,7 @@ void update_mult_sim(all *data) {
 		if (data->obs[i]->n_config > 1) {
 			
 			// first, we're going to compute the influence of the fixed variables on the blanked out data
-			for(loc=0;loc<data->obs[i]->n_blanks;loc++) {
+			for(loc=0;loc<data->obs[i]->n_blanks;loc++) { // go through all the blank positions...
 				fields[loc]=0;
 				loc_true=data->obs[i]->blanks[loc]; // actual node position
 				
@@ -542,7 +542,7 @@ void update_mult_sim(all *data) {
 }
 
 void compute_k_general(all *data, int do_derivs) {
-	int d, dp, k, a, i, j, ip, jp, loc_p, n, count, term, loc, d_count, fixed, changed;
+	int d, dp, k, a, i, j, f, ip, jp, loc_p, n, count, term, loc, d_count, fixed, changed;
 	int **ij;
 	unsigned long int config1, config2;
 	double **obs, **cross_terms;
@@ -616,7 +616,7 @@ void compute_k_general(all *data, int do_derivs) {
 
 		if ((do_derivs == 1) && (data->obs[d]->n_config > 1)) {
 			// compute the expectation value of the pair
-			for(i=0;i<(data->n);i++) {
+			for(i=0;i<data->n;i++) {
 				for(j=(i+1);j<data->n;j++) {
 					cross_terms[i][j]=0;
 					cross_terms[j][i]=0;
@@ -630,8 +630,10 @@ void compute_k_general(all *data, int do_derivs) {
 					cross_terms[i][i] += VAL(data->obs[d]->config[k],i)*data->obs[d]->mult_sim[k];
 				}
 				
-			}			
+			}
+						
 		}
+		
 		big_running=0;
 		if (do_derivs == 1) {
 			for(i=0;i<data->n_params;i++) {
@@ -680,7 +682,21 @@ void compute_k_general(all *data, int do_derivs) {
 						running_k[data->h_offset+loc_p] += multiplier*(VAL(config1,loc_p) - cross_terms[loc_p][loc_p]);
 						for(jp=0;jp<data->n;jp++) {
 							if (loc_p != jp) {
-								running_k[ij[loc_p][jp]] += multiplier*(VAL(config1,loc_p)*VAL(config1,jp) - cross_terms[loc_p][jp]);
+								
+								fixed=1;
+								for(f=0;f<data->obs[d]->n_blanks;f++) {
+									if (data->obs[d]->blanks[f] == jp) { // and except the other blank ones...
+										fixed=0;
+										break;
+									}
+								}
+								if (fixed) {
+									running_k[ij[loc_p][jp]] += multiplier*(VAL(config1,loc_p)*VAL(config1,jp) - cross_terms[loc_p][jp]); 
+								} else {
+									if (loc_p > jp) { // if they are both in the blank set, don't double-count OMG THIS TOOK ME A WEEK TO FIND
+										running_k[ij[loc_p][jp]] += multiplier*(VAL(config1,loc_p)*VAL(config1,jp) - cross_terms[loc_p][jp]); 
+									}
+								}
 							}
 						}
 					}
@@ -773,7 +789,7 @@ void simple_minimizer(all *data) {
 	}
 	// T = gsl_multimin_fdfminimizer_conjugate_fr; // 5867.659379
 	T = gsl_multimin_fdfminimizer_conjugate_pr; // 5866.193340 5865.871289 5866.563172 5868.561687
-	// T = gsl_multimin_fdfminimizer_vector_bfgs2; // 6118.521483
+	T = gsl_multimin_fdfminimizer_vector_bfgs2; // 6118.521483
 	s = gsl_multimin_fdfminimizer_alloc(T, data->n_params);
 	
 	compute_k_general(data, 1);
@@ -787,15 +803,16 @@ void simple_minimizer(all *data) {
 
 		status = gsl_multimin_test_gradient(s->gradient, 1e-12);
 		
-		printf ("%i %li (%lf) : ", status, iter, s->f);
-		for(i=0;i<data->n_params;i++) {
-			printf("%.10le ", gsl_vector_get (s->x, i));
-		}
-		compute_k_general(data, 1);
-		for(i=0;i<data->n_params;i++) {
-			printf("%lf ", data->dk[i]);
-		}
-		printf("\n");
+		// printf ("%i %li (%lf) : ", status, iter, s->f);
+		// for(i=0;i<data->n_params;i++) {
+		// 	printf("%.10le ", gsl_vector_get (s->x, i));
+		// }
+		// compute_k_general(data, 1);
+		// printf("\n Derivs: ");
+		// for(i=0;i<data->n_params;i++) {
+		// 	printf("%lf ", data->dk[i]);
+		// }
+		// printf("\n");
 		
 		num=0;
 		for(i=0;i<data->n_params;i++) {
