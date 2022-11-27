@@ -2,7 +2,7 @@
 
 load '../../ENT/ent.rb'
 require 'parallel'
-n_proc=8
+n_proc=32+16
 
 preface="/Users/simon/Desktop/humanities-glass/data/clean/"
 preface_new="/Users/simon/Desktop/humanities-glass/data/mdl/"
