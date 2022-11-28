@@ -389,3 +389,13 @@ To github.com:victor-m-p/humanities-glass.git
 [-0.5, -8.155817616915423]
 [-0.25, -8.065002731343283]
 Best lambda for matrix_nrow_605_ncol_21_nuniq_20_suniq_530_maxna_7.txt: 0.375
+To github.com:victor-m-p/humanities-glass.git
+   9da2124..7fb1ba9  main -> main
+[2.4375, -12.048214970149255]
+[2.375, -11.849785865671642]
+[2.3125, -11.638387283582091]
+[2.25, -11.415034]
+[2.1875, -11.181198303482587]
+slurmstepd: error: *** JOB 13313329 ON r182 CANCELLED AT 2022-11-28T08:15:51 DUE TO TIME LIMIT ***
+[2.0, -10.438748890547263]
+[2.125, -10.938833611940298]
