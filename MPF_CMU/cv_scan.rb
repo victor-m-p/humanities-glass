@@ -11,7 +11,11 @@ n_obs=100
 set=[]
 start=Time.now
 
-1000.times { |pos|
+file=File.new("saved_cv_tests.dat", 'r')
+set=Marshal.load(file.read)
+file.close
+
+(1000-set.length).times { |pos|
 
   beta=((rand() < 0.5) ? rand()**2 : rand())
   if (beta < 0.1) then
