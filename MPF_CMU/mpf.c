@@ -515,6 +515,15 @@ void create_near(all *data, int n_step) { // creates nearest neighbours, removes
 	// }
 	
 	// compute the sparsity
+	update_sparsity(data);
+
+	data->nei=(double *)malloc(data->near_uniq*sizeof(double));
+}
+
+void update_sparsity(all *data) {
+	int i;
+	double running;
+	
 	data->sparsity=data->n_prox*exp(data->log_sparsity*log(10));
 	running=0;
 	for(i=0;i<data->uniq;i++) {
@@ -522,8 +531,6 @@ void create_near(all *data, int n_step) { // creates nearest neighbours, removes
 	}
 	data->sparsity *= running;
 	data->sparsity *= (1.0/data->n_params);
-
-	data->nei=(double *)malloc(data->near_uniq*sizeof(double));
 }
 
 void update_mult_sim(all *data) {
@@ -600,6 +607,7 @@ double cross(char *filename, double log_sparsity, int nn) {
 	int i, thread_id, last_pos, in, j, count, pos, n_obs, n_nodes, kfold, num_no_na;
 	unsigned long int config;
 	sample *sav;
+	double t0;
 	
 	data=new_data();
 	read_data(filename, data);
@@ -611,13 +619,14 @@ double cross(char *filename, double log_sparsity, int nn) {
 			num_no_na++;
 		}
 	}
-	// if (num_no_na > 10) {
-	// 	num_no_na=10;
-	// }
-	// printf("%i observations can be cross-validated.\n", num_no_na);
+	printf("%i observations can be cross-validated.\n", num_no_na);
+	if (num_no_na > 128) { // for the Pittsburgh Supercomputer Center, each node has a max of 128 cores, so let's restrict to this for the most efficient use of computer time
+		num_no_na=128;
+	}
 	
 	glob_nloops=0;
-#pragma omp parallel private(data, pos, last_pos, count, sav, config, logl_ans, thread_id) reduction(+:glob_nloops)
+	t0=clock();
+#pragma omp parallel private(data, pos, last_pos, count, sav, config, logl_ans, thread_id, t0) reduction(+:glob_nloops)
 	{
 
 		// parallelize this for loop
@@ -669,7 +678,9 @@ double cross(char *filename, double log_sparsity, int nn) {
 		}
 		
 	}
-	printf("for log-sparsity=%lf, Log-l of held-out data is: %lf\n", log_sparsity, glob_nloops*1.0/num_no_na);
+	printf("For log-sparsity=%lf, Log-l of held-out data is: %lf\n", log_sparsity, glob_nloops*1.0/num_no_na);
+	printf("Clock time for one iteration: %14.12lf seconds.\n", (clock() - t0)/CLOCKS_PER_SEC);
+	
 	return glob_nloops*1.0/num_no_na;
 }
 

@@ -1,0 +1,14 @@
+gsl: fsolver.c:126: ERROR: endpoints do not enclose a minimum
+Default GSL error handler invoked.
+/var/spool/slurm/d/job13330435/slurm_script:34:in `<main>': undefined method `split' for nil:NilClass (NoMethodError)
+183 observations can be cross-validated.
+For log-sparsity=-2.000000, Log-l of held-out data is: -19.360688
+Clock time for one iteration: 109105.051053999996 seconds.
+183 observations can be cross-validated.
+For log-sparsity=5.000000, Log-l of held-out data is: -19.317336
+Clock time for one iteration: 213379.434998000012 seconds.
+183 observations can be cross-validated.
+For log-sparsity=1.000000, Log-l of held-out data is: -19.360688
+Clock time for one iteration: 322847.945377000025 seconds.
+
+

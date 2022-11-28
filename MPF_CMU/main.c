@@ -3,6 +3,7 @@
 // mpf -c [filename] [NN] // load in data, fit, using cross-validation to pick best sparsity
 // mpf -g [filename] [n_nodes] [n_obs] [beta] // generate data, save both parameters and data to files
 // mpf -t [filename] [logsparsity] [NN] // load in test data, fit, get KL divergence from truth
+// mpf -o [filename_prefix] [NN] // load in data (_data.dat suffix), find best lambda using _params.dat to determine KL
 
 int main (int argc, char *argv[]) {
 	double t0, beta, *big_list, *truth, logl_ans, glob_nloops, best_log_sparsity;
@@ -72,6 +73,36 @@ int main (int argc, char *argv[]) {
 					printf("%.10e]\n", data->big_list[i]);
 				}
 			}
+			
+		}
+
+		if (argv[1][1] == 'o') { // optimal lambda -- to be written
+			
+			// cv=(cross_val *)malloc(sizeof(cross_val));
+			// cv->filename=argv[2];
+			// cv->nn=atoi(argv[3]);
+			// best_log_sparsity=minimize_true_kl(cv);
+			//
+			// printf("Best log_sparsity: %lf\n", best_log_sparsity);
+			//
+			// data=new_data();
+			// read_data(argv[2], data);
+			// process_obs_raw(data);
+			//
+			// init_params(data);
+			// data->log_sparsity=best_log_sparsity;
+			// create_near(data, cv->nn);
+			//
+			// simple_minimizer(data);
+			//
+			// printf("\n\nparams=[");
+			// for(i=0;i<data->n_params;i++) {
+			// 	if (i < (data->n_params-1)) {
+			// 		printf("%.10e, ", data->big_list[i]);
+			// 	} else {
+			// 		printf("%.10e]\n", data->big_list[i]);
+			// 	}
+			// }
 			
 		}
 		
