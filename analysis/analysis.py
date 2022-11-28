@@ -26,7 +26,7 @@ file = '/home/vpoulsen/humanities-glass/analysis/pars/matrix_nrow_541_ncol_21_nu
 n_nodes, maxna = 20, 4
 outpath = '../fig/MDS'
 
-type = 'DRH'
+filetype = 'DRH'
 seed = 2
 n_cutoff = 500
 
@@ -38,6 +38,8 @@ h = A[nJ:]
 
 p = p_dist(h, J) # this was okay actually
 allstates = bin_states(n_nodes) 
+p.size
+allstates.size
 
 # subset the states we want 
 val_cutoff = np.sort(p)[::-1][n_cutoff]
@@ -90,7 +92,7 @@ size_lst = list(nx.get_node_attributes(G, 'size').values())
 size_lst = [x*node_scaling for x in size_lst]
 
 # plot 
-out = os.path.join(outpath, f'type_{type}_nnodes_{n_nodes}_maxna_{maxna}_ncutoff_{n_cutoff}_perc_{perc}_seed_{seed}.jpeg')
+out = os.path.join(outpath, f'type_{filetype}_nnodes_{n_nodes}_maxna_{maxna}_ncutoff_{n_cutoff}_perc_{perc}_seed_{seed}.jpeg')
 fig, axis = plt.subplots(facecolor = 'w', edgecolor = 'k')
 plt.axis('off')
 nx.draw_networkx_nodes(G, pos, node_size = size_lst)
