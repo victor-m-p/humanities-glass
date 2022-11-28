@@ -7,7 +7,6 @@ class Array
   end
 end
 
-
 require 'parallel'
 n_proc=32+16
 
@@ -57,6 +56,6 @@ set[1..-1].select { |i| }.each { |trial|
   file_out.write(ans.split("\n").select { |i| i.include?("params") }[0])
   file_out.close
   
-  `cd /Users/simon/Desktop/humanities-glass ; git add . ; git commit -m "new cross-validated fits (from PSC)" ; git push`
+  `cd /jet/home/sdedeo/humanities-glass ; git add . ; git commit -m "new cross-validated fits (from PSC)" ; git push`
 }
 
