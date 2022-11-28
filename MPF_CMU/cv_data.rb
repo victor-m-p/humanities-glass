@@ -1,7 +1,7 @@
 #!/opt/local/bin/ruby
 
-preface="/Users/simon/Desktop/humanities-glass/data/clean/"
-preface_new="/Users/simon/Desktop/humanities-glass/data/mdl/"
+preface="../data/clean/"
+preface_new="../data/mdl/"
 
 set=`ls -alh /Users/simon/Desktop/humanities-glass/data/clean`.split("\n").collect { |i| i.split(" ")[-1] }.select { |i| i.include?("txt") and !i.include?("mpf") }.collect { |i| 
   n=i.split("_")[6].to_i
