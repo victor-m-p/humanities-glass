@@ -7,14 +7,14 @@ set_num=ARGV[0].to_i
 preface="../data/clean/"
 preface_new="../data/mdl/"
 
-set=`ls -alh ../data/clean`.split("\n").collect { |i| i.split(" ")[-1] }.select { |i| i.include?("txt") and !i.include?("mpf") }.collect { |i| 
+set=`ls -alh ../data/clean`.split("\n").collect { |i| i.split(" ")[-1] }.select { |i| i.include?("txt") and !i.include?("mpf") and !i.include?("nuniq_20") }.collect { |i| 
   n=i.split("_")[6].to_i
   na=i.split("_")[-1].to_i
   [n, na, i]
 }.sort { |i,j| (i[0] <=> j[0]) == 0 ? i[1] <=> j[1] : i[0] <=> j[0] }
 
 nn=1
-trial=set[set_num+8]
+trial=set[set_num]
 
 n_lines=`wc -l #{preface+trial[-1]}`.split(" ")[0].to_i
 n=trial[0]
@@ -41,6 +41,6 @@ print "n=#{trial[0]}; maxNA=#{trial[1]}; NN=#{nn}; Best Log-Sparsity: #{best_log
 `cd /jet/home/sdedeo/humanities-glass ; git add . ; git commit -m "updating files #{Time.now}" ; git push`
 
 
-25.times { |i|
-  print "sbatch -N 1 -o CV_DATA_ONE_#{i} --mail-type=ALL -t 12:00:00 -p RM ./cv_data.rb #{i}\n"
+22.times { |i|
+  print "sbatch -N 1 -o CV_DATA_FIXED_#{i} --mail-type=ALL -t 12:00:00 -p RM ./cv_data.rb #{i}\n"
 }
