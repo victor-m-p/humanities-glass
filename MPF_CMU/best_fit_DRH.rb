@@ -30,7 +30,7 @@ set=`ls -alh ../data/clean`.split("\n").collect { |i| i.split(" ")[-1] }.select 
   [n, na, i]
 }.sort { |i,j| (i[0] <=> j[0]) == 0 ? i[1] <=> j[1] : i[0] <=> j[0] }
 
-set[1..-1].each { |trial|
+set[1..-1].select { |i| i[-1].include?("nuniq_20") }.each { |trial|
 
   nn=1
   scan=Array.new(32+16) { |i| (i-8)/16.0 }     
