@@ -41,6 +41,6 @@ print "n=#{trial[0]}; maxNA=#{trial[1]}; NN=#{nn}; Best Log-Sparsity: #{best_log
 `cd /jet/home/sdedeo/humanities-glass ; git add . ; git commit -m "updating files #{Time.now}" ; git push`
 
 
-# 25.times { |i|
-#   print "sbatch -N 1 -o CV_DATA_ONE_#{i} --mail-type=ALL -t 48:00:00 -p RM ./cv_data.rb #{i}\n"
-# }
+25.times { |i|
+  print "sbatch -N 1 -o CV_DATA_ONE_#{i} --mail-type=ALL -t 12:00:00 -p RM ./cv_data.rb #{i}\n"
+}

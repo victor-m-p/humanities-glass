@@ -52,7 +52,7 @@ void mcmc_sampler(unsigned long int *config, int iter, all *data) {
 }
 
 double log_l(all *data, unsigned long int config, double *inferred, int do_approx) {
-	int i, n, ip, jp, sig_ip, sig_jp, hits, count=0;
+	int i, n, ip, jp, sig_ip, sig_jp, hits, count=0, mc_iter=1000000;
 	double z_inferred=0;
 	double e_inferred, e_loc;
 	unsigned long int config_sample;
@@ -92,15 +92,22 @@ double log_l(all *data, unsigned long int config, double *inferred, int do_appro
 	} else { // do MCMC sampling
 		t0=clock();
 		hits=0;
-		for(i=0;i<1000000;i++) {
+		for(i=0;i<mc_iter;i++) {
 			config_sample=gsl_rng_uniform_int(data->r, (1 << data->n));
-			mcmc_sampler(&config_sample, 100, data);
+			mcmc_sampler(&config_sample, 6, data);
 			if (config_sample == config) {
 				hits++;
 			}
 		}
-		// printf("Clock time MCMC Sampling: %14.12lf seconds.\n", (clock() - t0)/CLOCKS_PER_SEC);
-		return log(hits+1.0/(1 << data->n))-log(1000000.0);
+		if (hits == 0) {
+			while((i<10*mc_iter) & (hits == 0)) {
+				config_sample=gsl_rng_uniform_int(data->r, (1 << data->n));
+				mcmc_sampler(&config_sample, 6, data);
+				i++;
+			}
+		}
+		printf("Clock time MCMC Sampling: %14.12lf seconds.\n", (clock() - t0)/CLOCKS_PER_SEC);
+		return log(hits+1.0/((double)i))-log((double)i);
 	}
 }
 

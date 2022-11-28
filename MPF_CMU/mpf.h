@@ -110,3 +110,4 @@ double log_l(all *data, unsigned long int config, double *inferred, int do_appro
 
 double cross(char *filename, double log_sparsity, int nn);
 double minimize_kl(cross_val *cv);
+void update_sparsity(all *data);
