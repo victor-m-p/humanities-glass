@@ -5,7 +5,7 @@
 preface="../data/clean/"
 preface_new="../data/mdl/"
 
-set=`ls -alh /Users/simon/Desktop/humanities-glass/data/clean`.split("\n").collect { |i| i.split(" ")[-1] }.select { |i| i.include?("txt") and !i.include?("mpf") }.collect { |i| 
+set=`ls -alh ../data/clean`.split("\n").collect { |i| i.split(" ")[-1] }.select { |i| i.include?("txt") and !i.include?("mpf") }.collect { |i| 
   n=i.split("_")[6].to_i
   na=i.split("_")[-1].to_i
   [n, na, i]
@@ -36,6 +36,6 @@ set.each { |trial|
 
   print "n=#{trial[0]}; maxNA=#{trial[1]}; NN=#{nn}; Best Log-Sparsity: #{best_log_sparsity}; #{ans.split("\n").select { |i| i.include?("Clock") }[0]}\n"
 
-  `cd /Users/simon/Desktop/humanities-glass ; git add . ; git commit -m "updating files #{Time.now}" ; git push`
+  `cd /jet/home/sdedeo/humanities-glass ; git add . ; git commit -m "updating files #{Time.now}" ; git push`
 }
 
