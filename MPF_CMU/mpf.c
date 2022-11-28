@@ -594,6 +594,85 @@ void update_mult_sim(all *data) {
 	
 }
 
+double cross(char *filename, double log_sparsity, int nn) {
+	all *data;
+	double glob_nloops, logl_ans;
+	int i, thread_id, last_pos, in, j, count, pos, n_obs, n_nodes, kfold, num_no_na;
+	unsigned long int config;
+	sample *sav;
+	
+	data=new_data();
+	read_data(filename, data);
+	
+	// here's what we'll do -- we'll cycle through a bunch of samples where we leave out one data point
+	num_no_na=0;
+	for(i=0;i<data->m;i++) {
+		if (data->obs_raw[i]->n_blanks == 0) {
+			num_no_na++;
+		}
+	}
+	// if (num_no_na > 10) {
+	// 	num_no_na=10;
+	// }
+	// printf("%i observations can be cross-validated.\n", num_no_na);
+	
+	glob_nloops=0;
+#pragma omp parallel private(data, pos, last_pos, count, sav, config, logl_ans, thread_id) reduction(+:glob_nloops)
+	{
+
+		// parallelize this for loop
+		#pragma omp for
+		for(in=0;in<num_no_na;in++) {
+		
+			data=new_data();
+			read_data(filename, data);
+			data->m = data->m-1; // remove one data point
+
+			pos=0;
+			last_pos=0;
+			count=0;
+			while(count < (in+1)) {
+				if(data->obs_raw[pos]->n_blanks == 0) { // if you see a good one, count it
+					count++;
+					last_pos=pos;
+				}
+				pos++; // move forward one unit
+			}
+			pos=last_pos;
+
+			sav=data->obs_raw[pos]; // the pointer to the data we'll leave out
+			data->obs_raw[pos]=data->obs_raw[data->m]; //
+			data->obs_raw[data->m]=sav;
+
+			process_obs_raw(data);				
+			init_params(data);
+			data->log_sparsity=log_sparsity;
+			create_near(data, nn);
+							
+			simple_minimizer(data);
+
+			config=0;
+			for(i=0;i<data->n;i++) {
+				if (data->obs_raw[data->m]->config_base[i] > 0) {
+					config += (1 << i);
+				}
+			}
+			if (data->n <= 20) {
+				logl_ans=log_l(data, config, data->big_list, 0);
+			} else {
+				logl_ans=log_l(data, config, data->big_list, 1);
+			}
+			
+			glob_nloops += logl_ans;
+			thread_id = omp_get_thread_num();
+			// printf("LogL of left-out point %i, computed in thread %i: %lf\n", in, thread_id, logl_ans);
+		}
+		
+	}
+	printf("for log-sparsity=%lf, Log-l of held-out data is: %lf\n", log_sparsity, glob_nloops*1.0/num_no_na);
+	return glob_nloops*1.0/num_no_na;
+}
+
 void compute_k_general(all *data, int do_derivs) {
 	int d, dp, k, a, i, j, f, ip, jp, loc_p, n, count, term, loc, d_count, fixed, changed;
 	int **ij;

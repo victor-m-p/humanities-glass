@@ -1,5 +1,5 @@
-#!/usr/bin/ruby
 #!/opt/local/bin/ruby
+#!/usr/bin/ruby
 # sbatch -N 100 -o CV_SCAN --mail-type=ALL -t 12:00:00 -p RM ./cv_scan.rb
 
 require 'parallel'
@@ -20,7 +20,7 @@ class Array
     end
 end
 
-n_proc=64
+n_proc=8
 
 n_nodes=20
 n_obs=100
@@ -32,7 +32,8 @@ file=File.new("saved_cv_tests.dat", 'r')
 set=Marshal.load(file.read)
 file.close
 
-Parallel.map(Array.new(800) { |i| i }, :in_process=>200) { |pos|
+#Parallel.map(Array.new(800) { |i| i }, :in_process=>200) 
+(1000-set.length).times { |pos|
 
   beta=((rand() < 0.5) ? rand()**2 : rand())
   if (beta < 0.1) then
@@ -74,5 +75,5 @@ Parallel.map(Array.new(800) { |i| i }, :in_process=>200) { |pos|
   file.close
  
   print "#{(Time.now-start)/(pos+1)} per round; finish at #{Time.now + (1000-pos)*(Time.now-start)/(pos+1)}\n"
-  `cd /jet/home/sdedeo/humanities-glass ; git add . ; git commit -m "new cross-validated fits (from PSC)" ; git push`
+  # `cd /jet/home/sdedeo/humanities-glass ; git add . ; git commit -m "new cross-validated fits (from PSC)" ; git push`
 }

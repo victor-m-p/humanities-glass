@@ -51,39 +51,57 @@ void mcmc_sampler(unsigned long int *config, int iter, all *data) {
 	
 }
 
-double log_l(all *data, unsigned long int config, double *inferred) {
-	int i, n, ip, jp, sig_ip, sig_jp, count=0;
+double log_l(all *data, unsigned long int config, double *inferred, int do_approx) {
+	int i, n, ip, jp, sig_ip, sig_jp, hits, count=0;
 	double z_inferred=0;
 	double e_inferred, e_loc;
+	unsigned long int config_sample;
 	double t0;
 
 	n=data->n;
-	// first compute the partition function -- we could actually save all the values to memory but it's faster not to; we have to do two loops; one calculates the two partition functions (normalizations) -- the second uses that normalization to compute the probabilities. Beware we are NOT doing checks for underflows/overflows in the exp calculation
-	for(i=0;i<(1 << n);i++) {
+
+	if (do_approx == 0) {
+		t0=clock();
 		
-		e_inferred=0;
+		for(i=0;i<(1 << n);i++) {
+		
+			e_inferred=0;
+			count=0;
+			for(ip=0;ip<n;ip++) {
+				e_inferred += VAL(i, ip)*inferred[data->h_offset+ip];
+				for(jp=(ip+1);jp<n;jp++) {
+					e_inferred += VAL(i, ip)*VAL(i, jp)*inferred[count]; // data->ij[ip][jp] -- for super-speed, we'll live on the edge
+					count++;
+				}
+			}
+			z_inferred += exp(e_inferred);	
+		}
+	
+		e_loc=0;
 		count=0;
 		for(ip=0;ip<n;ip++) {
-			e_inferred += VAL(i, ip)*inferred[data->h_offset+ip];
+			e_loc += VAL(config, ip)*inferred[data->h_offset+ip];
 			for(jp=(ip+1);jp<n;jp++) {
-				e_inferred += VAL(i, ip)*VAL(i, jp)*inferred[count]; // data->ij[ip][jp] -- for super-speed, we'll live on the edge
+				e_loc += VAL(config, ip)*VAL(config, jp)*inferred[count]; // data->ij[ip][jp] -- for super-speed, we'll live on the edge
 				count++;
 			}
 		}
-		z_inferred += exp(e_inferred);	
-	}
-	
-	e_loc=0;
-	count=0;
-	for(ip=0;ip<n;ip++) {
-		e_loc += VAL(config, ip)*inferred[data->h_offset+ip];
-		for(jp=(ip+1);jp<n;jp++) {
-			e_loc += VAL(config, ip)*VAL(config, jp)*inferred[count]; // data->ij[ip][jp] -- for super-speed, we'll live on the edge
-			count++;
+		// printf("Clock time Exact Computation: %14.12lf seconds.\n", (clock() - t0)/CLOCKS_PER_SEC);
+		return e_loc-log(z_inferred);	
+			
+	} else { // do MCMC sampling
+		t0=clock();
+		hits=0;
+		for(i=0;i<1000000;i++) {
+			config_sample=gsl_rng_uniform_int(data->r, (1 << data->n));
+			mcmc_sampler(&config_sample, 100, data);
+			if (config_sample == config) {
+				hits++;
+			}
 		}
+		// printf("Clock time MCMC Sampling: %14.12lf seconds.\n", (clock() - t0)/CLOCKS_PER_SEC);
+		return log(hits+1.0/(1 << data->n))-log(1000000.0);
 	}
-	
-	return e_loc-log(z_inferred);
 }
 
 double full_kl(all *data, double *inferred, double *truth) { // intense, full-enumeration kl calculation... explodes exponentially

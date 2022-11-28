@@ -1,3 +1,5 @@
+#include <omp.h>
+
 #include <stdio.h> 
 #include <stdlib.h>
 #include <math.h>
@@ -21,6 +23,11 @@
 #define BIG 1e6
 #define BIGI 1e-6
 #define EPSILON 1e-16
+
+typedef struct {
+	char *filename;
+	int nn;
+} cross_val;
 
 typedef struct {
 	unsigned long int config;
@@ -99,4 +106,7 @@ unsigned long int convert(int *list);
 
 void mcmc_sampler(unsigned long int *config, int iter, all *data);
 double full_kl(all *data, double *inferred, double *truth);
-double log_l(all *data, unsigned long int config, double *inferred);
+double log_l(all *data, unsigned long int config, double *inferred, int do_approx);
+
+double cross(char *filename, double log_sparsity, int nn);
+double minimize_kl(cross_val *cv);
