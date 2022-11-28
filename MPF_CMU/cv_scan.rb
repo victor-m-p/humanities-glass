@@ -1,3 +1,4 @@
+#!/usr/bin/ruby
 #!/opt/local/bin/ruby
 
 require 'parallel'
