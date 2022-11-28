@@ -1,6 +1,6 @@
 #!/usr/bin/ruby
 #!/opt/local/bin/ruby
-#sbatch -N 1 -o CV_DATA --mail-type=ALL -t 12:00:00 -p RM ./cv_data.rb
+#sbatch -N 2 -o CV_DATA --mail-type=ALL -t 48:00:00 -p RM ./cv_data.rb
 
 preface="../data/clean/"
 preface_new="../data/mdl/"
@@ -27,7 +27,7 @@ set[7..-1].each { |trial|
   file_out.write("#{n_lines}\n#{n}\n")
   file_out.write(str); file_out.close
 
-  ans=`OMP_NUM_THREADS=128 ./mpf -c #{preface_new+trial[-1]+".mpf"} #{nn}`
+  ans=`OMP_NUM_THREADS=256 ./mpf -c #{preface_new+trial[-1]+".mpf"} #{nn}`
   print "#{ans}\n\n"
   best_log_sparsity=ans.scan(/sparsity:[^\n]+\n/)[-1].split(" ")[-1].to_f
   file_out=File.new(preface_new+trial[-1]+".mpf_params_NN#{nn}_LAMBDA#{best_log_sparsity}", 'w')
