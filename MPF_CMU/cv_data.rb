@@ -29,7 +29,7 @@ set.each { |trial|
 
   ans=`./mpf -c #{preface_new+trial[-1]+".mpf"} #{nn}`
   print "#{ans}\n\n"
-  best_log_sparsity=ans.scan(/Best\ log\_sparsity\:[^n]+\n/)[-1].split(" ")[-1].to_f
+  best_log_sparsity=ans.scan(/sparsity:[^\n]+\n/)[-1].split(" ")[-1].to_f
   file_out=File.new(preface_new+trial[-1]+".mpf_params_NN#{nn}_LAMBDA#{best_log_sparsity}", 'w')
   file_out.write(ans.split("\n").select { |i| i.include?("params") }[0])
   file_out.close
