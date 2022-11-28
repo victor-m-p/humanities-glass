@@ -99,8 +99,8 @@ double log_l(all *data, unsigned long int config, double *inferred, int do_appro
 				hits++;
 			}
 		}
-		if (hits == 0) {
-			while((i<10*mc_iter) & (hits == 0)) {
+		if (hits == 0) { // desparately seeking something...
+			while((i<100*mc_iter) & (hits == 0)) {
 				config_sample=gsl_rng_uniform_int(data->r, (1 << data->n));
 				mcmc_sampler(&config_sample, 6, data);
 				i++;

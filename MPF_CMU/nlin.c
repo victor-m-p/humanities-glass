@@ -27,6 +27,8 @@ double minimize_kl(cross_val *cv) {
   F.function = &cross_holder;
   F.params = cv;
 
+  gsl_set_error_handler_off(); // living on the edge
+
   T = gsl_min_fminimizer_brent;
   s = gsl_min_fminimizer_alloc (T);
   gsl_min_fminimizer_set(s, &F, m, a, b);
@@ -40,7 +42,6 @@ double minimize_kl(cross_val *cv) {
           iter, a, b,
           m, b - a);
 
-		  gsl_set_error_handler_off(); // living on the edge
 
   do {
       iter++;
