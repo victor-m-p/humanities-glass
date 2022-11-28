@@ -7,6 +7,17 @@ class Array
   end
 end
 
+class Array
+    def ent # naieve entropy from distribution   
+      dent=0
+      tot=self.sum*1.0
+      self.length.times { |i|
+        dent = dent - (self[i]/tot)*Math::log2((self[i]+1e-64)/tot)
+      }
+      dent
+    end
+end
+
 require 'parallel'
 n_proc=32+16
 
