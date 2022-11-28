@@ -620,8 +620,8 @@ double cross(char *filename, double log_sparsity, int nn) {
 		}
 	}
 	printf("%i observations can be cross-validated.\n", num_no_na);
-	if (num_no_na > 10) { // for the Pittsburgh Supercomputer Center, each node has a max of 128 cores, so let's restrict to this for the most efficient use of computer time
-		num_no_na=10;
+	if (num_no_na > 128) { // for the Pittsburgh Supercomputer Center, each node has a max of 128 cores, so let's restrict to this for the most efficient use of computer time
+		num_no_na=128;
 	}
 	
 	glob_nloops=0;

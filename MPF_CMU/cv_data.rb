@@ -7,7 +7,7 @@ set_num=ARGV[0].to_i
 preface="../data/clean/"
 preface_new="../data/mdl/"
 
-set=`ls -alh ../data/clean`.split("\n").collect { |i| i.split(" ")[-1] }.select { |i| i.include?("txt") and !i.include?("mpf") and !i.include?("nuniq_20") }.collect { |i| 
+set=`ls -alh ../data/clean`.split("\n").collect { |i| i.split(" ")[-1] }.select { |i| i.include?("txt") and !i.include?("mpf") and (!i.include?("nuniq_20") or (i.include?("nuniq_20") and i.include?("maxna_10"))) }.collect { |i| 
   n=i.split("_")[6].to_i
   na=i.split("_")[-1].to_i
   [n, na, i]
@@ -41,6 +41,6 @@ print "n=#{trial[0]}; maxNA=#{trial[1]}; NN=#{nn}; Best Log-Sparsity: #{best_log
 `cd /jet/home/sdedeo/humanities-glass ; git add . ; git commit -m "updating files #{Time.now}" ; git push`
 
 
-22.times { |i|
-  print "sbatch -N 1 -o CV_DATA_FIXED_#{i} --mail-type=ALL -t 12:00:00 -p RM ./cv_data.rb #{i}\n"
+23.times { |i|
+  print "sbatch -N 1 -o CV_DATA_FIXED_#{i} --mail-type=ALL -t 48:00:00 -p RM ./cv_data.rb #{i}\n"
 }
