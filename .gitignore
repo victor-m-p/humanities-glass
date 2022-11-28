@@ -8,6 +8,6 @@ coniiis
 lexibank-analysed
 *.o
 MPF_playground
-julia
-alg
+julia_test
+alg_test
 MPF_CMU/mpf
