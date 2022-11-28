@@ -2,8 +2,24 @@
 #!/opt/local/bin/ruby
 
 require 'parallel'
-load '../../ENT/ent.rb'
-n_proc=8
+class Array
+  def mean
+    self.sum*1.0/self.length
+  end
+end
+
+class Array
+    def ent # naieve entropy from distribution   
+      dent=0
+      tot=self.sum*1.0
+      self.length.times { |i|
+        dent = dent - (self[i]/tot)*Math::log2((self[i]+1e-64)/tot)
+      }
+      dent
+    end
+end
+
+n_proc=64
 
 n_nodes=20
 n_obs=100
@@ -57,4 +73,5 @@ file.close
   file.close
  
   print "#{(Time.now-start)/(pos+1)} per round; finish at #{Time.now + (1000-pos)*(Time.now-start)/(pos+1)}\n"
+  `cd /jet/home/sdedeo/humanities-glass ; git add . ; git commit -m "new cross-validated fits (from PSC)" ; git push`
 }
