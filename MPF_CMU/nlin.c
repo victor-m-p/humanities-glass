@@ -40,6 +40,8 @@ double minimize_kl(cross_val *cv) {
           iter, a, b,
           m, b - a);
 
+		  gsl_set_error_handler_off(); // living on the edge
+
   do {
       iter++;
       status = gsl_min_fminimizer_iterate (s);
@@ -60,6 +62,8 @@ double minimize_kl(cross_val *cv) {
               m, b - a);
     }
   while (status == GSL_CONTINUE && iter < max_iter);
+
+	gsl_set_error_handler(NULL);
 
   gsl_min_fminimizer_free(s);
 
