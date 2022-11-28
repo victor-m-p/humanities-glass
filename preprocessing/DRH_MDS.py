@@ -12,7 +12,7 @@ import glob
 import re
 import time 
 
-# setup
+# setup..
 outpath = '../fig/MDS'
 type = 'sim'
 seed = 2
@@ -179,9 +179,9 @@ probs = np.array([0.35, 0.05, 0.45, 0.1])
 # this needs to be generalized to n blanks 
 # using p, allstates from above currently
 l = [[1, -1], [1], [1], [1], [1]]
-def compute_ratio(l, allstates): 
+def compute_ratio(p, l, allstates): 
     N = len(l)
-    marginal_states = np.array([p for c in itertools.combinations(l, N) for p in product(*c)])
+    marginal_states = np.array([p for c in itertools.combinations(l, N) for p in itertools.product(*c)])
     marginal_both = np.array(np.all((marginal_states[:,None,:]==allstates[None,:,:]),axis=-1).nonzero()).T.tolist()
     marginal_orig = [y for x, y in marginal_both]
     probs = p[marginal_orig]
