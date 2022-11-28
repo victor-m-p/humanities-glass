@@ -1,6 +1,6 @@
 #!/usr/bin/ruby
 #!/opt/local/bin/ruby
-# sbatch -N 400 -o CV_SCAN --mail-type=ALL -t 12:00:00 -p RM ./cv_scan.rb
+# sbatch -N 100 -o CV_SCAN --mail-type=ALL -t 12:00:00 -p RM ./cv_scan.rb
 
 require 'parallel'
 class Array
@@ -32,7 +32,7 @@ file=File.new("saved_cv_tests.dat", 'r')
 set=Marshal.load(file.read)
 file.close
 
-Parallel.map(Array.new(800) { |i| i }, :in_process=>800) { |pos|
+Parallel.map(Array.new(800) { |i| i }, :in_process=>200) { |pos|
 
   beta=((rand() < 0.5) ? rand()**2 : rand())
   if (beta < 0.1) then
