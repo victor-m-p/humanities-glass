@@ -600,6 +600,7 @@ double cross(char *filename, double log_sparsity, int nn) {
 	int i, thread_id, last_pos, in, j, count, pos, n_obs, n_nodes, kfold, num_no_na;
 	unsigned long int config;
 	sample *sav;
+	double t0;
 	
 	data=new_data();
 	read_data(filename, data);
@@ -611,10 +612,10 @@ double cross(char *filename, double log_sparsity, int nn) {
 			num_no_na++;
 		}
 	}
-	// if (num_no_na > 10) {
-	// 	num_no_na=10;
-	// }
-	// printf("%i observations can be cross-validated.\n", num_no_na);
+	printf("%i observations can be cross-validated.\n", num_no_na);
+	if (num_no_na > 128) { // for the Pittsburgh Supercomputer Center, each node has a max of 128 cores, so let's restrict to this for the most efficient use of computer time
+		num_no_na=128;
+	}
 	
 	glob_nloops=0;
 #pragma omp parallel private(data, pos, last_pos, count, sav, config, logl_ans, thread_id) reduction(+:glob_nloops)
@@ -669,7 +670,9 @@ double cross(char *filename, double log_sparsity, int nn) {
 		}
 		
 	}
-	printf("for log-sparsity=%lf, Log-l of held-out data is: %lf\n", log_sparsity, glob_nloops*1.0/num_no_na);
+	printf("For log-sparsity=%lf, Log-l of held-out data is: %lf\n", log_sparsity, glob_nloops*1.0/num_no_na);
+	printf("Clock time for one iteration: %14.12lf seconds.\n", (clock() - t0)/CLOCKS_PER_SEC);
+	
 	return glob_nloops*1.0/num_no_na;
 }
 
