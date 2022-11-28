@@ -1,5 +1,6 @@
 #!/usr/bin/ruby
 #!/opt/local/bin/ruby
+# sbatch -n 64 -o CV_SCAN --mail-type=ALL -t 12:00:00 -p RM-shared ./cv_scan.rb
 
 require 'parallel'
 class Array
