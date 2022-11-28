@@ -1,6 +1,13 @@
+#!/usr/bin/ruby
 #!/opt/local/bin/ruby
 
-load '../../ENT/ent.rb'
+class Array
+  def mean
+    self.sum*1.0/self.length
+  end
+end
+
+
 require 'parallel'
 n_proc=32+16
 
