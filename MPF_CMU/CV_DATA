@@ -262,3 +262,6 @@ Clock time: 80945.342543000006 seconds.
 
 
 n=20; maxNA=6; NN=1; Best Log-Sparsity: 0.407989; Clock time: 80945.342543000006 seconds.
+To github.com:victor-m-p/humanities-glass.git
+   c32d475..a28f747  main -> main
+slurmstepd: error: *** JOB 13326558 ON r195 CANCELLED AT 2022-11-28T11:01:32 ***
