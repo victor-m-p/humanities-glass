@@ -12,7 +12,7 @@ set=`ls -alh ../data/clean`.split("\n").collect { |i| i.split(" ")[-1] }.select 
 }.sort { |i,j| (i[0] <=> j[0]) == 0 ? i[1] <=> j[1] : i[0] <=> j[0] }
 
 nn=1
-set.each { |trial|
+set[7..-1].each { |trial|
 
   n_lines=`wc -l #{preface+trial[-1]}`.split(" ")[0].to_i
   n=trial[0]
@@ -27,7 +27,7 @@ set.each { |trial|
   file_out.write("#{n_lines}\n#{n}\n")
   file_out.write(str); file_out.close
 
-  ans=`./mpf -c #{preface_new+trial[-1]+".mpf"} #{nn}`
+  ans=`OMP_NUM_THREADS=128 ./mpf -c #{preface_new+trial[-1]+".mpf"} #{nn}`
   print "#{ans}\n\n"
   best_log_sparsity=ans.scan(/sparsity:[^\n]+\n/)[-1].split(" ")[-1].to_f
   file_out=File.new(preface_new+trial[-1]+".mpf_params_NN#{nn}_LAMBDA#{best_log_sparsity}", 'w')
