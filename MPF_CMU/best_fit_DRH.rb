@@ -4,16 +4,16 @@ load '../../ENT/ent.rb'
 require 'parallel'
 n_proc=32+16
 
-preface="/Users/simon/Desktop/humanities-glass/data/clean/"
-preface_new="/Users/simon/Desktop/humanities-glass/data/mdl/"
+preface="../data/clean/"
+preface_new="../data/mdl/"
 
-set=`ls -alh /Users/simon/Desktop/humanities-glass/data/clean`.split("\n").collect { |i| i.split(" ")[-1] }.select { |i| i.include?("txt") and !i.include?("mpf") }.collect { |i| 
+set=`ls -alh ../data/clean`.split("\n").collect { |i| i.split(" ")[-1] }.select { |i| i.include?("txt") and !i.include?("mpf") }.collect { |i| 
   n=i.split("_")[6].to_i
   na=i.split("_")[-1].to_i
   [n, na, i]
 }.sort { |i,j| (i[0] <=> j[0]) == 0 ? i[1] <=> j[1] : i[0] <=> j[0] }
 
-set[1..-1].each { |trial|
+set[1..-1].select { |i| }.each { |trial|
 
   nn=1
   scan=Array.new(32+16) { |i| (i-8)/16.0 }     
@@ -50,6 +50,6 @@ set[1..-1].each { |trial|
   file_out.write(ans.split("\n").select { |i| i.include?("params") }[0])
   file_out.close
   
-  `cd /Users/simon/Desktop/humanities-glass ; git add . ; git commit -m "new cross-validated fits" ; git push`
+  `cd /Users/simon/Desktop/humanities-glass ; git add . ; git commit -m "new cross-validated fits (from PSC)" ; git push`
 }
 
