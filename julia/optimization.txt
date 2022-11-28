@@ -1,5 +1,7 @@
 https://www.youtube.com/watch?v=PnuiYbeTcQ4
 
+# installing packages
+
 # first call latency (probably don't want to do this)
 julia -O1 
 julia -O2
