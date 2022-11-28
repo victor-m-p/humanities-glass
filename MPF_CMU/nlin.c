@@ -21,7 +21,7 @@ double minimize_kl(cross_val *cv) {
   gsl_min_fminimizer *s;
   
   double m = 1.0;
-  double a = -1.0, b = 5.0;
+  double a = -2.0, b = 5.0;
   gsl_function F;
 
   F.function = &cross_holder;

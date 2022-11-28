@@ -1,5 +1,6 @@
 #!/usr/bin/ruby
 #!/opt/local/bin/ruby
+#sbatch -N 1 -o CV_DATA --mail-type=ALL -t 12:00:00 -p RM ./cv_data.rb
 
 preface="../data/clean/"
 preface_new="../data/mdl/"
