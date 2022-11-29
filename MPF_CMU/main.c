@@ -161,7 +161,7 @@ int main (int argc, char *argv[]) {
 			kl_cv_sp=best_log_sparsity;
 			printf("KL at CV'd log_sparsity: %lf\n", cv->kl_true);
 			
-			printf("val=[%.10f, %.10f, %.10f, %.10f, %.10f, %.10f, %.10f, %.10f]\n", ent, entropy_nsb(p), kl_true, kl_true_sp, kl_cv, kl_cv_sp, kl_holder(-100, (void *)cv), -1000);
+			printf("val=[%.10f, %.10f, %.10f, %.10f, %.10f, %.10f, %.10f, %.10f]\n", ent, entropy_nsb(p), kl_true, kl_true_sp, kl_cv, kl_cv_sp, kl_holder(-100, (void *)cv), -1000.0);
 		}
 		
 		if (argv[1][1] == 'g') {

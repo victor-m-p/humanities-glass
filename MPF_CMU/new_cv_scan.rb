@@ -3,10 +3,10 @@
 
 list=[]
 start=Time.now
-1000.times { |pos|
+10000.times { |pos|
   beta=0
-  while(beta < 0.001) do
-    beta=((rand() < 0.5) ? rand()**2 : rand())
+  while(beta < 0.01) do
+    beta=rand()
   end
   
   `./mpf -g test 20 128 #{beta}`

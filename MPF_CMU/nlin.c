@@ -36,12 +36,12 @@ double kl_holder(double log_sparsity, void *params) {
 
 double minimize_kl_true(cross_val *cv) {
   int status;
-  int iter = 0, max_iter = 10;
+  int iter = 0, max_iter = 20;
   const gsl_min_fminimizer_type *T;
   gsl_min_fminimizer *s;
   
   double m = 1.0;
-  double a = -2.0, b = 5.0;
+  double a = -5.0, b = 5.0;
   gsl_function F;
 
   F.function = &kl_holder;
@@ -93,12 +93,12 @@ double minimize_kl_true(cross_val *cv) {
 
 double minimize_kl(cross_val *cv) {
   int status;
-  int iter = 0, max_iter = 10;
+  int iter = 0, max_iter = 20;
   const gsl_min_fminimizer_type *T;
   gsl_min_fminimizer *s;
   
   double m = 1.0;
-  double a = -2.0, b = 5.0;
+  double a = -5.0, b = 5.0;
   gsl_function F;
 
   F.function = &cross_holder;
