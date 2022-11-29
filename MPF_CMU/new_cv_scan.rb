@@ -6,7 +6,7 @@ start=Time.now
 10000.times { |pos|
   beta=0
   while(beta < 0.01) do
-    beta=rand()
+    beta=rand()**2
   end
   
   `./mpf -g test 20 128 #{beta}`
