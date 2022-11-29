@@ -117,8 +117,11 @@ df_top_n = node_attr_data.sort_values('size', ascending=False).head(5)
 other_focus_civs = pd.DataFrame({
     'node_index': [31, # interesting outlier
                    82, # interesting outlier
-                   ]}) # see below
+                   #332, # outlier to the left
+                   ]})
 df_focus_qual = node_attr_data.merge(other_focus_civs, on = 'node_index', how = 'inner')
+
+node_attr_data[node_attr_data['Christian'] == True]
 
 # get entry and position
 df_focus_nodes = pd.concat([df_top_n, df_focus_qual])
@@ -140,7 +143,7 @@ position_nudge = {
     '12th-13th c Cistercians': (5, 0),
     'Local Religion at Selinous': (2, 4),
     'Cham Bani': (-4, 6),
-    'Bön (Bon)': (0, 5)
+    'Bön (Bon)': (-0.5, 5)
 }
 
 # plot 
@@ -160,7 +163,6 @@ for entry_name, position in positions:
                                     connectionstyle="arc3"))
 # save
 plt.savefig(out)
-
 
 #### reference plot #####
 d_not_data = node_attr[node_attr['datastate'] == 'No'].sort_values('size', ascending = False)
@@ -208,4 +210,3 @@ d_important_points = pd.DataFrame({
         'config_top5_left_mid_l', #285
         'config_top5_left_mid_r' #59
         ]})
-
