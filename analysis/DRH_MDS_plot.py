@@ -30,6 +30,10 @@ nref = pd.read_csv(nref)
 # get all state configurations 
 allstates = bin_states(n_nodes) # takes a minute (do not attempt with n_nodes > 20)
 
+#### for julia test ####
+outname = '../data/analysis/allstates_nrow_660_ncol_21_nuniq_20_suniq_581_maxna_10_NN1_LAMBDA0_453839.txt'
+np.savetxt('../data/analysis/p_nrow_660_ncol_21_nuniq_20_suniq_581_maxna_10_NN1_LAMBDA0_453839.txt', p)
+
 # subset states above threshold
 val_cutoff = np.sort(p)[::-1][n_cutoff]
 p_ind = [i for i,v in enumerate(p) if v > val_cutoff]
@@ -210,3 +214,24 @@ d_important_points = pd.DataFrame({
         'config_top5_left_mid_l', #285
         'config_top5_left_mid_r' #59
         ]})
+
+## data states not in top 500 configurations 
+## hamming distance 
+distances.shape # 500, 500
+substates # the 500 configs in the plot 
+substates
+
+# get all state configurations 
+allstates = bin_states(n_nodes) # takes a minute (do not attempt with n_nodes > 20)
+
+# subset states above threshold
+val_cutoff = np.sort(p)[::-1][n_cutoff]
+p_ind = [i for i,v in enumerate(p) if v > val_cutoff]
+p_vals = p[p > val_cutoff]
+substates = allstates[p_ind]
+perc = round(np.sum(p_vals)*100,2) 
+
+#### test number of rows without any nan ####
+d_cols = d_main.columns
+d_A = np.array(d_main[list(d_cols[1:-1])])
+d_A[np.all(d_A, axis = 1)].shape

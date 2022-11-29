@@ -111,7 +111,6 @@ ax.tick_params(
     bottom = False,
     top = False,
     labelbottom = False)
-plt.show()
 plt.savefig(f'../fig/h_means_nnodes_{n}_maxna_{n_nan}.pdf')
 
 # correlations
