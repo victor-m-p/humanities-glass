@@ -1,7 +1,7 @@
 SHELL=/bin/bash
 CC=/usr/bin/llvm-gcc-4.2 
 CC=/usr/bin/clang
-#CC=/opt/local/bin/clang
+CC=/opt/local/bin/clang
 CC=gcc
 ## tested on all three compilers for Max OS X; gcc is the most generic.
 

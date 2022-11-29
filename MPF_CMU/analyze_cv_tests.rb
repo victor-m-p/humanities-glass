@@ -1,4 +1,4 @@
-`git pull`;1
+#`git pull`;1
 load '../../ENT/ent.rb'
 
 class Float
@@ -10,13 +10,13 @@ end
 
 [1,2].each { |nn|
   list=[]
-  `ls cv_full_*_#{nn}NN.dat`.split("\n").each { |fn|
+  `ls DATA/cv_full_*_#{nn}NN.dat`.split("\n").each { |fn|
     file=File.new(fn, 'r')
     list += Marshal.load(file.read).select { |i| i.length > 0 }
     file.close
   }
 
-  print "$\\beta$ range & Optimal KL & KL found via CV & KL without sparsity \\\\ \\hline\n"
+  print "$\\beta$ range & Optimal KL & KL with CV & KL without sparsity \\\\ \\hline\n"
   [[0.01,0.125, "dispersed"], [0.125, 0.25, "ordered"], [0.25, 0.5, "near-critical"], [0.5, 1.0, "critical"]].each { |range|
     set=list.select { |i| i[0] > range[0] and i[0] < range[1] }.select { |i| i[7].finite? }
     ent=set.transpose[1].mean.r

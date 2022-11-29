@@ -111,6 +111,44 @@ double log_l_parallel(all *data, unsigned long int config, double *inferred, int
 	}
 }
 
+double compute_probs(int n, double *big_list, char *filename) {
+	int i, ip, jp, sig_ip, sig_jp, count, h_offset;
+	double e_inferred, z_inferred=0;
+	FILE *fn;
+
+	h_offset=n*(n-1)/2;
+	for(i=0;i<(1 << n);i++) {	
+		e_inferred=0;
+		count=0;
+		for(ip=0;ip<n;ip++) {
+			e_inferred += VAL(i, ip)*big_list[h_offset+ip];
+			for(jp=(ip+1);jp<n;jp++) {
+				e_inferred += VAL(i, ip)*VAL(i, jp)*big_list[count]; // data->ij[ip][jp] -- for super-speed, we'll live on the edge
+				count++;
+			}
+		}
+		z_inferred += exp(e_inferred);	
+	}
+	z_inferred=log(z_inferred);
+	
+    fn = fopen(filename, "w+");
+	
+	for(i=0;i<(1 << n);i++) {	
+		e_inferred=0;
+		count=0;
+		for(ip=0;ip<n;ip++) {
+			e_inferred += VAL(i, ip)*big_list[h_offset+ip];
+			for(jp=(ip+1);jp<n;jp++) {
+				e_inferred += VAL(i, ip)*VAL(i, jp)*big_list[count]; // data->ij[ip][jp] -- for super-speed, we'll live on the edge
+				count++;
+			}
+		}
+		fprintf(fn, "%.10e\n", exp(e_inferred-z_inferred));	
+	}
+	
+    fclose(fn);
+}
+
 double log_l(all *data, unsigned long int config, double *inferred, int do_approx) {
 	int i, n, ip, jp, sig_ip, sig_jp, hits, count=0, mc_iter=1000000;
 	double z_inferred=0;

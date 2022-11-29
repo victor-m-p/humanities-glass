@@ -4,11 +4,12 @@
 // mpf -g [filename] [n_nodes] [n_obs] [beta] // generate data, save both parameters and data to files
 // mpf -t [filename] [paramfile] [NN] // load in test data, fit, get KL divergence from truth
 // mpf -o [filename_prefix] [NN] // load in data (_data.dat suffix), find best lambda using _params.dat to determine KL
+// mpf -k [filename] [paramfile_truth] [paramfile_inferred] // load data, compare truth to inferred
 
 int main (int argc, char *argv[]) {
-	double t0, beta, *big_list, *truth, logl_ans, glob_nloops, best_log_sparsity, kl_cv, kl_cv_sp, kl_true, kl_true_sp, ent;
+	double t0, beta, *big_list, *truth, *inferred, logl_ans, glob_nloops, best_log_sparsity, kl_cv, kl_cv_sp, kl_true, kl_true_sp, ent;
 	all *data;
-	int i, thread_id, last_pos, in, j, count, pos, n_obs, n_nodes, kfold, num_no_na, tot_uniq;
+	int i, n, thread_id, last_pos, in, j, count, pos, n_obs, n_nodes, kfold, num_no_na, tot_uniq;
 	sample *sav;
 	cross_val *cv;
 	unsigned long int config;
@@ -45,6 +46,14 @@ int main (int argc, char *argv[]) {
 					printf("%.10e]\n", data->big_list[i]);
 				}
 			}
+
+			strcpy(filename_sav, argv[2]);
+			strcat(filename_sav, "_params.dat");
+		    fp = fopen(filename_sav, "w+");
+			for(j=0;j<data->n_params;j++) {
+				fprintf(fp, "%.10e ", data->big_list[j]);
+			}
+		    fclose(fp);	
 		}
 
 		if (argv[1][1] == 'c') { // cross validation
@@ -74,7 +83,14 @@ int main (int argc, char *argv[]) {
 					printf("%.10e]\n", data->big_list[i]);
 				}
 			}
-						
+			
+			strcpy(filename_sav, argv[2]);
+			strcat(filename_sav, "_params.dat");
+		    fp = fopen(filename_sav, "w+");
+			for(j=0;j<data->n_params;j++) {
+				fprintf(fp, "%.10e ", data->big_list[j]);
+			}
+		    fclose(fp);	
 		}
 
 		if (argv[1][1] == 'o') { // optimal lambda -- to be written
@@ -231,6 +247,40 @@ int main (int argc, char *argv[]) {
 		    fclose(fp);
 			
 			printf("KL divergence from truth: %.10f\n", full_kl(data, data->big_list, truth));
+			// now compare to the true distribution
+		}
+		if (argv[1][1] == 'k') {
+			data=new_data();
+			read_data(argv[2], data);
+			process_obs_raw(data);
+			init_params(data);
+			
+			truth=(double *)malloc(data->n_params*sizeof(double));
+		    fp = fopen(argv[3], "r");
+			for(j=0;j<data->n_params;j++) {
+				fscanf(fp, "%le ", &(truth[j]));
+			}
+		    fclose(fp);
+
+			inferred=(double *)malloc(data->n_params*sizeof(double));
+		    fp = fopen(argv[4], "r");
+			for(j=0;j<data->n_params;j++) {
+				fscanf(fp, "%le ", &(inferred[j]));
+			}
+		    fclose(fp);
+			
+			printf("KL: %lf\n", full_kl(data, inferred, truth));
+			// n=atoi(argv[3]);
+			// truth=(double *)malloc((n*(n+1)/2)*sizeof(double));
+			// 		    fp = fopen(argv[2], "r");
+			// for(j=0;j<(n*(n+1)/2);j++) {
+			// 	fscanf(fp, "%le ", &(truth[j]));
+			// }
+			// 		    fclose(fp);
+			//
+			// strcpy(filename_sav, argv[2]);
+			// strcat(filename_sav, "_probs.dat");
+			// compute_probs(n, truth, filename_sav);
 			// now compare to the true distribution
 		}
 	}
