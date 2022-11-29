@@ -1,7 +1,8 @@
 #!/usr/bin/ruby
 
 n=ARGV[0].to_i
-label=ARGV[1]
+nan=ARGV[1].to_i
+label=ARGV[2]
 `./mpf -g DATA/test_sequence_#{label} #{n} 2048 0.2`
 
 file=File.new("DATA/test_sequence_#{label}_data.dat", 'r')
@@ -55,7 +56,7 @@ avg.collect! { |i| i/128.0 }
 cut=1024
 str_na=str.split("\n")[1..(128+1)].join("\n")+"\n"+str.split("\n")[129..(128+cut+1)].collect { |j| 
   loc=[]
-  while(loc.length < 3) do
+  while(loc.length < nan) do
     while(loc.include?(pos=rand(n))) do     
     end
     loc << pos    
