@@ -1,6 +1,6 @@
 #!/usr/bin/ruby
 
-n=10
+n=ARGV[0].to_i
 `./mpf -g DATA/test_sequence #{n} 1024 0.2`
 
 file=File.new("DATA/test_sequence_data.dat", 'r')
