@@ -1,5 +1,5 @@
 #!/usr/bin/ruby
-# sbatch -N 100 -o CV_SCAN --mail-type=ALL -t 12:00:00 -p RM ./cv_scan.rb
+# sbatch -N 1 -o NEW_CV_SCAN -t 12:00:00 -p RM ./new_cv_scan.rb
 
 list=[]
 start=Time.now
