@@ -969,7 +969,7 @@ void simple_minimizer(all *data) {
 		if ((iter % 10) == 0) {
 			prev=num;
 		}
-	} while (status == GSL_CONTINUE && iter < 1000);
+	} while (status == GSL_CONTINUE && iter < 4000);
 
 	for(i=0;i<data->n_params;i++) {
 		data->big_list[i]=gsl_vector_get(s->x, i);

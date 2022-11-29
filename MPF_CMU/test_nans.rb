@@ -2,7 +2,7 @@
 
 n=ARGV[0].to_i
 label=ARGV[1]
-`./mpf -g DATA/test_sequence_#{label} #{n} 1024 0.2`
+`./mpf -g DATA/test_sequence_#{label} #{n} 2048 0.2`
 
 file=File.new("DATA/test_sequence_#{label}_data.dat", 'r')
 str=file.read; file.close
@@ -35,7 +35,7 @@ str_na=str.split("\n")[1..(128+1)].join("\n")+"\n"+str.split("\n")[129..(128+cut
   code
 }.join("\n");1
 
-[64, 128, 256, 512, 512+256, 1024].each { |cut|
+[64, 128, 256, 256+128, 512, 512+128, 512+256, 512+128, 1024].each { |cut|
   file=File.new("DATA/test_sequence_#{label}_128_#{cut}NA3_data.dat", 'w')
   file.write("#{128+cut}\n"+str_na); file.close
   `./mpf -c DATA/test_sequence_#{label}_128_#{cut}NA3_data.dat 1`  
