@@ -19,22 +19,24 @@ file.write(str2); file.close
 start=`./mpf -k DATA/test_sequence_base_data.dat DATA/test_sequence_params.dat DATA/test_sequence_base_data.dat_params.dat`.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
 best=`./mpf -k DATA/test_sequence_base_data.dat DATA/test_sequence_params.dat DATA/test_sequence_256_data.dat_params.dat`.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
 
-[64, 128, 256, 512, 1024].each { |cut|
-  file=File.new("DATA/test_sequence_128_#{cut}NA3_data.dat", 'w')
-  str2="#{128+cut}\n"+str.split("\n")[1..(128+1)].join("\n")+"\n"+str.split("\n")[129..(128+cut+1)].collect { |j| 
-    loc=[]
-    while(loc.length < 3) do
-      while(loc.include?(pos=rand(n))) do     
-      end
-      loc << pos    
+cut=1024
+str_na=str.split("\n")[1..(128+1)].join("\n")+"\n"+str.split("\n")[129..(128+cut+1)].collect { |j| 
+  loc=[]
+  while(loc.length < 3) do
+    while(loc.include?(pos=rand(n))) do     
     end
-    code=j.dup
-    loc.each { |i|
-      code[i]="X"
-    }
-    code
-  }.join("\n");1
-  file.write(str2); file.close
+    loc << pos    
+  end
+  code=j.dup
+  loc.each { |i|
+    code[i]="X"
+  }
+  code
+}.join("\n");1
+
+[64, 128, 256, 512, 512+256, 1024].each { |cut|
+  file=File.new("DATA/test_sequence_128_#{cut}NA3_data.dat", 'w')
+  file.write("#{128+cut}\n"+str_na); file.close
   `./mpf -c DATA/test_sequence_128_#{cut}NA3_data.dat 1`  
   ans=`./mpf -k DATA/test_sequence_base_data.dat DATA/test_sequence_params.dat DATA/test_sequence_128_#{cut}NA3_data.dat_params.dat`.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
   print "#{cut}: #{ans} (vs #{best}, vs #{start})\n"
