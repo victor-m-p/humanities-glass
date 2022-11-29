@@ -1853,3 +1853,28 @@ Clock time: 2115623.430209999904 seconds.
 
 
 n=30; maxNA=0; NN=1; Best Log-Sparsity: 0.801841; Clock time MCMC Sampling: 3306.844531000000 seconds.
+To github.com:victor-m-p/humanities-glass.git
+   7061208..e4982e5  main -> main
+sbatch -N 1 -o CV_DATA_FIXED_0 --mail-type=ALL -t 48:00:00 -p RM ./cv_data.rb 0
+sbatch -N 1 -o CV_DATA_FIXED_1 --mail-type=ALL -t 48:00:00 -p RM ./cv_data.rb 1
+sbatch -N 1 -o CV_DATA_FIXED_2 --mail-type=ALL -t 48:00:00 -p RM ./cv_data.rb 2
+sbatch -N 1 -o CV_DATA_FIXED_3 --mail-type=ALL -t 48:00:00 -p RM ./cv_data.rb 3
+sbatch -N 1 -o CV_DATA_FIXED_4 --mail-type=ALL -t 48:00:00 -p RM ./cv_data.rb 4
+sbatch -N 1 -o CV_DATA_FIXED_5 --mail-type=ALL -t 48:00:00 -p RM ./cv_data.rb 5
+sbatch -N 1 -o CV_DATA_FIXED_6 --mail-type=ALL -t 48:00:00 -p RM ./cv_data.rb 6
+sbatch -N 1 -o CV_DATA_FIXED_7 --mail-type=ALL -t 48:00:00 -p RM ./cv_data.rb 7
+sbatch -N 1 -o CV_DATA_FIXED_8 --mail-type=ALL -t 48:00:00 -p RM ./cv_data.rb 8
+sbatch -N 1 -o CV_DATA_FIXED_9 --mail-type=ALL -t 48:00:00 -p RM ./cv_data.rb 9
+sbatch -N 1 -o CV_DATA_FIXED_10 --mail-type=ALL -t 48:00:00 -p RM ./cv_data.rb 10
+sbatch -N 1 -o CV_DATA_FIXED_11 --mail-type=ALL -t 48:00:00 -p RM ./cv_data.rb 11
+sbatch -N 1 -o CV_DATA_FIXED_12 --mail-type=ALL -t 48:00:00 -p RM ./cv_data.rb 12
+sbatch -N 1 -o CV_DATA_FIXED_13 --mail-type=ALL -t 48:00:00 -p RM ./cv_data.rb 13
+sbatch -N 1 -o CV_DATA_FIXED_14 --mail-type=ALL -t 48:00:00 -p RM ./cv_data.rb 14
+sbatch -N 1 -o CV_DATA_FIXED_15 --mail-type=ALL -t 48:00:00 -p RM ./cv_data.rb 15
+sbatch -N 1 -o CV_DATA_FIXED_16 --mail-type=ALL -t 48:00:00 -p RM ./cv_data.rb 16
+sbatch -N 1 -o CV_DATA_FIXED_17 --mail-type=ALL -t 48:00:00 -p RM ./cv_data.rb 17
+sbatch -N 1 -o CV_DATA_FIXED_18 --mail-type=ALL -t 48:00:00 -p RM ./cv_data.rb 18
+sbatch -N 1 -o CV_DATA_FIXED_19 --mail-type=ALL -t 48:00:00 -p RM ./cv_data.rb 19
+sbatch -N 1 -o CV_DATA_FIXED_20 --mail-type=ALL -t 48:00:00 -p RM ./cv_data.rb 20
+sbatch -N 1 -o CV_DATA_FIXED_21 --mail-type=ALL -t 48:00:00 -p RM ./cv_data.rb 21
+sbatch -N 1 -o CV_DATA_FIXED_22 --mail-type=ALL -t 48:00:00 -p RM ./cv_data.rb 22
