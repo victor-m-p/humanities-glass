@@ -17,8 +17,8 @@ file.write(str2); file.close
 
 `./mpf -c DATA/test_sequence_#{label}_base_data.dat 1`
 `./mpf -c DATA/test_sequence_#{label}_256_data.dat 1`
-start=`./mpf -k DATA/test_sequence_#{label}base_data.dat DATA/test_sequence_#{label}params.dat DATA/test_sequence_#{label}base_data.dat_params.dat`.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
-best=`./mpf -k DATA/test_sequence_#{label}base_data.dat DATA/test_sequence_#{label}params.dat DATA/test_sequence_#{label}256_data.dat_params.dat`.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
+start=`./mpf -k DATA/test_sequence_#{label}_base_data.dat DATA/test_sequence_#{label}_params.dat DATA/test_sequence_#{label}_base_data.dat_params.dat`.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
+best=`./mpf -k DATA/test_sequence_#{label}_base_data.dat DATA/test_sequence_#{label}_params.dat DATA/test_sequence_#{label}_256_data.dat_params.dat`.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
 
 cut=1024
 str_na=str.split("\n")[1..(128+1)].join("\n")+"\n"+str.split("\n")[129..(128+cut+1)].collect { |j| 
@@ -36,10 +36,10 @@ str_na=str.split("\n")[1..(128+1)].join("\n")+"\n"+str.split("\n")[129..(128+cut
 }.join("\n");1
 
 [64, 128, 256, 512, 512+256, 1024].each { |cut|
-  file=File.new("DATA/test_sequence_#{label}128_#{cut}NA3_data.dat", 'w')
+  file=File.new("DATA/test_sequence_#{label}_128_#{cut}NA3_data.dat", 'w')
   file.write("#{128+cut}\n"+str_na); file.close
-  `./mpf -c DATA/test_sequence_#{label}128_#{cut}NA3_data.dat 1`  
-  ans=`./mpf -k DATA/test_sequence_#{label}base_data.dat DATA/test_sequence_#{label}params.dat DATA/test_sequence_#{label}128_#{cut}NA3_data.dat_params.dat`.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
+  `./mpf -c DATA/test_sequence_#{label}_128_#{cut}NA3_data.dat 1`  
+  ans=`./mpf -k DATA/test_sequence_#{label}_base_data.dat DATA/test_sequence_#{label}_params.dat DATA/test_sequence_#{label}_128_#{cut}NA3_data.dat_params.dat`.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
   print "#{cut}: #{ans} (vs #{best}, vs #{start})\n"
 }
 
