@@ -51,7 +51,7 @@ void mcmc_sampler(unsigned long int *config, int iter, all *data) {
 	
 }
 
-double log_l(all *data, unsigned long int config, double *inferred, int do_approx) {
+double log_l_parallel(all *data, unsigned long int config, double *inferred, int do_approx) {
 	int i, n, ip, jp, sig_ip, sig_jp, hits, count=0, mc_iter=1000000;
 	double z_inferred=0;
 	double e_inferred, e_loc;
@@ -101,6 +101,66 @@ double log_l(all *data, unsigned long int config, double *inferred, int do_appro
 		}
 		if (hits == 0) { // desparately seeking something...
 			while((i<100*mc_iter) & (hits == 0)) {
+				config_sample=gsl_rng_uniform_int(data->r, (1 << data->n));
+				mcmc_sampler(&config_sample, 6, data);
+				i++;
+			}
+		}
+		printf("Clock time MCMC Sampling: %14.12lf seconds.\n", (clock() - t0)/CLOCKS_PER_SEC);
+		return log(hits+1.0/((double)i))-log((double)i);
+	}
+}
+
+double log_l(all *data, unsigned long int config, double *inferred, int do_approx) {
+	int i, n, ip, jp, sig_ip, sig_jp, hits, count=0, mc_iter=1000000;
+	double z_inferred=0;
+	double e_inferred, e_loc;
+	unsigned long int config_sample;
+	double t0;
+
+	n=data->n;
+
+	if (do_approx == 0) {
+		t0=clock();
+		
+		for(i=0;i<(1 << n);i++) {
+		
+			e_inferred=0;
+			count=0;
+			for(ip=0;ip<n;ip++) {
+				e_inferred += VAL(i, ip)*inferred[data->h_offset+ip];
+				for(jp=(ip+1);jp<n;jp++) {
+					e_inferred += VAL(i, ip)*VAL(i, jp)*inferred[count]; // data->ij[ip][jp] -- for super-speed, we'll live on the edge
+					count++;
+				}
+			}
+			z_inferred += exp(e_inferred);	
+		}
+	
+		e_loc=0;
+		count=0;
+		for(ip=0;ip<n;ip++) {
+			e_loc += VAL(config, ip)*inferred[data->h_offset+ip];
+			for(jp=(ip+1);jp<n;jp++) {
+				e_loc += VAL(config, ip)*VAL(config, jp)*inferred[count]; // data->ij[ip][jp] -- for super-speed, we'll live on the edge
+				count++;
+			}
+		}
+		// printf("Clock time Exact Computation: %14.12lf seconds.\n", (clock() - t0)/CLOCKS_PER_SEC);
+		return e_loc-log(z_inferred);	
+			
+	} else { // do MCMC sampling
+		t0=clock();
+		hits=0;
+		for(i=0;i<mc_iter;i++) {
+			config_sample=gsl_rng_uniform_int(data->r, (1 << data->n));
+			mcmc_sampler(&config_sample, 6, data);
+			if (config_sample == config) {
+				hits++;
+			}
+		}
+		if (hits == 0) { // desparately seeking something...
+			while((i<10*mc_iter) & (hits == 0)) {
 				config_sample=gsl_rng_uniform_int(data->r, (1 << data->n));
 				mcmc_sampler(&config_sample, 6, data);
 				i++;

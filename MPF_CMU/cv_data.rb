@@ -42,5 +42,5 @@ print "n=#{trial[0]}; maxNA=#{trial[1]}; NN=#{nn}; Best Log-Sparsity: #{best_log
 
 
 23.times { |i|
-  print "sbatch -N 1 -o CV_DATA_FIXED_#{i} --mail-type=ALL -t 48:00:00 -p RM ./cv_data.rb #{i}\n"
+  print "sbatch -N 1 -o CV_DATA_FIXED_#{i} -t 48:00:00 -p RM ./cv_data.rb #{i}\n"
 }
