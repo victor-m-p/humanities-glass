@@ -15,7 +15,7 @@ sref = pd.read_csv(sref)
 nref = pd.read_csv(nref)
 
 # our params
-n, nan = 20, 10
+n, n_nan = 20, 10
 h_offset = int(n*(n-1)/2) 
 J = params[:h_offset] 
 h = params[h_offset:]
@@ -112,7 +112,7 @@ ax.tick_params(
     top = False,
     labelbottom = False)
 plt.show()
-plt.savefig(f'../fig/h_means_nnodes_{n}_maxna_{nan}.pdf')
+plt.savefig(f'../fig/h_means_nnodes_{n}_maxna_{n_nan}.pdf')
 
 # correlations
 
