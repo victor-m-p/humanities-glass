@@ -330,6 +330,7 @@ void clear_data(all *data) {
 	}
 	
 }
+
 void init_params(all *data) {
 	int i, j, d, count;
 	double running;

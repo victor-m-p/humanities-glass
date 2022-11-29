@@ -26,6 +26,8 @@
 
 typedef struct {
 	char *filename;
+	double *big_list_true;
+	double kl_true;
 	int nn;
 } cross_val;
 
@@ -111,3 +113,28 @@ double log_l(all *data, unsigned long int config, double *inferred, int do_appro
 double cross(char *filename, double log_sparsity, int nn);
 double minimize_kl(cross_val *cv);
 void update_sparsity(all *data);
+
+double kl_holder(double log_sparsity, void *params);
+double minimize_kl_true(cross_val *cv);
+
+typedef struct {
+	int n;	// number of states
+	double *p; // list of probabilities
+	double norm; // overall normalization
+	double holder; // useful holder
+	double k; // total number of bins
+	double kappa; // Eq 6 in NSB paper
+	gsl_ran_discrete_t *pre_proc; // the pre-processor for fast number generation
+} prob;
+
+typedef struct {
+	int n;	// number of states for process I
+	int m; // number of states for process II
+	
+	double **p; // list of probabilities
+	double holder; // useful holder
+	double norm; // overall normalization
+	gsl_ran_discrete_t *pre_proc; // the pre-processor for fast number generation
+} j_prob;
+double entropy_nsb(prob *p);
+

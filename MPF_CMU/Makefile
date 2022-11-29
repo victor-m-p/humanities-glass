@@ -1,14 +1,14 @@
 SHELL=/bin/bash
 CC=/usr/bin/llvm-gcc-4.2 
 CC=/usr/bin/clang
-CC=/opt/local/bin/clang
+#CC=/opt/local/bin/clang
 CC=gcc
 ## tested on all three compilers for Max OS X; gcc is the most generic.
 
 CFLAGS=-O3 -fopenmp `gsl-config --cflags`
 LFLAGS=`gsl-config --libs`
 
-OBJ = mpf.o mcmc.o nlin.o
+OBJ = mpf.o mcmc.o nlin.o nsb.o
 
 all : main.c $(OBJ)
 	${CC} $^ -o mpf ${CFLAGS} ${LFLAGS}
@@ -20,6 +20,9 @@ mcmc.o: mcmc.c
 	${CC} $^ ${CFLAGS} -c
 
 nlin.o: nlin.c
+	${CC} $^ ${CFLAGS} -c
+
+nsb.o: nsb.c
 	${CC} $^ ${CFLAGS} -c
 
 clean:

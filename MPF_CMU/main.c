@@ -6,14 +6,15 @@
 // mpf -o [filename_prefix] [NN] // load in data (_data.dat suffix), find best lambda using _params.dat to determine KL
 
 int main (int argc, char *argv[]) {
-	double t0, beta, *big_list, *truth, logl_ans, glob_nloops, best_log_sparsity;
+	double t0, beta, *big_list, *truth, logl_ans, glob_nloops, best_log_sparsity, kl_cv, kl_cv_sp, kl_true, kl_true_sp, ent;
 	all *data;
-	int i, thread_id, last_pos, in, j, count, pos, n_obs, n_nodes, kfold, num_no_na;
+	int i, thread_id, last_pos, in, j, count, pos, n_obs, n_nodes, kfold, num_no_na, tot_uniq;
 	sample *sav;
 	cross_val *cv;
 	unsigned long int config;
 	char filename_sav[1000];
     FILE *fp;
+	prob *p;
 	
 	t0=clock();
 
@@ -73,37 +74,94 @@ int main (int argc, char *argv[]) {
 					printf("%.10e]\n", data->big_list[i]);
 				}
 			}
-			
+						
 		}
 
 		if (argv[1][1] == 'o') { // optimal lambda -- to be written
 			
-			// cv=(cross_val *)malloc(sizeof(cross_val));
-			// cv->filename=argv[2];
-			// cv->nn=atoi(argv[3]);
-			// best_log_sparsity=minimize_true_kl(cv);
-			//
-			// printf("Best log_sparsity: %lf\n", best_log_sparsity);
-			//
-			// data=new_data();
-			// read_data(argv[2], data);
-			// process_obs_raw(data);
-			//
-			// init_params(data);
-			// data->log_sparsity=best_log_sparsity;
-			// create_near(data, cv->nn);
-			//
-			// simple_minimizer(data);
-			//
-			// printf("\n\nparams=[");
-			// for(i=0;i<data->n_params;i++) {
-			// 	if (i < (data->n_params-1)) {
-			// 		printf("%.10e, ", data->big_list[i]);
-			// 	} else {
-			// 		printf("%.10e]\n", data->big_list[i]);
-			// 	}
-			// }
+			cv=(cross_val *)malloc(sizeof(cross_val));
 			
+			// set up the data correctly...
+			strcpy(filename_sav, argv[2]);
+			strcat(filename_sav, "_data.dat");
+			cv->filename=filename_sav;
+
+			cv->nn=atoi(argv[3]);
+			
+			// read in the true parameters correctly
+			data=new_data();
+			read_data(filename_sav, data);
+			process_obs_raw(data);						
+			init_params(data);
+			cv->big_list_true=(double *)malloc(data->n_params*sizeof(double));
+			strcpy(filename_sav, argv[2]);
+			strcat(filename_sav, "_params.dat");
+		    fp = fopen(filename_sav, "r");
+			for(j=0;j<data->n_params;j++) {
+				fscanf(fp, "%le ", &(cv->big_list_true[j]));
+			}
+		    fclose(fp);
+			
+			p=(prob *)malloc(sizeof(prob));
+			p->n=0;
+			tot_uniq=0;
+			for(i=0;i<data->uniq;i++) {
+				if (data->obs[i]->n_blanks == 0) {
+					p->n++;
+					tot_uniq += data->obs[i]->mult;
+				}
+			}
+			p->norm=-1;
+			p->p=(double *)malloc(p->n*sizeof(double));
+			ent=0;
+			count=0;
+			for(i=0;i<data->uniq;i++) {
+				if (data->obs[i]->n_blanks == 0) {
+					p->p[count]=data->obs[i]->mult;
+					ent -= (data->obs[i]->mult*1.0/tot_uniq)*log((data->obs[i]->mult*1.0/tot_uniq))/log(2);
+					count++;
+				}
+			}
+			printf("NSB entropy of data: %lf\n", entropy_nsb(p));
+			printf("Naieve entropy of data: %lf\n", ent);
+			
+			strcpy(filename_sav, argv[2]);
+			strcat(filename_sav, "_data.dat");
+			cv->filename=filename_sav;
+			
+			best_log_sparsity=minimize_kl_true(cv);
+
+			cv->kl_true=kl_holder(best_log_sparsity, (void *)cv);
+			
+			printf("Best log_sparsity: %lf\n", best_log_sparsity);
+			kl_true=cv->kl_true;
+			kl_true_sp=best_log_sparsity;
+			printf("KL at best log_sparsity: %lf\n", cv->kl_true);
+			
+			// now do CV
+			strcpy(filename_sav, argv[2]);
+			strcat(filename_sav, "_data.dat");
+			cv->filename=filename_sav;
+			best_log_sparsity=minimize_kl(cv);
+			
+			printf("Best log_sparsity CV: %lf\n", best_log_sparsity);
+			
+			data=new_data();
+			read_data(cv->filename, data);
+			process_obs_raw(data);
+						
+			init_params(data);
+			data->log_sparsity=best_log_sparsity;
+			create_near(data, cv->nn);
+												
+			simple_minimizer(data);
+			
+			cv->kl_true=kl_holder(best_log_sparsity, (void *)cv);
+			kl_cv=cv->kl_true;
+			kl_cv_sp=best_log_sparsity;
+			printf("KL at CV'd log_sparsity: %lf\n", cv->kl_true);
+			
+			printf("val=[%.10f, %.10f, %.10f, %.10f, %.10f, %.10f]\n", ent, entropy_nsb(p), kl_true, kl_true_sp, kl_cv, kl_cv_sp);
 		}
 		
 		if (argv[1][1] == 'g') {
