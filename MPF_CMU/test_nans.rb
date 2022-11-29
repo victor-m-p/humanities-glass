@@ -67,13 +67,10 @@ str_na_new=str_na.split("\n")[1..(128+1)].join("\n")+"\n"+str_na.split("\n")[130
   print "#{cut}: #{ans} (vs #{best}, vs #{start})\n"
 }
 
-# sbatch -N 1 -o NAN_TESTS_10_1 -t 2:00:00 -p RM ./test_nans.rb 10 1
-# sbatch -N 1 -o NAN_TESTS_10_2 -t 2:00:00 -p RM ./test_nans.rb 10 2
-# sbatch -N 1 -o NAN_TESTS_10_3 -t 2:00:00 -p RM ./test_nans.rb 10 3
-# sbatch -N 1 -o NAN_TESTS_10_4 -t 2:00:00 -p RM ./test_nans.rb 10 4
-# sbatch -N 1 -o NAN_TESTS_10_5 -t 2:00:00 -p RM ./test_nans.rb 10 5
-# sbatch -N 1 -o NAN_TESTS_20_1 -t 2:00:00 -p RM ./test_nans.rb 20 6
-# sbatch -N 1 -o NAN_TESTS_20_2 -t 2:00:00 -p RM ./test_nans.rb 20 7
-# sbatch -N 1 -o NAN_TESTS_20_3 -t 2:00:00 -p RM ./test_nans.rb 20 8
-# sbatch -N 1 -o NAN_TESTS_20_4 -t 2:00:00 -p RM ./test_nans.rb 20 9
-# sbatch -N 1 -o NAN_TESTS_20_5 -t 2:00:00 -p RM ./test_nans.rb 20 10
+5.times { |label|
+  [10,20].each { |nodes|
+    [3,5].each { |nan|
+      print "sbatch -N 1 -o DATA/NAN_TESTS_#{nodes}nodes_#{nan}NAN_#{label} -t 2:00:00 -p RM ./test_nans.rb #{nodes} #{nan} #{label}\n"
+    }
+  }
+}
