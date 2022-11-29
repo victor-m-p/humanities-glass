@@ -20,7 +20,7 @@ start=Time.now
   
   `./mpf -g test_#{ARGV[0]}_#{ARGV[1]} 20 128 #{beta}`
   ans=`./mpf -o test_#{ARGV[0]}_#{ARGV[1]} #{ARGV[1]}`
-  val=[beta]+eval(ans.split("\n").select { |i| i.include?("val=") }[0].split("=")[-1])
+  val=[beta]+eval(ans.split("\n").select { |i| i.include?("val=") }[0].split("=")[-1].gsub("inf", "Float::INFINITY"))
   list << val
   print "#{(Time.now-start)/(pos+1)} per loop.\n"
   print "#{val}\n"

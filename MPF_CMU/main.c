@@ -2,7 +2,7 @@
 // mpf -l [filename] [logsparsity] [NN] // load in data, fit
 // mpf -c [filename] [NN] // load in data, fit, using cross-validation to pick best sparsity
 // mpf -g [filename] [n_nodes] [n_obs] [beta] // generate data, save both parameters and data to files
-// mpf -t [filename] [logsparsity] [NN] // load in test data, fit, get KL divergence from truth
+// mpf -t [filename] [paramfile] [NN] // load in test data, fit, get KL divergence from truth
 // mpf -o [filename_prefix] [NN] // load in data (_data.dat suffix), find best lambda using _params.dat to determine KL
 
 int main (int argc, char *argv[]) {
@@ -205,49 +205,32 @@ int main (int argc, char *argv[]) {
 		    fclose(fp);
 		}
 		if (argv[1][1] == 't') {
-			data=new_data();
 			
-			strcpy(filename_sav, argv[2]);
-			strcat(filename_sav, "_data.dat");
+			cv=(cross_val *)malloc(sizeof(cross_val));
+			cv->filename=argv[2];
+			cv->nn=atoi(argv[4]);
+			best_log_sparsity=minimize_kl(cv);
+			
+			printf("Best log_sparsity: %lf\n", best_log_sparsity);
+			
+			data=new_data();
 			read_data(filename_sav, data);
 			process_obs_raw(data);
 						
 			init_params(data);
-			data->log_sparsity=atof(argv[3]);
-			create_near(data, atoi(argv[4]));
-			
-			printf("%i data vectors; %i total; %i NNs\n", data->uniq, data->n_all, data->near_uniq);
-									
+			data->log_sparsity=best_log_sparsity;
+			create_near(data, cv->nn);
+												
 			simple_minimizer(data);
 			
-			printf("\n\nparams=[");
-			for(i=0;i<data->n_params;i++) {
-				if (i < (data->n_params-1)) {
-					printf("%.10e, ", data->big_list[i]);
-				} else {
-					printf("%.10e]\n", data->big_list[i]);
-				}
-			}
-
 			truth=(double *)malloc(data->n_params*sizeof(double));
-			strcpy(filename_sav, argv[2]);
-			strcat(filename_sav, "_params.dat");
-		    fp = fopen(filename_sav, "r");
+		    fp = fopen(argv[3], "r");
 			for(j=0;j<data->n_params;j++) {
 				fscanf(fp, "%le ", &(truth[j]));
 			}
 		    fclose(fp);
-
-			printf("\n\ntruth=[");
-			for(i=0;i<data->n_params;i++) {
-				if (i < (data->n_params-1)) {
-					printf("%.10e, ", truth[i]);
-				} else {
-					printf("%.10e]\n", truth[i]);
-				}
-			}
 			
-			printf("KL divergence: %.10f\n", full_kl(data, data->big_list, truth));
+			printf("KL divergence from truth: %.10f\n", full_kl(data, data->big_list, truth));
 			// now compare to the true distribution
 		}
 	}
