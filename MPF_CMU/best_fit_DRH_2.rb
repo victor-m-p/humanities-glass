@@ -65,7 +65,7 @@ set.select { |i| i[-1].include?("nuniq_20") }.each { |trial|
 
   ans=`./mpf -l #{preface_new+trial[-1]+".mpf"} #{best_lambda} #{nn}`
   ans.split("\n").select { |i| i.include?("params") }
-  file_out=File.new(preface_new+trial[-1]+".mpf_params_NN#{nn}_#{best_lambda}lambda", 'w')
+  file_out=File.new(preface_new+trial[-1]+".mpf_params_NN#{nn}_#{best_lambda}lambda_UPDATED", 'w')
   file_out.write(ans.split("\n").select { |i| i.include?("params") }[0])
   file_out.close
   
