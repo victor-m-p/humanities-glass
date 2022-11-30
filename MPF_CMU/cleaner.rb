@@ -19,7 +19,7 @@ file.close
   };1
 
   file=File.new("../data/mdl_final/cleaned_nrows_#{set.length}_maxna_#{na}.dat", 'w')
-  file.write("#{set.length}\n#{20}\n#{set[1..-1].collect { |k| k.join(" ") }.join("\n")}")
+  file.write("#{set.length}\n#{20}\n#{set.collect { |k| k[1..-1].join(" ") }.join("\n")}")
   file.close
 
   file=File.new("../data/mdl_final/reference_with_entry_id_cleaned_nrows_#{set.length}_maxna_#{na}.dat", 'w')
