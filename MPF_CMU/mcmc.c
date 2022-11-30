@@ -111,7 +111,7 @@ double log_l_parallel(all *data, unsigned long int config, double *inferred, int
 	}
 }
 
-double compute_probs(int n, double *big_list, char *filename) {
+void compute_probs(int n, double *big_list, char *filename) {
 	int i, ip, jp, sig_ip, sig_jp, count, h_offset;
 	double e_inferred, z_inferred=0;
 	FILE *fn;
@@ -250,9 +250,11 @@ double full_kl(all *data, double *inferred, double *truth) { // intense, full-en
 		// 		max_catch=-(fabs(e_inferred)/e_inferred)*MAX(e_inferred, e_truth);
 		// 	}
 		// }
-		z_inferred += exp(e_inferred+max_catch);
-		z_truth += exp(e_truth+max_catch);
+		z_inferred += exp(e_inferred);
+		z_truth += exp(e_truth);
 	}
+	z_inferred=log(z_inferred);
+	z_truth=log(z_truth);
 	
 	// then compute the kl function
 	for(i=0;i<(1 << n);i++) {
@@ -282,7 +284,8 @@ double full_kl(all *data, double *inferred, double *truth) { // intense, full-en
 			}
 		}
 		// printf("%i %lf %lf %lf\n", i, kl, e_truth, e_inferred);
-		kl += (exp(e_truth+max_catch)/z_truth)*log((exp(e_truth+max_catch)/z_truth)/(exp(e_inferred+max_catch)/z_inferred));
+		kl += exp(e_truth-z_truth)*(e_truth-z_truth-e_inferred+z_inferred);
+			// log(exp(e_truth+max_catch-z_truth)/exp(e_inferred+max_catch-z_inferred));
 	}
 	// printf("Clock time KL: %14.12lf seconds.\n", (clock() - t0)/CLOCKS_PER_SEC);
 	

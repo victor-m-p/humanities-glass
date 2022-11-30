@@ -362,7 +362,7 @@ void init_params(all *data) {
 	}
 
 	for(i=0;i<data->n_params;i++) {
-		data->big_list[i]=gsl_ran_gaussian(data->r, 1.0)/100.0; // initiatize for tests
+		data->big_list[i]=gsl_ran_gaussian(data->r, 1.0)/1000.0; // initiatize for tests
 		data->old_list[i]=0; // initiatize for tests
 		// printf("%i %lf\n", i, data->big_list[i]);
 	}
@@ -938,7 +938,7 @@ void simple_minimizer(all *data) {
 	
 	compute_k_general(data, 1);
 
-	gsl_multimin_fdfminimizer_set(s, &k_func, x, 0.01, 1e-4);
+	gsl_multimin_fdfminimizer_set(s, &k_func, x, 0.01, 1e-6);
 	
 	prev=1e300;
 	do {
@@ -951,12 +951,6 @@ void simple_minimizer(all *data) {
 		// for(i=0;i<data->n_params;i++) {
 		// 	printf("%.10le ", gsl_vector_get (s->x, i));
 		// }
-		// compute_k_general(data, 1);
-		// printf("\n Derivs: ");
-		// for(i=0;i<data->n_params;i++) {
-		// 	printf("%lf ", data->dk[i]);
-		// }
-		// printf("\n");
 		
 		num=0;
 		for(i=0;i<data->n_params;i++) {
@@ -969,7 +963,14 @@ void simple_minimizer(all *data) {
 		if ((iter % 10) == 0) {
 			prev=num;
 		}
-	} while (status == GSL_CONTINUE && iter < 4000);
+	} while (status == GSL_CONTINUE && iter < 2000);
+
+	// compute_k_general(data, 1);
+	// printf("FINAL Derivs: ");
+	// for(i=0;i<data->n_params;i++) {
+	// 	printf("%lf ", data->dk[i]);
+	// }
+	// printf("\n");
 
 	for(i=0;i<data->n_params;i++) {
 		data->big_list[i]=gsl_vector_get(s->x, i);
