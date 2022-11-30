@@ -27,7 +27,7 @@ start=`./mpf -k DATA/test_sequence_#{label}_base_data.dat DATA/test_sequence_#{l
 best=`./mpf -k DATA/test_sequence_#{label}_base_data.dat DATA/test_sequence_#{label}_params.dat DATA/test_sequence_#{label}_256_data.dat_params.dat`.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
 even_bester=`./mpf -k DATA/test_sequence_#{label}_base_data.dat DATA/test_sequence_#{label}_params.dat DATA/test_sequence_#{label}_512_data.dat_params.dat`.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
 
-str_na=str.split("\n")[1..128].join("\n")+"\n"+str.split("\n")[129..-1].collect { |j| 
+str_na=str.split("\n")[1..129].join("\n")+"\n"+str.split("\n")[130..-1].collect { |j| 
   loc=[]
   while(loc.length < nan) do
     while(loc.include?(pos=rand(n))) do     

@@ -933,7 +933,7 @@ void simple_minimizer(all *data) {
 	}
 	// T = gsl_multimin_fdfminimizer_conjugate_fr; // 5867.659379
 	T = gsl_multimin_fdfminimizer_conjugate_pr; // 5866.193340 5865.871289 5866.563172 5868.561687
-	T = gsl_multimin_fdfminimizer_vector_bfgs2; // 6118.521483
+	// T = gsl_multimin_fdfminimizer_vector_bfgs2; // 6118.521483
 	s = gsl_multimin_fdfminimizer_alloc(T, data->n_params);
 	
 	compute_k_general(data, 1);
@@ -951,6 +951,12 @@ void simple_minimizer(all *data) {
 		// for(i=0;i<data->n_params;i++) {
 		// 	printf("%.10le ", gsl_vector_get (s->x, i));
 		// }
+		// printf("\n");
+		// printf("Derivs: ");
+		// for(i=0;i<data->n_params;i++) {
+		// 	printf("%lf ", data->dk[i]);
+		// }
+		// printf("\n");
 		
 		num=0;
 		for(i=0;i<data->n_params;i++) {
