@@ -1,6 +1,0 @@
-/var/spool/slurm/d/job13357054/slurm_script:34:in `[]=': index 6 out of string (IndexError)
-	from /var/spool/slurm/d/job13357054/slurm_script:34:in `block (2 levels) in <main>'
-	from /var/spool/slurm/d/job13357054/slurm_script:33:in `each'
-	from /var/spool/slurm/d/job13357054/slurm_script:33:in `block in <main>'
-	from /var/spool/slurm/d/job13357054/slurm_script:25:in `collect'
-	from /var/spool/slurm/d/job13357054/slurm_script:25:in `<main>'
