@@ -362,7 +362,7 @@ void init_params(all *data) {
 	}
 
 	for(i=0;i<data->n_params;i++) {
-		data->big_list[i]=gsl_ran_gaussian(data->r, 1.0)/10.0; // initiatize for tests
+		data->big_list[i]=gsl_ran_gaussian(data->r, 1.0)/100.0; // initiatize for tests
 		data->old_list[i]=0; // initiatize for tests
 		// printf("%i %lf\n", i, data->big_list[i]);
 	}
