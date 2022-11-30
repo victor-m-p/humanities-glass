@@ -53,7 +53,7 @@ set.select { |i| i[-1].include?("nuniq_20") }.each { |trial|
   file=File.new(preface_new+trial[-1]+".mpf", 'r');file.readline;file.readline;count=Hash.new(0);file.each_line { |i| count[i] += 1 };entropy=count.to_a.collect { |i| i[1] }.ent
 
   cv_test=Parallel.map(scan, :in_process=>n_proc) { |logs|
-    val=`./mpf -c #{preface_new+trial[-1]+".mpf"} #{logs} #{nn}`.scan(/point:[^\n]+\n/).collect { |i| i.split(" ")[-1].to_f }.mean
+    val=`OMP_NUM_THREADS=128 ./mpf -c #{preface_new+trial[-1]+".mpf"} #{logs} #{nn}`.scan(/point:[^\n]+\n/).collect { |i| i.split(" ")[-1].to_f }.mean
     ans_cv=[logs, val]
     print "#{ans_cv}\n"
     ans_cv
