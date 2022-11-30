@@ -66,4 +66,12 @@ def bin_states(n, sym=True):
 
 # stackoverflow
 def compute_HammingDistance(X):
+    '''https://stackoverflow.com/questions/42752610/python-how-to-generate-the-pairwise-hamming-distance-matrix'''
     return (X[:, None, :] != X).sum(2)
+
+# 
+def top_n_idx(n, p, allstates): # fix this
+    val_cutoff = np.sort(p)[::-1][n]
+    p_ind = [i for i, v in enumerate(p) if v > val_cutoff]
+    p_vals = p[p > val_cutoff]
+    return p_ind, p_vals

@@ -35,7 +35,10 @@ qcols = allcols[1:-1]
 def expand_nan(l): 
     N = len(l)
     lc = [[1, -1] if x == 0 else [x] for x in l]
-    states = np.array([p for c in itertools.combinations(lc, N) for p in itertools.product(*c)])
+    ### get back and check this 
+    ### I think that we only need [p for p in itertools.product(*lc)]
+    #states = np.array([p for c in itertools.combinations(lc, N) for p in itertools.product(*c)])
+    states = np.array([p for p in itertools.product(*lc)])
     return states
 
 # get probabilities
@@ -47,9 +50,10 @@ def get_probs(states, allstates, p):
     return probs, probs_norm
 
 # run over all cases (4 for now...)
+#### creation of d_unweighted now in prep ####
 d_unweighted = d_main.groupby('s')[qcols].mean().reset_index()
 d_unweighted = d_unweighted.astype(int)
-d_unweighted = d_unweighted.head(4)
+d_unweighted = d_unweighted.head(5)
 l_mat, l_eid, l_p, l_pnorm = [], [], [], []
 for s in d_unweighted['s'].unique(): 
     print(s)
@@ -77,6 +81,8 @@ df = pd.DataFrame({
     'p': flat_p,
     'p_norm': flat_pnorm})
 df['index'] = df.index
+
+## 36
 
 # try to find e.g. maximum likelihood config for each
 max_likelihood = df.groupby('entry_id')['p', 'p_norm', 'index'].max().reset_index()
