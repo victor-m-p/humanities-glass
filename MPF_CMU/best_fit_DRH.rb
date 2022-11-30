@@ -1,5 +1,6 @@
 #!/usr/bin/ruby
 #!/opt/local/bin/ruby
+# sbatch -N 1 -o UPDATED_FITS -t 24:00:00 -p RM ./best_fit_DRH.rb
 
 class Array
   def mean
@@ -51,7 +52,7 @@ set[1..-1].select { |i| i[-1].include?("nuniq_20") and (i[-1].include?("maxna_5"
   file=File.new(preface_new+trial[-1]+".mpf", 'r');file.readline;file.readline;count=Hash.new(0);file.each_line { |i| count[i] += 1 };entropy=count.to_a.collect { |i| i[1] }.ent
 
   cv_test=Parallel.map(scan, :in_process=>n_proc) { |logs|
-    val=`./mpf -c #{preface_new+trial[-1]+".mpf"} #{logs} 1`.scan(/point:[^\n]+\n/).collect { |i| i.split(" ")[-1].to_f }.mean
+    val=`OMP_NUM_THREADS=128 ./mpf -c #{preface_new+trial[-1]+".mpf"} #{logs} 1`.scan(/point:[^\n]+\n/).collect { |i| i.split(" ")[-1].to_f }.mean
     ans_cv=[logs, val]
     print "#{ans_cv}\n"
     ans_cv
