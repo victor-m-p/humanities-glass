@@ -13,7 +13,7 @@ file.close
     if !list.include?(i[0].to_i) then
       str=i[1..-2].collect { |j| j.to_i == 0 ? "X" : (j.to_i < 0 ? 0 : 1) }.join("")
       if str.scan(/X/).length <= na then
-        set << [i[0], str, i[-1].to_f]
+        set << [str, i[-1].to_f]
       end
     end
   };1
