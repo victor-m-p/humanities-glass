@@ -188,7 +188,6 @@ transl = [
     'PCR-PI'
 ]
 
-labeldct.values()
 position_nudge = {}
 translation_dct = {}
 for idx, val in enumerate(labeldct.values()): 
@@ -196,6 +195,11 @@ for idx, val in enumerate(labeldct.values()):
     position_nudge[abb] = nudge[idx]
     translation_dct[val] = abb
 
+# paths and names
+perc = sum(p_vals)
+out = os.path.join(outpath, f'MDS_annotated_nnodes_{n_nodes}_maxna_{maxna}_ncutoff_{n_cutoff}_perc_{perc}_seed_{seed}.pdf')
+
+#### actually plotting ####
 fig, ax = plt.subplots(facecolor = 'w', edgecolor = 'k', dpi = 300)
 plt.axis('off')
 
@@ -256,6 +260,4 @@ for entry_name, position in positions:
                                     connectionstyle="arc3"))
 
 # save
-perc = sum(p_vals)
-out = os.path.join(outpath, f'MDS_annotated_nnodes_{n_nodes}_maxna_{maxna}_ncutoff_{n_cutoff}_perc_{perc}_seed_{seed}.pdf')
 plt.savefig(out)
