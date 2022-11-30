@@ -44,10 +44,10 @@ str_na=str.split("\n")[1..(128+1)].join("\n")+"\n"+str.split("\n")[130..-1].coll
 [64, 128, 256, 512, 512+256, 1024].each { |cut| #, 512, 512+256, 1024
   file=File.new("DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat", 'w')
   file.write("#{128+cut}\n"+str_na); file.close
-  print `./mpf -c DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat 1`  
+  `./mpf -c DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat 1`
   begin
-    str=`./mpf -k DATA/test_sequence_#{label}_base_data.dat DATA/test_sequence_#{label}_params.dat DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat_params.dat`
-    ans=str.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
+    ans=`./mpf -k DATA/test_sequence_#{label}_base_data.dat DATA/test_sequence_#{label}_params.dat DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat_params.dat`
+    ans=ans.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
     print "#{cut}: #{ans} (vs #{best} vs #{even_bester} vs #{start})\n"
   rescue
     print "Something bad happened at #{cut}\n"    
