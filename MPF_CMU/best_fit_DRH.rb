@@ -53,6 +53,6 @@ set[0..-1].select { |i| i[-1].include?("nuniq_20") and (i[-1].scan(/maxna_[0-9]/
 
   print `OMP_NUM_THREADS=128 ./mpf -c #{preface_new+trial[-1]+".mpf"} 1`
   `cp #{preface_new+trial[-1]+".mpf"}_params.dat ../data/mdl_final/`
-  `cd /jet/home/sdedeo/humanities-glass ; git add . ; git commit -m "new cross-validated fits (from PSC)" ; git push`
+  `cd /jet/home/sdedeo/humanities-glass ; git add . ; git commit -m "final cross-validated fits (from PSC)" ; git push`
 }
 
