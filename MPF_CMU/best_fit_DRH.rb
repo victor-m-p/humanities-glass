@@ -31,7 +31,7 @@ set=`ls -alh ../data/clean`.split("\n").collect { |i| i.split(" ")[-1] }.select 
   [n, na, i]
 }.sort { |i,j| (i[0] <=> j[0]) == 0 ? i[1] <=> j[1] : i[0] <=> j[0] }
 
-set[1..-1].select { |i| i[-1].include?("nuniq_20") and (i[-1].scan(/maxna_[0-9]/)[0].split("_")[1].to_i < 5) }.each { |trial|
+set[0..0].select { |i| i[-1].include?("nuniq_20") and (i[-1].scan(/maxna_[0-9]/)[0].split("_")[1].to_i < 5) }.each { |trial|
 
   nn=1
   scan=Array.new(32+16) { |i| (i-8)/16.0 }     
