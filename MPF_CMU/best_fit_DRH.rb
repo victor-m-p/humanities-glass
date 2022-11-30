@@ -31,7 +31,7 @@ set=`ls -alh ../data/clean`.split("\n").collect { |i| i.split(" ")[-1] }.select 
   [n, na, i]
 }.sort { |i,j| (i[0] <=> j[0]) == 0 ? i[1] <=> j[1] : i[0] <=> j[0] }
 
-set[1..-1].select { |i| i[-1].include?("nuniq_20") and (i[-1].include?("maxna_5") or i[-1].include?("maxna_6")) }.each { |trial|
+set[1..-1].select { |i| i[-1].include?("nuniq_20") and (i[-1].include?("maxna_5") or i[-1].include?("maxna_6") or i[-1].include?("maxna_7")) }.each { |trial|
 
   nn=1
   scan=Array.new(32+16) { |i| (i-8)/16.0 }     
@@ -51,7 +51,7 @@ set[1..-1].select { |i| i[-1].include?("nuniq_20") and (i[-1].include?("maxna_5"
 
   file=File.new(preface_new+trial[-1]+".mpf", 'r');file.readline;file.readline;count=Hash.new(0);file.each_line { |i| count[i] += 1 };entropy=count.to_a.collect { |i| i[1] }.ent
 
-  print `./mpf -c #{preface_new+trial[-1]+".mpf"} 1`
+  print `OMP_NUM_THREADS=128 ./mpf -c #{preface_new+trial[-1]+".mpf"} 1`
   
   `cd /jet/home/sdedeo/humanities-glass ; git add . ; git commit -m "new cross-validated fits (from PSC)" ; git push`
 }
