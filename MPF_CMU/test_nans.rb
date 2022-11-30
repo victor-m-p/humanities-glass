@@ -20,11 +20,11 @@ file=File.new("DATA/test_sequence_#{label}_512_data.dat", 'w')
 str2="512\n"+str.split("\n")[1..-1].join("\n");1
 file.write(str2); file.close
 
-ans=`./mpf -c DATA/test_sequence_#{label}_base_data.dat 1`
+ans=`./mpf -c DATA/test_sequence_#{label}_base_data.dat 2`
 best_sp=ans.scan(/Best log\_sparsity:[^\n]+\n/)[0].split(":")[-1].to_f
 
-`./mpf -c DATA/test_sequence_#{label}_256_data.dat 1`
-`./mpf -c DATA/test_sequence_#{label}_512_data.dat 1`
+`./mpf -c DATA/test_sequence_#{label}_256_data.dat 2`
+`./mpf -c DATA/test_sequence_#{label}_512_data.dat 2`
 start=`./mpf -k DATA/test_sequence_#{label}_base_data.dat DATA/test_sequence_#{label}_params.dat DATA/test_sequence_#{label}_base_data.dat_params.dat`.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
 best=`./mpf -k DATA/test_sequence_#{label}_base_data.dat DATA/test_sequence_#{label}_params.dat DATA/test_sequence_#{label}_256_data.dat_params.dat`.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
 even_bester=`./mpf -k DATA/test_sequence_#{label}_base_data.dat DATA/test_sequence_#{label}_params.dat DATA/test_sequence_#{label}_512_data.dat_params.dat`.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
@@ -46,7 +46,7 @@ str_na=str.split("\n")[1..129].join("\n")+"\n"+str.split("\n")[130..-1].collect 
 [64, 128, 256, 512, 512+256, 1024].each { |cut| #, 512, 512+256, 1024
   file=File.new("DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat", 'w')
   file.write("#{128+cut}\n"+str_na); file.close
-  `OMP_NUM_THREADS=128 ./mpf -c DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat 1`
+  `./mpf -c DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat 2`
   begin
     ans=`./mpf -k DATA/test_sequence_#{label}_base_data.dat DATA/test_sequence_#{label}_params.dat DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat_params.dat`
     ans=ans.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
@@ -73,7 +73,7 @@ str_na_new=str_na.split("\n")[1..-1].collect { |j|
 [64, 128, 256, 512, 512+256, 1024].each { |cut| #, 512, 512+256, 1024
   file=File.new("DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat", 'w')
   file.write("#{128+cut}\n#{n}\n"+str_na_new); file.close
-  `OMP_NUM_THREADS=128 ./mpf -c DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat 1` 
+  `OMP_NUM_THREADS=128 ./mpf -c DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat 2` 
   begin
     ans=`./mpf -k DATA/test_sequence_#{label}_base_data.dat DATA/test_sequence_#{label}_params.dat DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat_params.dat`.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
     print "#{cut}: #{ans} (vs #{best} vs #{even_bester} vs #{start})\n"
