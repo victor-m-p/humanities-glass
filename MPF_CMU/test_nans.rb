@@ -20,7 +20,9 @@ file=File.new("DATA/test_sequence_#{label}_512_data.dat", 'w')
 str2="512\n"+str.split("\n")[1..-1].join("\n");1
 file.write(str2); file.close
 
-`./mpf -c DATA/test_sequence_#{label}_base_data.dat 1`
+ans=`./mpf -c DATA/test_sequence_#{label}_base_data.dat 1`
+best_sp=ans.scan(/Best log\_sparsity:[^\n]+\n/)[0].split(":")[-1].to_f
+
 `./mpf -c DATA/test_sequence_#{label}_256_data.dat 1`
 `./mpf -c DATA/test_sequence_#{label}_512_data.dat 1`
 start=`./mpf -k DATA/test_sequence_#{label}_base_data.dat DATA/test_sequence_#{label}_params.dat DATA/test_sequence_#{label}_base_data.dat_params.dat`.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
@@ -80,10 +82,10 @@ str_na_new=str_na.split("\n")[1..-1].collect { |j|
   end
 }
 
-# 5.times { |label|
+# 10.times { |label|
 #   [20].each { |nodes|
-#     [6,7,8,9,10].each { |nan|
-#       print "sbatch -N 1 -o DATA/NAN_TESTS_#{nodes}nodes_#{nan}NAN_#{label} -t #{nodes == 10 ? "00:30" : "02:00"}:00 -p RM ./test_nans.rb #{nodes} #{nan} #{label}_#{nodes}_#{nan}\n"
+#     [5].each { |nan|
+#       print "sbatch -N 1 -o DATA/NAN_TESTS_#{nodes}nodes_#{nan}NAN_#{label}_LONG -t #{nodes == 10 ? "00:30" : "08:00"}:00 -p RM ./test_nans.rb #{nodes} #{nan} #{label}_#{nodes}_#{nan}_LONG\n"
 #     }
 #   }
 # }

@@ -371,7 +371,7 @@ void init_params(all *data) {
 }
 
 void create_near(all *data, int n_step) { // creates nearest neighbours, removes duplicates
-	int i, j, k, kp, kpp, count, pos, num_near, count_uniq, dist, t_count;
+	int i, j, k, kp, kpp, count, found, pos, num_near, count_uniq, dist, t_count;
 	double running;
 	unsigned long int *near_temp;
 	
@@ -405,10 +405,22 @@ void create_near(all *data, int n_step) { // creates nearest neighbours, removes
 
 				data->near_set=(near_struct **)realloc(data->near_set, (count+data->n)*sizeof(near_struct *));
 				for(k=0;k<data->n;k++) {
+					// little trick -- don't flow into something that you are simulating... let's see what happens to fit quality
+					// hmm -- makes it much worse, it seems
+					found=0;
+					// for(kpp=0;kpp<data->obs[i]->n_blanks;kpp++) {
+					// 	if (k == data->obs[i]->blanks[kpp]) {
+					// 		found=1;
+					// 	}
+					// }
 					data->near_set[count]=(near_struct *)malloc(sizeof(near_struct));
-					data->near_set[count]->config=(data->obs[i]->config[j] ^ (1 << k)); // XOR at that bit to flip it
+					if (!found) {
+						data->near_set[count]->config=(data->obs[i]->config[j] ^ (1 << k)); // XOR at that bit to flip it
+					} else {
+						data->near_set[count]->config=gsl_rng_uniform_int(data->r, (1 << data->n)); // choose randomly!						
+					}
 					data->near_set[count]->data_prox=&(data->obs[i]->prox[j][k]); // pointer to the proximate location
-					count++;
+					count++;						
 				}				
 			}
 			
