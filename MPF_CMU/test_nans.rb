@@ -41,7 +41,7 @@ str_na=str.split("\n")[1..129].join("\n")+"\n"+str.split("\n")[130..-1].collect 
   code
 }.join("\n");1
 
-[64, 64, 128, 128, 256, 512, 512+256, 1024].each { |cut| #, 512, 512+256, 1024
+[64, 128, 256, 512, 512+256, 1024].each { |cut| #, 512, 512+256, 1024
   file=File.new("DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat", 'w')
   file.write("#{128+cut}\n"+str_na); file.close
   `./mpf -c DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat 1`
