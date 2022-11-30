@@ -1,6 +1,8 @@
 #!/usr/bin/ruby
 #!/opt/local/bin/ruby
 
+# sbatch -N 1 -o UPDATED_FITS -t 24:00:00 -p RM ./best_fit_DRH_2.rb
+
 class Array
   def mean
     self.sum*1.0/self.length
@@ -32,7 +34,7 @@ set=`ls -alh ../data/clean`.split("\n").collect { |i| i.split(" ")[-1] }.select 
 
 set.select { |i| i[-1].include?("nuniq_20") }.each { |trial|
 
-  nn=2
+  nn=1
   scan=Array.new(32+16) { |i| (i-8)/16.0 }     
 
   n_lines=`wc -l #{preface+trial[-1]}`.split(" ")[0].to_i
