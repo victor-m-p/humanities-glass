@@ -1,5 +1,6 @@
 #!/usr/bin/ruby
 #!/opt/local/bin/ruby
+# sbatch -N 1 -o UPDATED_FITS -t 24:00:00 -p RM ./best_fit_DRH.rb
 
 class Array
   def mean
