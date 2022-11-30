@@ -133,7 +133,7 @@ void compute_probs(int n, double *big_list, char *filename) {
 	
     fn = fopen(filename, "w+");
 	
-	for(i=0;i<(1 << n);i++) {	
+	for(i=0;i<(1 << n);i++) {
 		e_inferred=0;
 		count=0;
 		for(ip=0;ip<n;ip++) {
@@ -143,7 +143,16 @@ void compute_probs(int n, double *big_list, char *filename) {
 				count++;
 			}
 		}
-		fprintf(fn, "%.10e\n", exp(e_inferred-z_inferred));	
+		
+		for(ip=0;ip<n;ip++) {
+			if (i & (1 << ip)) {
+				fprintf(fn, "1");
+			} else {
+				fprintf(fn, "0");
+			}
+		}
+		
+		fprintf(fn, " %.10e %.10e\n", e_inferred, exp(e_inferred-z_inferred));	
 	}
 	
     fclose(fn);

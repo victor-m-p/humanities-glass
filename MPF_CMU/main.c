@@ -5,6 +5,7 @@
 // mpf -t [filename] [paramfile] [NN] // load in test data, fit, get KL divergence from truth
 // mpf -o [filename_prefix] [NN] // load in data (_data.dat suffix), find best lambda using _params.dat to determine KL
 // mpf -k [filename] [paramfile_truth] [paramfile_inferred] // load data, compare truth to inferred
+// mpf -z [paramfile] [n_nodes]  // print out probabilities of all configurations under paramfile
 
 int main (int argc, char *argv[]) {
 	double t0, beta, *big_list, *truth, *inferred, logl_ans, glob_nloops, best_log_sparsity, kl_cv, kl_cv_sp, kl_true, kl_true_sp, ent;
@@ -282,6 +283,20 @@ int main (int argc, char *argv[]) {
 			// strcat(filename_sav, "_probs.dat");
 			// compute_probs(n, truth, filename_sav);
 			// now compare to the true distribution
+		}
+		if (argv[1][1] == 'z') {
+			n=atoi(argv[3]);
+			truth=(double *)malloc((n*(n+1)/2)*sizeof(double));
+		    fp = fopen(argv[2], "r");
+			for(j=0;j<n*(n+1)/2;j++) {
+				fscanf(fp, "%le ", &(truth[j]));
+			}
+		    fclose(fp);
+			
+			strcpy(filename_sav, argv[2]);
+			strcat(filename_sav, "_probs.dat");
+			
+			compute_probs(n, truth, filename_sav);
 		}
 	}
 	printf("Clock time: %14.12lf seconds.\n", (clock() - t0)/CLOCKS_PER_SEC);
