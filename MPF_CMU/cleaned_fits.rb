@@ -4,7 +4,7 @@
 `ls ../data/mdl_final/cleaned_*`.split("\n").each { |file|
   start=Time.now
   print "Doing #{file}...\n"
-  `OMP_NUM_THREADS=128 ./mpf -c ../data/mdl_final/cleaned_maxna_#{i}.dat 1`  
+  `OMP_NUM_THREADS=128 ./mpf -c #{file} 1`  
   print "#{Time.now-start} seconds\n"
 
   `cd /jet/home/sdedeo/humanities-glass ; git add . ; git commit -m "cleaned no-text fits (from PSC)" ; git push`
