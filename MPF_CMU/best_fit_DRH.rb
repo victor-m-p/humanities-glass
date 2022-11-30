@@ -51,22 +51,7 @@ set[1..-1].select { |i| i[-1].include?("nuniq_20") and (i[-1].include?("maxna_5"
 
   file=File.new(preface_new+trial[-1]+".mpf", 'r');file.readline;file.readline;count=Hash.new(0);file.each_line { |i| count[i] += 1 };entropy=count.to_a.collect { |i| i[1] }.ent
 
-  cv_test=Parallel.map(scan, :in_process=>n_proc) { |logs|
-    val=`OMP_NUM_THREADS=128 ./mpf -c #{preface_new+trial[-1]+".mpf"} 1`.scan(/point:[^\n]+\n/).collect { |i| i.split(" ")[-1].to_f }.mean
-    ans_cv=[logs, val]
-    print "#{ans_cv}\n"
-    ans_cv
-  }
-  loc=cv_test.index { |i| i[1] == cv_test.collect { |j| j[1] }.max }
-  best_lambda=cv_test[loc][0]
-
-  print "Best lambda for #{trial[-1]}: #{best_lambda}\n"
-
-  ans=`./mpf -l #{preface_new+trial[-1]+".mpf"} #{best_lambda} 1`
-  ans.split("\n").select { |i| i.include?("params") }
-  file_out=File.new(preface_new+trial[-1]+".mpf_params_NN#{nn}_#{best_lambda}lambda_UPDATED", 'w')
-  file_out.write(ans.split("\n").select { |i| i.include?("params") }[0])
-  file_out.close
+  print `./mpf -c #{preface_new+trial[-1]+".mpf"} 1`
   
   `cd /jet/home/sdedeo/humanities-glass ; git add . ; git commit -m "new cross-validated fits (from PSC)" ; git push`
 }
