@@ -938,7 +938,7 @@ void simple_minimizer(all *data) {
 	
 	compute_k_general(data, 1);
 
-	gsl_multimin_fdfminimizer_set(s, &k_func, x, 0.01, 1e-6);
+	gsl_multimin_fdfminimizer_set(s, &k_func, x, 0.01, 1e-4);
 	
 	prev=1e300;
 	do {

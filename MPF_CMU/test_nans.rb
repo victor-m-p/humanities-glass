@@ -41,7 +41,7 @@ str_na=str.split("\n")[1..129].join("\n")+"\n"+str.split("\n")[130..-1].collect 
   code
 }.join("\n");1
 
-[64, 128, 256, 512, 512+256, 1024].each { |cut| #, 512, 512+256, 1024
+[64, 64, 128, 128, 256, 512, 512+256, 1024].each { |cut| #, 512, 512+256, 1024
   file=File.new("DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat", 'w')
   file.write("#{128+cut}\n"+str_na); file.close
   `./mpf -c DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat 1`
@@ -80,10 +80,10 @@ str_na_new=str_na.split("\n")[1..-1].collect { |j|
   end
 }
 
-# 10.times { |label|
-#   [10,20].each { |nodes|
-#     [3,5].each { |nan|
-#       print "sbatch -N 1 -o DATA/NAN_TESTS_#{nodes}nodes_#{nan}NAN_#{label} -t #{nodes == 10 ? "00:30" : "01:00"}:00 -p RM ./test_nans.rb #{nodes} #{nan} #{label}_#{nodes}_#{nan}\n"
-#     }
-#   }
-# }
+5.times { |label|
+  [20].each { |nodes|
+    [6,7,8,9,10].each { |nan|
+      print "sbatch -N 1 -o DATA/NAN_TESTS_#{nodes}nodes_#{nan}NAN_#{label} -t #{nodes == 10 ? "00:30" : "02:00"}:00 -p RM ./test_nans.rb #{nodes} #{nan} #{label}_#{nodes}_#{nan}\n"
+    }
+  }
+}
