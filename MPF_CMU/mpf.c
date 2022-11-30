@@ -950,7 +950,7 @@ void simple_minimizer(all *data) {
 	
 	compute_k_general(data, 1);
 
-	gsl_multimin_fdfminimizer_set(s, &k_func, x, 0.01, 1e-4);
+	gsl_multimin_fdfminimizer_set(s, &k_func, x, 0.01, 1e-6);
 	
 	prev=1e300;
 	do {
@@ -975,13 +975,13 @@ void simple_minimizer(all *data) {
 			num += fabs(data->big_list[i]);
 		}
 		
-		if ((fabs(prev-num) < 1e-16) && ((iter % 10) == 9)) {
+		if ((fabs(prev-num) < 1e-16) && ((iter % 20) == 19)) {
 			break;
 		}
-		if ((iter % 10) == 0) {
+		if ((iter % 20) == 0) {
 			prev=num;
 		}
-	} while (status == GSL_CONTINUE && iter < 2000);
+	} while (status == GSL_CONTINUE && iter < 3000);
 
 	// compute_k_general(data, 1);
 	// printf("FINAL Derivs: ");
