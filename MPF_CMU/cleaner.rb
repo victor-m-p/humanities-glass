@@ -13,13 +13,17 @@ file.close
     if !list.include?(i[0].to_i) then
       str=i[1..-2].collect { |j| j.to_i == 0 ? "X" : (j.to_i < 0 ? 0 : 1) }.join("")
       if str.scan(/X/).length <= na then
-        set << [str, i[-1].to_f]
+        set << [i[0], str, i[-1].to_f]
       end
     end
   };1
 
   file=File.new("../data/mdl_final/cleaned_nrows_#{set.length}_maxna_#{na}.dat", 'w')
-  file.write("#{set.length}\n#{20}\n#{set.collect { |k| k.join(" ") }.join("\n")}")
+  file.write("#{set.length}\n#{20}\n#{set[1..-1].collect { |k| k.join(" ") }.join("\n")}")
+  file.close
+
+  file=File.new("../data/mdl_final/reference_with_entry_id_cleaned_nrows_#{set.length}_maxna_#{na}.dat", 'w')
+  file.write("#{set.collect { |k| k.join(" ") }.join("\n")}")
   file.close
   
   print "#{na}: #{set.length}\n"
