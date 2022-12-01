@@ -100,3 +100,4 @@ Clock time: 92811.486999000001 seconds.
 To github.com:victor-m-p/humanities-glass
    b66e360..869e584  main -> main
 Doing ../data/mdl_final/holdout_nrows_478_maxna_5.dat...
+slurmstepd: error: *** JOB 13412751 ON r347 CANCELLED AT 2022-12-01T11:45:17 ***
