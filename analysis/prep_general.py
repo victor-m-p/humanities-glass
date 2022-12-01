@@ -1,6 +1,7 @@
 import numpy as np 
-from sim_fun import p_dist, bin_states
+from fun import p_dist, bin_states, top_n_idx, compute_HammingDistance
 import pandas as pd 
+from sklearn.manifold import MDS
 
 # setup
 infile = '../data/analysis/matrix_nrow_660_ncol_21_nuniq_20_suniq_581_maxna_10.txt.mpf_params_NN1_LAMBDA0.453839'
@@ -23,7 +24,25 @@ h = A[nJ:]
 p = p_dist(h, J) # this takes some time (and should not be attempted with n_nodes > 20)
 np.savetxt(outname, p)
 
-# allstates (for julia)
+# allstates
 outname = '../data/analysis/allstates_nrow_660_ncol_21_nuniq_20_suniq_581_maxna_10_NN1_LAMBDA0_453839.txt'
 allstates = bin_states(n_nodes) # takes a minute (do not attempt with n_nodes > 20)
 np.savetxt(outname, allstates)
+
+# MDS (obtain positions)
+seed = 254
+c_cutoff = 500
+outname = '../data/analysis/pos_nrow_....'
+p_ind, p_vals = top_n_idx(500, p, allstates) 
+h_distances = compute_HammingDistance(p_ind) 
+mds = MDS(
+    n_components = 2,
+    n_init = 4, 
+    max_iter = 300, 
+    eps=1e-3, 
+    random_state=seed,
+    dissimilarity='precomputed',
+    n_jobs=-1 
+)
+pos = mds.fit(h_distances).embedding_
+np.savetxt(outname, pos)
