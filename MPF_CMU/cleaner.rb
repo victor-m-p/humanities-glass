@@ -48,3 +48,36 @@ file.close
   
   print "#{na}: #{set.length}\n"
 }
+
+file=File.new("../data/reference/main_nrow_660_ncol_21_nuniq_20_suniq_581_maxna_10.csv", 'r')
+csv = CSV.new(file)
+ans=csv.read;
+file.close
+properties=Hash.new([])
+ans[1..-1].each { |i|
+  properties[i[0].to_i] += [i[1..-2].collect { |j| j.to_i == 0 ? "X" : (j.to_i < 0 ? 0 : 1) }.join("")]
+};1
+
+keep=properties.keys.shuffle[0..(properties.keys.length-list.length-1)]
+
+0.upto(10) { |na|
+  set=[]
+  ans[1..-1].each { |i|
+    if keep.include?(i[0].to_i) then
+      str=i[1..-2].collect { |j| j.to_i == 0 ? "X" : (j.to_i < 0 ? 0 : 1) }.join("")
+      if str.scan(/X/).length <= na then
+        set << [i[0], str, i[-1].to_f]
+      end
+    end
+  };1
+
+  file=File.new("../data/mdl_final/holdout_nrows_#{set.length}_maxna_#{na}.dat", 'w')
+  file.write("#{set.length}\n#{20}\n#{set.collect { |k| k[1..-1].join(" ") }.join("\n")}")
+  file.close
+
+  file=File.new("../data/mdl_final/reference_with_entry_id_holdout_nrows_#{set.length}_maxna_#{na}.dat", 'w')
+  file.write("#{set.collect { |k| k.join(" ") }.join("\n")}")
+  file.close
+  
+  print "#{na}: #{set.length}\n"
+}

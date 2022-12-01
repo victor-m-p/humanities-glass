@@ -10,3 +10,47 @@ final parameter fits
 * the fits are with one nearest neighbour, and have the suffix _params.dat; J's and then h's order.
 
 * right now, we have NOT characterized the stability for N=20 when NA > 5; we have the CPU-hours, so I've run the fits on the Pittsburgh Supercomputer Center for NAs larger, just so we have them.
+
+In part because they focus on the content of a text, which might not reflect the full spectrum of attitudes within the religion as a whole, text questions end up having quite different statistics from the group cases:
+
+Q0: Does the religion have official political support
+Text average: 0.297 vs. Non-text average: 0.567 ± 0.021
+Q1: Does the religious group have scriptures:
+Text average: 0.276 vs. Non-text average: 0.612 ± 0.021
+Q2: Is monumental religious architecture present:
+Text average: NaN vs. Non-text average: 0.519 ± 0.021
+Q3: Is a spirit-body distinction present:
+Text average: 0.408 vs. Non-text average: 0.868 ± 0.013
+Q4: Belief in afterlife:
+Text average: 0.486 vs. Non-text average: 0.866 ± 0.013
+Q5: Reincarnation in this world:
+Text average: 0.085 vs. Non-text average: 0.322 ± 0.020
+Q6: Are there special treatments for adherents’ corpses:
+Text average: 0.121 vs. Non-text average: 0.689 ± 0.020
+Q7: Are co-sacrifices present in tomb/burial:
+Text average: 0.028 vs. Non-text average: 0.181 ± 0.018
+Q8: Are grave goods present:
+Text average: 0.087 vs. Non-text average: 0.455 ± 0.023
+Q9: Are formal burials present:
+Text average: 0.137 vs. Non-text average: 0.739 ± 0.018
+Q10: Are supernatural beings present:
+Text average: 0.710 vs. Non-text average: 0.870 ± 0.013
+Q11: Is supernatural monitoring present:
+Text average: 0.310 vs. Non-text average: 0.697 ± 0.020
+Q12: Do supernatural beings mete out punishment:
+Text average: 0.304 vs. Non-text average: 0.719 ± 0.019
+Q13: Does membership in this religious group require castration:
+Text average: 0.000 vs. Non-text average: 0.003 ± 0.002
+Q14: Does membership in this religious group require sacrifice of adults:
+Text average: 0.000 vs. Non-text average: 0.049 ± 0.009
+Q15: Does membership in this religious group require sacrifice of children:
+Text average: 0.009 vs. Non-text average: 0.023 ± 0.007
+Q16: Does membership in this religious group require self-sacrifice (suicide):
+Text average: 0.000 vs. Non-text average: 0.020 ± 0.006
+Q17: Does membership in this religious group require participation in small-scale rituals (private, household):
+Text average: 0.325 vs. Non-text average: 0.576 ± 0.024
+Q18: Does membership in this religious group require participation in large-scale rituals:
+Text average: 0.217 vs. Non-text average: 0.670 ± 0.021
+Q19: Does the religious group in question possess its own distinct written language:
+Text average: 0.214 vs. Non-text average: 0.226 ± 0.019
+
