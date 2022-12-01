@@ -1,5 +1,6 @@
 import numpy as np
 import itertools 
+import pandas as pd 
 
 # taken from coniii enumerate
 def fast_logsumexp(X, coeffs=None):
@@ -58,6 +59,7 @@ def p_dist(h, J):
     return Pout[::-1]
 
 # taken from conii 
+# but maybe this does not make sense now 
 def bin_states(n, sym=True):
     v = np.array([list(np.binary_repr(i,width=n)) for i in range(2**n)]).astype(int)
     if sym is False:

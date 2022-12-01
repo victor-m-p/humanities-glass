@@ -15,6 +15,7 @@ n_cutoff = 500
 outpath = '../fig'
 
 # read files 
+# consider what we actually need, pre-running POS now 
 p_file = '../data/analysis/p_nrow_660_ncol_21_nuniq_20_suniq_581_maxna_10_NN1_LAMBDA0_453839.txt'
 mat_file = '../data/clean/matrix_nrow_660_ncol_21_nuniq_20_suniq_581_maxna_10.txt'
 d_main = '../data/reference/main_nrow_660_ncol_21_nuniq_20_suniq_581_maxna_10.csv'
@@ -178,15 +179,18 @@ nudge = [
 transl = [
     'Tsonga',
     'Luguru',
-    'AT',
-    'MMN',
+    'Mesopotamia',
+    'Cistercians',
     'Islam in Aceh',
-    'Jesuits in Britain',
-    'Ancient Egypt (RP)',
+    'LR-Selinous',
+    'Ancient Egypt (OK)',
     'PMP-PC',
     'GVT',
     'PCR-PI'
 ]
+
+### DOUBLE CHECK THIS, ....??
+labeldct
 
 position_nudge = {}
 translation_dct = {}
@@ -195,6 +199,7 @@ for idx, val in enumerate(labeldct.values()):
     position_nudge[abb] = nudge[idx]
     translation_dct[val] = abb
 
+translation_dct
 # paths and names
 perc = sum(p_vals)
 out = os.path.join(outpath, f'MDS_annotated_nnodes_{n_nodes}_maxna_{maxna}_ncutoff_{n_cutoff}_perc_{perc}_seed_{seed}.pdf')
@@ -261,3 +266,51 @@ for entry_name, position in positions:
 
 # save
 plt.savefig(out)
+translation_dct
+
+node_attr[node_attr['node_id'] == 146]
+# double check everything.
+# some inconsistency. 
+# rerun (nb. incorporate in earlier pipeline for final)
+# more entry_name duplicates consider.
+
+#### check which points are inside ellipse ####
+# https://stackoverflow.com/questions/37031356/check-if-points-are-inside-ellipse-faster-than-contains-point-method
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
+import numpy as np
+
+fig,ax = plt.subplots(1)
+ax.set_aspect('equal')
+
+# Some test points
+x = np.random.rand(500)*0.5+0.7
+y = np.random.rand(500)*0.5+0.7
+
+# The ellipse
+g_ell_center = (0.8882, 0.8882)
+g_ell_width = 0.36401857095483
+g_ell_height = 0.16928136341606
+angle = 30.
+
+g_ellipse = patches.Ellipse(g_ell_center, g_ell_width, g_ell_height, angle=angle, fill=False, edgecolor='green', linewidth=2)
+ax.add_patch(g_ellipse)
+cos_angle = np.cos(np.radians(180.-angle))
+sin_angle = np.sin(np.radians(180.-angle))
+
+xc = x - g_ell_center[0]
+yc = y - g_ell_center[1]
+
+xct = xc * cos_angle - yc * sin_angle
+yct = xc * sin_angle + yc * cos_angle 
+
+rad_cc = (xct**2/(g_ell_width/2.)**2) + (yct**2/(g_ell_height/2.)**2)
+
+# Set the colors. Black if outside the ellipse, green if inside
+colors_array = np.array(['black'] * len(rad_cc))
+colors_array[np.where(rad_cc <= 1.)[0]] = 'green'
+
+ax.scatter(x,y,c=colors_array,linewidths=0.3)
+
+plt.show()
+ 
