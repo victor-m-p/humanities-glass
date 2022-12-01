@@ -1,5 +1,5 @@
 #!/usr/bin/ruby
-# sbatch -N 1 -o CLEANED_FITS -t 3:00:00 -p RM ./cleaned_fits.rb
+# sbatch -N 1 -o CLEANED_FITS -t 10:00:00 -p RM ./cleaned_fits.rb
 
 `ls ../data/mdl_final/cleaned_*`.split("\n").each { |file|
   start=Time.now
