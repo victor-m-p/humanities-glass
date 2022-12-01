@@ -72,8 +72,12 @@ def hamming_distance(X):
     return (X[:, None, :] != X).sum(2)
 
 # 
-def top_n_idx(n, p): # fix this
+def top_n_idx(n, p, ind_colname, val_colname): # fix this
     val_cutoff = np.sort(p)[::-1][n]
     p_ind = [i for i, v in enumerate(p) if v > val_cutoff]
-    p_vals = p[p > val_cutoff]
-    return p_ind, p_vals
+    p_val = p[p > val_cutoff]
+    d = pd.DataFrame({
+        ind_colname: p_ind, 
+        val_colname: p_val})
+    d = d.sort_values(val_colname, ascending=False)
+    return d
