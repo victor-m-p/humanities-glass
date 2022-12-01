@@ -32,11 +32,9 @@ file.close
 0.upto(10) { |na|
   set=[]
   ans[1..-1].each { |i|
-    if !list.include?(i[0].to_i) then
-      str=i[1..-2].collect { |j| j.to_i == 0 ? "X" : (j.to_i < 0 ? 0 : 1) }.join("")
-      if str.scan(/X/).length <= na then
-        set << [i[0], str, i[-1].to_f]
-      end
+    str=i[1..-2].collect { |j| j.to_i == 0 ? "X" : (j.to_i < 0 ? 0 : 1) }.join("")
+    if str.scan(/X/).length <= na then
+      set << [i[0], str, i[-1].to_f]
     end
   };1
 
