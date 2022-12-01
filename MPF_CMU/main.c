@@ -51,10 +51,11 @@ int main (int argc, char *argv[]) {
 			strcpy(filename_sav, argv[2]);
 			strcat(filename_sav, "_params.dat");
 		    fp = fopen(filename_sav, "w+");
-			for(j=0;j<data->n_params;j++) {
-				fprintf(fp, "%.10e ", data->big_list[j]);
-			}
-		    fclose(fp);	
+			// for(j=0;j<data->n_params;j++) {
+			// 	fprintf(fp, "%.10e ", data->big_list[j]);
+			// }
+			// 		    fclose(fp);
+						
 		}
 
 		if (argv[1][1] == 'c') { // cross validation
@@ -92,6 +93,7 @@ int main (int argc, char *argv[]) {
 				fprintf(fp, "%.10e ", data->big_list[j]);
 			}
 		    fclose(fp);	
+			
 		}
 
 		if (argv[1][1] == 'o') { // optimal lambda -- to be written

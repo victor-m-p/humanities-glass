@@ -643,7 +643,7 @@ double cross(char *filename, double log_sparsity, int nn) {
 	{
 
 		// parallelize this for loop
-		#pragma omp for
+#pragma omp for
 		for(in=0;in<num_no_na;in++) {
 		
 			data=new_data();
@@ -665,6 +665,16 @@ double cross(char *filename, double log_sparsity, int nn) {
 			sav=data->obs_raw[pos]; // the pointer to the data we'll leave out
 			data->obs_raw[pos]=data->obs_raw[data->m]; //
 			data->obs_raw[data->m]=sav;
+			
+			// printf("Flip %i to end\n", pos);
+			// for(i=0;i<data->n;i++) {
+			// 	printf("%i", data->obs_raw[pos]->config_base[i]);
+			// }
+			// printf("\n");
+			// for(i=0;i<data->n;i++) {
+			// 	printf("%i", data->obs_raw[data->m]->config_base[i]);
+			// }
+			// printf("\n");
 
 			process_obs_raw(data);				
 			init_params(data);
@@ -684,6 +694,12 @@ double cross(char *filename, double log_sparsity, int nn) {
 			} else {
 				logl_ans=log_l(data, config, data->big_list, 1);
 			}
+			//
+			// printf("Outcome %i: %lf\n", in, logl_ans);
+			// for(i=0;i<data->n_params;i++) {
+			// 	printf("%.10le, ", data->big_list[i]);
+			// }
+			// printf("\n");
 			
 			glob_nloops += logl_ans;
 			thread_id = omp_get_thread_num();
@@ -941,7 +957,7 @@ void simple_minimizer(all *data) {
 	
 	x = gsl_vector_alloc(data->n_params);
 	for(i=0;i<data->n_params;i++) {
-		gsl_vector_set(x, i, data->big_list[i]);
+		gsl_vector_set(x, i, data->big_list[i]); //
 	}
 	// T = gsl_multimin_fdfminimizer_conjugate_fr; // 5867.659379
 	T = gsl_multimin_fdfminimizer_conjugate_pr; // 5866.193340 5865.871289 5866.563172 5868.561687
@@ -984,9 +1000,9 @@ void simple_minimizer(all *data) {
 	} while (status == GSL_CONTINUE && iter < 3000);
 
 	// compute_k_general(data, 1);
-	// printf("FINAL Derivs: ");
+	// printf("FINAL params: ");
 	// for(i=0;i<data->n_params;i++) {
-	// 	printf("%lf ", data->dk[i]);
+	// 	printf("%.10le ", gsl_vector_get (s->x, i));
 	// }
 	// printf("\n");
 

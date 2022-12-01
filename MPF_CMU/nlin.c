@@ -106,7 +106,7 @@ double minimize_kl(cross_val *cv) {
 
   gsl_set_error_handler_off(); // living on the edge
 
-  T = gsl_min_fminimizer_brent;
+  T = gsl_min_fminimizer_goldensection;
   s = gsl_min_fminimizer_alloc (T);
   gsl_min_fminimizer_set(s, &F, m, a, b);
 
