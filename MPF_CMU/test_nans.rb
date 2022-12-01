@@ -82,10 +82,10 @@ str_na_new=str_na.split("\n")[1..-1].collect { |j|
   end
 }
 
-3.times { |label|
-  [20].each { |nodes|
-    [5].each { |nan|
-      print "sbatch -N 1 -o DATA/NAN_TESTS_#{nodes}nodes_#{nan}NAN_#{label}_DDLONG -t #{nodes == 10 ? "00:30" : "24:00"}:00 -p RM ./test_nans.rb #{nodes} #{nan} #{label}_#{nodes}_#{nan}_DDLONG\n"
-    }
-  }
-}
+# 3.times { |label|
+#   [10].each { |nodes|
+#     [5].each { |nan|
+#       print "sbatch -N 1 -o DATA/new_NAN_TESTS_#{nodes}nodes_#{nan}NAN_#{label}_DDLONG -t #{nodes == 10 ? "02:00" : "24:00"}:00 -p RM ./test_nans.rb #{nodes} #{nan} #{label}_#{nodes}_#{nan}_DDLONG\n"
+#     }
+#   }
+# }
