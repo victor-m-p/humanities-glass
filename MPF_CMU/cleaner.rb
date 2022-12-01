@@ -28,3 +28,25 @@ file.close
   
   print "#{na}: #{set.length}\n"
 }
+
+0.upto(10) { |na|
+  set=[]
+  ans[1..-1].each { |i|
+    if !list.include?(i[0].to_i) then
+      str=i[1..-2].collect { |j| j.to_i == 0 ? "X" : (j.to_i < 0 ? 0 : 1) }.join("")
+      if str.scan(/X/).length <= na then
+        set << [i[0], str, i[-1].to_f]
+      end
+    end
+  };1
+
+  file=File.new("../data/mdl_final/all_nrows_#{set.length}_maxna_#{na}.dat", 'w')
+  file.write("#{set.length}\n#{20}\n#{set.collect { |k| k[1..-1].join(" ") }.join("\n")}")
+  file.close
+
+  file=File.new("../data/mdl_final/reference_with_entry_id_all_nrows_#{set.length}_maxna_#{na}.dat", 'w')
+  file.write("#{set.collect { |k| k.join(" ") }.join("\n")}")
+  file.close
+  
+  print "#{na}: #{set.length}\n"
+}
