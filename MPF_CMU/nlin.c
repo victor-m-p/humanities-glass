@@ -93,7 +93,7 @@ double minimize_kl_true(cross_val *cv) {
 
 double minimize_kl(cross_val *cv) {
   int status;
-  int iter = 0, max_iter = 12;
+  int iter = 0, max_iter = 20;
   const gsl_min_fminimizer_type *T;
   gsl_min_fminimizer *s;
   
