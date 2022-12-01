@@ -145,7 +145,7 @@ focus_nodes = sorted([427, 444, 81, 428, 494, 183, 78,
 sums = [np.sum([x, y]) for x, y in pos]
 dsum = pd.DataFrame({'sums': sums})
 dsum['node_id'] = dsum.index 
-dsum = dsum.merge(node_attr, on = 'node_id', how = 'inner')
+dsum = dsum.merge(node_attr_yes, on = 'node_id', how = 'inner')
 dsum.sort_values('sums', ascending=True)
 
 # make better translations
@@ -178,6 +178,10 @@ transl = {
     494: 'Pre-Christian Ireland', 
 }
 
+d_transl = pd.DataFrame.from_dict(transl, orient='index', columns=['translation'])
+d_transl['node_id'] = d_transl.index
+d_transl = d_transl.merge(node_attr, on = 'node_id', how = 'inner')
+d_transl
 nudge = {
     11: (-4, -4), #spiritualism
     44: (-4, -2), # Tiwi
@@ -197,7 +201,7 @@ nudge = {
     228: (5, 1), #Peruvian Mormons
     281: (-4, -2), #Orokaiva
     312: (-8, 0), #Spartan Cults
-    392: (5, 0.5), #Irish Cat
+    #392: (5, 0.5), #Irish Cat
     421: (-13, -1.5), #German Prot.
     425: (-12, 3), #Roman Ort.
     427: (5, 1.5), #Cistercians
@@ -239,6 +243,50 @@ for entry_name, position, node_id in positions:
 
 plt.savefig(out)
 
+##### new labels ######
+pd.set_option('display.max_colwidth', None)
+def contains(df, str): 
+    return df[df['entry_name'].str.contains(str)]
+
+tsong = contains(d_conf, 'Tsonga') # yes
+lug = contains(d_conf, 'Luguru') # two 
+jes = contains(d_conf, 'Jesuits')
+ae = contains(d_conf, 'Ancient Egypt - the Ram')
+islam = contains(d_conf, 'Islam in Aceh')
+morav = contains(d_conf, 'Moravian')
+new_nodes = pd.concat([tsong, lug, jes, ae, islam, morav])
+
+nudge = [
+    (-5, -2), # tsonga
+    (-5, 0), # luguru
+    (-5, 1), # luguru
+    (-10, -12), #jesuits
+    (0, -11), #AE
+    (4, -6), #islam
+    (-5, -13) #moravian
+]
+
+fig, ax = plt.subplots(facecolor = 'w', edgecolor = 'k', dpi = 300)
+plt.axis('off')
+nx.draw_networkx_nodes(G, pos, node_size = node_size_lst, node_color = 'tab:blue')
+nx.draw_networkx_nodes(G, pos, nodelist = sub_nodelst, node_size = sub_size_lst,
+                       node_color = 'tab:orange', node_shape = 'x',
+                       linewidths=0.4)
+
+
+#new_nodes = new_nodes.reset_index()
+for index, row in new_nodes.iterrows(): 
+    node_idx = row['node_id']
+    name = row['entry_name']
+    pos_x, pos_y = pos[node_idx]
+    xx, yy = nudge[index]
+    ax.annotate(name, xy = [pos_x, pos_y],
+                xytext=[pos_x+xx, pos_y+yy],
+                arrowprops = dict(arrowstyle="->",
+                                  connectionstyle='arc3'))
+    
+
+
 # drawing ellipses
 ## red ellipse
 ellipse = Ellipse((-2, 2.5),
@@ -279,31 +327,6 @@ ellipse = Ellipse((-0.4, -3.5),
     edgecolor='tab:red',
     alpha=0.2)
 ax.add_patch(ellipse)
-
-nx.draw_networkx_nodes(G, pos, node_size = node_size_lst, node_color = 'tab:blue')
-nx.draw_networkx_nodes(G, pos, nodelist = sub_nodelst, node_size = sub_size_lst,
-                       node_color = 'tab:orange', node_shape = 'x',
-                       linewidths=0.4)
-
-# annotate 
-for entry_name, position in positions: 
-    pos_x, pos_y = position
-    abb = translation_dct.get(entry_name)
-    x_nudge, y_nudge = position_nudge.get(abb)
-    ax.annotate(abb, xy=[pos_x, pos_y], 
-                xytext=[pos_x+x_nudge, pos_y+y_nudge],
-                arrowprops = dict(arrowstyle="->",
-                                    connectionstyle="arc3"))
-
-# save
-plt.savefig(out)
-translation_dct
-
-node_attr[node_attr['node_id'] == 146]
-# double check everything.
-# some inconsistency. 
-# rerun (nb. incorporate in earlier pipeline for final)
-# more entry_name duplicates consider.
 
 #### check which points are inside ellipse ####
 # https://stackoverflow.com/questions/37031356/check-if-points-are-inside-ellipse-faster-than-contains-point-method
