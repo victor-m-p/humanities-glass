@@ -1,3 +1,5 @@
+# todo: add entry_name to the dataframe 
+# would save a lot of wrangling. 
 using Printf, Statistics, Distributions, DelimitedFiles, CSV, DataFrames, IterTools
 
 # check up on how to better manage paths in julia
