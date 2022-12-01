@@ -11,4 +11,3 @@
     `cd /jet/home/sdedeo/humanities-glass ; git add . ; git commit -m "cleaned no-text fits (from PSC)" ; git push`
   end
 }
-
