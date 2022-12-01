@@ -7,7 +7,7 @@ csv = CSV.new(file)
 ans=csv.read;
 file.close
 
-0.upto(5) { |na|
+0.upto(10) { |na|
   set=[]
   ans[1..-1].each { |i|
     if !list.include?(i[0].to_i) then

@@ -36,6 +36,7 @@ ans[1..-1].each { |i|
 };1
 
 #tag=Hash.new
+dates=Hash.new
 
 require "selenium-webdriver"
 driver = Selenium::WebDriver.for :safari
@@ -43,50 +44,24 @@ wait = Selenium::WebDriver::Wait.new(:timeout => 20)
 count=0
 text=0
 lookup.keys.each { |k|
-  if tag[k] == nil then
+  if dates[k] == nil then
     driver.navigate.to "https://religiondatabase.org/browse/#{k}/#/"
     sleep(2)
-    tag[k]=driver.find_elements(:class, "Tags__tag--ma3").collect { |i| i.text }
+    dates[k]=driver.find_elements(:class, "Date__text--S8V").collect { |i| i.text }[0]
   end
-   if tag[k].select { |i| i.downcase.include?("text") }.length > 0 then
-     print "#{k} has #{tag[k]}\n"
-     text += 1
-   end
-   count += 1
-   print "#{k} (#{count}): #{tag[k]}\n"
+  print "#{k} (#{count}): #{dates[k]}\n"
 };1
 
 lookup.keys.each { |k|
-  if tag[k] == [] then
+  if date[k] == [] then
     driver.navigate.to "https://religiondatabase.org/browse/#{k}/#/"
     sleep(3)
-    tag[k]=driver.find_elements(:class, "Tags__tag--ma3").collect { |i| i.text }
-    if tag[k].select { |i| i.downcase.include?("text") }.length > 0 then
-      text += 1
-    end
+    dates[k]=driver.find_elements(:class, "Date__text--S8V").collect { |i| i.text }[0]
     print "#{k} has #{tag[k]}\n"
   end
 };1
 
-text=0
-list=[]
-lookup.keys.each { |k|
-  if tag[k].select { |i| i.downcase.include?("text") }.length > 0 then
-    text += 1
-    list << k
-  end 
-}
-
-file=File.new("DATA/scrape_tags.dat", 'w'); file.write(Marshal.dump(tag)); file.close
-
-(lookup.keys-list).each { |i|
-  print "#{i} & #{lookup[i]} & #{properties[i][0]} \\\\\n"
-  if (properties[i].length > 1) then
-    properties[i][1..-1].each { |k|
-      print " & & #{k} \\\\ \n"      
-    }
-  end
-}
+file=File.new("DATA/scrape_dates.dat", 'w'); file.write(Marshal.dump(dates)); file.close
 
 
 
