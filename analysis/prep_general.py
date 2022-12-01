@@ -1,48 +1,64 @@
 import numpy as np 
-from fun import p_dist, bin_states, top_n_idx, compute_HammingDistance
+from fun import p_dist, bin_states, top_n_idx, hamming_distance
 import pandas as pd 
 from sklearn.manifold import MDS
 
 # setup
-infile = '../data/analysis/matrix_nrow_660_ncol_21_nuniq_20_suniq_581_maxna_10.txt.mpf_params_NN1_LAMBDA0.453839'
-d_main = '../data/reference/main_nrow_660_ncol_21_nuniq_20_suniq_581_maxna_10.csv'
+n_nodes = 20
+n_nan = 5
+
+# important reference for now (only states that have these ids)
+infile = f'../data/mdl_final/reference_with_entry_id_cleaned_nrows_455_maxna_{n_nan}.dat'
+with open(infile) as f:
+    reference = [x.strip() for x in f.readlines()]
+reference = [int(x.split()[0]) for x in reference]
+d_reference = pd.DataFrame({'entry_id': reference})
+d_reference = d_reference.drop_duplicates()
+
+# recreate the node reference document
+nodes_reference = pd.read_csv('../data/reference/sref_nrow_660_ncol_21_nuniq_20_suniq_581_maxna_10.csv')
+nodes_reference = nodes_reference.merge(d_reference, on = 'entry_id', how = 'inner')
+nodes_reference.to_csv(f'../data/analysis/nref_nrows_455_maxna_{n_nan}_nodes_{n_nodes}.csv', index = False)
+states_reference = pd.read_csv('../data/reference/nref_nrow_660_ncol_21_nuniq_20_suniq_581_maxna_10.csv')
+states_reference.to_csv(f'../data/analysis/sref_nrows_455_maxna_{n_nan}_nodes_{n_nodes}.csv', index = False)
 
 # collapse weighted rows to nan
-outname = '../data/analysis/d_collapsed_nrow_660_ncol_21_nuniq_20_suniq_581_maxna_10_NN1_LAMBDA0_453839.csv'
-d_main = pd.read_csv(d_main)
+d_main = pd.read_csv('../data/reference/main_nrow_660_ncol_21_nuniq_20_suniq_581_maxna_10.csv')
+d_main = d_main.rename(columns = {'s': 'entry_id'})
+d_main = d_main.merge(d_reference, on = 'entry_id', how = 'inner')
 qcols = d_main.columns[1:-1]
-d_unweighted = d_main.groupby('s')[qcols].mean().reset_index().astype(int)
-d_unweighted.to_csv(outname, index = False)
+d_unweighted = d_main.groupby('entry_id')[qcols].mean().reset_index().astype(int)
+d_unweighted.to_csv(f'../data/analysis/d_collapsed_nrows_455_maxna_{n_nan}_nodes_{n_nodes}.csv', index = False)
+d_main.to_csv(f'../data/analysis/d_main_nrows_455_maxna_{n_nan}_nodes_{n_nodes}.csv', index = False)
 
 # calculate probability of all configurations based on parameters h, J.
-outname = '../data/analysis/p_nrow_660_ncol_21_nuniq_20_suniq_581_maxna_10_NN1_LAMBDA0_453839.txt'
+params = np.loadtxt('../data/mdl_final/cleaned_nrows_455_maxna_5.dat_params.dat')
 n_nodes = 20
 nJ = int(n_nodes*(n_nodes-1)/2)
-A = np.loadtxt(infile, delimiter = ',')
-J = A[:nJ]
-h = A[nJ:]
+J = params[:nJ]
+h = params[nJ:]
 p = p_dist(h, J) # this takes some time (and should not be attempted with n_nodes > 20)
-np.savetxt(outname, p)
+np.savetxt(f'../data/analysis/p_nrows_455_maxna_{n_nan}_nodes_{n_nodes}.txt', p)
 
 # allstates
-outname = '../data/analysis/allstates_nrow_660_ncol_21_nuniq_20_suniq_581_maxna_10_NN1_LAMBDA0_453839.txt'
 allstates = bin_states(n_nodes) # takes a minute (do not attempt with n_nodes > 20)
-np.savetxt(outname, allstates)
+np.savetxt(f'../data/analysis/allstates_nrows_455_maxna_{n_nan}_nodes_{n_nodes}.txt', allstates.astype(int), fmt='%i')
 
 # MDS (obtain positions)
 seed = 254
 c_cutoff = 500
 outname = '../data/analysis/pos_nrow_....'
-p_ind, p_vals = top_n_idx(500, p, allstates) 
-h_distances = compute_HammingDistance(p_ind) 
+p_ind, p_vals = top_n_idx(c_cutoff, p) 
+top_states = allstates[p_ind]
+h_distances = hamming_distance(top_states) 
 mds = MDS(
     n_components = 2,
-    n_init = 4, 
-    max_iter = 300, 
-    eps=1e-3, 
+    n_init = 6, 
+    max_iter = 1000, 
+    eps=1e-7, 
     random_state=seed,
     dissimilarity='precomputed',
     n_jobs=-1 
 )
 pos = mds.fit(h_distances).embedding_
-np.savetxt(outname, pos)
+np.savetxt(f'../data/analysis/pos_nrows_455_maxna_{n_nan}_nodes_{n_nodes}_cutoff_{c_cutoff}_seed_{seed}.txt', pos)

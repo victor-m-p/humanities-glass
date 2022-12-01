@@ -3,16 +3,17 @@
 using Printf, Statistics, Distributions, DelimitedFiles, CSV, DataFrames, IterTools
 
 # check up on how to better manage paths in julia
-p_file = "/home/vpoulsen/humanities-glass/data/analysis/p_nrow_660_ncol_21_nuniq_20_suniq_581_maxna_10_NN1_LAMBDA0_453839.txt"
-all_file = "/home/vpoulsen/humanities-glass/data/analysis/allstates_nrow_660_ncol_21_nuniq_20_suniq_581_maxna_10_NN1_LAMBDA0_453839.txt"
-unweighted_file = "/home/vpoulsen/humanities-glass/data/analysis/d_collapsed_nrow_660_ncol_21_nuniq_20_suniq_581_maxna_10_NN1_LAMBDA0_453839.csv"
+p_file = "/home/vpoulsen/humanities-glass/data/analysis/p_nrows_455_maxna_5_nodes_20.txt"
+all_file = "/home/vpoulsen/humanities-glass/data/analysis/allstates_nrows_455_maxna_5_nodes_20.txt"
+unweighted_file = "/home/vpoulsen/humanities-glass/data/analysis/d_collapsed_nrows_455_maxna_5_nodes_20.csv"
 
 # setup
-n_nodes, maxna = 20, 10
+n_nodes, maxna = 20, 5
 
 # read stuff
 p = readdlm(p_file) 
 allstates = readdlm(all_file)
+allstates
 d_unweighted = DataFrame(CSV.File(unweighted_file))
 mat_unweighted = Matrix(d_unweighted)
 
@@ -77,5 +78,5 @@ d = DataFrame(
     p_norm = total_pnorm)
 
 # save stuff 
-CSV.write("/home/vpoulsen/humanities-glass/data/analysis/d_likelihood_nrow_660_ncol_21_nuniq_20_suniq_581_maxna_10_NN1_LAMBDA0_453839.csv", d)
-writedlm("/home/vpoulsen/humanities-glass/data/analysis/mat_likelihood_nrow_660_ncol_21_nuniq_20_suniq_581_maxna_10_NN1_LAMBDA0_453839.txt", mat)
+CSV.write("/home/vpoulsen/humanities-glass/data/analysis/d_likelihood_nrows_455_maxna_5_nodes_20.csv", d)
+writedlm("/home/vpoulsen/humanities-glass/data/analysis/mat_likelihood_nrows_455_maxna_5_nodes_20.txt", mat)
