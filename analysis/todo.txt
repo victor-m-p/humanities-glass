@@ -1,0 +1,4 @@
+1. check whether it is better to compute distance
+based on more than Hamming-1. 
+
+2. make the plots side-by side. 
