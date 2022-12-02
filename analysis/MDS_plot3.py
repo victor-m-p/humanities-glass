@@ -26,9 +26,12 @@ idx = [f'hamming{x}' for x in range(10)]
 d = pd.DataFrame(h_distances, columns = idx)
 d['node_x'] = d.index
 d = pd.wide_to_long(d, stubnames = "hamming", i = 'node_x', j = 'node_y').reset_index()
+d = d[d['node_x'] != d['node_y']]
+d = d.drop_duplicates() 
+d = d.assign(weight = lambda x: 1/x['hamming'])
 
-G = nx.from_pandas_edgelist(d, 'node_x', 'node_y', 'hamming')
-pos = nx.spring_layout(G, weight = 'hamming')
+G = nx.from_pandas_edgelist(d, 'node_x', 'node_y', 'weight')
+pos = nx.spring_layout(G, weight = 'weight')
 
 labeldict = {}
 for i in G.nodes(): 
