@@ -51,6 +51,9 @@ cg_list.length.times { |i|
 }
 max_dist=5
 
+
+cg_list=top20=set.to_a.sort { |i,j| j[1] <=> i[1] }[0..149];1
+max_dist=2
 file=File.new("cg_edges.csv", 'w')
 file.write("Source,Target,Weight\n")
 (cg_list.length-1).times { |i|
