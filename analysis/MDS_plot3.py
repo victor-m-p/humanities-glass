@@ -31,20 +31,29 @@ d = d.drop_duplicates()
 d = d.assign(weight = lambda x: 1/x['hamming'])
 
 G = nx.from_pandas_edgelist(d, 'node_x', 'node_y', 'weight')
-pos = nx.spring_layout(G, weight = 'weight')
+
+d_hamming = pd.read_csv(f'../data/analysis/hamming_nrows_{n_rows}_maxna_{n_nan}_nodes_{n_nodes}_ntop_10.csv')
+d_hamming = d_hamming[['node_id', 'p_raw_focal']].drop_duplicates()
 
 labeldict = {}
-for i in G.nodes(): 
-    labeldict[i] = i
+node_size_dct = d_hamming.to_dict('index')
+for index, vals in node_size_dct.items(): 
+    idx = vals['node_id']
+    G.nodes[idx]['node_size'] = vals['p_raw_focal']
+    labeldict[idx] = idx
+
+pos = nx.spring_layout(G, weight = 'weight', seed = 3)
 
 fig, ax = plt.subplots(facecolor = 'w', edgecolor = 'k', dpi = 300)
 plt.axis('off')
 
-nx.draw_networkx_nodes(G, pos)
+edgew = list(nx.get_edge_attributes(G, 'weight').values())
+edgew = [x*10 if x > 0.49 else 0 for x in edgew]
+nx.draw_networkx_nodes(G, pos, node_color = 'tab:blue')
+nx.draw_networkx_edges(G, pos, width = edgew, edge_color = 'tab:blue', alpha = 0.5)
 nx.draw_networkx_labels(
     G, pos,
     labels = labeldict, 
     font_size = 20,
     font_color='black')
 plt.show();
-

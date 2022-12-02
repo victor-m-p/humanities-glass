@@ -68,18 +68,21 @@ d_hamming_equal = d_hamming_equal.merge(d_hamming_0, on = 'node_id', how = 'inne
 comb = list(itertools.combinations(d_hamming_equal['node_id'].values, 2))
 
 # create equal graph
+## this is how we SHOULD do it 
 Ge = nx.Graph(comb)
 dct_nodes = d_hamming_equal.to_dict('index')
 for key, val in dct_nodes.items():
     for attr in val: 
-        Ge.nodes[key][attr] = val[attr]
+        idx = val['node_id']
+        Ge.nodes[idx][attr] = val[attr]
         
 # create accumulating graph
 Ga = nx.Graph(comb)
 dct_nodes = d_hamming_above.to_dict('index')
 for key, val in dct_nodes.items():
     for attr in val: 
-        Ga.nodes[key][attr] = val[attr]
+        idx = val['node_id']
+        Ga.nodes[idx][attr] = val[attr]
 
 ####### MEAN / TRANSPARENCY #########
 ## problem is that the size becomes so incredibly tiny. 
@@ -154,6 +157,7 @@ d_reference = d_hamming[['node_id', 'p_ind_focal']].drop_duplicates()
 neighbor_dist = neighbor_dist.merge(d_reference, on = 'p_ind_focal')
 d_reference = d_reference.rename(columns = {'p_ind_focal': 'p_ind_other'})
 neighbor_dist = neighbor_dist.merge(d_reference, on = 'p_ind_other')
+
 ## create network from this 
 Gaw = nx.from_pandas_edgelist(neighbor_dist,
                             'node_id_x',
@@ -163,10 +167,13 @@ Gaw = nx.from_pandas_edgelist(neighbor_dist,
 dct_nodes = d_hamming_above.to_dict('index')
 for key, val in dct_nodes.items():
     for attr in val: 
+        idx = val['node_id']
         Gaw.nodes[key][attr] = val[attr]
+        
 # labels
 labeldict = {}
 for i in Gaw.nodes(): 
+    print(i)
     labeldict[i] = i
 
 n_top = 4
@@ -174,7 +181,7 @@ cmap = cm.get_cmap('Oranges', n_top+1)
 raw_scalar = 5000
 node_diams = []
 for i, j in zip(range(n_top,-1,-1), range(n_top+1)): 
-    node_diam = list(nx.get_node_attributes(Ga, f'sum_{i}').values())
+    node_diam = list(nx.get_node_attributes(Gaw, f'sum_{i}').values())
     node_diam = [x*raw_scalar for x in node_diam]
     rgba = rgb2hex(cmap(j))
     #edge_size = [x if x <= i else 0 for x in weight_lst]
