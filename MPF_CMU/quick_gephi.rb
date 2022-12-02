@@ -16,7 +16,7 @@ file.each_line { |i|
   set[i.split(" ")[0]]=i.split(" ")[2].to_f
 }; file.close
 
-top20=set.to_a.sort { |i,j| j[1] <=> i[1] }[0..49]
+top20=set.to_a.sort { |i,j| j[1] <=> i[1] }[0..149]
 top20_sav=top20.collect { |i| i.dup };1
 
 final_list=[]
@@ -37,7 +37,7 @@ while(i < top20.length) do
   i += 1
 end
 
-cg_list=final_list[0..19].collect { |i|
+cg_list=final_list.collect { |i|
   [i[0][0], i.collect { |j| j[1] }.sum]
 }
 
