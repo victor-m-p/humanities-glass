@@ -12,3 +12,4 @@ julia_test
 alg_test
 MPF_CMU/mpf
 data/analysis/allstates*
+data/analysis/hamming*
