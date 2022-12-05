@@ -9,14 +9,7 @@ import re
 import numpy as np
 import argparse 
 
-##### PLOT PARAMETERS ######
-n_nodes, n_nan = 20, 5
-A = np.loadtxt('../data/mdl_final/cleaned_nrows_455_maxna_5.dat_params.dat')
-n_J = int(n_nodes*(n_nodes-1)/2)
-J = A[:n_J] 
-h = A[n_J:]
 
-## try for correlation data
 def node_edge_lst(n, corr_J, means_h): 
     nodes = [node for node in range(n)]
     comb = list(itertools.combinations(nodes, 2))
@@ -28,10 +21,6 @@ def node_edge_lst(n, corr_J, means_h):
     dct_nodes = d_nodes.to_dict('index')
     return d_edgelst, dct_nodes
 
-d_edgelst, dct_nodes = node_edge_lst(n_nodes, J, h)
-d_edgelst = d_edgelst.assign(w_abs = lambda x: np.abs(x['w']))
-
-## create graph 
 def create_graph(d_edgelst, dct_nodes): 
 
     G = nx.from_pandas_edgelist(
@@ -51,7 +40,17 @@ def create_graph(d_edgelst, dct_nodes):
     
     return G, labeldict
 
+##### PLOT PARAMETERS ######
+n_nodes, n_nan = 20, 5
+A = np.loadtxt('../data/mdl_final/cleaned_nrows_455_maxna_5.dat_params.dat')
+n_J = int(n_nodes*(n_nodes-1)/2)
+J = A[:n_J] 
+h = A[n_J:]
+
+d_edgelst, dct_nodes = node_edge_lst(n_nodes, J, h)
+d_edgelst = d_edgelst.assign(w_abs = lambda x: np.abs(x['w']))
 G, labeldct = create_graph(d_edgelst, dct_nodes)
+
 seed = 32
 threshold = 0.4
 cmap = plt.cm.coolwarm
@@ -79,25 +78,14 @@ nx.draw_networkx_edges(
     edge_color = weight_lst, 
     alpha = 0.5, # hmmm
     edge_cmap = cmap, edge_vmin = vmin, edge_vmax = vmax)
-## labels 
-#label_options = {'edgecolor': 'none', 'facecolor': 'white', 'alpha': 0.5}
-#nx.draw_networkx_labels(
-#    G, pos, 
-#    labels = labeldct, 
-#    font_size = 20,
-#    font_color='whitesmoke')
-## colorbar
 sm = plt.cm.ScalarMappable(cmap=cmap, norm=plt.Normalize(vmin = vmin, vmax=vmax))
 sm._A = []
-
 axis = plt.gca()
 # maybe smaller factors work as well, but 1.1 works fine for this minimal example
 #axis.set_xlim([1.1*x for x in axis.get_xlim()])
 #axis.set_ylim([1.1*y for y in axis.get_ylim()])
-
 plt.colorbar(sm, fraction = 0.035)
 plt.show();
-
 
 def plot_corr(G, labeldict, threshold, n_nodes, tol, seed, outpath): 
     # plot basics
