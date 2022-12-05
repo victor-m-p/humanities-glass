@@ -11,7 +11,7 @@ CFLAGS=-O3 -fopenmp `gsl-config --cflags`
 # for PSC with AMD compiler
 # run `module load aocc` first!
 CC=clang
-CFLAGS=-O3 -fopenmp -mllvm -enable-partial-unswitch -fvectorize -flto -fstrip-mining -finline-aggressive -do-block-reorder=aggressive -fremap-arrays-fstruct-layout=5  `gsl-config --cflags`
+CFLAGS=-O3 -fopenmp -mllvm -enable-partial-unswitch -fvectorize -flto -do-block-reorder=aggressive -fremap-arrays-fstruct-layout=5  `gsl-config --cflags`
 
 #fopenmp
 LFLAGS=`gsl-config --libs`
