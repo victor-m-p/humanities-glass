@@ -500,8 +500,10 @@ for node in nodelst_data:
     labeldict[node] = node_id
 
 fig, ax = plt.subplots(1, 2, figsize = (6, 8), dpi = 500)
-draw_network(G_data, pos, 'Blues', 0.6, nodelst_data, nodesize_data, edgelst_data, edgew_data, 0)
-nx.draw_networkx_labels(G_data, pos, font_size = 3, labels = labeldict, ax = ax[0])
+draw_network(G_full, pos, 'Blues', 0.6, nodelst_full, nodesize_full, edgelst_full, edgew_full, 0)
+draw_network(G_data, pos, 'Blues', 0.6, nodelst_data, nodesize_data, edgelst_data, edgew_data, 1)
+nx.draw_networkx_labels(G_full, pos, font_size = 3, labels = labeldict, ax = ax[0])
+nx.draw_networkx_labels(G_data, pos, font_size = 3, labels = labeldict, ax = ax[1])
 plt.savefig('../fig/reference_temp.pdf')
 
 # 18, 27, 2, 14, 46, 145, 93 (for large differences)
