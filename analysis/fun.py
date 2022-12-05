@@ -79,5 +79,5 @@ def top_n_idx(n, p, ind_colname, val_colname): # fix this
     d = pd.DataFrame({
         ind_colname: p_ind, 
         val_colname: p_val})
-    d = d.sort_values(val_colname, ascending=False)
+    d = d.sort_values(val_colname, ascending=False).reset_index(drop=True)
     return d

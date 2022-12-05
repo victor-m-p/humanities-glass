@@ -51,10 +51,10 @@ int main (int argc, char *argv[]) {
 			strcpy(filename_sav, argv[2]);
 			strcat(filename_sav, "_params.dat");
 		    fp = fopen(filename_sav, "w+");
-			// for(j=0;j<data->n_params;j++) {
-			// 	fprintf(fp, "%.10e ", data->big_list[j]);
-			// }
-			// 		    fclose(fp);
+			for(j=0;j<data->n_params;j++) {
+				fprintf(fp, "%.10e ", data->big_list[j]);
+			}
+		    fclose(fp);
 						
 		}
 
@@ -63,7 +63,7 @@ int main (int argc, char *argv[]) {
 			cv=(cross_val *)malloc(sizeof(cross_val));
 			cv->filename=argv[2];
 			cv->nn=atoi(argv[3]);
-			best_log_sparsity=minimize_kl(cv);
+			best_log_sparsity=minimize_kl(cv, 1); // don't use fast version, just for safety
 			
 			printf("Best log_sparsity: %lf\n", best_log_sparsity);
 			
@@ -161,7 +161,7 @@ int main (int argc, char *argv[]) {
 			strcpy(filename_sav, argv[2]);
 			strcat(filename_sav, "_data.dat");
 			cv->filename=filename_sav;
-			best_log_sparsity=minimize_kl(cv);
+			best_log_sparsity=minimize_kl(cv, 1); // use fast version
 			
 			printf("Best log_sparsity CV: %lf\n", best_log_sparsity);
 			
@@ -228,7 +228,7 @@ int main (int argc, char *argv[]) {
 			cv=(cross_val *)malloc(sizeof(cross_val));
 			cv->filename=argv[2];
 			cv->nn=atoi(argv[4]);
-			best_log_sparsity=minimize_kl(cv);
+			best_log_sparsity=minimize_kl(cv, 1); // use fast version
 			
 			printf("Best log_sparsity: %lf\n", best_log_sparsity);
 			

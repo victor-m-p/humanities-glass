@@ -91,7 +91,7 @@ double minimize_kl_true(cross_val *cv) {
   return m;
 }
 
-double minimize_kl(cross_val *cv) {
+double minimize_kl(cross_val *cv, int fast_version) {
   int status;
   int iter = 0, max_iter = 20;
   const gsl_min_fminimizer_type *T;
@@ -106,7 +106,11 @@ double minimize_kl(cross_val *cv) {
 
   gsl_set_error_handler_off(); // living on the edge
 
-  T = gsl_min_fminimizer_goldensection;
+  if (fast_version == 1) {
+	  T=gsl_min_fminimizer_brent; 
+  } else {
+	  T=gsl_min_fminimizer_goldensection;  	
+  }
   s = gsl_min_fminimizer_alloc (T);
   gsl_min_fminimizer_set(s, &F, m, a, b);
 

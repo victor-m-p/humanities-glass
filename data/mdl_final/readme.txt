@@ -1,5 +1,9 @@
 final parameter fits
 
+* use cleaned* for all analyses (these are the ones with texts removed)
+
+* cleaned_* is the data; reference_with_entry_id_cleaned_* has the entry_ids listed
+
 * based on the lists that appear in /data/reference/main_nrow_660_ncol_21_nuniq_20_suniq_581_maxna_10.csv
 
 * questions have the same order as in /data/reference/main_nrow_660_ncol_21_nuniq_20_suniq_581_maxna_10.csv

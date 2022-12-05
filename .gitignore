@@ -11,4 +11,7 @@ MPF_playground
 julia_test
 alg_test
 MPF_CMU/mpf
+MPF_CMU/PLOTS/*eps
+MPF_CMU/TEST/*
 data/analysis/allstates*
+data/analysis/hamming*

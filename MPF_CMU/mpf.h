@@ -112,7 +112,7 @@ double log_l(all *data, unsigned long int config, double *inferred, int do_appro
 void compute_probs(int n, double *big_list, char *filename);
 
 double cross(char *filename, double log_sparsity, int nn);
-double minimize_kl(cross_val *cv);
+double minimize_kl(cross_val *cv, int fast_version);
 void update_sparsity(all *data);
 
 double kl_holder(double log_sparsity, void *params);
