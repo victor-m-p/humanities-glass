@@ -7,14 +7,14 @@ CC=/opt/local/bin/clang
 # run `module load gcc` first!
 CC=gcc
 CFLAGS=-O3 -fopenmp `gsl-config --cflags`
+LFLAGS=`gsl-config --libs`
 
 # for PSC with AMD compiler
 # run `module load aocc aocl` first!
 CC=clang
-CFLAGS=-O3 -fopenmp -fvectorize -flto -fremap-arrays -funroll-loops -finline-aggressive -lalm  -lm `gsl-config --cflags`
-
+CFLAGS=-O3 -fopenmp -fvectorize -flto -fremap-arrays -funroll-loops -finline-aggressive `gsl-config --cflags`
+LFLAGS=-lalm  -lm `gsl-config --libs`
 #fopenmp
-LFLAGS=`gsl-config --libs`
 
 OBJ = mpf.o mcmc.o nlin.o nsb.o
 
