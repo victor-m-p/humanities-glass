@@ -1,5 +1,5 @@
 #!/usr/bin/ruby
-# sbatch -N 1 -o quick_test_COMP -t 06:00:00 -p RM ./quick_test.rb 256
+# sbatch -N 1 -o quick_test_COMP_FINAL -t 06:00:00 -p RM ./quick_test.rb 
 
 list=[]
 ans=Array.new(100) { |i|
