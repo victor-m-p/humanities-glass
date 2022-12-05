@@ -31,8 +31,8 @@ ans=Array.new(100) { |i|
 
   print "GCC time: #{gcc}\n"
   print "AMD time: #{amd}\n"
-  print "#{`./mpf -k TEST_COMP/test_#{i}_data.dat TEST_COMP/test_#{i}_params.dat TEST_COMP/test_#{i}_data.dat_params_CV.dat`}\n"
   print "#{`./mpf -k TEST_COMP/test_#{i}_data.dat TEST_COMP/test_#{i}_params.dat TEST_COMP/test_#{i}_data.dat_params_CV_GCC.dat`}\n"
+  print "#{`./mpf -k TEST_COMP/test_#{i}_data.dat TEST_COMP/test_#{i}_params.dat TEST_COMP/test_#{i}_data.dat_params_CV.dat`}\n"
   print "#{`./mpf -k TEST_COMP/test_#{i}_data.dat TEST_COMP/test_#{i}_params.dat TEST_COMP/test_#{i}_data.dat_params.dat`}\n"
   
   [gcc, amd]
