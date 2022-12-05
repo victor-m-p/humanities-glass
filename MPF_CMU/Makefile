@@ -10,8 +10,8 @@ CFLAGS=-O3 -fopenmp `gsl-config --cflags`
 
 # for PSC with AMD compiler
 # run `module load aocc` first!
-# CC=clang
-# CFLAGS=-O3 -fopenmp -fvectorize -flto `gsl-config --cflags`
+CC=clang
+CFLAGS=-O3 -fopenmp -fvectorize -flto `gsl-config --cflags`
 
 #fopenmp
 LFLAGS=`gsl-config --libs`
@@ -19,7 +19,7 @@ LFLAGS=`gsl-config --libs`
 OBJ = mpf.o mcmc.o nlin.o nsb.o
 
 all : main.c $(OBJ)
-	${CC} $^ -o mpf ${CFLAGS} ${LFLAGS}
+	${CC} $^ -o mpf_AMD ${CFLAGS} ${LFLAGS}
 
 mpf.o: mpf.c
 	${CC} $^ ${CFLAGS} -c
