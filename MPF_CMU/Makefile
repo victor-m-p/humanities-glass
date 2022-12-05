@@ -12,7 +12,7 @@ LFLAGS=`gsl-config --libs`
 # for PSC with AMD compiler
 # run `module load aocc aocl` first!
 CC=clang
-CFLAGS=-O3 -fopenmp -fvectorize -flto -fremap-arrays -funroll-loops -fslp-vectorize -finline-aggressive -mllvm --reduce-array-computations=3 `gsl-config --cflags`
+CFLAGS=-O3 -fopenmp -fvectorize -flto -fwhole-program-vtables -fremap-arrays -funroll-loops -fslp-vectorize -floop-unswitch-aggressive -finline-aggressive -mllvm --reduce-array-computations=3 `gsl-config --cflags`
 LFLAGS=-unroll-aggressive -lalm -lamdlibm  -lm -lamdalloc `gsl-config --libs`
 #fopenmp
 
