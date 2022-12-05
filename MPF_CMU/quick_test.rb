@@ -1,7 +1,7 @@
 #!/usr/bin/ruby
-# sbatch -N 1 -o quick_test_#{i}_OUT -t 0030:00 -p RM ./quick_test.rb
+# sbatch -N 20 -o quick_test_OUT -t 00:30:00 -p RM ./quick_test.rb
 
-ans=Parallel.map(Array.new(100) { |i| i }, in_processes: 100) { |i|
+ans=Parallel.map(Array.new(100) { |i| i }, in_processes: 20) { |i|
 
   `./mpf -g TEST/test_#{i} 20 256 0.5`
 
