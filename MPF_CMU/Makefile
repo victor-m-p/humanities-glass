@@ -27,7 +27,7 @@ mpf.o: mpf.c
 mcmc.o: mcmc.c
 	${CC} $^ ${CFLAGS} -c
 
-nlin.o: nlin.cls -
+nlin.o: nlin.c
 	${CC} $^ ${CFLAGS} -c
 
 nsb.o: nsb.c
