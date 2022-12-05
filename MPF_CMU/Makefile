@@ -16,7 +16,7 @@ LFLAGS=`gsl-config --libs`
 OBJ = mpf.o mcmc.o nlin.o nsb.o
 
 all : main.c $(OBJ)
-	${CC} $^ -o mpf ${CFLAGS} ${LFLAGS}
+	${CC} $^ -o mpf_AMD ${CFLAGS} ${LFLAGS}
 
 mpf.o: mpf.c
 	${CC} $^ ${CFLAGS} -c
