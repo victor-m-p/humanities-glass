@@ -4,6 +4,7 @@ SHELL=/bin/bash
 CC=/opt/local/bin/clang
 
 # for PSC with GCC
+# run `module load gcc` first!
 CC=gcc
 CFLAGS=-O3 -fopenmp `gsl-config --cflags`
 
