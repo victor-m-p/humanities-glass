@@ -1,30 +1,38 @@
 #!/usr/bin/ruby
-# sbatch -N 1 -o quick_test_OUT -t 0030:00 -p RM ./quick_test.rb
+# sbatch -N 1 -o quick_test_#{i}_OUT -t 0030:00 -p RM ./quick_test.rb
 
-`./mpf -g TEST/test 20 256 0.5`
+ans=Parallel.map(Array.new(100) { |i| i }, in_processes: 100) { |i|
 
-`./mpf -z TEST/test_params.dat 20`
+  `./mpf -g TEST/test_#{i} 20 256 0.5`
 
-start=Time.now
-print "Doing GCC case; #{start}\n"
-`./mpf -c TEST/test_data.dat 1`
-print "Finish at #{Time.now-start}\n"
-`cp TEST/test_data.dat_params.dat TEST/test_data.dat_params_CV_GCC.dat`
+  `./mpf -z TEST/test_#{i}_params.dat 20`
 
-start=Time.now
-print "Doing AMD case; #{start}\n"
-`./mpf_AMD -c TEST/test_data.dat 1`
-print "Finish at #{Time.now-start}\n"
+  start=Time.now
+  print "Doing GCC case; #{start}\n"
+  `./mpf -c TEST/test_#{i}_data.dat 1`
+  gcc=Time.now-start
+  print "Finish at #{Time.now-start}\n"
+  `cp TEST/test_#{i}_data.dat_params.dat TEST/test_#{i}_data.dat_params_CV_GCC.dat`
 
-`./mpf -z TEST/test_data.dat_params.dat 20`
+  start=Time.now
+  print "Doing AMD case; #{start}\n"
+  `./mpf_AMD -c TEST/test_#{i}_data.dat 1`
+  amd=Time.now-start
+  print "Finish at #{Time.now-start}\n"
 
-`cp TEST/test_data.dat_params.dat_probs.dat TEST/test_data.dat_params.dat_probs_CV.dat`
-`cp TEST/test_data.dat_params.dat TEST/test_data.dat_params_CV.dat`
+  `./mpf -z TEST/test_#{i}_data.dat_params.dat 20`
 
-`./mpf -l TEST/test_data.dat -100 1`
+  `cp TEST/test_#{i}_data.dat_params.dat_probs.dat TEST/test_#{i}_data.dat_params.dat_probs_CV.dat`
+  `cp TEST/test_#{i}_data.dat_params.dat TEST/test_#{i}_data.dat_params_CV.dat`
 
-`./mpf -z TEST/test_data.dat_params.dat 20`
+  `./mpf -l TEST/test_#{i}_data.dat -100 1`
 
-`./mpf -k TEST/test_data.dat TEST/test_params.dat TEST/test_data.dat_params_CV.dat`
-`./mpf -k TEST/test_data.dat TEST/test_params.dat TEST/test_data.dat_params.dat`
+  `./mpf -z TEST/test_#{i}_data.dat_params.dat 20`
 
+  `./mpf -k TEST/test_#{i}_data.dat TEST/test_#{i}_params.dat TEST/test_#{i}_data.dat_params_CV.dat`
+  `./mpf -k TEST/test_#{i}_data.dat TEST/test_#{i}_params.dat TEST/test_#{i}_data.dat_params.dat`
+  
+  [gcc, amd]
+}
+ 
+print "#{ans}\n"
