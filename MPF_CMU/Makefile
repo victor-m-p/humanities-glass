@@ -11,7 +11,7 @@ CC=gcc
 CC=clang
 
 #fopenmp
-CFLAGS=-O3 -mp -zopt -flto -fremap-arrays `gsl-config --cflags`
+CFLAGS=-O3 -mp -fvectorize -flto -fremap-arrays -fstruct-layout=6  `gsl-config --cflags`
 LFLAGS=`gsl-config --libs`
 
 OBJ = mpf.o mcmc.o nlin.o nsb.o
