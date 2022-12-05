@@ -1,10 +1,14 @@
 SHELL=/bin/bash
-CC=/usr/bin/llvm-gcc-4.2 
-CC=/usr/bin/clang
+
+# for mac...
 CC=/opt/local/bin/clang
+
+# for PSC with GCC
 CC=gcc
-#CC=clang
-## tested on all three compilers for Max OS X; gcc is the most generic.
+
+# for PSC with AMD compiler
+# run `module load aocc` first!
+CC=clang
 
 CFLAGS=-O3 -fopenmp `gsl-config --cflags`
 LFLAGS=`gsl-config --libs`
