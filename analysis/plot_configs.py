@@ -305,7 +305,6 @@ draw_network(H, pos, cmap, nodelst_H, nodesize_H, edgelst_H, edgew_H, 1)
 plt.show();
 
 ####### clean version with functions ########
-
 from matplotlib.colors import rgb2hex
 def draw_network(Graph, pos, cmap_name, alpha, nodelst, nodesize, edgelst, edgesize, ax_idx): 
     cmap = plt.cm.get_cmap(cmap_name)
@@ -387,55 +386,206 @@ nodes_reference = pd.read_csv(f'../data/analysis/nref_nrows_455_maxna_5_nodes_20
 
 # bin states and get likelihood and index
 allstates = bin_states(n_nodes) 
-d_ind = top_n_idx(n_top_states, p, 'p_ind', 'p_val') 
-d_ind['node_id'] = d_ind.index
+d_ind = top_n_idx(n_top_states, p, 'p_ind', 'p_raw') 
+d_ind['node_id'] = d_ind.index # 150
 
-## add likelihood information
-d_likelihood = d_likelihood.merge(nodes_reference, on = 'entry_id', how = 'inner')
-max_likelihood = d_likelihood.groupby('entry_id')['p_norm'].max().reset_index(name = 'p_norm')
-d_likelihood = d_likelihood.merge(max_likelihood, on = ['entry_id', 'p_norm'], how = 'left', indicator=True)
-d_likelihood = d_likelihood.rename(columns = {'_merge': 'max_likelihood'})
-d_likelihood = d_likelihood.replace({'max_likelihood': {'both': 'yes', 'left_only': 'no'}})
+## add likelihood information for the states that appear in top states
+def datastate_information(d_likelihood, nodes_reference, d_ind): 
+    # merge with nodes reference to get entry_name
+    d_likelihood = d_likelihood[['entry_id', 'p_ind', 'p_norm']]
+    d_likelihood = d_likelihood.merge(nodes_reference, on = 'entry_id', how = 'inner')
+    # make sure that dtypes are preserved 
+    d_ind = d_ind.convert_dtypes()
+    d_likelihood = d_likelihood.convert_dtypes()
+    # merge with d_ind to get data-state probability 
+    d_likelihood = d_likelihood.merge(d_ind, on = 'p_ind', indicator = True)
+    d_likelihood.rename(columns = {'_merge': 'state'}, inplace = True)
+    d_likelihood = d_likelihood.replace({'state': {'left_only': 'only_data', 
+                                        'right_only': 'only_config',
+                                        'both': 'overlap'}})
+    # only interested in states both in data and in top configurations
+    d_overlap = d_likelihood[d_likelihood['state'] == 'overlap'].drop(columns={'state'})
+    # add information about maximum likelihood 
+    max_likelihood = d_overlap.groupby('entry_id')['p_norm'].max().reset_index(name = 'p_norm')
+    d_overlap = d_overlap.merge(max_likelihood, on = ['entry_id', 'p_norm'], how = 'left', indicator=True)
+    d_overlap = d_overlap.rename(columns = {'_merge': 'max_likelihood'})
+    d_overlap = d_overlap.replace({'max_likelihood': {'both': 'yes', 'left_only': 'no'}})
+    d_overlap['full_record'] = np.where(d_overlap['p_norm'] == 1, 'yes', 'no')
+    return d_overlap 
 
-## preserve dtypes (integers) through merge
-d_ind = d_ind.convert_dtypes()
-d_likelihood = d_likelihood.convert_dtypes()
+d_overlap = datastate_information(d_likelihood, nodes_reference, d_ind) # 407
 
-## merge 
-d_nodes = d_likelihood.merge(d_ind, on = 'p_ind', how = 'outer', indicator = True)
-d_nodes.rename(columns = {'_merge': 'state'}, inplace = True)
-d_nodes = d_nodes.replace({'state': {'left_only': 'only_data', 
-                                     'right_only': 'only_config',
-                                     'both': 'overlap'}})
+## weight for configurations (proportional to data state weight) 
+def datastate_weight(d_overlap): 
+    d_entry_node = d_overlap[['entry_id', 'node_id']]
+    d_datastate_weight = d_entry_node.groupby('entry_id').size().reset_index(name = 'entry_count')
+    d_datastate_weight = d_datastate_weight.assign(entry_weight = lambda x: 1/x['entry_count'])
+    d_datastate_weight = d_entry_node.merge(d_datastate_weight, on = 'entry_id', how = 'inner')
+    d_datastate_weight = d_datastate_weight.groupby('node_id')['entry_weight'].sum().reset_index(name = 'datastate_sum')
+    return d_datastate_weight 
 
-## now focused on plot --
-## only the nodes in overlap or configurations 
-##### d_nodes can be used as a reference ######
-d_configurations = d_nodes[(d_nodes['state'] == 'only_conf') | (d_nodes['state'] == 'overlap')]
+d_datastate_weight = datastate_weight(d_overlap) # 129
 
-### observation weight (added for normalization of weight)
-d_observation_weight = d_configurations.groupby('entry_id').size().reset_index(name = 'entry_count')
-d_observation_weight = d_observation_weight.assign(entry_weight = lambda x: 1/x['entry_count'])
-d_configurations = d_configurations.merge(d_observation_weight, on = 'entry_id', how = 'inner')
+## labels by node_id
+### take the maximum p_norm per node_id
+### if there are ties do not break them for now
+d_max_weight = d_overlap.groupby('node_id')['p_norm'].max().reset_index(name = 'p_norm')
+d_max_weight = d_overlap.merge(d_max_weight, on = ['node_id', 'p_norm'], how = 'inner')
+d_max_weight = d_datastate_weight.merge(d_max_weight, on = 'node_id', how = 'inner')
 
-### weight for configurations (as observed in data states)
-node_weighted = d_configurations.groupby('node_id')['entry_weight'].sum().reset_index(name = 'config_sum')
-node_maxlikelihood = d_configurations[d_configurations['max_likelihood'] == 'yes']
-node_configs = node_weighted.merge(node_maxlikelihood, on = 'node_id', how = 'left', indicator=True)
-node_configs = node_configs.rename(columns = {'_merge': 'maximum_likelihood'})
-node_configs = node_configs.replace({'maximum_likelihood': {'both': 'yes',
-                                                            'left_only': 'no'}})
+## labels by node_id 
+### break ties randomly for now 
+def merge_node_attributes(d_max_weight, d_ind): 
+    d_datastate_attr = d_max_weight.groupby('node_id').sample(n=1, random_state=421)
+    d_datastate_attr = d_datastate_attr.drop(columns = {'p_raw'})
+    node_attr = d_ind.merge(d_datastate_attr, on = ['node_id', 'p_ind'], how = 'left', indicator = True)
+    node_attr = node_attr.rename(columns = {'_merge': 'datastate'})
+    node_attr = node_attr.replace({'datastate': {'both': 'yes', 'left_only': 'no'}})
+    # configs that are not datastates, fill na (easier later)
+    node_attr['datastate_sum'] = node_attr['datastate_sum'].fillna(0)
+    node_attr['max_likelihood'] = node_attr['max_likelihood'].fillna('no')
+    #node_attr_dict = node_attr.to_dict('index')
+    return node_attr
 
-## create the ultimate node information dictionary
-node_uniq = node_configs.groupby('node_id').sample(n=1, random_state = 421)
-node_attr = d_ind.merge(node_uniq, on = ['node_id', 'p_ind'], how = 'left', indicator = True)
-node_attr = node_attr.rename(columns = {'_merge': 'datastate'})
-node_attr = node_attr.replace({'datastate': {'both': 'yes', 'left_only': 'no'}})
-node_attr['config_sum'] = node_attr['config_sum'].fillna(0)
-node_attr['maximum_likelihood'] = node_attr['maximum_likelihood'].fillna('no')
+node_attr = merge_node_attributes(d_max_weight, d_ind)
 node_attr_dict = node_attr.to_dict('index')
 
-# add hamming distance 
+# hamming distance
+p_ind = d_ind['p_ind'].tolist()
+top_states = allstates[p_ind]
+h_distances = hamming_distance(top_states) 
+h_distances = hamming_edges(n_top_states, h_distances)
+h_distances = h_distances[h_distances['hamming'] == 1]
+ 
+# create network
+G = nx.from_pandas_edgelist(h_distances,
+                            'node_x',
+                            'node_y',
+                            'hamming')
+
+pos = nx.nx_agraph.graphviz_layout(G, prog = "fdp")
+
+# add all node information
+node_attr_dict
+for idx, val in node_attr_dict.items(): 
+    for attr in val: 
+        idx = val['node_id']
+        G.nodes[idx][attr] = val[attr]
+
+# process 
+G_full = edge_strength(G, 'p_raw') # fix
+edgelst_full, edgew_full = edge_information(G_full, 'pmass_mult', 'hamming', 30000)
+nodelst_full, nodesize_full = node_information(G_full, 'p_raw', 5000)
+
+G_data = edge_strength(G, 'datastate_sum')
+edgelst_data, edgew_data = edge_information(G_data, 'pmass_mult', 'hamming', 0.2)
+nodelst_data, nodesize_data = node_information(G_data, 'datastate_sum', 15)
+
+# plot 
+fig, ax = plt.subplots(1, 2, facecolor = 'w', figsize = (12, 8), dpi = 500)
+draw_network(G_full, pos, 'Blues', 0.6, nodelst_full, nodesize_full, edgelst_full, edgew_full, 0)
+draw_network(G_data, pos, 'Blues', 0.6, nodelst_data, nodesize_data, edgelst_data, edgew_data, 1)
+plt.savefig('../fig/configurations.pdf')
+
+# status 
+## (1) need to scale "together" somehow (same min and max, or match the mean?) -- both nodes and edges
+## (2) need good way of referencing which records we are talking about
+## (3) largest differences between the two plots..?
+## (4) could try to run community detection as well 
+
+# reference plot 
+labeldict = {}
+for node in nodelst_data:
+    node_id = G.nodes[node]['node_id']
+    labeldict[node] = node_id
+
+fig, ax = plt.subplots(1, 2, figsize = (6, 8), dpi = 500)
+draw_network(G_full, pos, 'Blues', 0.6, nodelst_full, nodesize_full, edgelst_full, edgew_full, 0)
+draw_network(G_data, pos, 'Blues', 0.6, nodelst_data, nodesize_data, edgelst_data, edgew_data, 1)
+nx.draw_networkx_labels(G_full, pos, font_size = 3, labels = labeldict, ax = ax[0])
+nx.draw_networkx_labels(G_data, pos, font_size = 3, labels = labeldict, ax = ax[1])
+plt.savefig('../fig/reference_temp.pdf')
+
+# 18, 27, 2, 14, 46, 145, 93 (for large differences)
+# highest probability mass configurations
+d_max_weight[d_max_weight['node_id'] == 0]
+d_max_weight[d_max_weight['node_id'] == 1]
+d_max_weight[d_max_weight['node_id'] == 2] # also large difference
+d_max_weight[d_max_weight['node_id'] == 3]
+d_max_weight[d_max_weight['node_id'] == 4]
+
+# getting better idea about spread 
+d_max_weight[d_max_weight['node_id'] == 14]
+d_max_weight[d_max_weight['node_id'] == 18]
+d_max_weight[d_max_weight['node_id'] == 27]
+d_max_weight[d_max_weight['node_id'] == 46]
+d_max_weight[d_max_weight['node_id'] == 93]
+d_max_weight[d_max_weight['node_id'] == 145]
+
+### actually, we should scale AFTERWARDS ###
+### i.e. maximum node should have same size, and maximum edge should have same 
+### thickness --- or the total WEIGHT in the plot should be the same 
+
+### NB: might want to select preferentially the "clean" configs
+### rather than just maximum likelihood 
+
+# backtrack some of the civs 
+## just check a sample here 
+### biggest difference
+def scale_column(d, column): 
+    col_lst = (d[column]-d[column].min())/(d[column].max()-d[column].min())
+    return col_lst 
+
+node_max_diff = node_attr[['node_id', 'p_val_x', 'config_sum']]
+node_max_diff['p_scale'] = scale_column(node_max_diff, 'p_val_x')
+node_max_diff['config_scale'] = scale_column(node_max_diff, 'config_sum')
+node_max_diff = node_max_diff.assign(diff = lambda x: x['p_scale']-x['config_scale'])
+
+large_data = node_max_diff.sort_values('diff', ascending=True).head(5)[['node_id']] 
+large_model = node_max_diff.sort_values('diff', ascending=False).head(5)[['node_id']]
+
+large_data = d_configurations.merge(large_data, on = 'node_id', how = 'inner')
+large_model = d_configurations.merge(large_model, on = 'node_id', how = 'inner')
+
+large_model.sort_values('node_id', ascending=True)
+large_data.sort_values('node_id', ascending=True)
+
+## check those with duplicate vales 
+maxL_configs = d_configurations[d_configurations['max_likelihood'] == 'yes']
+node_ml_duplicates = maxL_configs.groupby('node_id').size().reset_index(name = 'count')
+node_ml_duplicates = node_ml_duplicates[node_ml_duplicates['count'] > 1]
+node_ml_duplicates = maxL_configs.merge(node_ml_duplicates, on = 'node_id', how = 'inner')
+node_ml_duplicates = node_ml_duplicates.sort_values(['node_id', 'entry_weight'], ascending = [True, False])
+node_ml_duplicates = node_ml_duplicates[['node_id', 'entry_id', 'entry_name', 'entry_weight']]
+
+node_ml_duplicates[node_ml_duplicates['node_id'] == 0]
+node_ml_duplicates.iloc[11:20]
+d_configurations
+
+
+# only states with maximum likelihood 
+## this does not do a lot 
+## should probably just remove this 
+G_maxL = G.copy()
+for node in G_maxL.nodes():
+    maxL = G_maxL.nodes[node]['maximum_likelihood'] 
+    if maxL == 'no':
+        G_maxL.nodes[node]['config_sum'] = 0
+    else: 
+        pass 
+
+G_maxL = edge_strength(G_maxL, 'config_sum')
+edgelst_maxL, edgew_maxL = edge_information(G_maxL, 'pmass_mult', 'weight', 0.2)
+nodelst_maxL, nodesize_maxL = node_information(G_maxL, 'config_sum', 10)
+
+fig, ax = plt.subplots(1, 2, facecolor = 'w', figsize = (10, 10), dpi = 500)
+plt.axis('off')
+draw_network(G_full, pos, 'Blues', 0.6, nodelst_full, nodesize_full, edgelst_full, edgew_full, 0)
+draw_network(G_maxL, pos, 'Blues', 0.6, nodelst_maxL, nodesize_maxL, edgelst_maxL, edgew_maxL, 1)
+plt.show();
+
+
+# different ways of getting POS 
 p_ind = d_ind['p_ind'].tolist()
 top_states = allstates[p_ind]
 h_distances = hamming_distance(top_states) 
@@ -463,77 +613,3 @@ for df in [hamming_one_distance, hamming_max_scaling, hamming_reciprocal]:
 pos_one_distance = position_lst[0]
 pos_max_scaling = position_lst[1]
 pos_reciprocal = position_lst[2]
- 
-# try to create a network G 
-G = nx.from_pandas_edgelist(hamming_one_distance,
-                            'node_x',
-                            'node_y',
-                            'weight')
-
-# add all node information
-#### node_info is our REFERENCE ####
-for idx, val in node_attr_dict.items(): 
-    for attr in val: 
-        idx = val['node_id']
-        G.nodes[idx][attr] = val[attr]
-
-G_full = edge_strength(G, 'p_val')
-edgelst_full, edgew_full = edge_information(G_full, 'pmass_mult', 'weight', 30000)
-nodelst_full, nodesize_full = node_information(G_full, 'p_val', 5000)
-
-G_data = edge_strength(G, 'config_sum')
-edgelst_data, edgew_data = edge_information(G_data, 'pmass_mult', 'weight', 0.2)
-nodelst_data, nodesize_data = node_information(G_data, 'config_sum', 15)
-
-pos = pos_one_distance
-fig, ax = plt.subplots(1, 2, facecolor = 'w', figsize = (12, 8), dpi = 500)
-plt.axis('off')
-draw_network(G_full, pos, 'Blues', 0.6, nodelst_full, nodesize_full, edgelst_full, edgew_full, 0)
-draw_network(G_data, pos, 'Blues', 0.6, nodelst_data, nodesize_data, edgelst_data, edgew_data, 1)
-plt.savefig('../fig/configurations.pdf')
-
-out = os.path.join(outpath, f'MDS_annotated_nnodes_{n_nodes}_maxna_{n_nan}_ncutoff_{n_cutoff}_perc_{perc}_seed_{seed}.pdf')
-
-### actually, we should scale AFTERWARDS ###
-### i.e. maximum node should have same size, and maximum edge should have same 
-### thickness --- or the total WEIGHT in the plot should be the same 
-
-### NB: might want to select preferentially the "clean" configs
-### rather than just maximum likelihood 
-
-
-# backtrack some of the civs 
-## just check a sample here 
-
-
-## check those with duplicate vales 
-maxL_configs = d_configurations[d_configurations['max_likelihood'] == 'yes']
-node_ml_duplicates = maxL_configs.groupby('node_id').size().reset_index(name = 'count')
-node_ml_duplicates = node_ml_duplicates[node_ml_duplicates['count'] > 1]
-node_ml_duplicates = maxL_configs.merge(node_ml_duplicates, on = 'node_id', how = 'inner')
-node_ml_duplicates = node_ml_duplicates.sort_values(['node_id', 'entry_weight'], ascending = [True, False])
-node_ml_duplicates = node_ml_duplicates[['node_id', 'entry_name', 'entry_weight']]
-node_ml_duplicates.iloc[0:10]
-
-#### save the plot, push and then we can explore w/ Simon
-
-# only states with maximum likelihood 
-## this does not do a lot 
-## should probably just remove this 
-G_maxL = G.copy()
-for node in G_maxL.nodes():
-    maxL = G_maxL.nodes[node]['maximum_likelihood'] 
-    if maxL == 'no':
-        G_maxL.nodes[node]['config_sum'] = 0
-    else: 
-        pass 
-
-G_maxL = edge_strength(G_maxL, 'config_sum')
-edgelst_maxL, edgew_maxL = edge_information(G_maxL, 'pmass_mult', 'weight', 0.2)
-nodelst_maxL, nodesize_maxL = node_information(G_maxL, 'config_sum', 10)
-
-fig, ax = plt.subplots(1, 2, facecolor = 'w', figsize = (10, 10), dpi = 500)
-plt.axis('off')
-draw_network(G_full, pos, 'Blues', 0.6, nodelst_full, nodesize_full, edgelst_full, edgew_full, 0)
-draw_network(G_maxL, pos, 'Blues', 0.6, nodelst_maxL, nodesize_maxL, edgelst_maxL, edgew_maxL, 1)
-plt.show();
