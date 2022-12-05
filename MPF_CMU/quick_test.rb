@@ -1,5 +1,6 @@
 #!/usr/bin/ruby
 # sbatch -N 5 -o quick_test_OUT -t 00:30:00 -p RM ./quick_test.rb
+require 'parallel'
 
 ans=Parallel.map(Array.new(20) { |i| i }, in_processes: 5) { |i|
 
