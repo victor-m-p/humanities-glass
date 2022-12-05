@@ -1,5 +1,5 @@
 #!/usr/bin/ruby
-# sbatch -N 1 -o quick_test_COMP -t 06:00:00 -p RM ./quick_test.rb
+# sbatch -N 1 -o quick_test_COMP -t 06:00:00 -p RM ./quick_test.rb 256
 
 list=[]
 ans=Array.new(100) { |i|
@@ -10,14 +10,18 @@ ans=Array.new(100) { |i|
 
   # `module load gcc`
   start=Time.now
+  print "Starting at #{Time.now}\n"
   `./mpf -c TEST_COMP/test_#{i}_data.dat 1`
   gcc=Time.now-start
+  print "Finished at #{Time.now} (#{gcc})\n"
   `cp TEST_COMP/test_#{i}_data.dat_params.dat TEST_COMP/test_#{i}_data.dat_params_CV_GCC.dat`
 
   # `module load aocc aocl`
   start=Time.now
+  print "Starting at #{Time.now}\n"
   `./mpf_AMD -c TEST_COMP/test_#{i}_data.dat 1`
   amd=Time.now-start
+  print "Finished at #{Time.now} (#{amd})\n"
   
   `./mpf -z TEST_COMP/test_#{i}_data.dat_params.dat 20`
 
