@@ -29,13 +29,13 @@ ans=Array.new(100) { |i|
 
   `./mpf -z TEST_COMP/test_#{i}_data.dat_params.dat 20`
 
-  print "GCC time: #{gcc}\n"
-  print "AMD time: #{amd}\n"
-  print "#{`./mpf -k TEST_COMP/test_#{i}_data.dat TEST_COMP/test_#{i}_params.dat TEST_COMP/test_#{i}_data.dat_params_CV_GCC.dat`}\n"
-  print "#{`./mpf -k TEST_COMP/test_#{i}_data.dat TEST_COMP/test_#{i}_params.dat TEST_COMP/test_#{i}_data.dat_params_CV.dat`}\n"
-  print "#{`./mpf -k TEST_COMP/test_#{i}_data.dat TEST_COMP/test_#{i}_params.dat TEST_COMP/test_#{i}_data.dat_params.dat`}\n"
+  ans_gcc=`./mpf -k TEST_COMP/test_#{i}_data.dat TEST_COMP/test_#{i}_params.dat TEST_COMP/test_#{i}_data.dat_params_CV_GCC.dat`.split("\n")[0].split(":")[-1].to_f
+  ans_amd=`./mpf -k TEST_COMP/test_#{i}_data.dat TEST_COMP/test_#{i}_params.dat TEST_COMP/test_#{i}_data.dat_params_CV.dat`.split("\n")[0].split(":")[-1].to_f
+
+  print "GCC time: #{gcc} (#{ans_gcc})\n"
+  print "AMD time: #{amd} (#{ans_amd})\n"
   
-  [gcc, amd]
+  [gcc, amd, ans_gcc, ans_amd]
 }
  
 print "#{ans}\n"
