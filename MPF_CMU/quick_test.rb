@@ -1,7 +1,7 @@
 #!/usr/bin/ruby
-# sbatch -N 20 -o quick_test_OUT -t 00:30:00 -p RM ./quick_test.rb
+# sbatch -N 5 -o quick_test_OUT -t 00:30:00 -p RM ./quick_test.rb
 
-ans=Parallel.map(Array.new(100) { |i| i }, in_processes: 20) { |i|
+ans=Parallel.map(Array.new(20) { |i| i }, in_processes: 5) { |i|
 
   `./mpf -g TEST/test_#{i} 20 256 0.5`
 
@@ -11,14 +11,14 @@ ans=Parallel.map(Array.new(100) { |i| i }, in_processes: 20) { |i|
   print "Doing GCC case; #{start}\n"
   `./mpf -c TEST/test_#{i}_data.dat 1`
   gcc=Time.now-start
-  print "Finish at #{Time.now-start}\n"
+  print "GCC case finish at #{Time.now-start}\n"
   `cp TEST/test_#{i}_data.dat_params.dat TEST/test_#{i}_data.dat_params_CV_GCC.dat`
 
   start=Time.now
   print "Doing AMD case; #{start}\n"
   `./mpf_AMD -c TEST/test_#{i}_data.dat 1`
   amd=Time.now-start
-  print "Finish at #{Time.now-start}\n"
+  print "AMD case finish at #{Time.now-start}\n"
 
   `./mpf -z TEST/test_#{i}_data.dat_params.dat 20`
 
