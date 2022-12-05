@@ -1,4 +1,3 @@
-#!/opt/local/bin/ruby
 #!/usr/bin/ruby
 # sbatch -N 1 -o quick_test_COMP -t 06:00:00 -p RM ./quick_test.rb
 
