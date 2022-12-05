@@ -11,6 +11,7 @@ MPF_playground
 julia_test
 alg_test
 MPF_CMU/mpf
+MPF_CMU/mpf_AMD
 MPF_CMU/PLOTS/*eps
 MPF_CMU/TEST/*
 MPF_CMU/TEST_COMP/*
