@@ -13,5 +13,6 @@ alg_test
 MPF_CMU/mpf
 MPF_CMU/PLOTS/*eps
 MPF_CMU/TEST/*
+MPF_CMU/TEST_COMP/*
 data/analysis/allstates*
 data/analysis/hamming*
