@@ -1,7 +1,7 @@
 #!/usr/bin/ruby
 # sbatch -N 1 -o quick_test_OUT -t 0030:00 -p RM ./quick_test.rb
 
-`./mpf -g TEST/test 20 512 0.5`
+`./mpf -g TEST/test 20 256 0.5`
 
 `./mpf -z TEST/test_params.dat 20`
 
