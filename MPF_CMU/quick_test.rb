@@ -2,44 +2,27 @@
 # sbatch -N 1 -o quick_test_COMP_FINAL -t 06:00:00 -p RM ./quick_test.rb 
 
 list=[]
-ans=Array.new(100) { |i|
+[128, 256, 512].each { |n_data|
+  ans=Array.new(10) { |i|
 
-  `./mpf -g TEST_COMP/test_#{i} 20 256 0.5`
+    `./mpf -g TEST_COMP/test_#{i}_#{n_data}DATA 20 #{n_data} 0.5`
 
-  `./mpf -z TEST_COMP/test_#{i}_params.dat 20`
+    `./mpf -z TEST_COMP/test_#{i}_#{n_data}DATA_params.dat 20`
 
-  # `module load gcc`
-  start=Time.now
-  print "Starting at #{Time.now}\n"
-  `./mpf -c TEST_COMP/test_#{i}_data.dat 1`
-  gcc=Time.now-start
-  print "Finished at #{Time.now} (#{gcc})\n"
-  `cp TEST_COMP/test_#{i}_data.dat_params.dat TEST_COMP/test_#{i}_data.dat_params_CV_GCC.dat`
-
-  # `module load aocc aocl`
-  start=Time.now
-  print "Starting at #{Time.now}\n"
-  `./mpf_AMD -c TEST_COMP/test_#{i}_data.dat 1`
-  amd=Time.now-start
-  print "Finished at #{Time.now} (#{amd})\n"
+    `./mpf -c TEST_COMP/test_#{i}_#{n_data}DATA_data.dat 1`
   
-  `./mpf -z TEST_COMP/test_#{i}_data.dat_params.dat 20`
+    `./mpf -z TEST_COMP/test_#{i}_#{n_data}DATA_data.dat_params.dat 20`
 
-  `cp TEST_COMP/test_#{i}_data.dat_params.dat_probs.dat TEST_COMP/test_#{i}_data.dat_params.dat_probs_CV.dat`
-  `cp TEST_COMP/test_#{i}_data.dat_params.dat TEST_COMP/test_#{i}_data.dat_params_CV.dat`
+    `cp TEST_COMP/test_#{i}_#{n_data}DATA_data.dat_params.dat_probs.dat TEST_COMP/test_#{i}_#{n_data}DATA_data.dat_params.dat_probs_CV.dat`
+    `cp TEST_COMP/test_#{i}_#{n_data}DATA_data.dat_params.dat TEST_COMP/test_#{i}_#{n_data}DATA_data.dat_params_CV.dat`
 
-  `./mpf -l TEST_COMP/test_#{i}_data.dat -100 1`
+    `./mpf -l TEST_COMP/test_#{i}_#{n_data}DATA_data.dat -100 1`
 
-  `./mpf -z TEST_COMP/test_#{i}_data.dat_params.dat 20`
+    `./mpf -z TEST_COMP/test_#{i}_#{n_data}DATA_data.dat_params.dat 20`
 
-  ans_gcc=`./mpf -k TEST_COMP/test_#{i}_data.dat TEST_COMP/test_#{i}_params.dat TEST_COMP/test_#{i}_data.dat_params_CV_GCC.dat`.split("\n")[0].split(":")[-1].to_f
-  ans_amd=`./mpf -k TEST_COMP/test_#{i}_data.dat TEST_COMP/test_#{i}_params.dat TEST_COMP/test_#{i}_data.dat_params_CV.dat`.split("\n")[0].split(":")[-1].to_f
+    cv_performance=`./mpf -k TEST_COMP/test_#{i}_#{n_data}DATA_data.dat TEST_COMP/test_#{i}_#{n_data}DATA_params.dat TEST_COMP/test_#{i}_#{n_data}DATA_data.dat_params_CV.dat`.split("\n")[0].split(":")[-1].to_f
+    baseline_performance=`./mpf -k TEST_COMP/test_#{i}_#{n_data}DATA_data.dat TEST_COMP/test_#{i}_#{n_data}DATA_params.dat TEST_COMP/test_#{i}_#{n_data}DATA_data.dat_params.dat`.split("\n")[0].split(":")[-1].to_f
 
-  print "GCC time: #{gcc} (#{ans_gcc})\n"
-  print "AMD time: #{amd} (#{ans_amd})\n"
-  
-  list << [gcc, amd, ans_gcc, ans_amd]
-  print "#{list}\n"
+    print "Iteration #{i} #{n_data}: #{cv_performance} vs #{baseline_performance}\n"
+  }  
 }
- 
-print "#{ans}\n"
