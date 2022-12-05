@@ -1,6 +1,5 @@
 #!/usr/bin/ruby
 # sbatch -N 1 -o quick_test_COMP -t 06:00:00 -p RM ./quick_test.rb
-require 'parallel'
 
 ans=Array.new(100) { |i|
 
