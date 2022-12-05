@@ -11,7 +11,7 @@ CFLAGS=-O3 -fopenmp `gsl-config --cflags`
 # for PSC with AMD compiler
 # run `module load aocc` first!
 CC=clang
-CFLAGS=-O3 -fopenmp -fvectorize -flto `gsl-config --cflags`
+CFLAGS=-O3 -fopenmp -fvectorize -flto -fremap-arrays -funroll-loops -unroll-aggressive -finline-aggressive -reduce-array-computation=3 -L/libm-install-dir/lib -lamdlibm `gsl-config --cflags`
 
 #fopenmp
 LFLAGS=`gsl-config --libs`
@@ -27,7 +27,7 @@ mpf.o: mpf.c
 mcmc.o: mcmc.c
 	${CC} $^ ${CFLAGS} -c
 
-nlin.o: nlin.c
+nlin.o: nlin.cls -
 	${CC} $^ ${CFLAGS} -c
 
 nsb.o: nsb.c
