@@ -1,7 +1,7 @@
 #!/usr/bin/ruby
 
-n=20
-nan=ARGV[0].to_i
+n=ARGV[0].to_i
+nan=ARGV[1].to_i
 label="#{n}_#{nan}"
 
 final_chunk=[]
