@@ -38,7 +38,7 @@ label="#{n}_#{nan}_#{rand(10000000)}"
 
 final_chunk=[]
 1000.times { |i|
-  beta=rand()+0.01
+  beta=rand()**2+0.01
   chunk=[]
   
   print "Starting new test #{i} at time #{Time.now} (#{beta})...\n"
