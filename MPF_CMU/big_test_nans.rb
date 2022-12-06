@@ -1,15 +1,14 @@
 #!/usr/bin/ruby
-# sbatch -N 1 -o big_NAN -t 12:00:00 -p RM ./big_test_nans.rb 5 1 
-# sbatch -N 1 -o big_NAN -t 12:00:00 -p RM ./big_test_nans.rb 20 1 
-# sbatch -N 1 -o big_NAN -t 12:00:00 -p RM ./big_test_nans.rb 20 2
-# sbatch -N 1 -o big_NAN -t 12:00:00 -p RM ./big_test_nans.rb 20 3 
-# sbatch -N 1 -o big_NAN -t 12:00:00 -p RM ./big_test_nans.rb 20 4 
-# sbatch -N 1 -o big_NAN -t 12:00:00 -p RM ./big_test_nans.rb 20 5 
-# sbatch -N 1 -o big_NAN -t 12:00:00 -p RM ./big_test_nans.rb 20 6 
-# sbatch -N 1 -o big_NAN -t 12:00:00 -p RM ./big_test_nans.rb 20 7
-# sbatch -N 1 -o big_NAN -t 12:00:00 -p RM ./big_test_nans.rb 20 8 
-# sbatch -N 1 -o big_NAN -t 12:00:00 -p RM ./big_test_nans.rb 20 9 
-# sbatch -N 1 -o big_NAN -t 12:00:00 -p RM ./big_test_nans.rb 20 10
+# sbatch -N 1 -o big_NAN_20_1 -t 15:00:00 -p RM ./big_test_nans.rb 20 1
+# sbatch -N 1 -o big_NAN_20_2 -t 15:00:00 -p RM ./big_test_nans.rb 20 2
+# sbatch -N 1 -o big_NAN_20_3 -t 15:00:00 -p RM ./big_test_nans.rb 20 3
+# sbatch -N 1 -o big_NAN_20_4 -t 15:00:00 -p RM ./big_test_nans.rb 20 4
+# sbatch -N 1 -o big_NAN_20_5 -t 15:00:00 -p RM ./big_test_nans.rb 20 5
+# sbatch -N 1 -o big_NAN_20_6 -t 15:00:00 -p RM ./big_test_nans.rb 20 6
+# sbatch -N 1 -o big_NAN_20_7 -t 15:00:00 -p RM ./big_test_nans.rb 20 7
+# sbatch -N 1 -o big_NAN_20_8 -t 15:00:00 -p RM ./big_test_nans.rb 20 8
+# sbatch -N 1 -o big_NAN_20_9 -t 15:00:00 -p RM ./big_test_nans.rb 20 9
+# sbatch -N 1 -o big_NAN_20_10 -t 15:00:00 -p RM ./big_test_nans.rb 20 10
  
 n=ARGV[0].to_i
 nan=ARGV[1].to_i
