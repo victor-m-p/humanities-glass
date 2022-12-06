@@ -1,5 +1,5 @@
 #!/usr/bin/ruby
-# sbatch -N 1 -o big_NAN_20_5_1 -t 15:00:00 -p RM ./big_test_nans.rb 20 5 0.125
+# sbatch -N 1 -o big_NAN_20_5_1 -t 15:00:00 -p RM ./big_test_nans.rb 20 5
 # sbatch -N 1 -o big_NAN_20_5_2 -t 15:00:00 -p RM ./big_test_nans.rb 20 5 0.125
 # sbatch -N 1 -o big_NAN_20_5_3 -t 15:00:00 -p RM ./big_test_nans.rb 20 5 0.125
 # sbatch -N 1 -o big_NAN_20_5_4 -t 15:00:00 -p RM ./big_test_nans.rb 20 5 0.125
@@ -10,28 +10,25 @@
 # sbatch -N 1 -o big_NAN_20_5_4 -t 15:00:00 -p RM ./big_test_nans.rb 20 5 0.125
 # sbatch -N 1 -o big_NAN_20_5_5 -t 15:00:00 -p RM ./big_test_nans.rb 20 5 0.125
 
-# [0.125, 0.5].each { |beta|
-#   [5].each { |nan|
-#     if (nan >= 4) then
-#       max=4
-#     else
-#       max=1
-#     end
-#     max.times { |k|
-#       print "sbatch -N 1 -o big_NAN_20_#{nan}_#{k+8}_#{beta} -t 15:00:00 -p RM ./big_test_nans.rb 20 #{nan} #{beta}\n"
-#     }
+# [5].each { |nan|
+#   if (nan >= 4) then
+#     max=20
+#   else
+#     max=1
+#   end
+#   max.times { |k|
+#     print "sbatch -N 1 -o big_NAN_scan_20_#{nan}_#{k+8} -t 15:00:00 -p RM ./big_test_nans.rb 20 #{nan}\n"
 #   }
 # }
 
 n=ARGV[0].to_i
 nan=ARGV[1].to_i
-beta=ARGV[2].to_f
 
 label="#{n}_#{nan}_#{rand(10000000)}"
 
 final_chunk=[]
-100.times { |i|
-  
+1000.times { |i|
+  beta=rand()+0.01
   chunk=[]
   
   print "Starting new test #{i} at time #{Time.now}...\n"
