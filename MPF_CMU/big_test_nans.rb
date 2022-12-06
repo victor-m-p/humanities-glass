@@ -1,15 +1,15 @@
 #!/usr/bin/ruby
 
-[5].each { |nan|
-  if (nan >= 4) then
-    max=40
-  else
-    max=1
-  end
-  max.times { |k|
-    print "sbatch -N 1 -o big_NAN_scan_20_#{nan}_#{k+40} -t 15:00:00 -p RM ./big_test_nans.rb 20 #{nan}\n"
-  }
-}
+# [5].each { |nan|
+#   if (nan >= 4) then
+#     max=80
+#   else
+#     max=1
+#   end
+#   max.times { |k|
+#     print "sbatch -N 1 -o NAN_TESTS/big_NAN_scan_20_#{nan}_#{k} -t 15:00:00 -p RM ./big_test_nans.rb 20 #{nan}\n"
+#   }
+# }
 
 n=ARGV[0].to_i
 nan=ARGV[1].to_i
