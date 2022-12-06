@@ -10,9 +10,20 @@
 # sbatch -N 1 -o big_NAN_20_9 -t 15:00:00 -p RM ./big_test_nans.rb 20 9
 # sbatch -N 1 -o big_NAN_20_10 -t 15:00:00 -p RM ./big_test_nans.rb 20 10
 
+# 1.upto(10) { |nan|
+#   if (nan >= 4) then
+#     max=4
+#   else
+#     max=1
+#   end
+#   max.times { |k|
+#     print "sbatch -N 1 -o big_NAN_20_#{nan}_#{k} -t 15:00:00 -p RM ./big_test_nans.rb 20 #{nan}\n"
+#   }
+# }
+
 n=ARGV[0].to_i
 nan=ARGV[1].to_i
-label="#{n}_#{nan}"
+label="#{n}_#{nan}_#{rand(10000000)}"
 
 final_chunk=[]
 100.times { |i|
