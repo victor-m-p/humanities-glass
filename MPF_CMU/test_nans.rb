@@ -1,5 +1,5 @@
 #!/usr/bin/ruby
-# sbatch -N 1 -o DATA/new_NAN_TESTS_final -t 06:00:00 -p RM ./test_nans.rb 20 5 NAN_TESTS_FINAL\n"
+# sbatch -N 1 -o NAN_TESTS/new_NAN_TESTS_final -t 24:00:00 -p RM ./test_nans.rb 20 5 NAN_TESTS_FINAL\n"
 
 n=ARGV[0].to_i
 nan=ARGV[1].to_i
