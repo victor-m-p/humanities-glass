@@ -302,21 +302,147 @@ def state_agreement(d, config_lst):
     d_mat = pd.DataFrame(d_conf, columns = question_ids)
     d_mat['p_ind'] = p_ind_uniq
     d_mat = pd.melt(d_mat, id_vars = 'p_ind', value_vars = question_ids, var_name = 'related_q_id')
-    d_mat = d_mat.groupby('related_q_id')['value'].mean().reset_index(name = 'mean')
+    d_mat = d_mat.groupby('related_q_id')['value'].mean().reset_index(name = 'mean_val')
 
     # merge back in question names
     d_interpret = d_mat.merge(sref, on = 'related_q_id', how = 'inner')
-    d_interpret = d_interpret.sort_values('mean')
+    d_interpret = d_interpret.sort_values('mean_val')
 
     # return 
     return d_interpret 
 
 # run on the big communities
+pd.set_option('display.max_colwidth', None)
 
+## red community 
+### -1: self-sacrifice, child-sacrifice, castration
+###  1: belief in afterlife, spirit-body, supernatural beings present, formal burials
+### -0.41: co-sacrifices present in tomb/burial, .41: participation in small-scale rituals
 comm_1 = list(louvain_comm[0])
-x = state_agreement(d_max_weight, comm_1)
-# 
+agree_1 = state_agreement(d_max_weight, comm_1)
 
+## cyan (bottom)
+### lean no: reincarnation this world
+### lean yes: small-scale rituals
+comm_2 = list(louvain_comm[1])
+agree_2 = state_agreement(d_max_weight, comm_2)
+
+## orange (top)
+### lean no: monumental architecture 
+### lean yes: special treatment corpses, reincarnation this world
+comm_3 = list(louvain_comm[2])
+agree_3 = state_agreement(d_max_weight, comm_3)
+
+## brown (mid/top)
+### -1: self-children-adult sacrifice, co-sacrifice, castration
+###  1: belief in afterlife, spirit-body, supernatural beings present 
+comm_4 = list(louvain_comm[3])
+agree_4 = state_agreement(d_max_weight, comm_4)
+
+## grey (central)
+### -1: self-sacrifice, child sacrifie, adult sacrifice, castration
+### ...
+###  1: large-scale rituals, supernatural beings (present, punishment), afterlife, spirit-body, scripture
+comm_5 = list(louvain_comm[4])
+agree_5 = state_agreement(d_max_weight, comm_5)
+
+## how do they differ across 
+agree_5['community'] = 'grey'
+agree_4['community'] = 'brown'
+agree_3['community'] = 'orange'
+agree_2['community'] = 'cyan'
+agree_1['community'] = 'red'
+df = pd.concat([agree_1, agree_2, agree_3, agree_4, agree_5])
+
+## anything shared by everyone?
+df_across = df.groupby('related_q')['mean_val'].mean().reset_index(name = 'global_mean')
+df_across.sort_values('global_mean', ascending = True).head()
+df_across.sort_values('global_mean', ascending = False).head()
+
+## check questions across
+questions = df['related_q'].unique().tolist()
+df[df['related_q'] == questions[0]] # self sac. (all no)
+df[df['related_q'] == questions[1]] # child sac. (all no)
+df[df['related_q'] == questions[2]] # castration (all no)
+df[df['related_q'] == questions[3]] # adult sac. (almost all no)
+df[df['related_q'] == questions[4]] # own written: most negative for cyan / orange
+df[df['related_q'] == questions[5]] # scriptures: most positive for cyan / orange (is this reverse-coded?)
+df[df['related_q'] == questions[6]] # monumental: cyan, grey 
+df[df['related_q'] == questions[7]] # reincarnation: orange max, brown min.
+df[df['related_q'] == questions[8]] # co-sacrifices: most red
+df[df['related_q'] == questions[9]] # small-scale: cyan, grey, red
+df[df['related_q'] == questions[10]] # pol support (cyan, orange) !!!!
+df[df['related_q'] == questions[11]] # supernat. monitor (cyan, orange) !!!!
+df[df['related_q'] == questions[12]] # grave goods (red)
+df[df['related_q'] == questions[13]] # large-scale: cyan, grey, red (orange outlier)
+df[df['related_q'] == questions[14]] # supernat. punishment (cyan, orange)
+df[df['related_q'] == questions[15]] # corpses (not so interesting)
+df[df['related_q'] == questions[16]] # afterlife: all yes
+df[df['related_q'] == questions[17]] # spirit-body: all yes
+df[df['related_q'] == questions[18]] # supernat. beings present: all yes
+df[df['related_q'] == questions[19]] # formal burial: ourange outlier
+
+def disagreement_across(d):
+    d_std = d.groupby('related_q')['mean_val'].std().reset_index(name = 'standard_deviation')
+    d_mean = d.groupby('related_q')['mean_val'].mean().reset_index(name = 'mean_across')
+    d_final = d_std.merge(d_mean, on = 'related_q', how = 'inner')
+    d_final = d_final.sort_values('standard_deviation', ascending=False)
+    return d_final 
+
+## red vs. grey
+df_red_grey = df[(df['community'] == 'red') | (df['community'] == 'grey')]
+diff_red_grey = disagreement_across(df_red_grey)
+diff_red_grey 
+## most disagree: scripture, monumental architecture, grave goods, ...
+## complete agreee: 
+### yes: supernatural beings present, spirit-body, belief in afterlife 
+### no: suicice, child sacrifice, castration
+df[df['community'] == 'red']
+df[df['community'] == 'grey']
+
+## red vs. orange (overall more disagreement than red/grey)
+df_red_brown = df[(df['community'] == 'brown') | (df['community'] == 'red')]
+diff_red_brown = disagreement_across(df_red_brown)
+diff_red_brown
+## most disagree: grave goods, small-scale rit., scriptures, ...
+## complete agree
+### yes: supernatural beings present, spirit-body, belief in afterlife
+### no: suicide, child sacrifice, castration
+df[df['community'] == 'red']
+df[df['community'] == 'brown']
+
+## grey vs. brown
+df_grey_brown = df[(df['community'] == 'grey') | (df['community'] == 'brown')]
+diff_grey_brown = disagreement_across(df_grey_brown)
+diff_grey_brown
+## most disagree: smalls-scale rit., monumental architecture, reincarnation this world, large-scale rit.
+## complete agree: 
+### yes: supernatural beings present, spirit-body distinction, belief in afterlife 
+### no: sacrifice children, adults - castration, suicide
+df[df['community'] == 'grey']
+df[df['community'] == 'brown']
+
+## brown vs. orange 
+df_brown_orange = df[(df['community'] == 'brown') | (df['community'] == 'orange')]
+diff_brown_orange = disagreement_across(df_brown_orange)
+diff_brown_orange
+## most disagree: supernatural monitoring + punishment, formal burials, reincarnation this world
+## completely agree
+### yes: supernatural beings present, belief afterlife, spirit-body
+### no: sacrifice adults, children, suice, castration -- co-sacrifices tomb/burial
+df[df['community'] == 'orange']
+df[df['community'] == 'brown']
+
+## grey vs. cyan
+df_grey_cyan = df[(df['community'] == 'grey') | (df['community'] == 'cyan')]
+diff_grey_cyan = disagreement_across(df_grey_cyan)
+diff_grey_cyan
+## most disagree: supernatural monitoring + punishment, official pol. sup., grave goods present
+## completely agree
+### yes: supernatural beings present, belief afterlife, spirit-body distinction, scriptures, large-scale rit.
+### no: sacrifice adults, children, suicice, castration
+df[df['community'] == 'grey'] # 
+df[df['community'] == 'cyan'] #
 
 ##### community detection #####
 import networkx.algorithms.community as nx_comm
