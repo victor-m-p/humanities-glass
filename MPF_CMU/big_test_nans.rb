@@ -1,14 +1,24 @@
 #!/usr/bin/ruby
-# sbatch -N 1 -o big_NAN_20_5_1 -t 15:00:00 -p RM ./big_test_nans.rb 20 5
-# sbatch -N 1 -o big_NAN_20_5_2 -t 15:00:00 -p RM ./big_test_nans.rb 20 5 0.125
-# sbatch -N 1 -o big_NAN_20_5_3 -t 15:00:00 -p RM ./big_test_nans.rb 20 5 0.125
-# sbatch -N 1 -o big_NAN_20_5_4 -t 15:00:00 -p RM ./big_test_nans.rb 20 5 0.125
-# sbatch -N 1 -o big_NAN_20_5_5 -t 15:00:00 -p RM ./big_test_nans.rb 20 5 0.125
-# sbatch -N 1 -o big_NAN_20_5_1 -t 15:00:00 -p RM ./big_test_nans.rb 20 5 0.125
-# sbatch -N 1 -o big_NAN_20_5_2 -t 15:00:00 -p RM ./big_test_nans.rb 20 5 0.125
-# sbatch -N 1 -o big_NAN_20_5_3 -t 15:00:00 -p RM ./big_test_nans.rb 20 5 0.125
-# sbatch -N 1 -o big_NAN_20_5_4 -t 15:00:00 -p RM ./big_test_nans.rb 20 5 0.125
-# sbatch -N 1 -o big_NAN_20_5_5 -t 15:00:00 -p RM ./big_test_nans.rb 20 5 0.125
+# sbatch -N 1 -o big_NAN_scan_20_5_0 -t 15:00:00 -p RM ./big_test_nans.rb 20 5
+# sbatch -N 1 -o big_NAN_scan_20_5_1 -t 15:00:00 -p RM ./big_test_nans.rb 20 5
+# sbatch -N 1 -o big_NAN_scan_20_5_2 -t 15:00:00 -p RM ./big_test_nans.rb 20 5
+# sbatch -N 1 -o big_NAN_scan_20_5_3 -t 15:00:00 -p RM ./big_test_nans.rb 20 5
+# sbatch -N 1 -o big_NAN_scan_20_5_4 -t 15:00:00 -p RM ./big_test_nans.rb 20 5
+# sbatch -N 1 -o big_NAN_scan_20_5_5 -t 15:00:00 -p RM ./big_test_nans.rb 20 5
+# sbatch -N 1 -o big_NAN_scan_20_5_6 -t 15:00:00 -p RM ./big_test_nans.rb 20 5
+# sbatch -N 1 -o big_NAN_scan_20_5_7 -t 15:00:00 -p RM ./big_test_nans.rb 20 5
+# sbatch -N 1 -o big_NAN_scan_20_5_8 -t 15:00:00 -p RM ./big_test_nans.rb 20 5
+# sbatch -N 1 -o big_NAN_scan_20_5_9 -t 15:00:00 -p RM ./big_test_nans.rb 20 5
+# sbatch -N 1 -o big_NAN_scan_20_5_10 -t 15:00:00 -p RM ./big_test_nans.rb 20 5
+# sbatch -N 1 -o big_NAN_scan_20_5_11 -t 15:00:00 -p RM ./big_test_nans.rb 20 5
+# sbatch -N 1 -o big_NAN_scan_20_5_12 -t 15:00:00 -p RM ./big_test_nans.rb 20 5
+# sbatch -N 1 -o big_NAN_scan_20_5_13 -t 15:00:00 -p RM ./big_test_nans.rb 20 5
+# sbatch -N 1 -o big_NAN_scan_20_5_14 -t 15:00:00 -p RM ./big_test_nans.rb 20 5
+# sbatch -N 1 -o big_NAN_scan_20_5_15 -t 15:00:00 -p RM ./big_test_nans.rb 20 5
+# sbatch -N 1 -o big_NAN_scan_20_5_16 -t 15:00:00 -p RM ./big_test_nans.rb 20 5
+# sbatch -N 1 -o big_NAN_scan_20_5_17 -t 15:00:00 -p RM ./big_test_nans.rb 20 5
+# sbatch -N 1 -o big_NAN_scan_20_5_18 -t 15:00:00 -p RM ./big_test_nans.rb 20 5
+# sbatch -N 1 -o big_NAN_scan_20_5_19 -t 15:00:00 -p RM ./big_test_nans.rb 20 5
 
 # [5].each { |nan|
 #   if (nan >= 4) then
@@ -17,7 +27,7 @@
 #     max=1
 #   end
 #   max.times { |k|
-#     print "sbatch -N 1 -o big_NAN_scan_20_#{nan}_#{k+8} -t 15:00:00 -p RM ./big_test_nans.rb 20 #{nan}\n"
+#     print "sbatch -N 1 -o big_NAN_scan_20_#{nan}_#{k} -t 15:00:00 -p RM ./big_test_nans.rb 20 #{nan}\n"
 #   }
 # }
 
