@@ -1,16 +1,19 @@
 #!/usr/bin/ruby
-# sbatch -N 1 -o NAN_TESTS/new_NAN_TESTS_final -t 24:00:00 -p RM ./test_nans.rb 20 5 NAN_TESTS_FINAL\n"
+# sbatch -N 7 -o NAN_TESTS/new_NAN_TESTS_final -t 24:00:00 -p RM ./test_nans.rb 20 5 NAN_TESTS_FINAL
+# [sdedeo@bridges2-login013 MPF_CMU]$ sbatch -N 1 -o NAN_TESTS/new_NAN_TESTS_final -t 24:00:00 -p RM ./test_nans.rb 20 5 NAN_TESTS_FINAL
+# Submitted batch job 13527344
 
 n=ARGV[0].to_i
 nan=ARGV[1].to_i
 label=ARGV[2]
+require 'parallel'
 
 10.times { |i|
   print "Starting new test #{i} at time #{Time.now}...\n"
   
   `./mpf -g DATA/test_sequence_#{label} #{n} 2048 0.2`
 
-  full_data=[0, 64, 128, 256, 512, 512+256, 1024].collect { |cut|
+  full_data=Parallel.map([0, 64, 128, 256, 512, 512+256, 1024], :in_process=>n_proc) { |cut|
     file=File.new("DATA/test_sequence_#{label}_data.dat", 'r')
     str=file.read; file.close
 
@@ -38,7 +41,7 @@ label=ARGV[2]
     code
   }.join("\n");1
 
-  nan_data=[64, 128, 256, 512, 512+256, 1024].collect { |cut| #, 512, 512+256, 1024
+  nan_data=Parallel.map([0, 64, 128, 256, 512, 512+256, 1024], :in_process=>n_proc) { |cut| #, 512, 512+256, 1024
     file=File.new("DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat", 'w')
     file.write("#{128+cut}\n"+str_na); file.close
     `./mpf -c DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat 1`
@@ -67,7 +70,7 @@ label=ARGV[2]
     Array.new(n) { |i| code[i] == "X"  ? avg[i].round.to_s : code[i] }.join("")+" 1.0"
   }.join("\n");1
 
-  bad_data=[64, 128, 256, 512, 512+256, 1024].collect { |cut| #, 512, 512+256, 1024
+  bad_data=Parallel.map([0, 64, 128, 256, 512, 512+256, 1024], :in_process=>n_proc) { |cut| #, 512, 512+256, 1024
     file=File.new("DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat", 'w')
     file.write("#{128+cut}\n#{n}\n"+str_na_new); file.close
     `OMP_NUM_THREADS=128 ./mpf -c DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat 1` 
