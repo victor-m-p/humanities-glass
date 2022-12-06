@@ -506,21 +506,50 @@ nx.draw_networkx_labels(G_full, pos, font_size = 3, labels = labeldict, ax = ax[
 nx.draw_networkx_labels(G_data, pos, font_size = 3, labels = labeldict, ax = ax[1])
 plt.savefig('../fig/reference_temp.pdf')
 
-# 18, 27, 2, 14, 46, 145, 93 (for large differences)
-# highest probability mass configurations
-d_max_weight[d_max_weight['node_id'] == 0]
-d_max_weight[d_max_weight['node_id'] == 1]
-d_max_weight[d_max_weight['node_id'] == 2] # also large difference
-d_max_weight[d_max_weight['node_id'] == 3]
-d_max_weight[d_max_weight['node_id'] == 4]
+# what are in these clusters?
+def get_match(n):
+    dm = d_max_weight[d_max_weight['node_id'] == n][['entry_name']]
+    print(dm.head(10))
 
-# getting better idea about spread 
-d_max_weight[d_max_weight['node_id'] == 14]
-d_max_weight[d_max_weight['node_id'] == 18]
-d_max_weight[d_max_weight['node_id'] == 27]
-d_max_weight[d_max_weight['node_id'] == 46]
-d_max_weight[d_max_weight['node_id'] == 93]
-d_max_weight[d_max_weight['node_id'] == 145]
+
+# central configuration (Catholic, Islamic, -- also Egypt -- Axial?)
+get_match(0) # 12th-13th C. Cistercians (Catholic), Savigny (12th C. Cistercian), Nahdlatul (Islamic Indonesia), Moravian (Christian), Knights Templar (Roman Cat.), Naqshbandi (sunni sufism), Greek (orthodox), Zapotec (south american, polytheistic)
+get_match(1) # Selinous (local religion, e.g. sacrifices, magic), Jesuits Britain (catholic), Confucianism (Chinese)
+get_match(2) # Cham Bani (sunni/shia mix), Ancient Egypt, Ugarit, Isis
+get_match(4) # Islam in Aceh
+get_match(14) # Donatism (christian), Irish Rom. Cat., Opus Dei (Catholic), Sino-Muslims, Mourides (sufist)
+
+# around number three (not sure)
+get_match(3) # Branch Davidians (Texas, apocalyptic, seventh-day), Egypt Salafism, Anabaptist Mennonites, Church of Christ, Jehova
+get_match(15) # Muslim Ahmadiyya (Islamic/messianic revival, 19th century British India)
+get_match(72) # Estado de India Renegades in Deccan (weird mixture)
+get_match(13) # Edinoverie (Russian, Christians, outsiders), Calvinism
+
+# right-top valley (Baptist/Methodist/Evangelical)
+get_match(18) # Wesleyanism (methodist), Methodists, Friends, Neo-charismatic, No-debt US Evangelicanism
+get_match(85) # Manus (pre-Christian Papua New Guinea, spirit belief)
+get_match(50) # Sachchai (Nepal Christians, evangelist)
+get_match(42) # Southern Baptists (Protestant, Baptist, Evangelical)
+
+# right-bot valley (Protestant + other)
+get_match(90) # Nigerian Pentecostalism (progressive, protestant), Anglican Korea (progressive, protestant)
+get_match(49) # Early Orthodox (calvinist, protestant), Tijaniyya (Sufi, west/north Africa)
+get_match(13) # Edinoverie (Russian, Christians, outsiders), Calvinism
+
+# lower cluster (Hindu/Buddhist)
+get_match(53) # swaminarayan Sampdraday -- Hindu
+get_match(46) # Nechung (Tibet Oracle), Dasara (Hindu), Shaiva (Hindu), Jain Digambara (Jainism) 
+get_match(91) # tamil saiva (Shaivism), ladakhi buddhism
+
+# top side (Indians)
+get_match(93) # Peyote (Native American) -- Indians
+get_match(145) # Timbira (Canela) -- Indians
+get_match(60) # pythagoreanism -- ...
+get_match(85) # Manus -- Christian/Indigenous mix
+
+# left side 
+
+
 
 ### actually, we should scale AFTERWARDS ###
 ### i.e. maximum node should have same size, and maximum edge should have same 
