@@ -1,10 +1,14 @@
 #!/usr/bin/ruby
 
 n=20
-nan=4
+nan=ARGV[0].to_i
 label="#{n}_#{nan}"
 
+final_chunk=[]
 10.times { |i|
+  
+  chunk=[]
+  
   print "Starting new test #{i} at time #{Time.now}...\n"
   
   `./mpf -g DATA/test_sequence_#{label} #{n} 2048 0.25`
@@ -42,6 +46,7 @@ label="#{n}_#{nan}"
     code
   }.join("\n");1
 
+  chunk=[start, best]
   [128].each { |cut| #, 512, 512+256, 1024
     file=File.new("DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat", 'w')
     file.write("#{128+cut}\n"+str_na); file.close
@@ -50,6 +55,7 @@ label="#{n}_#{nan}"
       ans=`./mpf -k DATA/test_sequence_#{label}_base_data.dat DATA/test_sequence_#{label}_params.dat DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat_params.dat`
       ans=ans.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
       print "#{cut}: #{ans} (vs #{best})\n"
+      chunk << ans
     rescue
       print "Something bad happened at #{cut}\n"    
     end
@@ -72,22 +78,17 @@ label="#{n}_#{nan}"
   [128].each { |cut| #, 512, 512+256, 1024
     file=File.new("DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat", 'w')
     file.write("#{128+cut}\n#{n}\n"+str_na_new); file.close
-    `OMP_NUM_THREADS=128 ./mpf -c DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat 2` 
+    `./mpf -c DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat 2` 
     begin
       ans=`./mpf -k DATA/test_sequence_#{label}_base_data.dat DATA/test_sequence_#{label}_params.dat DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat_params.dat`.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
-      print "#{cut}: #{ans} (vs #{best} vs #{even_bester} vs #{start})\n"
+      print "#{cut}: #{ans} (vs. #{best}))\n"
+      chunk << ans
     rescue
       print "Something bad happened at #{cut}\n"
     end
   }
   
+  print "#{chunk}\n"
   print "Finished test at #{Time.now}\n"
+  final_chunk << chunk
 }
-
-# 3.times { |label|
-#   [20].each { |nodes|
-#     [5].each { |nan|
-#       print "sbatch -N 1 -o DATA/new_NAN_TESTS_#{nodes}nodes_#{nan}NAN_#{label}_DDLONG -t #{nodes == 10 ? "02:00" : "24:00"}:00 -p RM ./test_nans.rb #{nodes} #{nan} #{label}_#{nodes}_#{nan}_DDLONG\n"
-#     }
-#   }
-# }
