@@ -1,28 +1,32 @@
 #!/usr/bin/ruby
-# sbatch -N 1 -o big_NAN_20_1 -t 15:00:00 -p RM ./big_test_nans.rb 20 1
-# sbatch -N 1 -o big_NAN_20_2 -t 15:00:00 -p RM ./big_test_nans.rb 20 2
-# sbatch -N 1 -o big_NAN_20_3 -t 15:00:00 -p RM ./big_test_nans.rb 20 3
-# sbatch -N 1 -o big_NAN_20_4 -t 15:00:00 -p RM ./big_test_nans.rb 20 4
-# sbatch -N 1 -o big_NAN_20_5 -t 15:00:00 -p RM ./big_test_nans.rb 20 5
-# sbatch -N 1 -o big_NAN_20_6 -t 15:00:00 -p RM ./big_test_nans.rb 20 6
-# sbatch -N 1 -o big_NAN_20_7 -t 15:00:00 -p RM ./big_test_nans.rb 20 7
-# sbatch -N 1 -o big_NAN_20_8 -t 15:00:00 -p RM ./big_test_nans.rb 20 8
-# sbatch -N 1 -o big_NAN_20_9 -t 15:00:00 -p RM ./big_test_nans.rb 20 9
-# sbatch -N 1 -o big_NAN_20_10 -t 15:00:00 -p RM ./big_test_nans.rb 20 10
+# sbatch -N 1 -o big_NAN_20_5_1 -t 15:00:00 -p RM ./big_test_nans.rb 20 5 0.125
+# sbatch -N 1 -o big_NAN_20_5_2 -t 15:00:00 -p RM ./big_test_nans.rb 20 5 0.125
+# sbatch -N 1 -o big_NAN_20_5_3 -t 15:00:00 -p RM ./big_test_nans.rb 20 5 0.125
+# sbatch -N 1 -o big_NAN_20_5_4 -t 15:00:00 -p RM ./big_test_nans.rb 20 5 0.125
+# sbatch -N 1 -o big_NAN_20_5_5 -t 15:00:00 -p RM ./big_test_nans.rb 20 5 0.125
+# sbatch -N 1 -o big_NAN_20_5_1 -t 15:00:00 -p RM ./big_test_nans.rb 20 5 0.125
+# sbatch -N 1 -o big_NAN_20_5_2 -t 15:00:00 -p RM ./big_test_nans.rb 20 5 0.125
+# sbatch -N 1 -o big_NAN_20_5_3 -t 15:00:00 -p RM ./big_test_nans.rb 20 5 0.125
+# sbatch -N 1 -o big_NAN_20_5_4 -t 15:00:00 -p RM ./big_test_nans.rb 20 5 0.125
+# sbatch -N 1 -o big_NAN_20_5_5 -t 15:00:00 -p RM ./big_test_nans.rb 20 5 0.125
 
-# 1.upto(10) { |nan|
-#   if (nan >= 4) then
-#     max=4
-#   else
-#     max=1
-#   end
-#   max.times { |k|
-#     print "sbatch -N 1 -o big_NAN_20_#{nan}_#{k} -t 15:00:00 -p RM ./big_test_nans.rb 20 #{nan}\n"
+# [0.125, 0.5].each { |beta|
+#   [5].each { |nan|
+#     if (nan >= 4) then
+#       max=4
+#     else
+#       max=1
+#     end
+#     max.times { |k|
+#       print "sbatch -N 1 -o big_NAN_20_#{nan}_#{k+8}_#{beta} -t 15:00:00 -p RM ./big_test_nans.rb 20 #{nan} #{beta}\n"
+#     }
 #   }
 # }
 
 n=ARGV[0].to_i
 nan=ARGV[1].to_i
+beta=ARGV[2].to_f
+
 label="#{n}_#{nan}_#{rand(10000000)}"
 
 final_chunk=[]
@@ -46,6 +50,7 @@ final_chunk=[]
   file.write(str2); file.close
 
   ans=`./mpf -c DATA/test_sequence_#{label}_base_data.dat 1`
+  print ans
   best_sp=ans.scan(/Best log\_sparsity:[^\n]+\n/)[0].split(":")[-1].to_f
 
   `./mpf -c DATA/test_sequence_#{label}_256_data.dat 1`
@@ -71,7 +76,7 @@ final_chunk=[]
   [128].each { |cut| #, 512, 512+256, 1024
     file=File.new("DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat", 'w')
     file.write("#{128+cut}\n"+str_na); file.close
-    `./mpf -c DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat 1`
+    print `./mpf -c DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat 1`
     begin
       ans=`./mpf -k DATA/test_sequence_#{label}_base_data.dat DATA/test_sequence_#{label}_params.dat DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat_params.dat`
       ans=ans.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
@@ -99,7 +104,7 @@ final_chunk=[]
   [128].each { |cut| #, 512, 512+256, 1024
     file=File.new("DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat", 'w')
     file.write("#{128+cut}\n#{n}\n"+str_na_new); file.close
-    `./mpf -c DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat 1` 
+    print `./mpf -c DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat 1` 
     begin
       ans=`./mpf -k DATA/test_sequence_#{label}_base_data.dat DATA/test_sequence_#{label}_params.dat DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat_params.dat`.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
       print "#{cut}: #{ans} (vs. #{best}))\n"
