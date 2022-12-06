@@ -5,17 +5,16 @@ import numpy as np
 import pandas as pd 
 from fun import bin_states, top_n_idx, hamming_distance
 
-def draw_network(Graph, pos, cmap_name, alpha, nodelst, nodesize, edgelst, edgesize, ax_idx): 
+def draw_network(Graph, pos, cmap_name, alpha, nodelst, nodesize, nodecolor, edgelst, edgesize, ax_idx, cmap_edge = 1): 
     cmap = plt.cm.get_cmap(cmap_name)
     nx.draw_networkx_nodes(Graph, pos, 
                            nodelist = nodelst,
                            node_size = nodesize, 
-                           node_color = nodesize,
+                           node_color = nodecolor,
                            linewidths = 0.5, edgecolors = 'black',
                            cmap = cmap,
                            ax = ax[ax_idx])
-    cmap = plt.cm.get_cmap(cmap_name, 2)
-    rgba = rgb2hex(cmap(1))
+    rgba = rgb2hex(cmap(cmap_edge))
     nx.draw_networkx_edges(Graph, pos, width = edgesize, 
                         alpha = alpha, edgelist = edgelst,
                         edge_color = rgba,
@@ -180,8 +179,8 @@ nodelst_data, nodesize_data = node_information(G_data, 'datastate_sum', 15)
 
 # plot 
 fig, ax = plt.subplots(1, 2, facecolor = 'w', figsize = (14, 8), dpi = 500)
-draw_network(G_full, pos, 'Blues', 0.6, nodelst_full, nodesize_full, edgelst_full, edgew_full, 0)
-draw_network(G_data, pos, 'Blues', 0.6, nodelst_data, nodesize_data, edgelst_data, edgew_data, 1)
+draw_network(G_full, pos, 'Blues', 0.6, nodelst_full, nodesize_full, nodesize_full, edgelst_full, edgew_full, 0)
+draw_network(G_data, pos, 'Blues', 0.6, nodelst_data, nodesize_data, nodesize_data, edgelst_data, edgew_data, 1)
 plt.savefig('../fig/configurations.pdf')
 
 # status 
@@ -280,11 +279,68 @@ get_match(61) # Goajiro (South American)
 get_match(5) # Tsonga (African)
 get_match(143) # Ainu (the other one)
 
-##### if we cannot figure it out from this include non-maximum-likelihood data states #####
+##### COMMUNITIES #####
+import networkx.algorithms.community as nx_comm
+louvain_comm = nx_comm.louvain_communities(G_full, weight = 'hamming', resolution = 0.5, seed = 152) # 8 comm.
 
-##### go in the opposite direction #####
-# i.e. give list of data states, and get agreement pct. 
-# setup
+# add louvain information
+counter = 0
+comm_dct = {}
+for comm in louvain_comm:
+    for node in comm: 
+        comm_dct[node] = counter  
+    counter += 1
+
+comm_lst_full = []
+for i in nodelst_full: 
+    comm_lst_full.append(comm_dct.get(i))
+    
+## plot this (reference)
+fig, ax = plt.subplots(figsize = (6, 8), dpi = 500)
+plt.axis('off')
+cmap = plt.cm.get_cmap("Set1")
+nx.draw_networkx_nodes(G_full, pos, 
+                        nodelist = nodelst_full,
+                        node_size = [x*1.5 for x in nodesize_full], 
+                        node_color = comm_lst_full,
+                        linewidths = 0.5, edgecolors = 'black',
+                        cmap = cmap)
+nx.draw_networkx_labels(G_full, pos, font_size = 8, labels = labeldict, bbox = label_options)
+plt.savefig('../fig/community_temp.pdf')
+
+## plot community (pretty) ## 
+## consider color-blind friendly. 
+fig, ax = plt.subplots(figsize = (6, 8), dpi = 500)
+cmap = plt.cm.get_cmap("Accent")
+nx.draw_networkx_nodes(G_full, pos, 
+                        nodelist = nodelst_full,
+                        node_size = [x*2 for x in nodesize_full], 
+                        node_color = comm_lst_full,
+                        linewidths = 0.5, edgecolors = 'black',
+                        cmap = cmap)
+rgba = rgb2hex(cmap(5))
+nx.draw_networkx_edges(G_full, pos, alpha = 0.7,
+                       width = edgew_full,
+                       edgelist = edgelst_full,
+                       edge_color = rgba
+                       )
+plt.savefig('../fig/community_configs.pdf')
+
+## side-by side plots 
+### get communities for the other one as well
+comm_lst_data = []
+for i in nodelst_data: 
+    comm_lst_data.append(comm_dct.get(i))
+
+## plot 
+fig, ax = plt.subplots(1, 2, facecolor = 'w', figsize = (14, 8), dpi = 500)
+draw_network(G_full, pos, 'Accent', 0.6, nodelst_full, [x*2 for x in nodesize_full], 
+             comm_lst_full, edgelst_full, [x*1.25 for x in edgew_full], 0, 5)
+draw_network(G_data, pos, 'Accent', 0.6, nodelst_data, [x*1.5 for x in nodesize_data], 
+             comm_lst_data, edgelst_data, edgew_data, 1, 5)
+plt.savefig('../fig/comm_configurations.pdf')
+
+##### UNDERSTAND THEM ######
 sref = pd.read_csv('../data/analysis/sref_nrows_455_maxna_5_nodes_20.csv')
 question_ids = sref['related_q_id'].to_list()
 
@@ -472,6 +528,8 @@ nx.draw_networkx_nodes(G_full, pos,
                         cmap = cmap)
 nx.draw_networkx_labels(G_full, pos, font_size = 8, labels = labeldict, bbox = label_options)
 plt.savefig('../fig/community_temp.pdf')
+
+#################### OLD SHIT #######################
 
 ### actually, we should scale AFTERWARDS ###
 ### i.e. maximum node should have same size, and maximum edge should have same 
