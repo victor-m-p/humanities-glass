@@ -27,7 +27,7 @@
 #     max=1
 #   end
 #   max.times { |k|
-#     print "sbatch -N 1 -o big_NAN_scan_20_#{nan}_#{k} -t 15:00:00 -p RM ./big_test_nans.rb 20 #{nan}\n"
+#     print "sbatch -N 1 -o big_NAN_scan_20_#{nan}_#{20+k} -t 15:00:00 -p RM ./big_test_nans.rb 20 #{nan}\n"
 #   }
 # }
 
