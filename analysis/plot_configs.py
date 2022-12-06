@@ -334,9 +334,9 @@ for i in nodelst_data:
 
 ## plot 
 fig, ax = plt.subplots(1, 2, facecolor = 'w', figsize = (14, 8), dpi = 500)
-draw_network(G_full, pos, 'Accent', 0.7, nodelst_full, [x*2 for x in nodesize_full], 
+draw_network(G_full, pos, 'Accent', 0.6, nodelst_full, [x*2 for x in nodesize_full], 
              comm_lst_full, edgelst_full, [x*1.25 for x in edgew_full], 0, 5)
-draw_network(G_data, pos, 'Accent', 0.7, nodelst_data, [x*1.5 for x in nodesize_data], 
+draw_network(G_data, pos, 'Accent', 0.6, nodelst_data, [x*1.5 for x in nodesize_data], 
              comm_lst_data, edgelst_data, edgew_data, 1, 5)
 plt.savefig('../fig/comm_configurations.pdf')
 
