@@ -1,6 +1,16 @@
 #!/usr/bin/ruby
-# sbatch -N 1 -o big_NAN -t 00:05:00 -p RM ./big_test_nans.rb 5 1 
-
+# sbatch -N 1 -o big_NAN -t 12:00:00 -p RM ./big_test_nans.rb 5 1 
+# sbatch -N 1 -o big_NAN -t 12:00:00 -p RM ./big_test_nans.rb 20 1 
+# sbatch -N 1 -o big_NAN -t 12:00:00 -p RM ./big_test_nans.rb 20 2
+# sbatch -N 1 -o big_NAN -t 12:00:00 -p RM ./big_test_nans.rb 20 3 
+# sbatch -N 1 -o big_NAN -t 12:00:00 -p RM ./big_test_nans.rb 20 4 
+# sbatch -N 1 -o big_NAN -t 12:00:00 -p RM ./big_test_nans.rb 20 5 
+# sbatch -N 1 -o big_NAN -t 12:00:00 -p RM ./big_test_nans.rb 20 6 
+# sbatch -N 1 -o big_NAN -t 12:00:00 -p RM ./big_test_nans.rb 20 7
+# sbatch -N 1 -o big_NAN -t 12:00:00 -p RM ./big_test_nans.rb 20 8 
+# sbatch -N 1 -o big_NAN -t 12:00:00 -p RM ./big_test_nans.rb 20 9 
+# sbatch -N 1 -o big_NAN -t 12:00:00 -p RM ./big_test_nans.rb 20 10
+ 
 n=ARGV[0].to_i
 nan=ARGV[1].to_i
 label="#{n}_#{nan}"
