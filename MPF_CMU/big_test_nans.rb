@@ -47,7 +47,6 @@ final_chunk=[]
   file.write(str2); file.close
 
   ans=`./mpf -c DATA/test_sequence_#{label}_base_data.dat 1`
-  print ans
   best_sp=ans.scan(/Best log\_sparsity:[^\n]+\n/)[0].split(":")[-1].to_f
 
   `./mpf -c DATA/test_sequence_#{label}_256_data.dat 1`
@@ -73,7 +72,7 @@ final_chunk=[]
   [128].each { |cut| #, 512, 512+256, 1024
     file=File.new("DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat", 'w')
     file.write("#{128+cut}\n"+str_na); file.close
-    print `./mpf -c DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat 1`
+    `./mpf -c DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat 1`
     begin
       ans=`./mpf -k DATA/test_sequence_#{label}_base_data.dat DATA/test_sequence_#{label}_params.dat DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat_params.dat`
       ans=ans.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
@@ -101,7 +100,7 @@ final_chunk=[]
   [128].each { |cut| #, 512, 512+256, 1024
     file=File.new("DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat", 'w')
     file.write("#{128+cut}\n#{n}\n"+str_na_new); file.close
-    print `./mpf -c DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat 1` 
+    `./mpf -c DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat 1` 
     begin
       ans=`./mpf -k DATA/test_sequence_#{label}_base_data.dat DATA/test_sequence_#{label}_params.dat DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat_params.dat`.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
       print "#{cut}: #{ans} (vs. #{best}))\n"
