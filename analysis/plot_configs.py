@@ -209,7 +209,6 @@ def get_match(n):
     dm = d_max_weight[d_max_weight['node_id'] == n][['entry_name']]
     print(dm.head(10))
 
-
 # central configuration (Catholic, Islamic, -- also Egypt -- Axial?)
 get_match(0) # 12th-13th C. Cistercians (Catholic), Savigny (12th C. Cistercian), Nahdlatul (Islamic Indonesia), Moravian (Christian), Knights Templar (Roman Cat.), Naqshbandi (sunni sufism), Greek (orthodox), Zapotec (south american, polytheistic)
 get_match(1) # Selinous (local religion, e.g. sacrifices, magic), Jesuits Britain (catholic), Confucianism (Chinese)
@@ -222,22 +221,29 @@ get_match(3) # Branch Davidians (Texas, apocalyptic, seventh-day), Egypt Salafis
 get_match(15) # Muslim Ahmadiyya (Islamic/messianic revival, 19th century British India)
 get_match(72) # Estado de India Renegades in Deccan (weird mixture)
 get_match(13) # Edinoverie (Russian, Christians, outsiders), Calvinism
+get_match(11) # Tariqa Shadhiliyya (sufi/sunni)
 
 # right-top valley (Baptist/Methodist/Evangelical)
 get_match(18) # Wesleyanism (methodist), Methodists, Friends, Neo-charismatic, No-debt US Evangelicanism
 get_match(85) # Manus (pre-Christian Papua New Guinea, spirit belief)
 get_match(50) # Sachchai (Nepal Christians, evangelist)
 get_match(42) # Southern Baptists (Protestant, Baptist, Evangelical)
+get_match(131) # American Evangelicalism, Protestantism welcoming People with Disabilities
+get_match(55) # valentinians
 
 # right-bot valley (Protestant + other)
 get_match(90) # Nigerian Pentecostalism (progressive, protestant), Anglican Korea (progressive, protestant)
 get_match(49) # Early Orthodox (calvinist, protestant), Tijaniyya (Sufi, west/north Africa)
 get_match(13) # Edinoverie (Russian, Christians, outsiders), Calvinism
+get_match(57) # Chisti Sufis
+get_match(10) # Middle-class Muslims in AUE, Inquisitors of Goa
+get_match(28) # Cham Bani, Ancient Egypt, Ugarit, Isis. 
 
 # lower cluster (Hindu/Buddhist) -- non-axial?
 get_match(53) # swaminarayan Sampdraday -- Hindu
 get_match(46) # Nechung (Tibet Oracle), Dasara (Hindu), Shaiva (Hindu), Jain Digambara (Jainism) 
 get_match(91) # tamil saiva (Shaivism), ladakhi buddhism
+get_match(146) # postsocialist mongolian buddhism 
 
 # top side (Indians) -- non-axial? 
 get_match(93) # Peyote (Native American) -- Indians
@@ -245,9 +251,101 @@ get_match(145) # Timbira (Canela) -- Indians
 get_match(60) # pythagoreanism -- ...
 get_match(85) # Manus -- Christian/Indigenous mix
 
-# left side 
+# right side (Hindu mainly)
+get_match(50) # Sachchai (Nepal Christian / Evangelist)
+get_match(94) # Madhva (Hindu)
+get_match(144) # Worship of Jagannath in Puri (Hindu)
+
+# bottom (misc?)
+get_match(116) # Pharisees
+get_match(106) # Sokoto (Sufi)
+get_match(148) # Wogeo (New Guinea)
+get_match(76) # Hmong Christianity, Tribal Christianity
+
+# left side (bot) -- Roman/Spartan
+get_match(27) # Roman Imperial cult
+get_match(36) # Pre-Christian Religion / Pagan Gaul
+get_match(22) # Achaeminid Religion
+get_match(35) # Archaic Spartan cults
+get_match(19) # Pontifex Maximus and Pontifices
+
+# left side (top) -- pre-axial 
+get_match(9) # BRIDGE: Religion in Mesopotamia, Ancient Thessalians
+get_match(103) # Mbau Fijians (Oceanic)
+get_match(20) # Religion in Old Assyruan Period
+get_match(68) # Shilluk (African)
+get_match(33) # Ainu (Japanese)
+get_match(133) # Maori (Oceanic)
+get_match(61) # Goajiro (South American)
+get_match(5) # Tsonga (African)
+get_match(143) # Ainu (the other one)
+
+##### if we cannot figure it out from this include non-maximum-likelihood data states #####
+
+##### go in the opposite direction #####
+# i.e. give list of data states, and get agreement pct. 
+# setup
+sref = pd.read_csv('../data/analysis/sref_nrows_455_maxna_5_nodes_20.csv')
+question_ids = sref['related_q_id'].to_list()
+
+def state_agreement(d, config_lst): 
+    
+    # subset states 
+    p_ind_uniq = d[d['node_id'].isin(config_lst)]
+    p_ind_uniq = p_ind_uniq['p_ind'].unique()
+    p_ind_uniq = list(p_ind_uniq)
+
+    # get the configurations
+    d_conf = allstates[p_ind_uniq]
+
+    # to dataframe 
+    d_mat = pd.DataFrame(d_conf, columns = question_ids)
+    d_mat['p_ind'] = p_ind_uniq
+    d_mat = pd.melt(d_mat, id_vars = 'p_ind', value_vars = question_ids, var_name = 'related_q_id')
+    d_mat = d_mat.groupby('related_q_id')['value'].mean().reset_index(name = 'mean')
+
+    # merge back in question names
+    d_interpret = d_mat.merge(sref, on = 'related_q_id', how = 'inner')
+    d_interpret = d_interpret.sort_values('mean')
+
+    # return 
+    return d_interpret 
+
+# run on the big communities
+
+comm_1 = list(louvain_comm[0])
+x = state_agreement(d_max_weight, comm_1)
+# 
 
 
+##### community detection #####
+import networkx.algorithms.community as nx_comm
+louvain_comm = nx_comm.louvain_communities(G_full, weight = 'hamming', resolution = 0.5, seed = 152) # 8 comm.
+
+# add louvain information
+counter = 0
+dct = {}
+for comm in louvain_comm:
+    for node in comm: 
+        dct[node] = counter  
+    counter += 1
+
+comm_lst = []
+for i in nodelst_full: 
+    comm_lst.append(dct.get(i))
+    
+
+## plot this 
+fig, ax = plt.subplots(figsize = (6, 8), dpi = 500)
+cmap = plt.cm.get_cmap("Set1")
+nx.draw_networkx_nodes(G_full, pos, 
+                        nodelist = nodelst_full,
+                        node_size = [x*1.5 for x in nodesize_full], 
+                        node_color = comm_lst,
+                        linewidths = 0.5, edgecolors = 'black',
+                        cmap = cmap)
+nx.draw_networkx_labels(G_full, pos, font_size = 8, labels = labeldict, bbox = label_options)
+plt.savefig('../fig/community_temp.pdf')
 
 ### actually, we should scale AFTERWARDS ###
 ### i.e. maximum node should have same size, and maximum edge should have same 
