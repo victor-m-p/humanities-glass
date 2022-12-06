@@ -33,5 +33,5 @@ list=[]
   }  
 }
 
-./mpf -k TEST_COMP/test_2_256DATA_data.dat TEST_COMP/test_2_256DATA_params.dat TEST_COMP/test_2_256DATA_data.dat_params.dat
-./mpf -z TEST_COMP/test_2_256DATA_data.dat_params.dat
+# ./mpf -k TEST_COMP/test_2_256DATA_data.dat TEST_COMP/test_2_256DATA_params.dat TEST_COMP/test_2_256DATA_data.dat_params.dat
+# ./mpf -z TEST_COMP/test_2_256DATA_data.dat_params.dat
