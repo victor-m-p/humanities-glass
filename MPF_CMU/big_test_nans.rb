@@ -9,7 +9,7 @@
 # sbatch -N 1 -o big_NAN_20_8 -t 15:00:00 -p RM ./big_test_nans.rb 20 8
 # sbatch -N 1 -o big_NAN_20_9 -t 15:00:00 -p RM ./big_test_nans.rb 20 9
 # sbatch -N 1 -o big_NAN_20_10 -t 15:00:00 -p RM ./big_test_nans.rb 20 10
- 
+
 n=ARGV[0].to_i
 nan=ARGV[1].to_i
 label="#{n}_#{nan}"
@@ -60,7 +60,7 @@ final_chunk=[]
   [128].each { |cut| #, 512, 512+256, 1024
     file=File.new("DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat", 'w')
     file.write("#{128+cut}\n"+str_na); file.close
-    `./mpf -c DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat 2`
+    `./mpf -c DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat 1`
     begin
       ans=`./mpf -k DATA/test_sequence_#{label}_base_data.dat DATA/test_sequence_#{label}_params.dat DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat_params.dat`
       ans=ans.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
@@ -88,7 +88,7 @@ final_chunk=[]
   [128].each { |cut| #, 512, 512+256, 1024
     file=File.new("DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat", 'w')
     file.write("#{128+cut}\n#{n}\n"+str_na_new); file.close
-    `./mpf -c DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat 2` 
+    `./mpf -c DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat 1` 
     begin
       ans=`./mpf -k DATA/test_sequence_#{label}_base_data.dat DATA/test_sequence_#{label}_params.dat DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat_params.dat`.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
       print "#{cut}: #{ans} (vs. #{best}))\n"
