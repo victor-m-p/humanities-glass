@@ -14,9 +14,9 @@ LFLAGS=-lm `gsl-config --libs`
 # for PSC with AMD compiler
 # time tests suggest that AMD is 10%±2% faster than GCC
 # run `module load aocc aocl` first!
-CC=clang
-CFLAGS=-O3 -fopenmp -fvectorize -flto -fwhole-program-vtables -fremap-arrays -funroll-loops -fslp-vectorize -floop-unswitch-aggressive -finline-aggressive -mllvm --reduce-array-computations=3 `gsl-config --cflags`
-LFLAGS=-unroll-aggressive -lamdlibm  -lm `gsl-config --libs`
+# CC=clang
+# CFLAGS=-O3 -fopenmp -fvectorize -flto -fwhole-program-vtables -fremap-arrays -funroll-loops -fslp-vectorize -floop-unswitch-aggressive -finline-aggressive -mllvm --reduce-array-computations=3 `gsl-config --cflags`
+# LFLAGS=-unroll-aggressive -lamdlibm  -lm `gsl-config --libs`
 
 OBJ = mpf.o mcmc.o nlin.o nsb.o
 

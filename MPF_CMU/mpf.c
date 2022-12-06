@@ -975,16 +975,16 @@ void simple_minimizer(all *data) {
 
 		status = gsl_multimin_test_gradient(s->gradient, 1e-12);
 		
-		// printf ("%i %li (%lf) : ", status, iter, s->f);
-		// for(i=0;i<data->n_params;i++) {
-		// 	printf("%.10le ", gsl_vector_get (s->x, i));
-		// }
-		// printf("\n");
-		// printf("Derivs: ");
-		// for(i=0;i<data->n_params;i++) {
-		// 	printf("%lf ", data->dk[i]);
-		// }
-		// printf("\n");
+		printf ("%i %li (%lf) : ", status, iter, s->f);
+		for(i=0;i<data->n_params;i++) {
+			printf("%.10le ", gsl_vector_get (s->x, i));
+		}
+		printf("\n");
+		printf("Derivs: ");
+		for(i=0;i<data->n_params;i++) {
+			printf("%lf ", data->dk[i]);
+		}
+		printf("\n");
 		
 		num=0;
 		for(i=0;i<data->n_params;i++) {

@@ -1,5 +1,5 @@
 #!/usr/bin/ruby
-# sbatch -N 1 -o quick_test_COMP_FINAL -t 06:00:00 -p RM ./quick_test.rb 
+# sbatch -N 1 -o quick_test_COMP_FINAL -t 12:00:00 -p RM ./quick_test.rb 
 
 list=[]
 [128, 256, 512].each { |n_data|
@@ -32,3 +32,6 @@ list=[]
     print "Iteration #{i} #{n_data} #{beta} (#{Time.now-start} sec.): #{cv_performance} vs #{baseline_performance}\n"
   }  
 }
+
+./mpf -k TEST_COMP/test_2_256DATA_data.dat TEST_COMP/test_2_256DATA_params.dat TEST_COMP/test_2_256DATA_data.dat_params.dat
+./mpf -z TEST_COMP/test_2_256DATA_data.dat_params.dat
