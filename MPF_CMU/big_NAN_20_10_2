@@ -1,0 +1,9 @@
+Starting new test 0 at time 2022-12-05 20:02:52 -0500...
+128: 0.707576 (vs 0.422382)
+Now do bad choice...
+128: 1.096061 (vs. 0.422382))
+[0.692405, 0.422382, 0.707576, 1.096061]
+Finished test at 2022-12-06 04:28:40 -0500
+[[0.692405, 0.422382, 0.707576, 1.096061]]
+Starting new test 1 at time 2022-12-06 04:28:40 -0500...
+slurmstepd: error: *** JOB 13498416 ON r367 CANCELLED AT 2022-12-06T11:02:50 DUE TO TIME LIMIT ***
