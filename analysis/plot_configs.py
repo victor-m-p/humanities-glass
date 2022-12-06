@@ -259,7 +259,7 @@ get_match(144) # Worship of Jagannath in Puri (Hindu)
 get_match(116) # Pharisees
 get_match(106) # Sokoto (Sufi)
 get_match(148) # Wogeo (New Guinea)
-get_match(76) # Hmong Christianity, Tribal Christianity
+get_match(78) # Hmong Christianity, Tribal Christianity
 
 # left side (bot) -- Roman/Spartan
 get_match(27) # Roman Imperial cult
@@ -358,6 +358,7 @@ def state_agreement(d, config_lst):
     d_mat = pd.DataFrame(d_conf, columns = question_ids)
     d_mat['p_ind'] = p_ind_uniq
     d_mat = pd.melt(d_mat, id_vars = 'p_ind', value_vars = question_ids, var_name = 'related_q_id')
+    d_mat = d_mat.replace({'value': {-1: 0}})
     d_mat = d_mat.groupby('related_q_id')['value'].mean().reset_index(name = 'mean_val')
 
     # merge back in question names
@@ -365,7 +366,7 @@ def state_agreement(d, config_lst):
     d_interpret = d_interpret.sort_values('mean_val')
 
     # return 
-    return d_interpret 
+    return d_interpret
 
 # run on the big communities
 pd.set_option('display.max_colwidth', None)
@@ -376,7 +377,7 @@ pd.set_option('display.max_colwidth', None)
 ### -0.41: co-sacrifices present in tomb/burial, .41: participation in small-scale rituals
 comm_1 = list(louvain_comm[0])
 agree_1 = state_agreement(d_max_weight, comm_1)
-
+agree_1
 ## cyan (bottom)
 ### lean no: reincarnation this world
 ### lean yes: small-scale rituals
