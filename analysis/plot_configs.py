@@ -199,8 +199,8 @@ for node in nodelst_data:
 fig, ax = plt.subplots(1, 2, figsize = (14, 8), dpi = 500)
 draw_network(G_full, pos, 'Blues', 0.6, nodelst_full, nodesize_full, edgelst_full, edgew_full, 0)
 draw_network(G_data, pos, 'Blues', 0.6, nodelst_data, nodesize_data, edgelst_data, edgew_data, 1)
-nx.draw_networkx_labels(G_full, pos, font_size = 3, labels = labeldict, ax = ax[0])
-nx.draw_networkx_labels(G_data, pos, font_size = 3, labels = labeldict, ax = ax[1])
+nx.draw_networkx_labels(G_full, pos, font_size = 6, labels = labeldict, ax = ax[0])
+nx.draw_networkx_labels(G_data, pos, font_size = 6, labels = labeldict, ax = ax[1])
 plt.savefig('../fig/reference_temp.pdf')
 
 # what are in these clusters?
@@ -233,12 +233,12 @@ get_match(90) # Nigerian Pentecostalism (progressive, protestant), Anglican Kore
 get_match(49) # Early Orthodox (calvinist, protestant), Tijaniyya (Sufi, west/north Africa)
 get_match(13) # Edinoverie (Russian, Christians, outsiders), Calvinism
 
-# lower cluster (Hindu/Buddhist)
+# lower cluster (Hindu/Buddhist) -- non-axial?
 get_match(53) # swaminarayan Sampdraday -- Hindu
 get_match(46) # Nechung (Tibet Oracle), Dasara (Hindu), Shaiva (Hindu), Jain Digambara (Jainism) 
 get_match(91) # tamil saiva (Shaivism), ladakhi buddhism
 
-# top side (Indians)
+# top side (Indians) -- non-axial? 
 get_match(93) # Peyote (Native American) -- Indians
 get_match(145) # Timbira (Canela) -- Indians
 get_match(60) # pythagoreanism -- ...
