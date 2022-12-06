@@ -1,4 +1,5 @@
 #!/usr/bin/ruby
+# sbatch -N 1 -o DATA/new_NAN_TESTS_final -t 06:00:00 -p RM ./test_nans.rb 20 5 NAN_TESTS_FINAL\n"
 
 n=ARGV[0].to_i
 nan=ARGV[1].to_i
@@ -9,29 +10,19 @@ label=ARGV[2]
   
   `./mpf -g DATA/test_sequence_#{label} #{n} 2048 0.2`
 
-  file=File.new("DATA/test_sequence_#{label}_data.dat", 'r')
-  str=file.read; file.close
+  full_data=[0, 64, 128, 256, 512, 512+256, 1024].collect { |cut|
+    file=File.new("DATA/test_sequence_#{label}_data.dat", 'r')
+    str=file.read; file.close
 
-  file=File.new("DATA/test_sequence_#{label}_base_data.dat", 'w')
-  str2="128\n"+str.split("\n")[1..-1].join("\n");1
-  file.write(str2); file.close
+    file=File.new("DATA/test_sequence_#{label}_#{cut+128}_data.dat", 'w')
+    str2="#{cut+128}\n"+str.split("\n")[1..-1].join("\n");1
+    file.write(str2); file.close
 
-  file=File.new("DATA/test_sequence_#{label}_256_data.dat", 'w')
-  str2="256\n"+str.split("\n")[1..-1].join("\n");1
-  file.write(str2); file.close
-
-  file=File.new("DATA/test_sequence_#{label}_512_data.dat", 'w')
-  str2="512\n"+str.split("\n")[1..-1].join("\n");1
-  file.write(str2); file.close
-
-  ans=`./mpf -c DATA/test_sequence_#{label}_base_data.dat 2`
-  best_sp=ans.scan(/Best log\_sparsity:[^\n]+\n/)[0].split(":")[-1].to_f
-
-  `./mpf -c DATA/test_sequence_#{label}_256_data.dat 2`
-  `./mpf -c DATA/test_sequence_#{label}_512_data.dat 2`
-  start=`./mpf -k DATA/test_sequence_#{label}_base_data.dat DATA/test_sequence_#{label}_params.dat DATA/test_sequence_#{label}_base_data.dat_params.dat`.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
-  best=`./mpf -k DATA/test_sequence_#{label}_base_data.dat DATA/test_sequence_#{label}_params.dat DATA/test_sequence_#{label}_256_data.dat_params.dat`.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
-  even_bester=`./mpf -k DATA/test_sequence_#{label}_base_data.dat DATA/test_sequence_#{label}_params.dat DATA/test_sequence_#{label}_512_data.dat_params.dat`.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
+    `./mpf -c DATA/test_sequence_#{label}_#{cut+128}_data.dat 1`
+    start=`./mpf -k DATA/test_sequence_#{label}_#{cut+128}_data.dat DATA/test_sequence_#{label}_#{cut+128}_params.dat DATA/test_sequence_#{label}_#{cut+128}_base_data.dat_params.dat`.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
+    print "Full data -- #{cut}: #{start}\n"
+    [cut, start]    
+  }
 
   str_na=str.split("\n")[1..129].join("\n")+"\n"+str.split("\n")[130..-1].collect { |j| 
     loc=[]
@@ -47,16 +38,18 @@ label=ARGV[2]
     code
   }.join("\n");1
 
-  [64, 128, 256, 512, 512+256, 1024].each { |cut| #, 512, 512+256, 1024
+  nan_data=[64, 128, 256, 512, 512+256, 1024].collect { |cut| #, 512, 512+256, 1024
     file=File.new("DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat", 'w')
     file.write("#{128+cut}\n"+str_na); file.close
-    `./mpf -c DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat 2`
+    `./mpf -c DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat 1`
     begin
       ans=`./mpf -k DATA/test_sequence_#{label}_base_data.dat DATA/test_sequence_#{label}_params.dat DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat_params.dat`
       ans=ans.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
-      print "#{cut}: #{ans} (vs #{best} vs #{even_bester} vs #{start})\n"
+      print "NA data -- #{cut}: #{ans}\n"
+      [cut, ans]
     rescue
-      print "Something bad happened at #{cut}\n"    
+      print "Something bad happened at #{cut}\n"   
+      [cut, -1] 
     end
   }
 
@@ -74,19 +67,24 @@ label=ARGV[2]
     Array.new(n) { |i| code[i] == "X"  ? avg[i].round.to_s : code[i] }.join("")+" 1.0"
   }.join("\n");1
 
-  [64, 128, 256, 512, 512+256, 1024].each { |cut| #, 512, 512+256, 1024
+  bad_data=[64, 128, 256, 512, 512+256, 1024].collect { |cut| #, 512, 512+256, 1024
     file=File.new("DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat", 'w')
     file.write("#{128+cut}\n#{n}\n"+str_na_new); file.close
-    `OMP_NUM_THREADS=128 ./mpf -c DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat 2` 
+    `OMP_NUM_THREADS=128 ./mpf -c DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat 1` 
     begin
       ans=`./mpf -k DATA/test_sequence_#{label}_base_data.dat DATA/test_sequence_#{label}_params.dat DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat_params.dat`.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
-      print "#{cut}: #{ans} (vs #{best} vs #{even_bester} vs #{start})\n"
+      print "Bad data -- #{cut}: #{ans}\n"
+      [cut, ans]
     rescue
       print "Something bad happened at #{cut}\n"
+      [cut, -1]
     end
   }
   
   print "Finished test at #{Time.now}\n"
+  print "full_data=#{full_data}\n"
+  print "nan_data=#{nan_data}\n"
+  print "bad_data=#{bad_data}\n"
 }
 
 # 3.times { |label|
