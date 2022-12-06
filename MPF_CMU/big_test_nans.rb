@@ -6,7 +6,7 @@ nan=ARGV[1].to_i
 label="#{n}_#{nan}"
 
 final_chunk=[]
-10.times { |i|
+100.times { |i|
   
   chunk=[]
   
@@ -92,4 +92,6 @@ final_chunk=[]
   print "#{chunk}\n"
   print "Finished test at #{Time.now}\n"
   final_chunk << chunk
+  print "#{final_chunk}\n"
 }
+print "#{final_chunk}\n"
