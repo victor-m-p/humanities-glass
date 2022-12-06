@@ -41,7 +41,7 @@ final_chunk=[]
   beta=rand()+0.01
   chunk=[]
   
-  print "Starting new test #{i} at time #{Time.now}...\n"
+  print "Starting new test #{i} at time #{Time.now} (#{beta})...\n"
   
   `./mpf -g DATA/test_sequence_#{label} #{n} 2048 0.25`
 
@@ -78,7 +78,7 @@ final_chunk=[]
     code
   }.join("\n");1
 
-  chunk=[start, best]
+  chunk=[beta, start, best]
   [128].each { |cut| #, 512, 512+256, 1024
     file=File.new("DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat", 'w')
     file.write("#{128+cut}\n"+str_na); file.close
