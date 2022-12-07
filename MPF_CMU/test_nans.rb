@@ -6,6 +6,7 @@
 n=ARGV[0].to_i
 nan=ARGV[1].to_i
 label=ARGV[2]
+n_proc=7
 require 'parallel'
 
 10.times { |i|
