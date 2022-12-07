@@ -3,74 +3,7 @@ from matplotlib.colors import rgb2hex
 import networkx as nx 
 import numpy as np
 import pandas as pd 
-from fun import bin_states, top_n_idx, hamming_distance
-
-def draw_network(Graph, pos, cmap_name, alpha, nodelst, nodesize, nodecolor, edgelst, edgesize, ax_idx, cmap_edge = 1): 
-    cmap = plt.cm.get_cmap(cmap_name)
-    nx.draw_networkx_nodes(Graph, pos, 
-                           nodelist = nodelst,
-                           node_size = nodesize, 
-                           node_color = nodecolor,
-                           linewidths = 0.5, edgecolors = 'black',
-                           cmap = cmap,
-                           ax = ax[ax_idx])
-    rgba = rgb2hex(cmap(cmap_edge))
-    nx.draw_networkx_edges(Graph, pos, width = edgesize, 
-                        alpha = alpha, edgelist = edgelst,
-                        edge_color = rgba,
-                        #edge_color = edgesize,
-                        #edge_cmap = cmap,
-                        ax = ax[ax_idx])
-    ax[ax_idx].set_axis_off()
-
-def edge_information(Graph, weight_attribute, filter_attribute, scaling): 
-    ## get edge attributes
-    edge_weight = nx.get_edge_attributes(Graph, weight_attribute)
-    edge_hdist = dict(nx.get_edge_attributes(Graph, filter_attribute))
-
-    ## sorting
-    edgew_sorted = {k: v for k, v in sorted(edge_weight.items(), key=lambda item: item[1])}
-    edgelst_sorted = list(edgew_sorted.keys())
-    edgeh_sorted = dict(sorted(edge_hdist.items(), key = lambda pair: edgelst_sorted.index(pair[0])))
-    
-    # now we can make lists = edge_w
-    edgew_lst = list(edgew_sorted.values())
-    edgeh_lst = list(edgeh_sorted.values())
-
-    # now we can filter out elements 
-    edgew_threshold = [x if y == 1 else 0 for x, y in zip(edgew_lst, edgeh_lst)]
-    edgew_scaled = [x*scaling for x in edgew_threshold]
-    return edgelst_sorted, edgew_scaled 
-
-def node_information(Graph, weight_attribute, scaling): 
-    # sort nodes 
-    node_size = nx.get_node_attributes(Graph, weight_attribute)
-    node_sort_size = {k: v for k, v in sorted(node_size.items(), key = lambda item: item[1])}
-    nodelst_sorted = list(node_sort_size.keys())
-    nodesize_sorted = list(node_sort_size.values())
-    nodesize_scaled = [x*scaling for x in nodesize_sorted]
-    return nodelst_sorted, nodesize_scaled 
-
-def hamming_edges(n_top_states, h_distances):
-    idx = [f'hamming{x}' for x in range(n_top_states)]
-    d = pd.DataFrame(h_distances, columns = idx)
-    d['node_x'] = d.index
-    d = pd.wide_to_long(d, stubnames = "hamming", i = 'node_x', j = 'node_y').reset_index()
-    d = d[d['node_x'] != d['node_y']] # remove diagonal 
-    d = d.drop_duplicates() # remove duplicates
-    return d 
-
-# assign weight information to G 
-def edge_strength(G, nodestrength): 
-    Gcopy = G.copy()
-    for edge_x, edge_y in Gcopy.edges():
-        pmass_x = Gcopy.nodes[edge_x][nodestrength]
-        pmass_y = Gcopy.nodes[edge_y][nodestrength]
-        pmass_mult = pmass_x*pmass_y 
-        pmass_add = pmass_x+pmass_y
-        Gcopy.edges[(edge_x, edge_y)]['pmass_mult'] = pmass_mult 
-        Gcopy.edges[(edge_x, edge_y)]['pmass_add'] = pmass_add  
-    return Gcopy 
+from fun import *
 
 # setup
 n_rows, n_nan, n_nodes, n_top_states = 455, 5, 20, 150
@@ -85,68 +18,16 @@ allstates = bin_states(n_nodes)
 d_ind = top_n_idx(n_top_states, p, 'p_ind', 'p_raw') 
 d_ind['node_id'] = d_ind.index # 150
 
-## add likelihood information for the states that appear in top states
-def datastate_information(d_likelihood, nodes_reference, d_ind): 
-    # merge with nodes reference to get entry_name
-    d_likelihood = d_likelihood[['entry_id', 'p_ind', 'p_norm']]
-    d_likelihood = d_likelihood.merge(nodes_reference, on = 'entry_id', how = 'inner')
-    # make sure that dtypes are preserved 
-    d_ind = d_ind.convert_dtypes()
-    d_likelihood = d_likelihood.convert_dtypes()
-    # merge with d_ind to get data-state probability 
-    d_likelihood = d_likelihood.merge(d_ind, on = 'p_ind', indicator = True)
-    d_likelihood.rename(columns = {'_merge': 'state'}, inplace = True)
-    d_likelihood = d_likelihood.replace({'state': {'left_only': 'only_data', 
-                                        'right_only': 'only_config',
-                                        'both': 'overlap'}})
-    # only interested in states both in data and in top configurations
-    d_overlap = d_likelihood[d_likelihood['state'] == 'overlap'].drop(columns={'state'})
-    # add information about maximum likelihood 
-    max_likelihood = d_overlap.groupby('entry_id')['p_norm'].max().reset_index(name = 'p_norm')
-    d_overlap = d_overlap.merge(max_likelihood, on = ['entry_id', 'p_norm'], how = 'left', indicator=True)
-    d_overlap = d_overlap.rename(columns = {'_merge': 'max_likelihood'})
-    d_overlap = d_overlap.replace({'max_likelihood': {'both': 'yes', 'left_only': 'no'}})
-    d_overlap['full_record'] = np.where(d_overlap['p_norm'] == 1, 'yes', 'no')
-    return d_overlap 
-
 d_overlap = datastate_information(d_likelihood, nodes_reference, d_ind) # 407
-
-## weight for configurations (proportional to data state weight) 
-def datastate_weight(d_overlap): 
-    d_entry_node = d_overlap[['entry_id', 'node_id']]
-    d_datastate_weight = d_entry_node.groupby('entry_id').size().reset_index(name = 'entry_count')
-    d_datastate_weight = d_datastate_weight.assign(entry_weight = lambda x: 1/x['entry_count'])
-    d_datastate_weight = d_entry_node.merge(d_datastate_weight, on = 'entry_id', how = 'inner')
-    d_datastate_weight = d_datastate_weight.groupby('node_id')['entry_weight'].sum().reset_index(name = 'datastate_sum')
-    return d_datastate_weight 
-
 d_datastate_weight = datastate_weight(d_overlap) # 129
 
 ## labels by node_id
 ### take the maximum p_norm per node_id
 ### if there are ties do not break them for now
-def maximum_weight(d_overlap, d_datastate_weight): 
-    d_max_weight = d_overlap.groupby('node_id')['p_norm'].max().reset_index(name = 'p_norm')
-    d_max_weight = d_overlap.merge(d_max_weight, on = ['node_id', 'p_norm'], how = 'inner')
-    d_max_weight = d_datastate_weight.merge(d_max_weight, on = 'node_id', how = 'inner')
-    return d_max_weight
-
 d_max_weight = maximum_weight(d_overlap, d_datastate_weight)
 
 ## labels by node_id 
 ### break ties randomly for now 
-def merge_node_attributes(d_max_weight, d_ind): 
-    d_datastate_attr = d_max_weight.groupby('node_id').sample(n=1, random_state=421)
-    d_datastate_attr = d_datastate_attr.drop(columns = {'p_raw'})
-    node_attr = d_ind.merge(d_datastate_attr, on = ['node_id', 'p_ind'], how = 'left', indicator = True)
-    node_attr = node_attr.rename(columns = {'_merge': 'datastate'})
-    node_attr = node_attr.replace({'datastate': {'both': 'yes', 'left_only': 'no'}})
-    # configs that are not datastates, fill na (easier later)
-    node_attr['datastate_sum'] = node_attr['datastate_sum'].fillna(0)
-    node_attr['max_likelihood'] = node_attr['max_likelihood'].fillna('no')
-    #node_attr_dict = node_attr.to_dict('index')
-    return node_attr
-
 node_attr = merge_node_attributes(d_max_weight, d_ind)
 node_attr_dict = node_attr.to_dict('index')
 
@@ -173,45 +54,19 @@ for idx, val in node_attr_dict.items():
         G.nodes[idx][attr] = val[attr]
         
 # process 
-G_full = edge_strength(G, 'p_raw') # fix
+G_full = edge_strength(G, 'p_raw') 
 edgelst_full, edgew_full = edge_information(G_full, 'pmass_mult', 'hamming', 30000)
 nodelst_full, nodesize_full = node_information(G_full, 'p_raw', 5000)
-
-G_data = edge_strength(G, 'datastate_sum')
-edgelst_data, edgew_data = edge_information(G_data, 'pmass_mult', 'hamming', 0.2)
-nodelst_data, nodesize_data = node_information(G_data, 'datastate_sum', 15)
-
-'''
-# plot 
-fig, ax = plt.subplots(1, 2, facecolor = 'w', figsize = (14, 8), dpi = 500)
-draw_network(G_full, pos, 'Blues', 0.6, nodelst_full, nodesize_full, nodesize_full, edgelst_full, edgew_full, 0, 1)
-draw_network(G_data, pos, 'Blues', 0.6, nodelst_data, nodesize_data, nodesize_data, edgelst_data, edgew_data, 1, 1)
-plt.savefig('../fig/configurations.pdf')
-'''
 
 # status 
 ## (1) need to scale "together" somehow (same min and max, or match the mean?) -- both nodes and edges
 ## (2) need good way of referencing which records we are talking about
 ## (3) largest differences between the two plots..?
 ## (4) could try to run community detection as well 
-'''
-# reference plot 
-labeldict = {}
-for node in nodelst_data:
-    node_id = G.nodes[node]['node_id']
-    labeldict[node] = node_id
-
-fig, ax = plt.subplots(1, 2, figsize = (14, 8), dpi = 500)
-draw_network(G_full, pos, 'Blues', 0.6, nodelst_full, nodesize_full, edgelst_full, edgew_full, 0, 1)
-draw_network(G_data, pos, 'Blues', 0.6, nodelst_data, nodesize_data, edgelst_data, edgew_data, 1, 1)
-label_options = {"ec": "k", "fc": "white", "alpha": 0.1}
-nx.draw_networkx_labels(G_full, pos, font_size = 8, labels = labeldict, bbox = label_options, ax = ax[0])
-nx.draw_networkx_labels(G_data, pos, font_size = 8, labels = labeldict, bbox = label_options, ax = ax[1])
-plt.savefig('../fig/reference_temp.pdf')
-'''
 # what are in these clusters?
 
 ##### COMMUNITIES #####
+## can probably add directly to graph actually...
 import networkx.algorithms.community as nx_comm
 louvain_comm = nx_comm.louvain_communities(G_full, weight = 'hamming', resolution = 0.5, seed = 152) # 8 comm.
 
@@ -245,23 +100,311 @@ nx.draw_networkx_edges(G_full, pos, alpha = 0.7,
                        )
 plt.savefig('../fig/community_configs.pdf')
 
-'''
-## side-by side plots 
-### get communities for the other one as well
-comm_lst_data = []
-for i in nodelst_data: 
-    comm_lst_data.append(comm_dct.get(i))
+##### community weight #####
+d_community = pd.DataFrame.from_dict(comm_dct,
+                                     orient='index',
+                                     columns = ['community'])
+d_community['node_id'] = d_community.index
+node_attr = node_attr.merge(d_community, on = 'node_id', how = 'inner')
+node_attr.groupby('community')['p_raw'].sum()
+node_attr['p_raw'].sum() # 0.4547
 
-## plot 
-fig, ax = plt.subplots(1, 2, facecolor = 'w', figsize = (14, 8), dpi = 500)
-draw_network(G_full, pos, 'Accent', 0.6, nodelst_full, [x*2 for x in nodesize_full], 
-             comm_lst_full, edgelst_full, [x*1.25 for x in edgew_full], 0, 5)
-draw_network(G_data, pos, 'Accent', 0.6, nodelst_data, [x*1.5 for x in nodesize_data], 
-             comm_lst_data, edgelst_data, edgew_data, 1, 5)
-plt.savefig('../fig/comm_configurations.pdf')
+#### community color ##### 
+community_color = {
+    0: 'Green',
+    1: 'Pastel',
+    2: 'Blue',
+    3: 'Orange',
+    4: 'Grey'
+}
+
+node_attr['color'] =  node_attr['community'].apply(lambda x: community_color.get(x))
+
+##### SREF: Questions IDS #######
+sref = pd.read_csv('../data/analysis/sref_nrows_455_maxna_5_nodes_20.csv')
+
+sref_questions_dict = {
+    4676: 'Official political support',
+    4729: 'Scriptures',
+    4745: 'Monumental religious architecture',
+    4776: 'Spirit-body distinction',
+    4780: 'Belief in afterlife',
+    4787: 'Reincarnation in this world',
+    4794: 'Special treatment for corpses',
+    4808: 'Co-sacrifices in tomb/burial',
+    4814: 'Grave goods',
+    4821: 'Formal burials',
+    4827: 'Supernatural beings present',
+    4954: 'Supernatural monitoring present',
+    4983: 'Supernatural beings punish',
+    5127: 'Castration required',
+    5132: 'Adult sacrifice required',
+    5137: 'Child sacrifice required',
+    5142: 'Suicide required',
+    5152: 'Small-scale rituals required',
+    5154: 'Large-scale rituals required',
+    5220: 'Distinct written language'
+}
+
+sref['question'] = sref['related_q_id'].apply(lambda x: sref_questions_dict.get(x))
+
+## TO LATEX
+sref_latex = sref[['related_q_id', 'question', 'related_q']]
+sref_latex_string = sref_latex.to_latex(index=False)
+with open('question_overview.txt', 'w') as f: 
+    f.write(sref_latex_string)
+
+##### BIT DIFFERENCE #####
+question_ids = sref['related_q_id'].to_list() 
+bit_lst = []
+for comm in range(5): # five communities 
+    idx_focal = list(louvain_comm[comm])
+    idx_other = [list(ele) for num, ele in enumerate(louvain_comm) if num != comm]
+    idx_other = [item for sublist in idx_other for item in sublist]
+    bit_focal = avg_bitstring(allstates, node_attr, question_ids, idx_focal, 'node_id', 'p_ind', 'related_q_id', 'p_raw')
+    bit_other = avg_bitstring(allstates, node_attr, question_ids, idx_other, 'node_id', 'p_ind', 'related_q_id', 'p_raw')
+    bit_focal = bit_focal.rename(columns = {'weighted_avg': f'weighted_avg_focal'})
+    bit_other = bit_other.rename(columns = {'weighted_avg': 'weighted_avg_other'})
+    bit_diff = bit_focal.merge(bit_other, on = 'related_q_id', how = 'inner')
+    bit_diff = bit_diff.assign(focal_minus_other = lambda x: x[f'weighted_avg_focal']-x['weighted_avg_other'])
+    bit_diff['focal_minus_other_abs'] = np.abs(bit_diff['focal_minus_other'])
+    bit_diff = sref.merge(bit_diff, on = 'related_q_id', how = 'inner')
+    bit_diff = bit_diff.sort_values('focal_minus_other_abs', ascending = False)
+    bit_diff['community'] = comm
+    bit_lst.append(bit_diff)
+
+# concat
+bit_df = pd.concat(bit_lst)
+# to percent, and round 
+bit_df = bit_df.assign(weighted_avg_focal = lambda x: round(x['weighted_avg_focal']*100, 2),
+                       weighted_avg_other = lambda x: round(x['weighted_avg_other']*100, 2),
+                       focal_minus_other = lambda x: round(x['focal_minus_other']*100, 2),
+                       focal_minus_other_abs = lambda x: round(x['focal_minus_other_abs']*100, 2)
+                       )
+
+# three most different per community
+comm_color = node_attr[['community', 'color']].drop_duplicates()
+bit_df = bit_df.merge(comm_color, on = 'community', how = 'inner')
+bit_diff = bit_df.sort_values(['focal_minus_other_abs'], ascending=False).groupby('community').head(3)
+bit_diff = bit_diff.sort_values(['community', 'focal_minus_other_abs'], ascending = [True, False])
+bit_diff = bit_diff[['community', 'color', 'question', 'weighted_avg_focal', 'weighted_avg_other', 'focal_minus_other']]
+
+# to latex table 
+bit_latex_string = bit_diff.to_latex(index=False)
+with open('community_differences.txt', 'w') as f: 
+    f.write(bit_latex_string)
+
+#### top configurations for each community (maximum likelihood) ####
+comm_color = node_attr[['community', 'color', 'p_ind']].drop_duplicates()
+d_top_conf = d_max_weight.merge(comm_color, on = 'p_ind', how = 'inner')
+# get top three nodes for each community
+d_top_nodeid = d_top_conf[['node_id', 'p_raw', 'community']].drop_duplicates()
+d_top_nodeid = d_top_nodeid.sort_values('p_raw', ascending=False).groupby('community').head(3)
+d_top_nodeid = d_top_nodeid[['node_id', 'community']]
+# get the data-states associated with this 
+d_top_states = d_top_conf.merge(d_top_nodeid, on = ['node_id', 'community'], how = 'inner')
+d_top_states.sort_values('node_id', ascending = True)
+# for annotation
+d_annotations = d_top_states[['entry_id', 'entry_name']].drop_duplicates()
+
+d_three = d_top_conf.sort_values(['p_raw'], ascending = False).groupby('community').head(3)
+d_three = d_three.sort_values(['community', 'p_norm'], ascending = [True, False])
+
+## translation dct 
+pd.set_option('display.max_colwidth', None)
+d_annotations
+entry_translate = {
+    543: 'Roman Imperial Cult', #y
+    871: 'Spiritualism', #y
+    1248: 'Old Assyrian', #y
+    1511: 'Sokoto', 
+    769: 'Wogeo', #y
+    1304: 'Peyote', #y
+    862: 'Ilm-e-Khshnoom', #y
+    1010: 'Pythagoreanism', #y
+    884: 'Pentecostalism', #y
+    1371: "Twelver Shi'ism", #
+    839: 'German Protestantism',
+    654: 'Cistercians',
+    926: 'Ladakhi Buddhism',
+    'Sichuan Esoteric Buddhist Cult': 'Esoteric Buddhist'
+}
+
+d_entry_top = node_attr[['entry_id', 'entry_name']].drop_duplicates()
+d_entry_top['entry_short'] = d_entry_top['entry_name'].apply(lambda x: entry_translate.get(x))
+d_entry_top = d_entry_top.dropna()
+
+######### plot with labels ###########
+top_nodes = d_top_nodeid['node_id'].tolist()
+labels_dct = {}
+for i in nodelst_full:
+    if i in top_nodes: 
+        labels_dct[i] = i
+    else: 
+        labels_dct[i] = ''
+
+fig, ax = plt.subplots(figsize = (6, 8), dpi = 500)
+plt.axis('off')
+cmap = plt.cm.get_cmap("Accent")
+nx.draw_networkx_nodes(G_full, pos, 
+                        nodelist = nodelst_full,
+                        node_size = [x*2 for x in nodesize_full], 
+                        node_color = comm_lst_full,
+                        linewidths = 0.5, edgecolors = 'black',
+                        cmap = cmap)
+rgba = rgb2hex(cmap(5))
+nx.draw_networkx_edges(G_full, pos, alpha = 0.7,
+                       width = edgew_full,
+                       edgelist = edgelst_full,
+                       edge_color = rgba
+                       )
+nx.draw_networkx_labels(G_full, pos, labels_dct, font_size = 8)
+plt.savefig('../fig/community_configs_labels.pdf')
+
+#### hand-picking approach ####
+def get_match(d, n):
+    dm = d[d['node_id'] == n][['entry_name', 'entry_id', 'p_norm']]
+    dm = dm.sort_values('p_norm', ascending = False)
+    print(dm.head(10))
+
+### *: Other religions share this configuration
+### **: This religion is not a complete record (but is still maximum likelihood)
+
+## green cluster
+get_match(d_max_weight, 9) # Mesopotamia*
+get_match(d_max_weight, 5) # Tsonga
+get_match(d_max_weight, 27) # Roman Imperial 
+## grey cluster
+get_match(d_max_weight, 0) # Cistercians*
+get_match(d_max_weight, 1) # Jesuits*
+get_match(d_max_weight, 2) # Ancient Egypt*
+get_match(d_max_weight, 4) # Islam in Aceh
+## Orange cluster
+get_match(d_max_weight, 3) # Jehova's Witnesses*
+get_match(d_max_weight, 18) # Free Methodist Church*
+get_match(d_max_weight, 13) # Calvinism*
+## blue 
+get_match(d_max_weight, 60) # Pythagoreanism**
+get_match(d_max_weight, 93) # Peyote
+## pastel
+get_match(d_max_weight, 148) # Wogeo
+get_match(d_max_weight, 78) # Sokoto
+
+transl_dict = {
+    230: 'Mesopotamia*',
+    1251: 'Tsonga',
+    534: 'Roman Imperial',
+    654: 'Cistercians*',
+    931: 'Jesuits in Britain*',
+    738: 'Ancient Egyptian*',
+    1043: 'Islam in Aceh',
+    1311: 'Jehovah*',
+    879: 'Free Methodist*',
+    984: 'Calvinism*',
+    1010: 'Pythagoreanism**',
+    1304: 'Peyote',
+    769: 'Wogeo**',
+    1511: 'Sokoto**'
+}
+
+d_annot = pd.DataFrame.from_dict(transl_dict, 
+                       orient = 'index',
+                       columns = ['entry_name_short'])
+d_annot['entry_id'] = d_annot.index
+node_annot = d_max_weight[['node_id', 'entry_id', 'entry_name']].drop_duplicates()
+node_annot = node_annot.dropna()
+d_annot = d_annot.merge(node_annot, on = 'entry_id', how = 'inner')
+d_annot = d_annot.merge(d_community, on = 'node_id', how = 'inner')
+d_annot = d_annot[d_annot['node_id'] != 106] # remove specific one 
+# for latex 
+
+######## ANNOTATION PLOT ########
+d_annot.sort_values('node_id')
+pos_annot = {
+    0: (300, 0), # Cistercians
+    1: (500, 0), # Jesuits
+    2: (600, 0), # Egypt
+    3: (400, 0), # Jehovah
+    4: (300, 0), # Islam
+    5: (-80, 300), # Tsonga
+    9: (-180, 400), # Meso
+    13: (300, 0), # Calvinism
+    18: (200, -100), # Free Methodist
+    27: (-200, 600), # Roman Imperial
+    60: (-600, 0), # Pythagoreanism
+    78: (-300, 0), # Sokoto
+    93: (-300, 0), # Peyote
+    148: (-300, 0) # Wogeo
+}
+
+cmap_dict = {
+    0: 0,
+    1: 2,
+    2: 4,
+    3: 6,
+    4: 7
+}
+
+d_annot['color'] = d_annot['community'].apply(lambda x: cmap_dict.get(x))
+d_annot
+
+rgb2hex(cmap(2))
+# 0: GREEN
+# 2: PASTEL
+# 4: BLUE
+# 6: ORANGE
+# 7: GREY
+
+fig, ax = plt.subplots(figsize = (6, 8), dpi = 500)
+plt.axis('off')
+cmap = plt.cm.get_cmap("Accent")
+nx.draw_networkx_nodes(G_full, pos, 
+                        nodelist = nodelst_full,
+                        node_size = [x*2 for x in nodesize_full], 
+                        node_color = comm_lst_full,
+                        linewidths = 0.5, edgecolors = 'black',
+                        cmap = cmap)
+rgba = rgb2hex(cmap(5))
+nx.draw_networkx_edges(G_full, pos, alpha = 0.7,
+                       width = edgew_full,
+                       edgelist = edgelst_full,
+                       edge_color = rgba
+                       )
+for index, row in d_annot.iterrows(): 
+    node_idx = row['node_id']
+    name = row['entry_name_short']
+    pos_x, pos_y = pos[node_idx]
+    xx, yy = pos_annot.get(node_idx)
+    color_code = row['color']
+    color = rgb2hex(cmap(color_code))
+    ax.annotate(name, xy = [pos_x, pos_y],
+                color = color,
+                #xycoords = 'figure fraction',
+                xytext=[pos_x+xx, pos_y+yy],
+                #textcoords = 'figure fraction', 
+                arrowprops = dict(arrowstyle="->",
+                                  connectionstyle='arc3',
+                                  color='black'))
+plt.savefig('../fig/community_configs_annotation.pdf')
+
+'''
+x_lst = []
+y_lst = []
+for key, val in pos.items():
+    x, y = val
+    x_lst.append(x)
+    y_lst.append(y)
+x_max = np.max(x_lst)
+y_max = np.max(y_lst)
+pos_scaled = {}
+for key, val in pos.items(): 
+    x, y = val 
+    x = x/x_max
+    y = y/y_max 
+    pos_scaled[key] = (x, y)
 '''
 
-##### spartans and evangelicals #####
+####### SEED PIPELINE #######
 # 18: Free Methodist Church
 # 35: Archaic Spartan cult. 
 def get_n_neighbors(n_neighbors, idx_focal, config_allstates, prob_allstates):
@@ -594,3 +737,37 @@ get_match(18) # Free Methodist Church
 get_match(27) # Roman imperial cult
 get_match(35) # Archaic Spartan cult. 
 
+########### old shit ###########
+def state_agreement(d, config_lst): 
+    
+    # subset states 
+    p_ind_uniq = d[d['node_id'].isin(config_lst)]
+    p_ind_uniq = p_ind_uniq['p_ind'].unique()
+    p_ind_uniq = list(p_ind_uniq)
+
+    # get the configurations
+    d_conf = allstates[p_ind_uniq]
+
+    # to dataframe 
+    d_mat = pd.DataFrame(d_conf, columns = question_ids)
+    d_mat['p_ind'] = p_ind_uniq
+    d_mat = pd.melt(d_mat, id_vars = 'p_ind', value_vars = question_ids, var_name = 'related_q_id')
+    d_mat = d_mat.replace({'value': {-1: 0}})
+    d_mat = d_mat.groupby('related_q_id')['value'].mean().reset_index(name = 'mean_val')
+
+    # merge back in question names
+    d_interpret = d_mat.merge(sref, on = 'related_q_id', how = 'inner')
+    d_interpret = d_interpret.sort_values('mean_val')
+
+    # return 
+    return d_interpret
+
+# run on the big communities
+pd.set_option('display.max_colwidth', None)
+
+def disagreement_across(d):
+    d_std = d.groupby('related_q')['mean_val'].std().reset_index(name = 'standard_deviation')
+    d_mean = d.groupby('related_q')['mean_val'].mean().reset_index(name = 'mean_across')
+    d_final = d_std.merge(d_mean, on = 'related_q', how = 'inner')
+    d_final = d_final.sort_values('standard_deviation', ascending=False)
+    return d_final 
