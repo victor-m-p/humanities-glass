@@ -2,6 +2,7 @@
 # sbatch -N 7 -o NAN_TESTS/new_NAN_TESTS_final -t 24:00:00 -p RM ./test_nans.rb 20 5 NAN_TESTS_FINAL
 # [sdedeo@bridges2-login013 MPF_CMU]$ sbatch -N 1 -o NAN_TESTS/new_NAN_TESTS_final -t 24:00:00 -p RM ./test_nans.rb 20 5 NAN_TESTS_FINAL
 # Submitted batch job 13527344
+# sbatch -N 1 -o NAN_TESTS/new_NAN_TESTS_final_1 -t 12:00:00 -p RM ./test_nans.rb 20 5 NAN_TESTS_FINAL_1
 
 n=ARGV[0].to_i
 nan=ARGV[1].to_i
@@ -23,7 +24,7 @@ require 'parallel'
     file.write(str2); file.close
 
     `./mpf -c DATA/test_sequence_#{label}_#{cut+128}_data.dat 1`
-    start=`./mpf -k DATA/test_sequence_#{label}_#{cut+128}_data.dat DATA/test_sequence_#{label}_#{cut+128}_params.dat DATA/test_sequence_#{label}_#{cut+128}_base_data.dat_params.dat`.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
+    start=`./mpf -k DATA/test_sequence_#{label}_#{cut+128}_data.dat DATA/test_sequence_#{label}_params.dat DATA/test_sequence_#{label}_#{cut+128}_base_data.dat_params.dat`.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
     print "Full data -- #{cut}: #{start}\n"
     [cut, start]    
   }
