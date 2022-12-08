@@ -1,8 +1,6 @@
 #!/usr/bin/ruby
 # sbatch -N 1 -o NAN_TESTS/new_NAN_TESTS_final -t 48:00:00 -p RM ./test_nans.rb 20 5 NAN_TESTS_FINAL
-# [sdedeo@bridges2-login013 MPF_CMU]$ sbatch -N 1 -o NAN_TESTS/new_NAN_TESTS_final -t 24:00:00 -p RM ./test_nans.rb 20 5 NAN_TESTS_FINAL
-# Submitted batch job 13527344
-# sbatch -N 1 -o NAN_TESTS/new_NAN_TESTS_final_1 -t 12:00:00 -p RM ./test_nans.rb 20 5 NAN_TESTS_FINAL_1
+# sbatch -N 1 -o NAN_TESTS/new_NAN_TESTS_final -t 00:15:00 -p RM ./test_nans.rb 4 5 NAN_TESTS_FINAL
 
 n=ARGV[0].to_i
 nan=ARGV[1].to_i
