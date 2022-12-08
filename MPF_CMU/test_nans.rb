@@ -13,7 +13,7 @@ require 'parallel'
   
   `./mpf -g DATA/test_sequence_#{label} #{n} 2048 0.2`
 
-  full_data=Parallel.map([0, 64, 128, 256, 512, 1024], :in_process=>n_proc) { |cut|
+  full_data=[0, 64, 128, 256, 512, 1024].collect { |cut|
     file=File.new("DATA/test_sequence_#{label}_data.dat", 'r')
     str=file.read; file.close
 
@@ -43,7 +43,7 @@ require 'parallel'
     code
   }.join("\n");1
 
-  nan_data=Parallel.map([0, 64, 128, 256, 512, 1024], :in_process=>n_proc) { |cut| #, 512, 512+256, 1024
+  nan_data=[64, 128, 256, 512, 1024].collect { |cut| #, 512, 512+256, 1024
     file=File.new("DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat", 'w')
     file.write("#{128+cut}\n"+str_na); file.close
     `./mpf -c DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat 1`
@@ -73,7 +73,7 @@ require 'parallel'
     Array.new(n) { |i| code[i] == "X"  ? avg[i].round.to_s : code[i] }.join("")+" 1.0"
   }.join("\n");1
 
-  bad_data=Parallel.map([0, 64, 128, 256, 512, 1024], :in_process=>n_proc) { |cut| #, 512, 512+256, 1024
+  bad_data=[0, 64, 128, 256, 512, 1024].collect { |cut| #, 512, 512+256, 1024
     file=File.new("DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat", 'w')
     file.write("#{128+cut}\n#{n}\n"+str_na_new); file.close
     `OMP_NUM_THREADS=128 ./mpf -c DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat 1` 
