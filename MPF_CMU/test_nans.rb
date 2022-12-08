@@ -24,7 +24,7 @@ require 'parallel'
     file.write(str2); file.close
 
     `./mpf -c DATA/test_sequence_#{label}_#{cut+128}_data.dat 1`
-    start=`./mpf -k DATA/test_sequence_#{label}_#{cut+128}_data.dat DATA/test_sequence_#{label}_params.dat DATA/test_sequence_#{label}_#{cut+128}_base_data.dat_params.dat`.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
+    start=`./mpf -k DATA/test_sequence_#{label}_#{cut+128}_data.dat DATA/test_sequence_#{label}_params.dat DATA/test_sequence_#{label}_#{cut+128}_data.dat_params.dat`.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
     print "Full data -- #{cut}: #{start}\n"
     [cut, start]    
   }
