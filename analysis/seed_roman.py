@@ -120,7 +120,7 @@ cmap = plt.cm.get_cmap("Greens") # reverse code this
 #pos_mov = pos.copy()
 #x, y = pos_mov[1]
 #pos_mov[1] = (x, y-10)
-
+'''
 ##### now the plot #####
 nx.draw_networkx_nodes(G_full, pos, 
                         nodelist = nodelst_full,
@@ -135,7 +135,7 @@ nx.draw_networkx_edges(G_full, pos, alpha = 0.7,
                        edge_color = rgba
                        )
 plt.savefig('../fig/seed_RomanImpCult.pdf')
-
+'''
 '''
 ######### reference plot (tmp) ##########
 labeldict = {}
@@ -206,6 +206,7 @@ d_annot = d_annot[~d_annot['node_id'].isin([19, 21])]
 fig, ax = plt.subplots(figsize = (6, 4), dpi = 500)
 plt.axis('off')
 cmap = plt.cm.get_cmap("Greens") # reverse code this
+#edgew_threshold = [x if x > 0.1 else 0 for x in edgew_full]
 nx.draw_networkx_nodes(G_full, pos, 
                         nodelist = nodelst_full,
                         node_size = [x*2 for x in nodesize_full], 
@@ -233,6 +234,39 @@ for index, row in d_annot.iterrows():
                                   connectionstyle='arc3',
                                   color=rgba))
 plt.savefig('../fig/seed_RomanImpCult_annotated_green.pdf')
+
+### main plot (mixed) ###
+fig, ax = plt.subplots(figsize = (6, 4), dpi = 500)
+plt.axis('off')
+cmap = plt.cm.get_cmap("Greens") # reverse code this
+#edgew_threshold = [x if x > 0.1 else 0 for x in edgew_full]
+nx.draw_networkx_nodes(G_full, pos, 
+                        nodelist = nodelst_full,
+                        node_size = [x*2 for x in nodesize_full], 
+                        node_color = [3-x for x in color_lst],
+                        linewidths = 0.5, edgecolors = 'black',
+                        cmap = cmap)
+rgba = rgb2hex(cmap(0.9))
+nx.draw_networkx_edges(G_full, pos, alpha = 0.7,
+                       width = [x*3 for x in edgew_full],
+                       edgelist = edgelst_full,
+                       edge_color = rgba
+                       )
+for index, row in d_annot.iterrows(): 
+    node_idx = row['node_id']
+    name = row['entry_name_short']
+    pos_x, pos_y = pos[node_idx]
+    xx, yy = pos_annot.get(node_idx)
+    color = rgb2hex(cmap(0.99))
+    ax.annotate(name, xy = [pos_x, pos_y],
+                color = rgba,
+                #xycoords = 'figure fraction',
+                xytext=[pos_x+xx, pos_y+yy],
+                #textcoords = 'figure fraction', 
+                arrowprops = dict(arrowstyle="->",
+                                  connectionstyle='arc3',
+                                  color='black'))
+plt.savefig('../fig/seed_RomanImpCult_annotated_mix.pdf')
 
 ### main plot (black) ###
 fig, ax = plt.subplots(figsize = (6, 4), dpi = 500)
