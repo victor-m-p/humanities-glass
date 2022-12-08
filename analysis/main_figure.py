@@ -1,6 +1,14 @@
+'''
+Would be really good to just do data curation here,
+i.e. create the node_attr data and max_weight data,
+as well as all of the tables, and then leave the plotting
+for another document.
+'''
+
 import matplotlib.pyplot as plt 
 from matplotlib.colors import rgb2hex
 import networkx as nx 
+import networkx.algorithms.community as nx_comm
 import numpy as np
 import pandas as pd 
 from fun import *
@@ -67,7 +75,6 @@ nodelst_full, nodesize_full = node_information(G_full, 'p_raw', 5000)
 
 ##### COMMUNITIES #####
 ## can probably add directly to graph actually...
-import networkx.algorithms.community as nx_comm
 louvain_comm = nx_comm.louvain_communities(G_full, weight = 'hamming', resolution = 0.5, seed = 152) # 8 comm.
 
 # add louvain information
@@ -119,7 +126,6 @@ community_color = {
     4: 'Grey'
 }
 
-
 node_attr['comm_color'] =  node_attr['community'].apply(lambda x: community_color.get(x))
 
 #### community labels #####
@@ -162,6 +168,7 @@ sref_questions_dict = {
 }
 
 sref['question'] = sref['related_q_id'].apply(lambda x: sref_questions_dict.get(x))
+sref.to_csv('../data/analysis/question_reference.csv', index = False)
 
 ## TO LATEX (good)
 sref_latex = sref[['related_q_id', 'question', 'related_q']]
@@ -190,6 +197,7 @@ for comm in range(5): # five communities
 
 # concat
 bit_df = pd.concat(bit_lst)
+
 # to percent, and round 
 bit_df = bit_df.assign(weighted_avg_focal = lambda x: round(x['weighted_avg_focal']*100, 2),
                        weighted_avg_other = lambda x: round(x['weighted_avg_other']*100, 2),
@@ -297,10 +305,10 @@ pos_annot = {
     3: (480, -20), # Jehovah
     4: (300, -20), # Islam
     5: (-90, 350), # Tsonga
-    9: (-190, 400), # Meso
+    9: (-170, 400), # Meso
     13: (350, -20), # Calvinism
     18: (200, -120), # Free Methodist
-    27: (-100, 400), # Roman Imperial
+    27: (-85, 400), # Roman Imperial
     60: (-600, -10), # Pythagoreanism
     78: (-400, -10), # Sokoto
     93: (-300, -10), # Peyote
@@ -315,7 +323,7 @@ cmap_dict = {
     4: 7
 }
 
-d_annot['color'] = d_annot['community'].apply(lambda x: cmap_dict.get(x))
+d_annot['comm_color_code'] = d_annot['community'].apply(lambda x: cmap_dict.get(x))
 # 0: GREEN
 # 2: PASTEL
 # 4: BLUE
@@ -342,7 +350,7 @@ for index, row in d_annot.iterrows():
     name = row['entry_name_short']
     pos_x, pos_y = pos[node_idx]
     xx, yy = pos_annot.get(node_idx)
-    color_code = row['color']
+    color_code = row['comm_color_code']
     color = rgb2hex(cmap(color_code))
     ax.annotate(name, xy = [pos_x, pos_y],
                 color = color,
@@ -354,6 +362,13 @@ for index, row in d_annot.iterrows():
                                   color='black'))
 plt.savefig('../fig/community_configs_annotation.pdf')
 
+# master dataframes 
+comm_color_codes = d_annot[['community', 'comm_color_code']].drop_duplicates()
+node_attr = node_attr.merge(comm_color_codes, on = 'community', how = 'inner')
+d_max_weight.to_csv('../data/analysis/d_max_weight.csv', index = False)
+node_attr.to_csv('../data/analysis/node_attr.csv', index = False) 
+
+'''
 ########### old shit ###########
 def state_agreement(d, config_lst): 
     
@@ -390,8 +405,6 @@ def disagreement_across(d):
     return d_final 
 
 
-
-'''
 #### top configurations for each community (maximum likelihood) ####
 comm_color = node_attr[['community', 'color', 'p_ind']].drop_duplicates()
 d_top_conf = d_max_weight.merge(comm_color, on = 'p_ind', how = 'inner')
