@@ -9,12 +9,11 @@ import re
 import numpy as np
 import argparse 
 
-
 def node_edge_lst(n, corr_J, means_h): 
     nodes = [node for node in range(n)]
     comb = list(itertools.combinations(nodes, 2))
     d_edgelst = pd.DataFrame(comb, columns = {'n1', 'n2'})
-    d_edgelst['w'] = corr_J
+    d_edgelst['weight'] = corr_J
     d_nodes = pd.DataFrame(nodes, columns = {'n'})
     d_nodes['size'] = means_h
     d_nodes = d_nodes.set_index('n')
@@ -27,7 +26,7 @@ def create_graph(d_edgelst, dct_nodes):
         d_edgelst,
         'n1',
         'n2', 
-        edge_attr=['w', 'w_abs'])
+        edge_attr=['weight', 'weight_abs'])
 
     # assign size information
     for key, val in dct_nodes.items():
@@ -48,44 +47,66 @@ J = A[:n_J]
 h = A[n_J:]
 
 d_edgelst, dct_nodes = node_edge_lst(n_nodes, J, h)
-d_edgelst = d_edgelst.assign(w_abs = lambda x: np.abs(x['w']))
+d_edgelst = d_edgelst.assign(weight_abs = lambda x: np.abs(x['weight']))
 G, labeldct = create_graph(d_edgelst, dct_nodes)
 
 seed = 32
-threshold = 0.4
+threshold = 0.35
 cmap = plt.cm.coolwarm
 fig, ax = plt.subplots(figsize = (7, 5), facecolor = 'w')
 plt.axis('off')
-pos = nx.spring_layout(G, weight = 'w_abs', seed = seed)
+pos = nx.nx_agraph.graphviz_layout(G, prog = "fdp")
 size_lst = list(nx.get_node_attributes(G, 'size').values())
-weight_lst = list(nx.get_edge_attributes(G, 'w').values())
+weight_lst = list(nx.get_edge_attributes(G, 'weight').values())
 weight_lst_filtered = [x if np.abs(x)>threshold else 0 for x in weight_lst]
-vmax = np.max(list(np.abs(size_lst)) + list(np.abs(weight_lst)))
-vmin = -vmax
+
+# vmin, vmax edges
+vmax_e = np.max(list(np.abs(weight_lst)))
+vmin_e = -vmax_e
+
+# vmin, vmax nodes
+vmax_n = np.max(list(np.abs(size_lst)))
+vmin_n = -vmax_n
+
 size_abs = [abs(x)*1500 for x in size_lst]
 weight_abs = [abs(x)*15 for x in weight_lst_filtered]
+
 nx.draw_networkx_nodes(
     G, pos, 
-    node_size = size_abs, 
+    node_size = 400,#size_abs, 
     node_color = size_lst, 
     edgecolors = 'black',
     linewidths = 0.5,
-    cmap = cmap, vmin = vmin, vmax = vmax 
+    cmap = cmap, vmin = vmin_n, vmax = vmax_n 
 )
 nx.draw_networkx_edges(
     G, pos,
     width = weight_abs, 
     edge_color = weight_lst, 
-    alpha = 0.5, # hmmm
-    edge_cmap = cmap, edge_vmin = vmin, edge_vmax = vmax)
-sm = plt.cm.ScalarMappable(cmap=cmap, norm=plt.Normalize(vmin = vmin, vmax=vmax))
-sm._A = []
+    alpha = 0.7, # hmmm
+    edge_cmap = cmap, edge_vmin = vmin_e, edge_vmax = vmax_e)
+
+# add to axis
+sm_edge = plt.cm.ScalarMappable(cmap=cmap, norm=plt.Normalize(vmin = vmin_e, vmax=vmax_e))
+sm_edge._A = []
+sm_node = plt.cm.ScalarMappable(cmap=cmap, norm=plt.Normalize(vmin = vmin_n, vmax=vmax_n))
+sm_node._A = []
 axis = plt.gca()
 # maybe smaller factors work as well, but 1.1 works fine for this minimal example
 #axis.set_xlim([1.1*x for x in axis.get_xlim()])
 #axis.set_ylim([1.1*y for y in axis.get_ylim()])
-plt.colorbar(sm, fraction = 0.035)
+plt.subplots_adjust(bottom=0, right=0.85, left=0.15, top=1)
+ax_edge = plt.axes([0.95, 0.12, 0.04, 0.74])
+ax_node = plt.axes([0.05, 0.12, 0.04, 0.74])
+plt.colorbar(sm_edge, cax = ax_edge)
+cbar = plt.colorbar(sm_node, cax = ax_node)
+cbar.ax.yaxis.set_ticks_position('left') #yaxis.tick_left()
+ax.text(1.05, 0.2, r'Pairwise couplings (J$_{ij}$)', size=20, rotation=90, transform=ax.transAxes)
+ax.text(-0.05, 0.28, r'Local fields (h$_i$)', size = 20, rotation = 90, transform = ax.transAxes)
+
 plt.show();
+vmax_e
+vmax_n
 
 def plot_corr(G, labeldict, threshold, n_nodes, tol, seed, outpath): 
     # plot basics

@@ -85,7 +85,6 @@ h_distances = hamming_distance(top_states)
 h_distances = hamming_edges(n_top_states+1, h_distances)
 h_distances = h_distances[h_distances['hamming'] == 1]
 
-
 # create network
 G = nx.from_pandas_edgelist(h_distances,
                             'node_x',
