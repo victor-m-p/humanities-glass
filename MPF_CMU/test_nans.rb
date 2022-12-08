@@ -29,6 +29,8 @@ require 'parallel'
     [cut, start]    
   }
 
+  file=File.new("DATA/test_sequence_#{label}_data.dat", 'r')
+  str=file.read; file.close
   str_na=str.split("\n")[1..129].join("\n")+"\n"+str.split("\n")[130..-1].collect { |j| 
     loc=[]
     while(loc.length < nan) do
