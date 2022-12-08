@@ -251,27 +251,27 @@ get_match(d_max_weight, 148) # Wogeo
 get_match(d_max_weight, 78) # Sokoto
 
 transl_dict = {
-    230: 'Mesopotamia*',
+    230: 'Mesopotamia', # *
     1251: 'Tsonga',
     534: 'Roman',
-    654: 'Cistercians*',
-    931: 'Jesuits in Britain*',
-    738: 'Ancient Egyptian*',
+    654: 'Cistercians', # *
+    931: 'Jesuits in Britain', # *
+    738: 'Ancient Egyptian', # *
     1043: 'Islam in Aceh',
-    1311: 'Jehovah*',
-    879: 'Free Methodist*',
-    984: 'Calvinism*',
-    1010: 'Pythagoreanism**',
+    1311: 'Jehovah', # *
+    879: 'Free Methodist', # *
+    984: 'Calvinism', # *
+    1010: 'Pythagoreanism', # **
     1304: 'Peyote',
-    769: 'Wogeo**',
-    1511: 'Sokoto**'
+    769: 'Wogeo', # **
+    1511: 'Sokoto' # **
 }
 
 d_annot = pd.DataFrame.from_dict(transl_dict, 
                        orient = 'index',
                        columns = ['entry_name_short'])
 d_annot['entry_id'] = d_annot.index
-node_annot = d_max_weight[['node_id', 'entry_id', 'entry_name']].drop_duplicates()
+node_annot = d_max_weight[['p_ind', 'entry_id', 'node_id', 'entry_name']].drop_duplicates()
 node_annot = node_annot.dropna()
 d_annot = d_annot.merge(node_annot, on = 'entry_id', how = 'inner')
 d_annot = d_annot.merge(d_community, on = 'node_id', how = 'inner')
@@ -279,24 +279,27 @@ d_annot = d_annot[d_annot['node_id'] != 106] # remove specific one
 
 # for latex (main figure entry_id)
 ## add color and weight of community 
-d_latex_lookup = d_annot[['entry_id', 'entry_name_short', 'entry_name']]
-d_latex_lookup = d_latex_lookup.sort_values('entry_id')
+d_latex_lookup = d_annot[['entry_name_short', 'entry_name', 'p_ind']]
+entry_labels = node_attr[['p_ind', 'comm_label']].drop_duplicates()
+entry_labels = entry_labels.dropna()
+d_latex_lookup = d_latex_lookup.merge(entry_labels, on = 'p_ind', how = 'inner')
+d_latex_lookup = d_latex_lookup.sort_values('comm_label')
+d_latex_lookup = d_latex_lookup[['comm_label', 'entry_name_short', 'entry_name']]
 latex_lookup_string = d_latex_lookup.to_latex(index=False)
 with open('entry_reference.txt', 'w') as f: 
     f.write(latex_lookup_string)
 
 ######## ANNOTATION PLOT ########
-
 pos_annot = {
-    0: (300, 0), # Cistercians
+    0: (300, -30), # Cistercians
     1: (500, 0), # Jesuits
-    2: (600, 0), # Egypt
-    3: (400, 0), # Jehovah
-    4: (300, 0), # Islam
+    2: (600, -20), # Egypt
+    3: (480, -20), # Jehovah
+    4: (300, -20), # Islam
     5: (-90, 350), # Tsonga
     9: (-190, 400), # Meso
-    13: (300, 0), # Calvinism
-    18: (200, -100), # Free Methodist
+    13: (350, -20), # Calvinism
+    18: (200, -120), # Free Methodist
     27: (-100, 400), # Roman Imperial
     60: (-600, -10), # Pythagoreanism
     78: (-400, -10), # Sokoto
@@ -350,23 +353,6 @@ for index, row in d_annot.iterrows():
                                   connectionstyle='arc3',
                                   color='black'))
 plt.savefig('../fig/community_configs_annotation.pdf')
-
-'''
-x_lst = []
-y_lst = []
-for key, val in pos.items():
-    x, y = val
-    x_lst.append(x)
-    y_lst.append(y)
-x_max = np.max(x_lst)
-y_max = np.max(y_lst)
-pos_scaled = {}
-for key, val in pos.items(): 
-    x, y = val 
-    x = x/x_max
-    y = y/y_max 
-    pos_scaled[key] = (x, y)
-'''
 
 ####### SEED PIPELINE #######
 # 18: Free Methodist Church
