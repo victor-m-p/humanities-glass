@@ -108,7 +108,7 @@ cbar = plt.colorbar(sm_node, cax = ax_node)
 cbar.ax.yaxis.set_ticks_position('left') #yaxis.tick_left()
 ax.text(1.06, 0.2, r'Pairwise couplings (J$_{ij}$)', size=20, rotation=90, transform=ax.transAxes)
 ax.text(-0.06, 0.28, r'Local fields (h$_i$)', size = 20, rotation = 90, transform = ax.transAxes)
-plt.savefig('../fig/parameters.pdf')
+plt.savefig('../fig/parameters.pdf', bbox_inches='tight')
 
 ## do it for correlations and means 
 ## only for FULL records 
