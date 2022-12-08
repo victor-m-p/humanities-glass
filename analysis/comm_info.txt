@@ -1,0 +1,11 @@
+\begin{tabular}{llr}
+\toprule
+comm\_label & comm\_color &  comm\_weight \\
+\midrule
+   Group 1 &       Grey &        18.84 \\
+   Group 2 &     Orange &        13.14 \\
+   Group 3 &      Green &        12.20 \\
+   Group 4 &       Blue &         0.75 \\
+   Group 5 &     Pastel &         0.54 \\
+\bottomrule
+\end{tabular}

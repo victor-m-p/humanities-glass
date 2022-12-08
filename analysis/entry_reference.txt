@@ -1,0 +1,20 @@
+\begin{tabular}{rll}
+\toprule
+ entry\_id &    entry\_name\_short &                                         entry\_name \\
+\midrule
+      230 &        Mesopotamia* &                            Religion in Mesopotamia \\
+      534 &               Roman &                                Roman Imperial Cult \\
+      654 &        Cistercians* &                            12th-13th c Cistercians \\
+      738 &   Ancient Egyptian* &                                   Ancient Egyptian \\
+      769 &             Wogeo** &                                              Wogeo \\
+      879 &     Free Methodist* &                              Free Methodist Church \\
+      931 & Jesuits in Britain* &          The Society of Jesus (Jesuits) in Britain \\
+      984 &          Calvinism* &                      Calvinism (Early/Reformation) \\
+     1010 &    Pythagoreanism** &                                     Pythagoreanism \\
+     1043 &       Islam in Aceh &                                      Islam in Aceh \\
+     1251 &              Tsonga &                                             Tsonga \\
+     1304 &              Peyote & Peyote Religion (Peyotism) and the Native Ameri... \\
+     1311 &            Jehovah* &                                Jehovah's Witnesses \\
+     1511 &            Sokoto** &                                             Sokoto \\
+\bottomrule
+\end{tabular}

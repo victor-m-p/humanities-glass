@@ -106,7 +106,8 @@ d_community = pd.DataFrame.from_dict(comm_dct,
                                      columns = ['community'])
 d_community['node_id'] = d_community.index
 node_attr = node_attr.merge(d_community, on = 'node_id', how = 'inner')
-node_attr.groupby('community')['p_raw'].sum()
+comm_weight = node_attr.groupby('community')['p_raw'].sum().reset_index(name = 'comm_weight')
+node_attr = node_attr.merge(comm_weight, on = 'community', how = 'inner')
 node_attr['p_raw'].sum() # 0.4547
 
 #### community color ##### 
@@ -118,7 +119,21 @@ community_color = {
     4: 'Grey'
 }
 
-node_attr['color'] =  node_attr['community'].apply(lambda x: community_color.get(x))
+
+node_attr['comm_color'] =  node_attr['community'].apply(lambda x: community_color.get(x))
+
+#### community labels #####
+comm_order = node_attr[['comm_weight']].drop_duplicates().reset_index(drop=True)
+comm_order['comm_label'] = comm_order.index+1
+comm_order['comm_label'] = comm_order['comm_label'].apply(lambda x: f'Group {x}')
+node_attr = node_attr.merge(comm_order, on = 'comm_weight', how = 'inner')
+
+#### community reference ####
+node_attr['comm_weight'] = node_attr['comm_weight'].apply(lambda x: round(x*100, 2))
+comm_info = node_attr[['comm_label', 'comm_color', 'comm_weight']].drop_duplicates()
+comm_info_latex = comm_info.to_latex(index=False)
+with open('comm_info.txt', 'w') as f: 
+    f.write(comm_info_latex)
 
 ##### SREF: Questions IDS #######
 sref = pd.read_csv('../data/analysis/sref_nrows_455_maxna_5_nodes_20.csv')
@@ -148,7 +163,7 @@ sref_questions_dict = {
 
 sref['question'] = sref['related_q_id'].apply(lambda x: sref_questions_dict.get(x))
 
-## TO LATEX
+## TO LATEX (good)
 sref_latex = sref[['related_q_id', 'question', 'related_q']]
 sref_latex_string = sref_latex.to_latex(index=False)
 with open('question_overview.txt', 'w') as f: 
@@ -183,83 +198,28 @@ bit_df = bit_df.assign(weighted_avg_focal = lambda x: round(x['weighted_avg_foca
                        )
 
 # three most different per community
-comm_color = node_attr[['community', 'color']].drop_duplicates()
+comm_color = node_attr[['comm_label', 'community', 'comm_color']].drop_duplicates()
 bit_df = bit_df.merge(comm_color, on = 'community', how = 'inner')
 bit_diff = bit_df.sort_values(['focal_minus_other_abs'], ascending=False).groupby('community').head(3)
-bit_diff = bit_diff.sort_values(['community', 'focal_minus_other_abs'], ascending = [True, False])
-bit_diff = bit_diff[['community', 'color', 'question', 'weighted_avg_focal', 'weighted_avg_other', 'focal_minus_other']]
+bit_diff = bit_diff.sort_values(['comm_label', 'focal_minus_other_abs'], ascending = [True, False])
+bit_diff = bit_diff[['comm_label', 'comm_color', 'question', 'weighted_avg_focal', 'weighted_avg_other', 'focal_minus_other']]
 
-# to latex table 
+# to latex table (sort communities by total weight)
 bit_latex_string = bit_diff.to_latex(index=False)
 with open('community_differences.txt', 'w') as f: 
     f.write(bit_latex_string)
 
-#### top configurations for each community (maximum likelihood) ####
-comm_color = node_attr[['community', 'color', 'p_ind']].drop_duplicates()
-d_top_conf = d_max_weight.merge(comm_color, on = 'p_ind', how = 'inner')
-# get top three nodes for each community
-d_top_nodeid = d_top_conf[['node_id', 'p_raw', 'community']].drop_duplicates()
-d_top_nodeid = d_top_nodeid.sort_values('p_raw', ascending=False).groupby('community').head(3)
-d_top_nodeid = d_top_nodeid[['node_id', 'community']]
-# get the data-states associated with this 
-d_top_states = d_top_conf.merge(d_top_nodeid, on = ['node_id', 'community'], how = 'inner')
-d_top_states.sort_values('node_id', ascending = True)
-# for annotation
-d_annotations = d_top_states[['entry_id', 'entry_name']].drop_duplicates()
-
-d_three = d_top_conf.sort_values(['p_raw'], ascending = False).groupby('community').head(3)
-d_three = d_three.sort_values(['community', 'p_norm'], ascending = [True, False])
-
-## translation dct 
-pd.set_option('display.max_colwidth', None)
-d_annotations
-entry_translate = {
-    543: 'Roman Imperial Cult', #y
-    871: 'Spiritualism', #y
-    1248: 'Old Assyrian', #y
-    1511: 'Sokoto', 
-    769: 'Wogeo', #y
-    1304: 'Peyote', #y
-    862: 'Ilm-e-Khshnoom', #y
-    1010: 'Pythagoreanism', #y
-    884: 'Pentecostalism', #y
-    1371: "Twelver Shi'ism", #
-    839: 'German Protestantism',
-    654: 'Cistercians',
-    926: 'Ladakhi Buddhism',
-    'Sichuan Esoteric Buddhist Cult': 'Esoteric Buddhist'
-}
-
-d_entry_top = node_attr[['entry_id', 'entry_name']].drop_duplicates()
-d_entry_top['entry_short'] = d_entry_top['entry_name'].apply(lambda x: entry_translate.get(x))
-d_entry_top = d_entry_top.dropna()
-
-######### plot with labels ###########
-top_nodes = d_top_nodeid['node_id'].tolist()
-labels_dct = {}
-for i in nodelst_full:
-    if i in top_nodes: 
-        labels_dct[i] = i
-    else: 
-        labels_dct[i] = ''
-
-fig, ax = plt.subplots(figsize = (6, 8), dpi = 500)
-plt.axis('off')
-cmap = plt.cm.get_cmap("Accent")
-nx.draw_networkx_nodes(G_full, pos, 
-                        nodelist = nodelst_full,
-                        node_size = [x*2 for x in nodesize_full], 
-                        node_color = comm_lst_full,
-                        linewidths = 0.5, edgecolors = 'black',
-                        cmap = cmap)
-rgba = rgb2hex(cmap(5))
-nx.draw_networkx_edges(G_full, pos, alpha = 0.7,
-                       width = edgew_full,
-                       edgelist = edgelst_full,
-                       edge_color = rgba
-                       )
-nx.draw_networkx_labels(G_full, pos, labels_dct, font_size = 8)
-plt.savefig('../fig/community_configs_labels.pdf')
+#### big latex table ####
+ref_observed_other = node_attr[['p_ind', 'p_norm', 'max_likelihood', 'full_record', 'comm_label']].drop_duplicates()
+ref_observed_other = ref_observed_other.dropna()
+ref_observed_entry = d_max_weight[['entry_name', 'p_ind']]
+ref_observed_master = ref_observed_other.merge(ref_observed_entry, on = 'p_ind', how = 'inner')
+ref_observed_master = ref_observed_master.sort_values(['comm_label', 'p_norm'], ascending = [True, False])
+ref_observed_master['p_norm'] = ref_observed_master['p_norm'].apply(lambda x: round(x*100, 2))
+ref_observed_master = ref_observed_master[['comm_label', 'entry_name', 'p_norm']]
+ref_observed_latex = ref_observed_master.to_latex(index=False)
+with open('ref_observed.txt', 'w') as f: 
+    f.write(ref_observed_latex)
 
 #### hand-picking approach ####
 def get_match(d, n):
@@ -293,7 +253,7 @@ get_match(d_max_weight, 78) # Sokoto
 transl_dict = {
     230: 'Mesopotamia*',
     1251: 'Tsonga',
-    534: 'Roman Imperial',
+    534: 'Roman',
     654: 'Cistercians*',
     931: 'Jesuits in Britain*',
     738: 'Ancient Egyptian*',
@@ -316,25 +276,32 @@ node_annot = node_annot.dropna()
 d_annot = d_annot.merge(node_annot, on = 'entry_id', how = 'inner')
 d_annot = d_annot.merge(d_community, on = 'node_id', how = 'inner')
 d_annot = d_annot[d_annot['node_id'] != 106] # remove specific one 
-# for latex 
+
+# for latex (main figure entry_id)
+## add color and weight of community 
+d_latex_lookup = d_annot[['entry_id', 'entry_name_short', 'entry_name']]
+d_latex_lookup = d_latex_lookup.sort_values('entry_id')
+latex_lookup_string = d_latex_lookup.to_latex(index=False)
+with open('entry_reference.txt', 'w') as f: 
+    f.write(latex_lookup_string)
 
 ######## ANNOTATION PLOT ########
-d_annot.sort_values('node_id')
+
 pos_annot = {
     0: (300, 0), # Cistercians
     1: (500, 0), # Jesuits
     2: (600, 0), # Egypt
     3: (400, 0), # Jehovah
     4: (300, 0), # Islam
-    5: (-80, 300), # Tsonga
-    9: (-180, 400), # Meso
+    5: (-90, 350), # Tsonga
+    9: (-190, 400), # Meso
     13: (300, 0), # Calvinism
     18: (200, -100), # Free Methodist
-    27: (-200, 600), # Roman Imperial
-    60: (-600, 0), # Pythagoreanism
-    78: (-300, 0), # Sokoto
-    93: (-300, 0), # Peyote
-    148: (-300, 0) # Wogeo
+    27: (-100, 400), # Roman Imperial
+    60: (-600, -10), # Pythagoreanism
+    78: (-400, -10), # Sokoto
+    93: (-300, -10), # Peyote
+    148: (-400, -10) # Wogeo
 }
 
 cmap_dict = {
@@ -346,9 +313,6 @@ cmap_dict = {
 }
 
 d_annot['color'] = d_annot['community'].apply(lambda x: cmap_dict.get(x))
-d_annot
-
-rgb2hex(cmap(2))
 # 0: GREEN
 # 2: PASTEL
 # 4: BLUE
@@ -771,3 +735,74 @@ def disagreement_across(d):
     d_final = d_std.merge(d_mean, on = 'related_q', how = 'inner')
     d_final = d_final.sort_values('standard_deviation', ascending=False)
     return d_final 
+
+
+
+'''
+#### top configurations for each community (maximum likelihood) ####
+comm_color = node_attr[['community', 'color', 'p_ind']].drop_duplicates()
+d_top_conf = d_max_weight.merge(comm_color, on = 'p_ind', how = 'inner')
+# get top three nodes for each community
+d_top_nodeid = d_top_conf[['node_id', 'p_raw', 'community']].drop_duplicates()
+d_top_nodeid = d_top_nodeid.sort_values('p_raw', ascending=False).groupby('community').head(3)
+d_top_nodeid = d_top_nodeid[['node_id', 'community']]
+# get the data-states associated with this 
+d_top_states = d_top_conf.merge(d_top_nodeid, on = ['node_id', 'community'], how = 'inner')
+d_top_states.sort_values('node_id', ascending = True)
+# for annotation
+d_annotations = d_top_states[['entry_id', 'entry_name']].drop_duplicates()
+
+d_three = d_top_conf.sort_values(['p_raw'], ascending = False).groupby('community').head(3)
+d_three = d_three.sort_values(['community', 'p_norm'], ascending = [True, False])
+
+## translation dct 
+pd.set_option('display.max_colwidth', None)
+d_annotations
+entry_translate = {
+    543: 'Roman Imperial Cult', #y
+    871: 'Spiritualism', #y
+    1248: 'Old Assyrian', #y
+    1511: 'Sokoto', 
+    769: 'Wogeo', #y
+    1304: 'Peyote', #y
+    862: 'Ilm-e-Khshnoom', #y
+    1010: 'Pythagoreanism', #y
+    884: 'Pentecostalism', #y
+    1371: "Twelver Shi'ism", #
+    839: 'German Protestantism',
+    654: 'Cistercians',
+    926: 'Ladakhi Buddhism',
+    'Sichuan Esoteric Buddhist Cult': 'Esoteric Buddhist'
+}
+
+d_entry_top = node_attr[['entry_id', 'entry_name']].drop_duplicates()
+d_entry_top['entry_short'] = d_entry_top['entry_name'].apply(lambda x: entry_translate.get(x))
+d_entry_top = d_entry_top.dropna()
+
+######### plot with labels ###########
+top_nodes = d_top_nodeid['node_id'].tolist()
+labels_dct = {}
+for i in nodelst_full:
+    if i in top_nodes: 
+        labels_dct[i] = i
+    else: 
+        labels_dct[i] = ''
+
+fig, ax = plt.subplots(figsize = (6, 8), dpi = 500)
+plt.axis('off')
+cmap = plt.cm.get_cmap("Accent")
+nx.draw_networkx_nodes(G_full, pos, 
+                        nodelist = nodelst_full,
+                        node_size = [x*2 for x in nodesize_full], 
+                        node_color = comm_lst_full,
+                        linewidths = 0.5, edgecolors = 'black',
+                        cmap = cmap)
+rgba = rgb2hex(cmap(5))
+nx.draw_networkx_edges(G_full, pos, alpha = 0.7,
+                       width = edgew_full,
+                       edgelist = edgelst_full,
+                       edge_color = rgba
+                       )
+nx.draw_networkx_labels(G_full, pos, labels_dct, font_size = 8)
+plt.savefig('../fig/community_configs_labels.pdf')
+'''
