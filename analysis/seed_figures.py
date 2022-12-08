@@ -1,3 +1,21 @@
+####### SEED PIPELINE #######
+# 18: Free Methodist Church
+# 35: Archaic Spartan cult. 
+def get_n_neighbors(n_neighbors, idx_focal, config_allstates, prob_allstates):
+    config_focal = config_allstates[idx_focal]
+    prob_focal = prob_allstates[idx_focal]
+    lst_neighbors = []
+    for idx_neighbor, config_neighbor in enumerate(config_allstates): 
+        h_dist = np.count_nonzero(config_focal!=config_neighbor)
+        if h_dist <= n_neighbors and idx_focal != idx_neighbor: 
+            prob_neighbor = prob_allstates[idx_neighbor]
+            lst_neighbors.append((idx_focal, prob_focal, idx_neighbor, prob_neighbor, h_dist ))
+    df_neighbor = pd.DataFrame(
+        lst_neighbors, 
+        columns = ['idx_focal', 'prob_focal', 'idx_neighbor', 'prob_neighbor', 'hamming']
+    )
+    return df_neighbor
+
 #### sparta ####
 #spartan_node_id = 35
 n_nearest = 2
