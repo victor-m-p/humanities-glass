@@ -1,10 +1,7 @@
 import itertools 
 import pandas as pd 
 import matplotlib.pyplot as plt 
-import os 
 import networkx as nx 
-import glob
-import re
 import numpy as np
 from fun import *
 
@@ -48,7 +45,11 @@ h = A[n_J:]
 ## make it 1-20, and cross-reference that with the related question IDs. 
 d_edgelst, dct_nodes = node_edge_lst(n_nodes, J, h)
 d_edgelst = d_edgelst.assign(weight_abs = lambda x: np.abs(x['weight']))
-G, labeldict = create_graph(d_edgelst, dct_nodes)
+
+## try with thresholding 
+d_edgelst_sub = d_edgelst[d_edgelst['weight_abs'] > 0.15]
+G, labeldict = create_graph(d_edgelst_sub, dct_nodes)
+
 pos = nx.nx_agraph.graphviz_layout(G, prog = "fdp")
 
 # setup 
@@ -77,7 +78,7 @@ weight_abs = [abs(x)*15 for x in weight_lst_filtered]
 
 nx.draw_networkx_nodes(
     G, pos, 
-    node_size = 400,#size_abs, 
+    node_size = 600,#size_abs, 
     node_color = size_lst, 
     edgecolors = 'black',
     linewidths = 0.5,
@@ -105,8 +106,8 @@ ax_node = plt.axes([0.05, 0.12, 0.04, 0.74])
 plt.colorbar(sm_edge, cax = ax_edge)
 cbar = plt.colorbar(sm_node, cax = ax_node)
 cbar.ax.yaxis.set_ticks_position('left') #yaxis.tick_left()
-ax.text(1.08, 0.2, r'Pairwise couplings (J$_{ij}$)', size=20, rotation=90, transform=ax.transAxes)
-ax.text(-0.02, 0.28, r'Local fields (h$_i$)', size = 20, rotation = 90, transform = ax.transAxes)
+ax.text(1.06, 0.2, r'Pairwise couplings (J$_{ij}$)', size=20, rotation=90, transform=ax.transAxes)
+ax.text(-0.06, 0.28, r'Local fields (h$_i$)', size = 20, rotation = 90, transform = ax.transAxes)
 plt.savefig('../fig/parameters.pdf')
 
 ## do it for correlations and means 
@@ -130,9 +131,6 @@ param_corr_melt = pd.melt(param_corr, id_vars = 'node_x', value_vars = question_
 param_corr_melt = param_corr_melt[param_corr_melt['node_x'] < param_corr_melt['node_y']]
 ## means 
 param_mean = df_configs.mean().reset_index(name = 'mean')
-
-param_corr_melt
-param_mean 
 
 ## create network 
 # create network
@@ -170,7 +168,7 @@ vmin_e = -vmax_e
 vmax_n = np.max(list(np.abs(size_lst)))
 vmin_n = -vmax_n
 
-weight_abs = [abs(x)*30 for x in weight_lst_filtered]
+weight_abs = [abs(x)*20 for x in weight_lst_filtered]
 
 nx.draw_networkx_nodes(
     G, pos, 
