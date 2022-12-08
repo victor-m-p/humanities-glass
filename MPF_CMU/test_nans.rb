@@ -24,7 +24,7 @@ require 'parallel'
     file.write(str2); file.close
 
     `./mpf -c DATA/test_sequence_#{label}_#{cut+128}_data.dat 1`
-    start=`./mpf -k DATA/test_sequence_#{label}_#{cut+128}_data.dat DATA/test_sequence_#{label}_params.dat DATA/test_sequence_#{label}_#{cut+128}_data.dat_params.dat`.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
+    start=`./mpf -k DATA/test_sequence_#{label}_data.dat DATA/test_sequence_#{label}_params.dat DATA/test_sequence_#{label}_#{cut+128}_data.dat_params.dat`.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
     print "Full data -- #{cut}: #{start}\n"
     [cut, start]    
   }
@@ -50,7 +50,8 @@ require 'parallel'
     file.write("#{128+cut}\n"+str_na); file.close
     `./mpf -c DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat 1`
     begin
-      ans=`./mpf -k DATA/test_sequence_#{label}_base_data.dat DATA/test_sequence_#{label}_params.dat DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat_params.dat`
+      ans=`./mpf -k DATA/test_sequence_#{label}_data.dat DATA/test_sequence_#{label}_params.dat DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat_params.dat`
+      print "#{ans}\n"
       ans=ans.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
       print "NA data -- #{cut}: #{ans}\n"
       [cut, ans]
@@ -79,7 +80,7 @@ require 'parallel'
     file.write("#{128+cut}\n#{n}\n"+str_na_new); file.close
     `OMP_NUM_THREADS=128 ./mpf -c DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat 1` 
     begin
-      ans=`./mpf -k DATA/test_sequence_#{label}_base_data.dat DATA/test_sequence_#{label}_params.dat DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat_params.dat`.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
+      ans=`./mpf -k DATA/test_sequence_#{label}_data.dat DATA/test_sequence_#{label}_params.dat DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat_params.dat`.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
       print "Bad data -- #{cut}: #{ans}\n"
       [cut, ans]
     rescue
