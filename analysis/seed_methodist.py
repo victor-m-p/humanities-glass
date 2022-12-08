@@ -131,13 +131,13 @@ plt.axis('off')
 cmap = plt.cm.get_cmap("Greens") # reverse code this
 nx.draw_networkx_nodes(G_full, pos, 
                         nodelist = nodelst_full,
-                        node_size = [x*2 for x in nodesize_full], 
+                        node_size = [x*4 for x in nodesize_full], 
                         node_color = [3-x for x in color_lst],
                         linewidths = 0.5, edgecolors = 'black',
                         cmap = cmap)
 rgba = rgb2hex(cmap(0.9))
 nx.draw_networkx_edges(G_full, pos, alpha = 0.7,
-                       width = edgew_full,
+                       width = [x*5 for x in edgew_full],
                        edgelist = edgelst_full,
                        edge_color = rgba
                        )
@@ -145,37 +145,33 @@ label_options = {"ec": "k", "fc": "white", "alpha": 0.1}
 nx.draw_networkx_labels(G_full, pos, font_size = 8, labels = labeldict, bbox = label_options)
 plt.savefig('../fig/seed_FreeMethChurch_reference.pdf')
 
-
 #### annotations #####
-get_match(d_max_weight, 2) # Mesopotamia (*)
-get_match(d_max_weight, 1) # Ancient Egypt (*)
-get_match(d_max_weight, 6) # Achaemenid (**)
-get_match(d_max_weight, 3) # Luguru (**)
-get_match(d_max_weight, 4) # Pontifex Maximus 
-get_match(d_max_weight, 5) # Old Assyrian
-get_match(d_max_weight, 7) # Archaic dn cults (**)
-get_match(d_max_weight, 0) # Roman Imperial cult
+get_match(d_max_weight, 0) # Free Methodist (*)
+get_match(d_max_weight, 1) # Jehovah (*)
+get_match(d_max_weight, 2) # Southern Baptist
+get_match(d_max_weight, 4) # No maximum likelihood (or data state?)
+get_match(d_max_weight, 5) # Sachchai
+get_match(d_max_weight, 6) # Tunisian Women
+get_match(d_max_weight, 9) # Pauline
+get_match(d_max_weight, 8) # No maximum likelihood (or data state?)
 
 transl_dict = {
-    534: 'Roman',
-    230: 'Mesopotamia', # *
-    424: 'Achaemenid',
-    738: 'Ancient Egyptian', # *
-    1323: 'Luguru',
+    879: 'Free Methodist',
+    1311: 'Jehovah', # *
+    1307: 'S. Baptists',
+    953: 'Sachchai', # *
+    1517: 'Tunisian Women',
     993: 'Pontifical College',
-    1248: 'Old Assyrian',
-    470: 'Spartan Cults'
+    196: 'Pauline Christianity',
 }
 
 pos_annot = {
-    0: (400, 0), # Roman
-    1: (200, 0), # Egypt
-    2: (-100, -300), # Meso 
-    3: (-300, 250), # Luguru
-    4: (-130, -250), # Pontifex
-    5: (-300, 0), # Old Assyrian
-    6: (-90, -250), # Achaemenid
-    7: (-105, 250), # Archaic Spartan
+    0: (-95, 360), # Free Meth
+    1: (-48, -200), # Jehova
+    2: (-65, -250), # S. Baptist
+    5: (-55, -270), # Sachchai
+    6: (-95, -300), # Tunisian
+    9: (-122, 280) # Pauline
 }
 
 d_annot = pd.DataFrame.from_dict(transl_dict, 
@@ -183,12 +179,43 @@ d_annot = pd.DataFrame.from_dict(transl_dict,
                        columns = ['entry_name_short'])
 d_annot['entry_id'] = d_annot.index
 d_annot = d_annot.merge(d_max_weight, on = 'entry_id', how = 'inner')
-d_annot = d_annot[~d_annot['node_id'].isin([19, 21])]
+d_annot = d_annot[~d_annot['node_id'].isin([15, 28])]
 
 ### main plot (colored) ###
 fig, ax = plt.subplots(figsize = (6, 4), dpi = 500)
 plt.axis('off')
-cmap = plt.cm.get_cmap("Greens") # reverse code this
+cmap = plt.cm.get_cmap("Oranges") # reverse code this
+nx.draw_networkx_nodes(G_full, pos, 
+                        nodelist = nodelst_full,
+                        node_size = [x*4 for x in nodesize_full], 
+                        node_color = [3-x for x in color_lst],
+                        linewidths = 0.5, edgecolors = 'black',
+                        cmap = cmap)
+rgba = rgb2hex(cmap(0.8))
+nx.draw_networkx_edges(G_full, pos, alpha = 0.7,
+                       width = [x*5 for x in edgew_full],
+                       edgelist = edgelst_full,
+                       edge_color = rgba
+                       )
+for index, row in d_annot.iterrows(): 
+    node_idx = row['node_id']
+    name = row['entry_name_short']
+    pos_x, pos_y = pos[node_idx]
+    xx, yy = pos_annot.get(node_idx)
+    color = rgb2hex(cmap(0.99))
+    ax.annotate(name, xy = [pos_x, pos_y],
+                color = rgba,
+                #xycoords = 'figure fraction',
+                xytext=[pos_x+xx, pos_y+yy],
+                #textcoords = 'figure fraction', 
+                arrowprops = dict(arrowstyle="->",
+                                  connectionstyle='arc3',
+                                  color=rgba))
+plt.savefig('../fig/seed_FreeMethChurch_annotated_orange.pdf')
+
+### main plot (mixed) ###
+fig, ax = plt.subplots(figsize = (6, 4), dpi = 500)
+plt.axis('off')
 nx.draw_networkx_nodes(G_full, pos, 
                         nodelist = nodelst_full,
                         node_size = [x*2 for x in nodesize_full], 
@@ -214,13 +241,12 @@ for index, row in d_annot.iterrows():
                 #textcoords = 'figure fraction', 
                 arrowprops = dict(arrowstyle="->",
                                   connectionstyle='arc3',
-                                  color=rgba))
-plt.savefig('../fig/seed_RomanImpCult_annotated_green.pdf')
+                                  color='black'))
+plt.savefig('../fig/seed_FreeMethChurch_annotated_mix.pdf')
 
 ### main plot (black) ###
 fig, ax = plt.subplots(figsize = (6, 4), dpi = 500)
 plt.axis('off')
-cmap = plt.cm.get_cmap("Greens") # reverse code this
 nx.draw_networkx_nodes(G_full, pos, 
                         nodelist = nodelst_full,
                         node_size = [x*2 for x in nodesize_full], 
@@ -247,7 +273,7 @@ for index, row in d_annot.iterrows():
                 arrowprops = dict(arrowstyle="->",
                                   connectionstyle='arc3',
                                   color='black'))
-plt.savefig('../fig/seed_RomanImpCult_annotated_black.pdf')
+plt.savefig('../fig/seed_FreeMethChurch_annotated_black.pdf')
 
 ### what is the bit-string of the Roman Imperial Cult?
 def uniq_bitstring(allstates, config_idx, question_ids, type):
