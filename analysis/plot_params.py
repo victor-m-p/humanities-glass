@@ -202,7 +202,7 @@ cbar = plt.colorbar(sm_node, cax = ax_node)
 cbar.ax.yaxis.set_ticks_position('left') #yaxis.tick_left()
 ax.text(1.08, 0.2, r"Pearson's correlation", size=20, rotation=90, transform=ax.transAxes)
 ax.text(-0.08, 0.43, r'Mean', size = 20, rotation = 90, transform = ax.transAxes)
-plt.savefig('../fig/observation.pdf')
+plt.savefig('../fig/observation.pdf', bbox_inches='tight')
 
 
 
