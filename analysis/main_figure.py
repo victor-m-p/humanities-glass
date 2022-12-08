@@ -217,6 +217,7 @@ bit_latex_string = bit_diff.to_latex(index=False)
 with open('community_differences.txt', 'w') as f: 
     f.write(bit_latex_string)
 
+''' old approach
 #### big latex table ####
 ref_observed_other = node_attr[['p_ind', 'p_norm', 'max_likelihood', 'full_record', 'comm_label']].drop_duplicates()
 ref_observed_other = ref_observed_other.dropna()
@@ -228,7 +229,7 @@ ref_observed_master = ref_observed_master[['comm_label', 'entry_name', 'p_norm']
 ref_observed_latex = ref_observed_master.to_latex(index=False)
 with open('ref_observed.txt', 'w') as f: 
     f.write(ref_observed_latex)
-
+'''
 #### hand-picking approach ####
 def get_match(d, n):
     dm = d[d['node_id'] == n][['entry_name', 'entry_id', 'p_norm']]
@@ -367,6 +368,64 @@ comm_color_codes = d_annot[['community', 'comm_color_code']].drop_duplicates()
 node_attr = node_attr.merge(comm_color_codes, on = 'community', how = 'inner')
 d_max_weight.to_csv('../data/analysis/d_max_weight.csv', index = False)
 node_attr.to_csv('../data/analysis/node_attr.csv', index = False) 
+
+######## all configurations #########
+# group by entry_id and community 
+# take the community that has largest weight for the config. 
+# Group | Entry name [DRH id] | Weight 
+
+comm_info = node_attr[['p_ind', 'comm_label']].drop_duplicates()
+state_info = d_likelihood[['entry_id', 'p_ind', 'p_norm']].drop_duplicates()
+comm_info = comm_info.dropna()
+sate_info = state_info.dropna()
+big_table = comm_info.merge(state_info, on = 'p_ind', how = 'inner')
+by_comm = big_table.groupby(['entry_id', 'comm_label'])['p_norm'].sum().reset_index(name = 'sum_in_comm')
+## only take the highest probability state within each community 
+uniq = by_comm.sort_values(['entry_id','sum_in_comm'],ascending=False).groupby('entry_id').head(1)
+## take these out 
+entry_ref = big_table[['entry_id', 'comm_label']].drop_duplicates()
+table = uniq.merge(entry_ref, on = ['entry_id', 'comm_label'], how = 'inner')
+table['sum_in_comm'] = table['sum_in_comm'].apply(lambda x: round(x*100, 2))
+## merge in entry name
+reference = pd.read_csv('../data/analysis/nref_nrows_455_maxna_5_nodes_20.csv')
+reference = reference[['entry_id', 'entry_name']].drop_duplicates()
+table_names = table.merge(reference, on = 'entry_id', how = 'inner')
+table_names = table_names.rename(columns = {
+    'comm_label': 'Group',
+    'entry_name': 'Entry Name',
+    'entry_id': 'DRH ID',
+    'sum_in_comm': 'Weight'
+})
+table_names = table_names.sort_values(['Group', 'Weight'], ascending = [True, False])
+table_names = table_names[['Group', 'DRH ID', 'Entry Name', 'Weight']]
+table_names['Entry Name'] = table_names[['Entry Name']].replace({r'[^\x00-\x7F]+':''}, regex=True)
+pd.set_option('display.max_colwidth', None)
+ref_observed_latex = table_names.to_latex(index=False, escape = False)
+with open('ref_observed.txt', 'w') as f: 
+    f.write(ref_observed_latex)
+
+## only have two religions overlapping communities: 
+### 609, 691 
+
+
+## all of the observed religions that are not in the top 150 ##
+### load reference
+reference = reference.rename(columns = {'entry_id': 'DRH ID'})
+### anti join 
+not_top150 = reference.merge(table_names, on = 'DRH ID', how = 'left', indicator = True)
+not_top150 = not_top150[not_top150['_merge'] == 'left_only']
+not_top150 = not_top150[['DRH ID', 'entry_name']]
+not_top150 = not_top150.rename(columns = {'entry_name': 'Entry Name'})
+not_top150['Entry Name'] = not_top150[['Entry Name']].replace({r'[^\x00-\x7F]+':''}, regex=True)
+ref_unobserved_latex = not_top150.to_latex(index=False, escape = False)
+with open('ref_unobserved.txt', 'w') as f: 
+    f.write(ref_unobserved_latex)
+
+## sanity check
+len(not_top150) + len(table_names) # 407 (great). 
+
+
+
 
 '''
 ########### old shit ###########
