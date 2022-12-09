@@ -299,6 +299,62 @@ for index, row in d_annot.iterrows():
                                   color='black'))
 plt.savefig('../fig/seed_RomanImpCult_annotated_black.pdf')
 
+### what is the probability of changing away ###
+entry_config_reference = d_likelihood[['entry_id', 'p_ind']].drop_duplicates()
+entry_config_reference = entry_config_reference.merge(nodes_reference, on = 'entry_id', how = 'inner')
+
+def transition_prob(d_main, hamming_dist): 
+    d_hamming = d_main[d_main['hamming'] == 1]
+    d_hamming = d_hamming[['idx_neighbor', 'prob_neighbor']]
+    d_hamming = d_hamming.assign(prob_norm = lambda x: x['prob_neighbor']/sum(x['prob_neighbor']))
+    d_hamming = d_hamming.sort_values('prob_neighbor', ascending = False)
+    d_hamming = d_hamming.rename(columns = {'idx_neighbor': 'p_ind'})
+    return d_hamming    
+
+### what is the bit-string of the Roman Imperial Cult?
+def uniq_bitstring(allstates, config_idx, question_ids, type):
+    focal_config = allstates[config_idx]
+    focal_config[focal_config == -1] = 0
+    focal_string = ''.join([str(x) for x in focal_config])
+    focal_df = pd.DataFrame([focal_config], columns = question_ids)
+    focal_df['p_ind'] = config_idx
+    focal_df = pd.melt(focal_df, id_vars = 'p_ind', value_vars = question_ids, var_name = 'related_q_id')
+    focal_df = focal_df.rename(columns = {
+        'p_ind': f'p_ind_{type}',
+        'value': f'value_{type}'})
+    return focal_string, focal_df 
+
+d_main = get_n_neighbors(1, config_idx, allstates, p)
+d_transition_prob = transition_prob(d_main, 1)
+d_transition_prob = d_transition_prob.merge(entry_config_reference, on = 'p_ind', how = 'left')
+d_transition_prob # 
+
+question_ids = question_reference['related_q_id'].to_list() 
+bitstr_meso, bitdf_meso = uniq_bitstring(allstates, 769926, question_ids, 'other')
+bitstr_achem, bitdf_achem = uniq_bitstring(allstates, 1032071, question_ids, 'other')
+bitstr_roman, bitdf_roman = uniq_bitstring(allstates, config_idx, question_ids, 'focal')
+
+baptist_neighbors = pd.concat([bitdf_meso, bitdf_achem])
+baptist_difference = baptist_neighbors.merge(bitdf_roman, on = 'related_q_id', how = 'inner')
+baptist_difference = baptist_difference.assign(difference = lambda x: x['value_focal']-x['value_other'])
+baptist_difference = baptist_difference[baptist_difference['difference'] != 0]
+
+pd.set_option('display.max_colwidth', None)
+baptist_interpret = baptist_difference.merge(question_reference, on = 'related_q_id', how = 'inner')
+baptist_interpret = baptist_interpret.rename(columns = {'p_ind_other': 'p_ind'})
+
+entry_config_reference_uniq = entry_config_reference[['p_ind', 'entry_name']].drop_duplicates()
+baptist_interpret = entry_config_reference_uniq.merge(baptist_interpret, on = 'p_ind', how = 'inner')
+
+d_transition_uniq = d_transition_prob[['p_ind', 'prob_norm']].drop_duplicates() 
+baptist_interpret = d_transition_uniq.merge(baptist_interpret, on = 'p_ind', how = 'inner')
+baptist_interpret
+
+# probability for each of the states
+p[bitdf_meso['p_ind_other'].unique()[0]] # 0.0291
+p[bitdf_achem['p_ind_other'].unique()[0]] # 0.0196
+p[bitdf_roman['p_ind_focal'].unique()[0]] # 0.0575
+
 ### what is the bit-string of the Roman Imperial Cult?
 def uniq_bitstring(allstates, config_idx, question_ids, type):
     focal_config = allstates[config_idx]

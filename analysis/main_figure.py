@@ -133,6 +133,7 @@ comm_order = node_attr[['comm_weight']].drop_duplicates().reset_index(drop=True)
 comm_order['comm_label'] = comm_order.index+1
 comm_order['comm_label'] = comm_order['comm_label'].apply(lambda x: f'Group {x}')
 node_attr = node_attr.merge(comm_order, on = 'comm_weight', how = 'inner')
+node_attr[['comm_weight', 'comm_label']].drop_duplicates()
 
 #### community reference ####
 node_attr['comm_weight'] = node_attr['comm_weight'].apply(lambda x: round(x*100, 2))
@@ -205,10 +206,16 @@ bit_df = bit_df.assign(weighted_avg_focal = lambda x: round(x['weighted_avg_foca
                        focal_minus_other_abs = lambda x: round(x['focal_minus_other_abs']*100, 2)
                        )
 
+### shared across? ###
+pd.set_option('display.max_colwidth', None)
+bit_df.groupby('related_q')['weighted_avg_focal'].mean().reset_index(name='mean').sort_values('mean')
+bit_df.groupby('related_q')['weighted_avg_focal'].mean().reset_index(name='mean').sort_values('mean', ascending=False)
+
+
 # three most different per community
 comm_color = node_attr[['comm_label', 'community', 'comm_color']].drop_duplicates()
 bit_df = bit_df.merge(comm_color, on = 'community', how = 'inner')
-bit_diff = bit_df.sort_values(['focal_minus_other_abs'], ascending=False).groupby('community').head(3)
+bit_diff = bit_df.sort_values(['focal_minus_other_abs'], ascending=False).groupby('community').head(10)
 bit_diff = bit_diff.sort_values(['comm_label', 'focal_minus_other_abs'], ascending = [True, False])
 bit_diff = bit_diff[['comm_label', 'comm_color', 'question', 'weighted_avg_focal', 'weighted_avg_other', 'focal_minus_other']]
 
@@ -216,6 +223,8 @@ bit_diff = bit_diff[['comm_label', 'comm_color', 'question', 'weighted_avg_focal
 bit_latex_string = bit_diff.to_latex(index=False)
 with open('community_differences.txt', 'w') as f: 
     f.write(bit_latex_string)
+
+bit_diffx[bit_diffx['comm_color'] == 'Pastel'].sort_values('weighted_avg_focal')
 
 ''' old approach
 #### big latex table ####
@@ -373,9 +382,8 @@ node_attr.to_csv('../data/analysis/node_attr.csv', index = False)
 # group by entry_id and community 
 # take the community that has largest weight for the config. 
 # Group | Entry name [DRH id] | Weight 
-
 comm_info = node_attr[['p_ind', 'comm_label']].drop_duplicates()
-state_info = d_likelihood[['entry_id', 'p_ind', 'p_norm']].drop_duplicates()
+state_info = d_likelihood[['entry_id', 'p_ind', 'p_norm', 'p_raw']].drop_duplicates()
 comm_info = comm_info.dropna()
 sate_info = state_info.dropna()
 big_table = comm_info.merge(state_info, on = 'p_ind', how = 'inner')
@@ -407,7 +415,6 @@ with open('ref_observed.txt', 'w') as f:
 ## only have two religions overlapping communities: 
 ### 609, 691 
 
-
 ## all of the observed religions that are not in the top 150 ##
 ### load reference
 reference = reference.rename(columns = {'entry_id': 'DRH ID'})
@@ -424,6 +431,9 @@ with open('ref_unobserved.txt', 'w') as f:
 ## sanity check
 len(not_top150) + len(table_names) # 407 (great). 
 
+### which attributes shared by all? ###
+d_likelihood
+sref
 
 
 

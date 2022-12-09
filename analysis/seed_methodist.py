@@ -43,7 +43,7 @@ def get_n_neighbors(n_neighbors, idx_focal, config_allstates, prob_allstates):
 ### node_id = 18 (Free Methodist Church)
 ### node_id = 27 (Roman Imperial Cult)
 
-#### Roman Imperial Cult ####
+#### Free Methodist ####
 node_idx = 18
 n_nearest = 2
 n_top_states = 49
@@ -275,6 +275,18 @@ for index, row in d_annot.iterrows():
                                   color='black'))
 plt.savefig('../fig/seed_FreeMethChurch_annotated_black.pdf')
 
+### what is the probability of changing away ###
+entry_config_reference = d_likelihood[['entry_id', 'p_ind']].drop_duplicates()
+entry_config_reference = entry_config_reference.merge(nodes_reference, on = 'entry_id', how = 'inner')
+
+def transition_prob(d_main, hamming_dist): 
+    d_hamming = d_main[d_main['hamming'] == 1]
+    d_hamming = d_hamming[['idx_neighbor', 'prob_neighbor']]
+    d_hamming = d_hamming.assign(prob_norm = lambda x: x['prob_neighbor']/sum(x['prob_neighbor']))
+    d_hamming = d_hamming.sort_values('prob_neighbor', ascending = False)
+    d_hamming = d_hamming.rename(columns = {'idx_neighbor': 'p_ind'})
+    return d_hamming    
+
 ### what is the bit-string of the Roman Imperial Cult?
 def uniq_bitstring(allstates, config_idx, question_ids, type):
     focal_config = allstates[config_idx]
@@ -288,12 +300,67 @@ def uniq_bitstring(allstates, config_idx, question_ids, type):
         'value': f'value_{type}'})
     return focal_string, focal_df 
 
+d_main = get_n_neighbors(1, config_idx, allstates, p)
+d_transition_prob = transition_prob(d_main, 1)
+d_transition_prob = d_transition_prob.merge(entry_config_reference, on = 'p_ind', how = 'left')
+d_transition_prob # 
+
+question_ids = question_reference['related_q_id'].to_list() 
+bitstr_baptist, bitdf_baptist = uniq_bitstring(allstates, 362370, question_ids, 'other')
+bitstr_pauline, bitdf_pauline = uniq_bitstring(allstates, 362372, question_ids, 'other')
+bitstr_methodist, bitdf_methodist = uniq_bitstring(allstates, config_idx, question_ids, 'focal')
+
+baptist_neighbors = pd.concat([bitdf_baptist, bitdf_pauline])
+baptist_difference = baptist_neighbors.merge(bitdf_methodist, on = 'related_q_id', how = 'inner')
+baptist_difference = baptist_difference.assign(difference = lambda x: x['value_focal']-x['value_other'])
+baptist_difference = baptist_difference[baptist_difference['difference'] != 0]
+
+pd.set_option('display.max_colwidth', None)
+baptist_interpret = baptist_difference.merge(question_reference, on = 'related_q_id', how = 'inner')
+baptist_interpret = baptist_interpret.rename(columns = {'p_ind_other': 'p_ind'})
+
+entry_config_reference_uniq = entry_config_reference[['p_ind', 'entry_name']].drop_duplicates()
+baptist_interpret = entry_config_reference_uniq.merge(baptist_interpret, on = 'p_ind', how = 'inner')
+
+d_transition_uniq = d_transition_prob[['p_ind', 'prob_norm']].drop_duplicates() 
+baptist_interpret = d_transition_uniq.merge(baptist_interpret, on = 'p_ind', how = 'inner')
+baptist_interpret
+
+# probability for each of the states
+p[bitdf_baptist['p_ind_other'].unique()[0]] # 0.0291
+p[bitdf_pauline['p_ind_other'].unique()[0]] # 0.0196
+p[bitdf_methodist['p_ind_focal'].unique()[0]] # 0.0575
+
+
+#### old shit (some of it useful, e.g. the loop) ####
+
+def get_n_neighbors(n_neighbors, idx_focal, config_allstates, prob_allstates):
+    config_focal = config_allstates[idx_focal]
+    prob_focal = prob_allstates[idx_focal]
+    lst_neighbors = []
+    for idx_neighbor, config_neighbor in enumerate(config_allstates): 
+        h_dist = np.count_nonzero(config_focal!=config_neighbor)
+        if h_dist <= n_neighbors and idx_focal != idx_neighbor: 
+            prob_neighbor = prob_allstates[idx_neighbor]
+            lst_neighbors.append((idx_focal, prob_focal, idx_neighbor, prob_neighbor, h_dist ))
+    df_neighbor = pd.DataFrame(
+        lst_neighbors, 
+        columns = ['idx_focal', 'prob_focal', 'idx_neighbor', 'prob_neighbor', 'hamming']
+    )
+    return df_neighbor
+
+d_main = get_n_neighbors(1, config_idx, allstates, p)
+
 ## prep 
 question_ids = question_reference['related_q_id'].to_list() 
 d_weight = d_max_weight[['p_norm', 'p_raw', 'p_ind']]
 
 ## run for the focal state
 string_focal, df_focal = uniq_bitstring(allstates, config_idx, question_ids, 'focal')
+
+df_focal
+## get all neighboring p_ind for this 
+## and get the probability of those configurations
 
 ## run for selected neighboring states
 p_neighbors = [769926, 1027975, 1032071, 638854, 
@@ -313,10 +380,19 @@ df_complete = df_complete[df_complete['difference'] == 1]
 
 ## add entry information 
 entry_ids = [230, 738, 424, 1323, 993, 1248, 470]
-entry_ref = d_max_weight[d_max_weight['entry_id'].isin(entry_ids)]
+entry_ref = d_likelihood[d_likelihood['entry_id'].isin(entry_ids)]
+entry_ref
+
+
+
 entry_ref = entry_ref[['p_ind', 'entry_name']].drop_duplicates()
 entry_ref = entry_ref.rename(columns = {'p_ind': 'p_ind_other'}) 
+
+entry_ref
+
+
 df_complete = df_complete.merge(entry_ref, on = 'p_ind_other', how = 'inner')
+
 
 ## add question information
 df_complete = df_complete.merge(question_reference, on = 'related_q_id', how = 'inner')
