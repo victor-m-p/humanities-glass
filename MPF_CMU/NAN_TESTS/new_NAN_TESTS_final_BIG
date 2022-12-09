@@ -89,3 +89,46 @@ KL: 0.441002
 Clock time: 0.487380000000 seconds.
 
 NA data -- 128: 0.441002
+KL: 0.339003
+Clock time: 0.487466000000 seconds.
+
+NA data -- 256: 0.339003
+KL: 0.275043
+Clock time: 0.487480000000 seconds.
+
+NA data -- 512: 0.275043
+KL: 0.230014
+Clock time: 0.485356000000 seconds.
+
+NA data -- 1024: 0.230014
+Now do bad choice...
+Bad data -- 0: 0.592146
+Bad data -- 64: 0.608738
+Bad data -- 128: 0.676832
+Bad data -- 256: 0.689984
+Bad data -- 512: 0.73941
+Bad data -- 1024: 0.797067
+Finished test at 2022-12-09 12:13:49 -0500
+full_data=[[0, 0.592169], [64, 0.391243], [128, 0.345368], [256, 0.226751], [512, 0.126329], [1024, 0.087057]]
+nan_data=[[64, 0.482587], [128, 0.441002], [256, 0.339003], [512, 0.275043], [1024, 0.230014]]
+bad_data=[[0, 0.592146], [64, 0.608738], [128, 0.676832], [256, 0.689984], [512, 0.73941], [1024, 0.797067]]
+Starting new test 3 at time 2022-12-09 12:13:49 -0500...
+Full data -- 0: 0.614405
+Full data -- 64: 0.492543
+Full data -- 128: 0.366446
+Full data -- 256: 0.267352
+Full data -- 512: 0.187379
+Full data -- 1024: 0.10889
+KL: 0.581348
+Clock time: 0.487430000000 seconds.
+
+NA data -- 64: 0.581348
+KL: 0.504347
+Clock time: 0.485287000000 seconds.
+
+NA data -- 128: 0.504347
+KL: 0.405592
+Clock time: 0.486003000000 seconds.
+
+NA data -- 256: 0.405592
+slurmstepd: error: *** JOB 13569488 ON r479 CANCELLED AT 2022-12-09T14:03:59 ***
