@@ -1,16 +1,5 @@
-Starting new test 0 at time 2022-12-07 16:38:26 -0500...
-/var/spool/slurm/d/job13549811/slurm_script:27:in `block (2 levels) in <main>': undefined method `split' for nil:NilClass (NoMethodError)
-	from /jet/home/sdedeo/.gem/ruby/gems/parallel-1.22.1/lib/parallel.rb:587:in `call_with_index'
-	from /jet/home/sdedeo/.gem/ruby/gems/parallel-1.22.1/lib/parallel.rb:557:in `process_incoming_jobs'
-	from /jet/home/sdedeo/.gem/ruby/gems/parallel-1.22.1/lib/parallel.rb:537:in `block in worker'
-	from /jet/home/sdedeo/.gem/ruby/gems/parallel-1.22.1/lib/parallel.rb:528:in `fork'
-	from /jet/home/sdedeo/.gem/ruby/gems/parallel-1.22.1/lib/parallel.rb:528:in `worker'
-	from /jet/home/sdedeo/.gem/ruby/gems/parallel-1.22.1/lib/parallel.rb:519:in `block in create_workers'
-	from /jet/home/sdedeo/.gem/ruby/gems/parallel-1.22.1/lib/parallel.rb:518:in `each'
-	from /jet/home/sdedeo/.gem/ruby/gems/parallel-1.22.1/lib/parallel.rb:518:in `each_with_index'
-	from /jet/home/sdedeo/.gem/ruby/gems/parallel-1.22.1/lib/parallel.rb:518:in `create_workers'
-	from /jet/home/sdedeo/.gem/ruby/gems/parallel-1.22.1/lib/parallel.rb:457:in `work_in_processes'
-	from /jet/home/sdedeo/.gem/ruby/gems/parallel-1.22.1/lib/parallel.rb:294:in `map'
-	from /var/spool/slurm/d/job13549811/slurm_script:18:in `block in <main>'
-	from /var/spool/slurm/d/job13549811/slurm_script:13:in `times'
-	from /var/spool/slurm/d/job13549811/slurm_script:13:in `<main>'
+Starting new test 0 at time 2022-12-08 18:22:47 -0500...
+Full data -- 0: 0.046442
+Full data -- 64: 0.408739
+Full data -- 128: 0.329584
+slurmstepd: error: *** JOB 13569469 ON r353 CANCELLED AT 2022-12-08T18:38:02 DUE TO TIME LIMIT ***
