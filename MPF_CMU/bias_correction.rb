@@ -1,6 +1,5 @@
-#!/opt/local/bin/ruby
 #!/usr/bin/ruby
-# sbatch -N 1 -o BIAS_TESTS/BIAS_TESTS_final_NEW_SHORT -t 24:00:00 -p RM ./bias_correction.rb 10
+# sbatch -N 1 -o BIAS_TESTS/BIAS_TESTS_final -t 24:00:00 -p RM ./bias_correction.rb 20
 
 n=ARGV[0].to_i
 label=rand(1 << 20)
