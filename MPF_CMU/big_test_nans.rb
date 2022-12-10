@@ -2,12 +2,12 @@
 
 # [5].each { |nan|
 #   if (nan >= 4) then
-#     max=80
+#     max=20
 #   else
 #     max=1
 #   end
 #   max.times { |k|
-#     print "sbatch -N 1 -o NAN_TESTS/big_NAN_scan_experimental_20_#{nan}_#{k} -t 15:00:00 -p RM ./big_test_nans.rb 20 #{nan}\n"
+#     print "sbatch -N 1 -o NAN_TESTS/big_NAN_scan_experimental_20_#{nan}_#{k} -t 10:00:00 -p RM ./big_test_nans.rb 20 #{nan}\n"
 #   }
 # }
 

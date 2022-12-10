@@ -2,7 +2,7 @@
 # sbatch -N 1 -o NAN_TESTS/new_NAN_TESTS_final_BIG2 -t 48:00:00 -p RM ./test_nans.rb 20 5 NAN_TESTS_FINAL
 # sbatch -N 1 -o NAN_TESTS/new_NAN_TESTS_final -t 00:15:00 -p RM ./test_nans.rb 4 1 NAN_TESTS_FINAL
 
-# sbatch -N 1 -o NAN_TESTS/new_NAN_TESTS_experiments -t 48:00:00 -p RM ./test_nans.rb 20 5 NAN_TESTS_FINAL_experiments
+# sbatch -N 1 -o NAN_TESTS/new_NAN_TESTS_experiments_10 -t 48:00:00 -p RM ./test_nans.rb 20 10 NAN_TESTS_FINAL_experiments_10
 
 n=ARGV[0].to_i
 nan=ARGV[1].to_i
