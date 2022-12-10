@@ -16,8 +16,9 @@ SHELL=/bin/bash
 # run `module load aocc aocl` first!
 CC=clang
 #CFLAGS=-O3 -fopenmp -fvectorize -flto -fwhole-program-vtables -fremap-arrays -funroll-loops -fslp-vectorize -floop-unswitch-aggressive -finline-aggressive -mllvm --reduce-array-computations=3 `gsl-config --cflags`
+# -lamdlibm  -lm
 CFLAGS=-O3 -zopt -fopenmp
-LFLAGS=-unroll-aggressive -lamdlibm  -lm `gsl-config --libs`
+LFLAGS=-unroll-aggressive -lalm -lm `gsl-config --libs` 
 
 OBJ = mpf.o mcmc.o nlin.o nsb.o
 
