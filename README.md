@@ -1,5 +1,7 @@
 Pre-review code for "Inferring Cultural Landscapes with the Inverse Ising Model"
+
 Victor Møller Poulsen and Simon DeDeo
+
 submitted to Entropy, 9 December 2022
 
 This is *pre-review* code, not intended for general public circulation. We would be very grateful for comments, questions, and thoughts. On re-submission and review, we will release general code, intended for consumer use, and a full guide.
