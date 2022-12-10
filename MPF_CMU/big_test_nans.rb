@@ -1,8 +1,8 @@
 #!/usr/bin/ruby
 
-# [5].each { |nan|
+# [10].each { |nan|
 #   if (nan >= 4) then
-#     max=20
+#     max=5
 #   else
 #     max=1
 #   end
