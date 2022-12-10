@@ -204,7 +204,7 @@ void read_data(char *filename, all *data) {
 			}
 		}
 		fscanf(f_in, "%lf", &(data->obs_raw[i]->mult)); // read in multiplicity
-		
+		data->obs_raw[i]->mult *= (data->n - data->obs_raw[i]->blanks)*1.0/data->n; // experiment -- test if downweighting X configs helps
 		fscanf(f_in, "%c", &c);
 		if ((c != '\n') && (i < (m-1))) {
 			printf("Expected an end of line, didn't get one\n");
