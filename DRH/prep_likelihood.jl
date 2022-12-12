@@ -1,3 +1,10 @@
+#=
+VMP 2022-12-12:
+For each entry_id (religious culture) find all possible configurations.
+I.e. if there are inconsistencies or NAN then expand to all possible. 
+Then assign probabilities to each of these possible configurations. 
+=# 
+
 # todo: add entry_name to the dataframe 
 # would save a lot of wrangling. 
 using Printf, Statistics, Distributions, DelimitedFiles, CSV, DataFrames, IterTools

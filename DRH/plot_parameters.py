@@ -1,3 +1,9 @@
+'''
+VMP 2022-12-12: 
+Visualize the paratmers (Jij, hi) versus surface-level correlations. 
+Produces figure 3A, 3B. 
+'''
+
 import itertools 
 import pandas as pd 
 import matplotlib.pyplot as plt 

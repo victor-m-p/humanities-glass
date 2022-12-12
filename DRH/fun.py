@@ -1,3 +1,8 @@
+'''
+VMP 2022-12-12: 
+Helper functions for the analysis of DRH data.
+'''
+
 import numpy as np
 import itertools 
 import pandas as pd 

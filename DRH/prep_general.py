@@ -1,3 +1,8 @@
+'''
+VMP 2022-12-12: 
+Prepares key documents for the analysis of DRH data. 
+'''
+
 import numpy as np 
 from fun import p_dist, bin_states, top_n_idx, hamming_distance
 import pandas as pd 

@@ -1,8 +1,7 @@
 '''
-Would be really good to just do data curation here,
-i.e. create the node_attr data and max_weight data,
-as well as all of the tables, and then leave the plotting
-for another document.
+VMP 2022-12-12: 
+Visualize the most likely configurations (n = 150) 
+along with communities. Produces figure 4A.
 '''
 
 import matplotlib.pyplot as plt 
