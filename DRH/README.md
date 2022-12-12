@@ -57,7 +57,10 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Victor Poulsen - [@vic_moeller](https://twitter.com/vic_moeller) - victormoeller@gmail.com
+Victor Poulsen 
+* Twitter: [@vic_moeller](https://twitter.com/vic_moeller) 
+* GitHub: [@victor-m-p](https://github.com/victor-m-p)
+* Mail: victormoeller@gmail.com
 
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
