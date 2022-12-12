@@ -1,4 +1,4 @@
-
+## Overview
 
 Pre-review code for "Inferring Cultural Landscapes with the Inverse Ising Model"
 
