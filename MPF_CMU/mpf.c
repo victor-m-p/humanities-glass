@@ -975,7 +975,7 @@ void simple_minimizer(all *data) {
 	
 	compute_k_general(data, 1);
 
-	gsl_multimin_fdfminimizer_set(s, &k_func, x, ((data->best_fit == NULL) ? 0.01 : 0.001), 1e-6);
+	gsl_multimin_fdfminimizer_set(s, &k_func, x, ((data->best_fit == NULL) ? 0.01 : 0.0001), 1e-12);
 	
 	prev=1e300;
 	do {
@@ -984,11 +984,13 @@ void simple_minimizer(all *data) {
 
 		status = gsl_multimin_test_gradient(s->gradient, 1e-12);
 		
-		// printf ("%i %li (%lf) : ", status, iter, s->f);
-		// for(i=0;i<data->n_params;i++) {
-		// 	printf("%.10le ", gsl_vector_get (s->x, i));
+		// if (data->best_fit != NULL) {
+			// printf ("%i %li (%lf) : ", status, iter, s->f);
+			// for(i=0;i<data->n_params;i++) {
+			// 	printf("%.10le ", gsl_vector_get (s->x, i));
+			// }
+			// printf("\n");
 		// }
-		// printf("\n");
 		// printf("Derivs: ");
 		// for(i=0;i<data->n_params;i++) {
 		// 	printf("%lf ", data->dk[i]);

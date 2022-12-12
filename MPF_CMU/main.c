@@ -124,7 +124,7 @@ int main (int argc, char *argv[]) {
 				best_log_sparsity=minimize_kl(cv, 1);
 
 				data=new_data();
-				read_data(argv[2], data);
+				read_data(filename_sav, data);
 				process_obs_raw(data);
 						
 				init_params(data);
@@ -134,7 +134,7 @@ int main (int argc, char *argv[]) {
 				simple_minimizer(data);
 				
 				// save the best fit for no-Nans
-				printf("Found a best-fit solution without NaNs: ");
+				printf("Found a best-fit solution without NaNs (%i; %lf): ", data->m, data->k);
 				best_fit=(double *)malloc(data->n_params*sizeof(double));
 				for(i=0;i<data->n_params;i++) {
 					best_fit[i]=data->big_list[i];
@@ -159,9 +159,10 @@ int main (int argc, char *argv[]) {
 			init_params(data);
 			data->log_sparsity=best_log_sparsity;
 			create_near(data, cv->nn);
-												
-			simple_minimizer(data);
 			
+			printf("Now doing %i\n", data->m);			
+			simple_minimizer(data);
+			printf("%lf\n", data->k);
 			printf("\n\nparams=[");
 			for(i=0;i<data->n_params;i++) {
 				if (i < (data->n_params-1)) {
