@@ -22,13 +22,11 @@ Raw data from the DRH (i.e. pre-curation) is not provided given size limits.
 This might be available upon request. 
 
 ### ```/fig```
-Figures for "Inferring Cultural Landscapes with the Inverse Ising Model". 
-
-(NB: currently only the figures for ```5. Results: The Database of Religious History```.)
+Figures for "Inferring Cultural Landscapes with the Inverse Ising Model". Currently only the figures for ```5. Results: The Database of Religious History``` (see ```/DRH``` for code). 
 
 
 ### ```/tables```
-Tables for "Inferring Cultural Landscapes with the Inverse Ising Model". 
+Tables for "Inferring Cultural Landscapes with the Inverse Ising Model". In particular, tables documenting the DRH dataset used in the article. See ```/DRH``` for code. 
 
 ### ```/DRH```
 ...
