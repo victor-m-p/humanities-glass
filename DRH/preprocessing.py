@@ -1,10 +1,10 @@
 '''
-NB: when we have a clean pipeline we should come back here
-and only select the columns we actually need.
-Potentially rename e.g. related_q_id to q_id, if we do end
-up using only that. 
+VMP 2022-12-12: 
+From .json obtained from the DRH to .csv. 
+The .json obtained from the DRH not provided on GitHub due to file size.
 
-data/x/drh_xxx.json
+usage: 
+python preprocessing.py -i ../data/raw/drh_20221019.json
 '''
 
 import pandas as pd 
@@ -58,13 +58,13 @@ def has_att(row, att):
 
 def main(inpath):
     # read file
-    json_raw = load_file(inpath) # data/x/drh_xxx.json
+    json_raw = load_file(inpath) # data/raw/drh_20221019.json
     outpath = re.sub('.json', '.csv', inpath)
     # extract the data 
     dct_raw = json_to_dct(json_raw)
     df_raw = pd.DataFrame(dct_raw)
     # write file 
-    df_raw.to_csv(outpath, index = False) # data/y/DRH_raw.csv
+    df_raw.to_csv(outpath, index = False) # data/raw/drh_20221019.csv
 
 if __name__ == '__main__':
     ap = argparse.ArgumentParser()
