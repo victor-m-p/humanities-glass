@@ -1,12 +1,13 @@
 <!-- TABLE OF CONTENTS -->
-
+## Overview
+This folder documents the the analysis of DRH data reported in "Inferring Cultural Landscapes with the Inverse Ising Model" (mainly Section 5). Preprocessing of the DRH data. Data curation for the subset used in the paper. Table creation (tables X-X). Figures 3 and 4. Currently, the code-base is being cleaned. 
 
 <!-- ABOUT THE PROJECT -->
-## Overview 
+## Files
 
 * ```preprocessing.py``` converts ```.json``` obtained from the DRH to ```.csv```.
 * ```curation.py``` runs data curation before ```MPF``` (see also: ```run_curation.sh```).
-* ```plot_paramters.py``` creates figure 3A and figure 3B. 
+* ```plot_parameters.py``` creates figure 3A and figure 3B. 
 * ```plot_configurations.py``` creates figure 4A.
 * ```seed_methodist.py``` creates figure 4B. 
 * ```seed_roman.py``` creates figure 4C.
@@ -29,7 +30,7 @@ Working installation of ```Python``` (tested with v3.10.6) and ```Julia``` (test
     git clone git@github.com:victor-m-p/humanities-glass.git
     ```
 
-2. Install the ```Python``` environment (```glassenv```), run: 
+2. Install the ```Python``` environment (```glassenv```):
     ```sh
     bash create_venv.sh
     bash add_venv.sh
@@ -37,24 +38,13 @@ Working installation of ```Python``` (tested with v3.10.6) and ```Julia``` (test
 
 3. Install the ```Julia``` environment  
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- USAGE EXAMPLES -->
-## Usage
-
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
+## 
 
 <!-- LICENSE -->
 ## License
-
+NB: MOVE TO OVERALL README. 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
