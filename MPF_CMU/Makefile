@@ -21,7 +21,7 @@ LFLAGS=-unroll-aggressive -lalm -lm `gsl-config --libs`
 OBJ = mpf.o mcmc.o nlin.o nsb.o
 
 all : main.c $(OBJ)
-	${CC} $^ -o mpf_simple ${CFLAGS} ${LFLAGS}
+	${CC} $^ -o mpf ${CFLAGS} ${LFLAGS}
 
 mpf.o: mpf.c
 	${CC} $^ ${CFLAGS} -c
