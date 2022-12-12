@@ -1,6 +1,5 @@
 import numpy as np 
 import pandas as pd 
-import matplotlib.pyplot as plt 
 from fun import *
 
 #d = pd.read_csv('../data/analysis/d_likelihood_nrow_660_ncol_21_nuniq_20_suniq_581_maxna_10_NN1_LAMBDA0_453839.csv')

@@ -15,7 +15,6 @@ sudo apt-get -y install python3-graph-tool
 pip install graphviz
 pip install ipython
 pip install jupyter
-pip install matplotlib
 
 python -m ipykernel install --user --name=$VENVNAME
 

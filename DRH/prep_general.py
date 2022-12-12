@@ -4,9 +4,8 @@ Prepares key documents for the analysis of DRH data.
 '''
 
 import numpy as np 
-from fun import p_dist, bin_states, top_n_idx, hamming_distance
+from fun import p_dist, bin_states
 import pandas as pd 
-from sklearn.manifold import MDS
 
 # setup
 n_nodes = 20
