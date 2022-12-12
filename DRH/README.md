@@ -4,7 +4,7 @@
 <!-- ABOUT THE PROJECT -->
 ## Overview 
 
-```preprocessing.py`` does something.
+```preprocessing.py``` does something.
 
 
 <!-- GETTING STARTED -->
