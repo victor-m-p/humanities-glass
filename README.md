@@ -8,13 +8,13 @@ This is *pre-review* code, not intended for general public circulation. We would
 
 We are very happy to take requests. Our experience has been that iterating with potential users is the best way to make our code and data clear, reusable, and efficient to use. On re-submission and review, we will release general code, intended for consumer use, and a full guide.
 
-** MAIN COMPONENTS ***
+* MAIN COMPONENTS
 
-* DATA *
+* DATA
 
 Processed DRH data can be found in data/mdl_final, with additional information in data/reference.
 
-* CODE *
+* CODE
 
 MPF_CMU contains the optimized C code to implement all of the extensions and modifications to MPF described in our paper. Many of the simulations were carried out on the Bridges2 Pittsburgh Supercomputing Center system, and for speed they are set up to use multiple cores with OpenMP. You will want to adjust the Makefile to compile on your local system. Note that the compiler that ships with the new Mac M1s does not support OpenMP; you will need to install a (non-Apple) clang compiler.
 
@@ -53,3 +53,7 @@ If you have previously fit some data, but you also know the true parameters, thi
 // mpf -z [paramfile] [n_nodes]  // print out probabilities of all configurations under paramfile
 
 If you have a parameter file, this will print out all the configurations, the energy for each config, and the probability.
+
+* FUNDING
+
+This work used the Extreme Science and Engineering Discovery Environment (XSEDE), which is supported by National Science Foundation grant number ACI-1548562. Specifically, it used 509 the Bridges-2 system, which is supported by NSF award number ACI-1928147, at the Pittsburgh 510 Supercomputing Center (PSC), under grant HUM220003. This work was supported in part by the Survival and Flourishing Fund.
