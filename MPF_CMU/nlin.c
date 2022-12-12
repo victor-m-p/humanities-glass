@@ -11,7 +11,7 @@ double cross_holder(double log_sparsity, void *params) {
 	cross_val *cv;
 	
 	cv=(cross_val *)params;
-	return -cross(cv->filename, log_sparsity, cv->nn);
+	return -cross(cv->filename, log_sparsity, cv->nn, cv->best_fit);
 }
 
 double kl_holder(double log_sparsity, void *params) {

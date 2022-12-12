@@ -98,6 +98,8 @@ all *new_data() {
 	data->ij=NULL;
 	data->h_offset=-1;
 	
+	data->best_fit=NULL;
+	
 	gsl_rng *r;
 	
 	
@@ -361,10 +363,16 @@ void init_params(all *data) {
 		}
 	}
 
-	for(i=0;i<data->n_params;i++) {
-		data->big_list[i]=gsl_ran_gaussian(data->r, 1.0)/100.0; // initiatize for tests
-		data->old_list[i]=0; // initiatize for tests
-		// printf("%i %lf\n", i, data->big_list[i]);
+	if (data->best_fit == NULL) {
+		for(i=0;i<data->n_params;i++) {
+			data->big_list[i]=gsl_ran_gaussian(data->r, 1.0)/100.0; // initiatize for tests
+			data->old_list[i]=0; // initiatize for tests
+		}		
+	} else {
+		for(i=0;i<data->n_params;i++) {
+			data->big_list[i]=data->best_fit[i]; // initiatize for tests
+			data->old_list[i]=0; // initiatize for tests
+		}
 	}
 
 	global_length=data->n;
@@ -614,7 +622,7 @@ void update_mult_sim(all *data) {
 	
 }
 
-double cross(char *filename, double log_sparsity, int nn) {
+double cross(char *filename, double log_sparsity, int nn, double *best_fit) {
 	all *data;
 	double glob_nloops, logl_ans;
 	int i, thread_id, last_pos, in, j, count, pos, n_obs, n_nodes, kfold, num_no_na;
@@ -645,9 +653,10 @@ double cross(char *filename, double log_sparsity, int nn) {
 		// parallelize this for loop
 #pragma omp for
 		for(in=0;in<num_no_na;in++) {
-		
 			data=new_data();
 			read_data(filename, data);
+			data->best_fit=best_fit; // will either be NULL or a best guess
+			
 			data->m = data->m-1; // remove one data point
 
 			pos=0;
@@ -975,16 +984,16 @@ void simple_minimizer(all *data) {
 
 		status = gsl_multimin_test_gradient(s->gradient, 1e-12);
 		
-		printf ("%i %li (%lf) : ", status, iter, s->f);
-		for(i=0;i<data->n_params;i++) {
-			printf("%.10le ", gsl_vector_get (s->x, i));
-		}
-		printf("\n");
-		printf("Derivs: ");
-		for(i=0;i<data->n_params;i++) {
-			printf("%lf ", data->dk[i]);
-		}
-		printf("\n");
+		// printf ("%i %li (%lf) : ", status, iter, s->f);
+		// for(i=0;i<data->n_params;i++) {
+		// 	printf("%.10le ", gsl_vector_get (s->x, i));
+		// }
+		// printf("\n");
+		// printf("Derivs: ");
+		// for(i=0;i<data->n_params;i++) {
+		// 	printf("%lf ", data->dk[i]);
+		// }
+		// printf("\n");
 		
 		num=0;
 		for(i=0;i<data->n_params;i++) {

@@ -28,6 +28,7 @@ typedef struct {
 	char *filename;
 	double *big_list_true;
 	double kl_true;
+	double *best_fit;
 	int nn;
 } cross_val;
 
@@ -77,6 +78,8 @@ typedef struct {
 	double *big_list;
 	double *old_list;
 	
+	double *best_fit;
+		
 	double *nei;
 	double *ei;
 	
@@ -111,7 +114,7 @@ double full_kl(all *data, double *inferred, double *truth);
 double log_l(all *data, unsigned long int config, double *inferred, int do_approx);
 void compute_probs(int n, double *big_list, char *filename);
 
-double cross(char *filename, double log_sparsity, int nn);
+double cross(char *filename, double log_sparsity, int nn, double *best_fit);
 double minimize_kl(cross_val *cv, int fast_version);
 void update_sparsity(all *data);
 

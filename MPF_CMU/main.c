@@ -8,10 +8,10 @@
 // mpf -z [paramfile] [n_nodes]  // print out probabilities of all configurations under paramfile
 
 int main (int argc, char *argv[]) {
-	double t0, beta, *big_list, *truth, *inferred, logl_ans, glob_nloops, best_log_sparsity, kl_cv, kl_cv_sp, kl_true, kl_true_sp, ent;
+	double t0, beta, *big_list, *truth, *inferred, logl_ans, glob_nloops, best_log_sparsity, kl_cv, kl_cv_sp, kl_true, kl_true_sp, ent, *best_fit;
 	all *data;
-	int i, n, thread_id, last_pos, in, j, count, pos, n_obs, n_nodes, kfold, num_no_na, tot_uniq;
-	sample *sav;
+	int i, n, thread_id, last_pos, in, j, count, pos, n_obs, n_nodes, kfold, num_no_na, tot_uniq, has_nans;
+	sample *sav, **sav_list;
 	cross_val *cv;
 	unsigned long int config;
 	char filename_sav[1000];
@@ -61,15 +61,99 @@ int main (int argc, char *argv[]) {
 		if (argv[1][1] == 'c') { // cross validation
 			// new idea : first find minimum without the NANs, then save that location, and "polish"
 			
+			data=new_data();
+			read_data(argv[2], data);
+			best_fit=NULL;
+			
+			has_nans=0;
+			for(i=0;i<data->m;i++) {
+				if (data->obs_raw[i]->n_blanks > 0) {
+					has_nans++;
+				}
+			}
+			if (has_nans > 0) {
+				// first, clean out the blanks...
+				sav_list=(sample **)malloc((data->m-has_nans)*sizeof(sample *));
+				count=0;
+				for(i=0;i<data->m;i++) {
+					if (data->obs_raw[i]->n_blanks == 0) {
+						sav_list[count]=(sample *)malloc(sizeof(sample));
+						sav_list[count]->config_base=(int *)malloc(data->n*sizeof(int));
+						sav_list[count]->n_blanks=0;
+						sav_list[count]->blanks=NULL;
+						for(j=0;j<data->n;j++) {
+							sav_list[count]->config_base[j]=data->obs_raw[i]->config_base[j];
+						}
+						sav_list[count]->mult=data->obs_raw[i]->mult;
+						count++;
+					}
+					free(data->obs_raw[i]->config_base);
+					if (data->obs_raw[i]->blanks != NULL) {
+						free(data->obs_raw[i]->blanks);
+					}
+				}
+				free(data->obs_raw);
+				data->obs_raw=sav_list;
+				data->m=data->m-has_nans;
+				// then, write the new thing to a temporary file
+								
+				strcpy(filename_sav, argv[2]);
+				strcat(filename_sav, "_noNA.dat");
+			    fp = fopen(filename_sav, "w+");
+				fprintf(fp, "%i\n%i\n", data->m, data->n);
+				for(i=0;i<data->m;i++) {
+					for(j=0;j<data->n;j++) {
+						if (data->obs_raw[i]->config_base[j] == 0) {
+							fprintf(fp, "X");
+						}
+						if (data->obs_raw[i]->config_base[j] == 1) {
+							fprintf(fp, "1");							
+						}
+						if (data->obs_raw[i]->config_base[j] == -1) {
+							fprintf(fp, "0");														
+						}
+					}
+					fprintf(fp, " %lf\n", data->obs_raw[i]->mult);
+				}
+			    fclose(fp);
+
+				cv=(cross_val *)malloc(sizeof(cross_val));
+				cv->filename=filename_sav;
+				cv->nn=atoi(argv[3]);
+				cv->best_fit=NULL;
+				best_log_sparsity=minimize_kl(cv, 1);
+
+				data=new_data();
+				read_data(argv[2], data);
+				process_obs_raw(data);
+						
+				init_params(data);
+				data->log_sparsity=best_log_sparsity;
+				create_near(data, cv->nn);
+												
+				simple_minimizer(data);
+				
+				// save the best fit for no-Nans
+				printf("Found a best-fit solution without NaNs: ");
+				best_fit=(double *)malloc(data->n_params*sizeof(double));
+				for(i=0;i<data->n_params;i++) {
+					best_fit[i]=data->big_list[i];
+					printf("%lf ", best_fit[i]);
+				}
+				printf("\n");
+			}
+			
 			cv=(cross_val *)malloc(sizeof(cross_val));
 			cv->filename=argv[2];
 			cv->nn=atoi(argv[3]);
+			cv->best_fit=best_fit;
 			best_log_sparsity=minimize_kl(cv, 1); // don't use fast version, just for safety
 			
 			printf("Best log_sparsity: %lf\n", best_log_sparsity);
 			
 			data=new_data();
 			read_data(argv[2], data);
+			data->best_fit=best_fit;
 			process_obs_raw(data);
 						
 			init_params(data);
