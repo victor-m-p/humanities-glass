@@ -151,6 +151,12 @@ int main (int argc, char *argv[]) {
 						
 			printf("Best log_sparsity: %lf\n", best_log_sparsity);
 			
+			cv=(cross_val *)malloc(sizeof(cross_val));
+			cv->filename=argv[2];
+			cv->nn=atoi(argv[3]);
+			cv->best_fit=best_fit;
+			best_log_sparsity=minimize_kl(cv, 1); // don't use fast version, just for safety
+			
 			data=new_data();
 			read_data(argv[2], data);
 			data->best_fit=best_fit;
