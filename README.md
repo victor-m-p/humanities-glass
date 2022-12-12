@@ -13,12 +13,20 @@ We are very happy to take requests. Our experience has been that iterating with 
 ## Components
 
 ### ```/data```
+* ```data/mdl_final```: processed DRH data (post-MPF).
+* ```data/clean```: processed DRH data (pre-MPF).
+* ```data/reference```: reference files (i.e. ensuring links between questions and cultures). 
+* ```data/analysis```: files used for the DRH analysis in ```/DRH```. 
+
+Raw data from the DRH (i.e. pre-curation) is not provided given size limits. 
+This might be available upon request. 
+
 
 Processed DRH data can be found in data/mdl_final, with additional information in data/reference.
 
 ### 
 
-### MPF code 
+### ```/MPF_CMU``` 
 
 MPF_CMU contains the optimized C code to implement all of the extensions and modifications to MPF described in our paper. Many of the simulations were carried out on the Bridges2 Pittsburgh Supercomputing Center system, and for speed they are set up to use multiple cores with OpenMP. You will want to adjust the Makefile to compile on your local system. Note that the compiler that ships with the new Mac M1s does not support OpenMP; you will need to install a (non-Apple) clang compiler.
 
