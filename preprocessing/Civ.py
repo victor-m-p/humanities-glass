@@ -30,7 +30,6 @@ def create_grid(df, c1, c2):
 ## assumes: 
 ### 1 = yes, -1 = no, 0 = nan
 ### currently only tested with specifying the number of nodes - not samples
-### 
 class Civilizations:
     
     ha = 'has_answer'

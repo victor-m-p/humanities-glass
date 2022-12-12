@@ -117,6 +117,13 @@ comm_weight = node_attr.groupby('community')['p_raw'].sum().reset_index(name = '
 node_attr = node_attr.merge(comm_weight, on = 'community', how = 'inner')
 node_attr['p_raw'].sum() # 0.4547
 
+## temporary ##
+node0 = node_attr[node_attr['node_id'] == 2]
+node0 = node0[["p_ind", "entry_name"]].drop_duplicates()
+node0 = d_overlap.merge(node0, on = 'p_ind', how = 'inner')
+
+## temporary
+
 #### community color ##### 
 community_color = {
     0: 'Green',
@@ -215,16 +222,21 @@ bit_df.groupby('related_q')['weighted_avg_focal'].mean().reset_index(name='mean'
 # three most different per community
 comm_color = node_attr[['comm_label', 'community', 'comm_color']].drop_duplicates()
 bit_df = bit_df.merge(comm_color, on = 'community', how = 'inner')
-bit_diff = bit_df.sort_values(['focal_minus_other_abs'], ascending=False).groupby('community').head(10)
+bit_diff = bit_df.sort_values(['focal_minus_other_abs'], ascending=False).groupby('community').head(3)
 bit_diff = bit_diff.sort_values(['comm_label', 'focal_minus_other_abs'], ascending = [True, False])
 bit_diff = bit_diff[['comm_label', 'comm_color', 'question', 'weighted_avg_focal', 'weighted_avg_other', 'focal_minus_other']]
-
+bit_diff
 # to latex table (sort communities by total weight)
 bit_latex_string = bit_diff.to_latex(index=False)
 with open('community_differences.txt', 'w') as f: 
     f.write(bit_latex_string)
 
+'''
+bit_diffx[bit_diffx['related_q_id'] == 4954].head(5)
+bit_diffx[bit_diffx['related_q_id'] == 4983].head(5)
 bit_diffx[bit_diffx['comm_color'] == 'Pastel'].sort_values('weighted_avg_focal')
+'''
+
 
 ''' old approach
 #### big latex table ####
@@ -406,14 +418,18 @@ table_names = table_names.rename(columns = {
 })
 table_names = table_names.sort_values(['Group', 'Weight'], ascending = [True, False])
 table_names = table_names[['Group', 'DRH ID', 'Entry Name', 'Weight']]
-table_names['Entry Name'] = table_names[['Entry Name']].replace({r'[^\x00-\x7F]+':''}, regex=True)
+#table_names['Entry Name'] = table_names[['Entry Name']].replace({r'[^\x00-\x7F]+':''}, regex=True)
+table_names['Entry Name'] = table_names['Entry Name'].apply(lambda x: x.encode())
+table_names['Entry Name'] = table_names['Entry Name'].apply(lambda x: x.decode('utf-8', 'ignore'))
 pd.set_option('display.max_colwidth', None)
 ref_observed_latex = table_names.to_latex(index=False, escape = False)
-with open('ref_observed.txt', 'w') as f: 
+with open('ref_observed_new.txt', 'w') as f: 
     f.write(ref_observed_latex)
 
 ## only have two religions overlapping communities: 
 ### 609, 691 
+tst = table_names[table_names['DRH ID'] == 960]['Entry Name'].values[0]
+tst2 = table_names[table_names['DRH ID'] == 1231]['Entry Name'].values[0]
 
 ## all of the observed religions that are not in the top 150 ##
 ### load reference
@@ -423,10 +439,12 @@ not_top150 = reference.merge(table_names, on = 'DRH ID', how = 'left', indicator
 not_top150 = not_top150[not_top150['_merge'] == 'left_only']
 not_top150 = not_top150[['DRH ID', 'entry_name']]
 not_top150 = not_top150.rename(columns = {'entry_name': 'Entry Name'})
-not_top150['Entry Name'] = not_top150[['Entry Name']].replace({r'[^\x00-\x7F]+':''}, regex=True)
+#not_top150['Entry Name'] = not_top150[['Entry Name']].replace({r'[^\x00-\x7F]+':''}, regex=True)
 ref_unobserved_latex = not_top150.to_latex(index=False, escape = False)
-with open('ref_unobserved.txt', 'w') as f: 
+with open('ref_unobserved.txt_new', 'w') as f: 
     f.write(ref_unobserved_latex)
+
+
 
 ## sanity check
 len(not_top150) + len(table_names) # 407 (great). 

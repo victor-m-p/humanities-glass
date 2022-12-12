@@ -12,7 +12,7 @@ len(df['entry_id'].unique()) # 838 (we use this)
 len(df['entry_name'].unique()) # 799
 len(df['related_q_id'].unique()) # all: 1133
 
-## only super
+## only super questions
 df = df[df['related_parent_q'].isna()] 
 len(df['entry_id'].unique()) # 838
 len(df['entry_name'].unique()) # 799

@@ -94,7 +94,7 @@ def unknown_type(sref, nref, d_total):
 dn = d_likelihood.groupby('entry_id').size().reset_index(name = 'count')
 dn = d_likelihood.merge(dn, on = 'entry_id', how = 'inner')
 dn = dn.merge(nodes_reference, on = 'entry_id', how = 'inner')
-dsub = dn[(dn['count'] >= 2) & (dn['count'] <= 8)]
+dsub = dn[dn['count'] >= 2] # dn[(dn['count'] >= 2) & (dn['count'] <= 8)]
 ncols = sref['related_q_id'].to_list()
 
 # test specific ones (mostly nan)
@@ -110,7 +110,6 @@ spartan = contains(dsub, 'Archaic Spartan Cults')
 spartan_total, spartan_table, qq = likelihood(spartan, configs, ncols, sref)
 spartan_types = unknown_type(d_main, sref, spartan_total)
 
-
 # run over all:
 entry_lst = dsub['entry_id'].unique().tolist()
 dct_table = {}
@@ -124,6 +123,23 @@ for idx, e_id in enumerate(entry_lst):
     dct_table[idx] = d_tab 
     dct_types[idx] = d_typ
     dct_reference[idx] = d_tmp
+
+
+dct_types[0]
+
+lst = []
+for idx, df in dct_types.items(): 
+    x = len(df[df['type']!= 0])
+    if x != 0: 
+        lst.append(idx)
+407/len(lst)
+for idx, val in dct_types.items():
+    x = val
+
+has_disagreement = [len(x[x['type'] != 0]) for x in dct_types]
+x = dct_types[0]
+x
+len(x[x['type'] != 0])
 
 # 13 = Iban 
 n = 4

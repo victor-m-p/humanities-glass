@@ -12,7 +12,7 @@
     231 &                                                                                                                Roman private religion \\
     263 &                                                                                                                     Irish Catholicism \\
     284 &                                                                                                                       Yolngu religion \\
-    294 &                                                                                                                              Xuanxue  \\
+    294 &                                                                                                                            Xuanxue 玄學 \\
     308 &                                                                                                                 Neo-Assyrian Scholars \\
     310 &                                                                                                                   Aztec Imperial Core \\
     364 &                                                                                                            Chittagong Plain Buddhists \\
@@ -23,23 +23,23 @@
     395 &                                                                              International Society for Krishna Consciousness (ISKCON) \\
     400 &                                                                                                             Singaporean Mega-Churches \\
     422 &                                                                                                                          Demeter Cult \\
-    439 &                                                                                                                            aiva Magic \\
+    439 &                                                                                                                           Śaiva Magic \\
     455 &                                                                                                                       Lan Na Buddhism \\
     469 &                                                                                                                          Won-Buddhism \\
     472 &                                                                                                         Karma Kagyu or Kamtsang Kagyu \\
     477 &                                                                                                                   Tractarian Movement \\
     478 &                                                                                                                 Early Indian Buddhism \\
     484 &                                                                                                            Northern Irish Protestants \\
-    485 &                                                                                                            Smi pre-Christian religion \\
+    485 &                                                                                                           Sámi pre-Christian religion \\
     486 &                                                                                   Church of Jesus Christ of Latter-day Saints (early) \\
     490 &                                                                                                                          Guglielmites \\
     491 &                                                                                                                       Anglican Church \\
-    520 &                                                                                                                             Cham Ahir \\
+    520 &                                                                                                                            Cham Ahiér \\
     525 &                                                                                  Church of Jesus Christ of Latter-day Saints (modern) \\
-    535 &                                                                                                                               Pupatas \\
-    562 &                                                                                                                   Medieval rvaisavism \\
+    535 &                                                                                                                             Pāśupatas \\
+    562 &                                                                                                               Medieval Śrīvaiṣṇavism \\
     570 &                                                                                                Supreme Master Ching Hai World Society \\
-    580 &                                                                                                                         Nth Sampradya \\
+    580 &                                                                                                                       Nāth Sampradāya \\
     582 &                                                                                                                Siamese (Central Thai) \\
     586 &                                                                                                             Kelantanese Thai Religion \\
     589 &                                                                                                                                Warrau \\
@@ -77,7 +77,7 @@
     690 &                                                                                                                Ahl-e-Sunnat wa Jamaat \\
     713 &                                                                                                                    Northern Saulteaux \\
     719 &                                                                                                                  Hinduism in Trinidad \\
-    726 &                                                                                                                          Early ramaas \\
+    726 &                                                                                                                        Early Śramaṇas \\
     727 &                                                                                                                                Raglai \\
     737 &                                                                                                                        Nama Hottentot \\
     742 &                                                                                                                       Thai Bhikkhunis \\
@@ -93,7 +93,7 @@
     826 &                                                                                                       The Church of Christ, Scientist \\
     833 &                                                                                                                                  Dobu \\
     841 &                                                                                                                               Sa skya \\
-    846 &                                                                                                           Xuanzang's Yogcra Tradition \\
+    846 &                                                                                                         Xuanzang's Yogācāra Tradition \\
     848 &                                                                                                                             Sadducees \\
     849 & """"""""Gaiwiio Religion,"""""""" """"""""Longhouse Religion,"""""""" or """"""""The Way of Handsome Lake"""""""" of the Seneca Tribe \\
     851 &                                                                                                          Sikhism in the United States \\
@@ -105,7 +105,7 @@
     885 &                                                                                                       Contemporary West African Vodun \\
     893 &                                                                                                                       Sethian Gnostic \\
     894 &                                                                               Universal Fellowship of Metropolitan Community Churches \\
-    896 &                                                                                                                            Sann Shint \\
+    896 &                                                                                                                          Sannō Shintō \\
     898 &                                                                                                                  Rastafari of Jamaica \\
     910 &                                                                                                     Christian Base Community movement \\
     919 &                                                                                                   Catholicism in contemporary Croatia \\
@@ -127,7 +127,7 @@
     964 &                                                                                                                 Baul Fakirs of Bengal \\
     967 &                                                                                                                Unitarian Universalism \\
     969 &                                                                                                    Adi Dravida/Valluva Sakya Buddhism \\
-    971 &                                                                                                                               Gapatya \\
+    971 &                                                                                                                             Gāṇapatya \\
     973 &                                                                                         The Sarna religion of the Oraons of Jharkhand \\
     976 &                                                                                                                      Mising Community \\
     978 &                                                                                                                Indonesian Catholicism \\
@@ -145,13 +145,13 @@
    1044 &                                                                                                    Han Imperial Cult under Emperor Wu \\
    1060 &                                                                                                                  The Taizhou Movement \\
    1071 &                                                                                                            Digital Shinto Communities \\
-   1083 &                                                                                                           Drukpa Kagy School (Bhutan) \\
+   1083 &                                                                                                          Drukpa Kagyü School (Bhutan) \\
    1087 &                                                                                                                          The Bogomils \\
    1106 &                                                                                                        Old Kingdom Religion at Abydos \\
    1109 &                                                                                                             Chan Buddhism in the Song \\
    1133 &                                                                                                         Religion in Greco-Roman Egypt \\
    1134 &                                                                                                                               Tiantai \\
-   1136 &                                                                                             The Fellowship of Goodness  (Tongshanshe) \\
+   1136 &                                                                                          The Fellowship of Goodness 同善社 (Tongshanshe) \\
    1153 &                                                                                                    Russian Orthodox Mission in Alaska \\
    1154 &                                                                                                                   The Cult of the Fox \\
    1156 &                                                                                                                  Solovetski monastery \\
@@ -167,7 +167,7 @@
    1284 &                                                                                                                 Religion of Phoenicia \\
    1289 &                                                                                                                      Buginese Muslims \\
    1299 &                                                                                                       Russians (of Viriatino Village) \\
-   1300 &                                                   Enlace de Agentes de Pastoral Indgena (EAPI, Network of Indigenous Ministry Agents) \\
+   1300 &                                                  Enlace de Agentes de Pastoral Indígena (EAPI, Network of Indigenous Ministry Agents) \\
    1301 &                                                                                                                       Moche (Mochica) \\
    1312 &                                                                                                                               Bishnoi \\
    1319 &                                                                                                                            Reginistas \\
@@ -175,7 +175,7 @@
    1335 &                                                                                                           Congregation of the Oratory \\
    1341 &                                                                           Muslim Students Association of the United States and Canada \\
    1344 &                                                                                                     Tibetan Nonsectarianism (ris med) \\
-   1352 &                                                                                                                       kadvpya Brhmaas \\
+   1352 &                                                                                                                 Śākadvīpīya Brāhmaṇas \\
    1357 &                                                                                                                            Encratites \\
    1386 &                                                                                                                   Liumen (Liu School) \\
    1390 &                                                                                                                        Eastern Apache \\
