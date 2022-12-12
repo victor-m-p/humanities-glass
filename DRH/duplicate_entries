@@ -1,6 +1,18 @@
+'''
+VMP 2022-12-12: 
+1. Document data curation (introduction to our data set)
+2. Entry Name overlap (independence of records, discussion)
+'''
+
 import pandas as pd 
-import numpy as np 
+from fun import *
 from Civ import Civilizations
+
+
+''' data curation documentation '''
+
+# setup
+n_rows, n_nan, n_nodes, n_top_states = 455, 5, 20, 150
 
 infile = '../data/raw/drh_20221019.csv'
 d = pd.read_csv(infile, low_memory=False) 
@@ -45,26 +57,23 @@ civ.weight_format()
 dcsv = civ.dcsv
 len(dcsv['s'].unique()) # 471
 
+''' Document data overlap '''
 
-# check date ranges 
-params = np.loadtxt('humanities-glass/data/mdl_final/cleaned_nrows_455_maxna_5.dat_params.dat')
-infile = '/home/vpoulsen/humanities-glass/data/mdl_final/reference_with_entry_id_cleaned_nrows_455_maxna_5.dat'
-with open(infile) as f:
-    reference = [x.strip() for x in f.readlines()]
-reference = [int(x.split()[0]) for x in reference]
-d_reference = pd.DataFrame({'entry_id': reference})
-d_reference = d_reference.drop_duplicates()
+# load data
+pd.set_option('display.max_colwidth', None)
+nodes_reference = pd.read_csv(f'../data/analysis/nref_nrows_455_maxna_5_nodes_20.csv')
+nodes_reference.groupby(['entry_name']).size().reset_index(name = 'count').sort_values('count', ascending=False)
+x = nodes_reference.sort_values('entry_name')
+x.iloc[120:140]
 
-d_year = d[['entry_id', 'entry_name', 'date_range', 'start_year', 'end_year']]
+# not much different from Egypt: 
+## e.g. 
+### Ancient Egypt - Early Dynastic Period,
+### Ancient Egypt - First Intermediate Period,
+### Ancient Egypt - Old Kingdom
+### Ancient Egypt - Predynastic Perid - Early Naqada Culture
+### Ancient Egyptian
+### Ancient Egyptian Religion in the Early 18th Dynasty
 
-d_year_merge = d_year.merge(d_reference, on = 'entry_id', how = 'inner')
-d_year_extreme = d_year_merge.groupby('entry_name').agg({'start_year': 'min', 'end_year': 'max'}).reset_index()
-d_year_extreme['start_year'].min() # -4000
-d_year_extreme['end_year'].max() # 2025
-d_year_extreme['start_year'].mean() # 1076
-d_year_extreme['end_year'].mean() # 1422
-
-# entry id 1015 (Ancient Egypt)
-d_year_merge[d_year_merge['start_year'] == -4000]
-# entry id 751: Buddhism in the Mekong Delta
-d_year_merge[d_year_merge['end_year'] == 2025]
+## Church of Jesus Christ of Latter-day Saints (eraly)
+## Church of Jesus Christ of Latter-day Saints (modern)
