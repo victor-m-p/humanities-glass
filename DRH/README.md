@@ -43,7 +43,7 @@ Working installation of ```Python``` (tested with v3.10.6) and ```Julia``` (test
     ```
 
 3. Install the ```Julia``` environment  
-
+TODO: figure out how to make Julia environment, and path management in ```Julia```. 
 
 <!-- USAGE EXAMPLES -->
 ## 
@@ -53,36 +53,15 @@ Working installation of ```Python``` (tested with v3.10.6) and ```Julia``` (test
 NB: MOVE TO OVERALL README. 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- CONTACT -->
 ## Contact
 
-Victor Poulsen - [@vic_moellervpoulsen](https://twitter.com/vic_moeller) - victormoeller@gmail.com
-
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
+Victor Poulsen - [@vic_moeller](https://twitter.com/vic_moeller) - victormoeller@gmail.com
 
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
+NB: MOVE TO OVERALL README. 
 
-conIII
- 
-
-
-* [Choose an Open Source License](https://choosealicense.com)
-* [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
-* [Malven's Flexbox Cheatsheet](https://flexbox.malven.co/)
-* [Malven's Grid Cheatsheet](https://grid.malven.co/)
-* [Img Shields](https://shields.io)
-* [GitHub Pages](https://pages.github.com)
-* [Font Awesome](https://fontawesome.com)
-* [React Icons](https://react-icons.github.io/react-icons/search)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
+* [ConIII](https://github.com/eltrompetero/coniii)
+* [Database of Religious History (DRH)](https://religiondatabase.org/landing/)
