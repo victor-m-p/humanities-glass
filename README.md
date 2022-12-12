@@ -29,7 +29,7 @@ Figures for "Inferring Cultural Landscapes with the Inverse Ising Model". Curren
 Tables for "Inferring Cultural Landscapes with the Inverse Ising Model". In particular, tables documenting the DRH dataset used in the article. See ```/DRH``` for code. 
 
 ### ```/DRH```
-...
+```DRH``` contains the code to reproduce the DRH analysis as presented in "Inferring Cultural Landscapes with the Inverse Ising Model". It contains both the preprocessing, data-curation, creation of tables (for ```/tables```) and creation of figures (for ```/fig```). See ```/DRH``` for more details. 
 
 ### ```/MPF_CMU``` 
 
