@@ -5,8 +5,11 @@
 ## Overview 
 
 * ```preprocessing.py``` converts ```.json``` obtained from the DRH to ```.csv```.
-* ```curation.py``` runs data curation before ```MPF``` (can be run through ```run_curation.sh```).
-
+* ```curation.py``` runs data curation before ```MPF``` (see also: ```run_curation.sh```).
+* ```plot_paramters.py``` creates figure 3A and figure 3B. 
+* ```plot_configurations.py``` creates figure 4A.
+* ```seed_methodist.py``` creates figure 4B. 
+* ```seed_roman.py``` creates figure 4C.
 
 
 <!-- GETTING STARTED -->
