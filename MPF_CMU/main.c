@@ -122,6 +122,7 @@ int main (int argc, char *argv[]) {
 				cv->nn=atoi(argv[3]);
 				cv->best_fit=NULL;
 				best_log_sparsity=minimize_kl(cv, 1);
+				printf("Found a best sparsity without NaNs (%lf)\n", best_log_sparsity);
 
 				data=new_data();
 				read_data(filename_sav, data);
@@ -148,6 +149,8 @@ int main (int argc, char *argv[]) {
 				cv->nn=atoi(argv[3]);
 				cv->best_fit=best_fit;
 				best_log_sparsity=minimize_kl(cv, 1); // don't use fast version, just for safety
+
+				printf("Found a best sparsity with NaNs (%lf): ", best_log_sparsity);
 			} else {
 				cv=(cross_val *)malloc(sizeof(cross_val));
 				cv->filename=argv[2];
@@ -170,7 +173,7 @@ int main (int argc, char *argv[]) {
 			printf("Now doing %i\n", data->m);			
 			simple_minimizer(data);
 			printf("%lf\n", data->k);
-			printf("\n\nparams=[");
+			printf("params=[");
 			for(i=0;i<data->n_params;i++) {
 				if (i < (data->n_params-1)) {
 					printf("%.10e, ", data->big_list[i]);

@@ -206,7 +206,7 @@ void read_data(char *filename, all *data) {
 			}
 		}
 		fscanf(f_in, "%lf", &(data->obs_raw[i]->mult)); // read in multiplicity
-		// data->obs_raw[i]->mult *= (data->n - data->obs_raw[i]->n_blanks)*1.0/data->n; // experiment -- test if downweighting X configs helps
+		data->obs_raw[i]->mult *= (data->n - data->obs_raw[i]->n_blanks)*1.0/data->n; // experiment -- test if downweighting X configs helps
 		fscanf(f_in, "%c", &c);
 		if ((c != '\n') && (i < (m-1))) {
 			printf("Expected an end of line, didn't get one\n");
@@ -647,7 +647,7 @@ double cross(char *filename, double log_sparsity, int nn, double *best_fit) {
 	
 	glob_nloops=0;
 	t0=clock();
-#pragma omp parallel private(data, pos, last_pos, count, sav, config, logl_ans, thread_id, t0) reduction(+:glob_nloops)
+#pragma omp parallel private(data, pos, last_pos, count, sav, config, logl_ans, thread_id) reduction(+:glob_nloops)
 	{
 
 		// parallelize this for loop
@@ -675,16 +675,6 @@ double cross(char *filename, double log_sparsity, int nn, double *best_fit) {
 			data->obs_raw[pos]=data->obs_raw[data->m]; //
 			data->obs_raw[data->m]=sav;
 			
-			// printf("Flip %i to end\n", pos);
-			// for(i=0;i<data->n;i++) {
-			// 	printf("%i", data->obs_raw[pos]->config_base[i]);
-			// }
-			// printf("\n");
-			// for(i=0;i<data->n;i++) {
-			// 	printf("%i", data->obs_raw[data->m]->config_base[i]);
-			// }
-			// printf("\n");
-
 			process_obs_raw(data);				
 			init_params(data);
 			data->log_sparsity=log_sparsity;
@@ -703,13 +693,7 @@ double cross(char *filename, double log_sparsity, int nn, double *best_fit) {
 			} else {
 				logl_ans=log_l(data, config, data->big_list, 1);
 			}
-			//
-			// printf("Outcome %i: %lf\n", in, logl_ans);
-			// for(i=0;i<data->n_params;i++) {
-			// 	printf("%.10le, ", data->big_list[i]);
-			// }
-			// printf("\n");
-			
+
 			glob_nloops += logl_ans;
 			thread_id = omp_get_thread_num();
 			// printf("LogL of left-out point %i, computed in thread %i: %lf\n", in, thread_id, logl_ans);
