@@ -15,15 +15,14 @@
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+Environments tested on ubuntu version 22.04 LTS. 
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
+To install the python environment (```glassenv```), run: 
   ```sh
-  npm install npm@latest -g
+  bash create_venv.sh
+  bash add_venv.sh
   ```
 
 ### Installation
