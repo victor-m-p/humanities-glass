@@ -17,13 +17,9 @@
 
 Environments tested on ubuntu version 22.04 LTS. 
 
-### Prerequisites
+### Requirements 
 
-To install the python environment (```glassenv```), run: 
-  ```sh
-  bash create_venv.sh
-  bash add_venv.sh
-  ```
+Working installation of ```Python``` (tested with v3.10.6) and ```Julia``` (tested with vXXX).
 
 ### Installation
 
@@ -33,12 +29,13 @@ To install the python environment (```glassenv```), run:
     git clone git@github.com:victor-m-p/humanities-glass.git
     ```
 
-2. Install the python environment (```glassenv```), run: 
+2. Install the ```Python``` environment (```glassenv```), run: 
     ```sh
     bash create_venv.sh
     bash add_venv.sh
     ```
 
+3. Install the ```Julia``` environment  
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
