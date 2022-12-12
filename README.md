@@ -10,13 +10,15 @@ This is *pre-review* code, not intended for general public circulation. We would
 
 We are very happy to take requests. Our experience has been that iterating with potential users is the best way to make our code and data clear, reusable, and efficient to use. On re-submission and review, we will release general code, intended for consumer use, and a full guide.
 
-* MAIN COMPONENTS
+## Components
 
-* DATA
+### ```/data```
 
 Processed DRH data can be found in data/mdl_final, with additional information in data/reference.
 
-* CODE
+### 
+
+### MPF code 
 
 MPF_CMU contains the optimized C code to implement all of the extensions and modifications to MPF described in our paper. Many of the simulations were carried out on the Bridges2 Pittsburgh Supercomputing Center system, and for speed they are set up to use multiple cores with OpenMP. You will want to adjust the Makefile to compile on your local system. Note that the compiler that ships with the new Mac M1s does not support OpenMP; you will need to install a (non-Apple) clang compiler.
 
