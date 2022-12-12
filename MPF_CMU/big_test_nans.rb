@@ -73,7 +73,7 @@ final_chunk=[]
     ans_2=`./mpf -k DATA/test_sequence_#{label}_base_data.dat DATA/test_sequence_#{label}_params.dat DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat_params.dat`
     ans_2=ans_2.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
     begin
-      print "#{cut}: #{ans} (simple was #{ans_2})\n"
+      print "#{cut}: #{ans} (simple was #{ans_2}; original was #{start}; best is #{best})\n"
       chunk << ans
     rescue
       print "Something bad happened at #{cut}\n"    
