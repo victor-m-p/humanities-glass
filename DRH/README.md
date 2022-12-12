@@ -27,21 +27,19 @@ To install the python environment (```glassenv```), run:
 
 ### Installation
 
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Clone the repo (if not already done) using ```HTTPS``` or ```SSH``` 
    ```sh
-   git clone https://github.com/your_username_/Project-Name.git
+   git clone https://github.com/victor-m-p/humanities-glass
+   git clone git@github.com:victor-m-p/humanities-glass.git
    ```
-3. Install NPM packages
-   ```sh
-   npm install
-   ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
+
+2. Install the python environment (```glassenv```), run: 
+  ```sh
+  bash create_venv.sh
+  bash add_venv.sh
+  ```
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
