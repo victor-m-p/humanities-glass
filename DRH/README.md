@@ -18,7 +18,6 @@ This folder documents the the analysis of DRH data reported in "Inferring Cultur
 * ```seed_methodist.py``` creates figure 4B. 
 * ```seed_roman.py``` creates figure 4C.
 
-
 <!-- GETTING STARTED -->
 ## Getting Started
 
@@ -45,26 +44,12 @@ Working installation of ```Python``` (tested with v3.10.6) and ```Julia``` (test
 3. Install the ```Julia``` environment  
 TODO: figure out how to make Julia environment, and path management in ```Julia```. 
 
-<!-- USAGE EXAMPLES -->
-## 
-
-<!-- LICENSE -->
-## License
-NB: MOVE TO OVERALL README. 
-Distributed under the MIT License. See `LICENSE.txt` for more information.
-
+## Main part missing here 
 
 <!-- CONTACT -->
 ## Contact
 
-Victor Poulsen 
+Victor M. Poulsen 
 * Twitter: [@vic_moeller](https://twitter.com/vic_moeller) 
 * GitHub: [@victor-m-p](https://github.com/victor-m-p)
 * Mail: victormoeller@gmail.com
-
-<!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
-NB: MOVE TO OVERALL README. 
-
-* [ConIII](https://github.com/eltrompetero/coniii)
-* [Database of Religious History (DRH)](https://religiondatabase.org/landing/)
