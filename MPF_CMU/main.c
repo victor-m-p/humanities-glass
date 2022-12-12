@@ -59,6 +59,7 @@ int main (int argc, char *argv[]) {
 		}
 
 		if (argv[1][1] == 'c') { // cross validation
+			// new idea : first find minimum without the NANs, then save that location, and "polish"
 			
 			cv=(cross_val *)malloc(sizeof(cross_val));
 			cv->filename=argv[2];
