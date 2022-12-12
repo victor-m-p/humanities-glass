@@ -147,7 +147,7 @@ int main (int argc, char *argv[]) {
 			cv->filename=argv[2];
 			cv->nn=atoi(argv[3]);
 			cv->best_fit=best_fit;
-			// cv->best_fit=NULL; // quickly try it without this
+			cv->best_fit=NULL; // quickly try it without this
 			best_log_sparsity=minimize_kl(cv, 1); // don't use fast version, just for safety
 			
 			printf("Best log_sparsity: %lf\n", best_log_sparsity);
@@ -155,6 +155,7 @@ int main (int argc, char *argv[]) {
 			data=new_data();
 			read_data(argv[2], data);
 			data->best_fit=best_fit;
+			data->best_fit=NULL; // quickly try it without this
 			process_obs_raw(data);
 						
 			init_params(data);
