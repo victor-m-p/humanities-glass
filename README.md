@@ -73,17 +73,16 @@ If you have a parameter file, this will print out all the configurations, the en
 
 <!-- LICENSE -->
 ## License
-NB: MOVE TO OVERALL README. 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 ## Contact
 
-Simon DeDeo (for ```MPF_CMU``` questions):
+Simon DeDeo (for ```/MPF_CMU``` questions):
 * Twitter: [@LaboratoryMinds](https://twitter.com/LaboratoryMinds)
 * Github: [@simon-dedeo](https://github.com/simon-dedeo)
 * Mail: sdedeo@andrew.cmu.edu
 
-Victor Poulsen (for ```DRH``` questions): 
+Victor Poulsen (for other questions): 
 * Twitter: [@vic_moeller](https://twitter.com/vic_moeller) 
 * GitHub: [@victor-m-p](https://github.com/victor-m-p)
 * Mail: victormoeller@gmail.com
@@ -91,7 +90,7 @@ Victor Poulsen (for ```DRH``` questions):
 
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
-NB: MOVE TO OVERALL README. 
+We are particularly grateful to the creaters of ```conIII``` and the maintainers and creators of the ```Database of Religious History (DRH)```.
 
 * [ConIII](https://github.com/eltrompetero/coniii)
 * [Database of Religious History (DRH)](https://religiondatabase.org/landing/)
