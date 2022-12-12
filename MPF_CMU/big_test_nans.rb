@@ -67,10 +67,13 @@ final_chunk=[]
     file=File.new("DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat", 'w')
     file.write("#{128+cut}\n"+str_na); file.close
     `./mpf -c DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat 1`
+    ans=`./mpf -k DATA/test_sequence_#{label}_base_data.dat DATA/test_sequence_#{label}_params.dat DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat_params.dat`
+    ans=ans.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
+    `./mpf_simple -c DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat 1`
+    ans=`./mpf -k DATA/test_sequence_#{label}_base_data.dat DATA/test_sequence_#{label}_params.dat DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat_params.dat`
+    ans_2=ans.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
     begin
-      ans=`./mpf -k DATA/test_sequence_#{label}_base_data.dat DATA/test_sequence_#{label}_params.dat DATA/test_sequence_#{label}_128_#{cut}NA#{nan}_data.dat_params.dat`
-      ans=ans.scan(/KL:[^\n]+\n/)[0].split(" ")[-1].to_f
-      print "#{cut}: #{ans} (vs #{best})\n"
+      print "#{cut}: #{ans} (simple was #{ans_2})\n"
       chunk << ans
     rescue
       print "Something bad happened at #{cut}\n"    
