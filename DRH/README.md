@@ -28,9 +28,8 @@ To install the python environment (```glassenv```), run:
 ### Installation
 
 
-1. Clone the repo (if not already done) using ```HTTPS``` or ```SSH``` 
+1. Clone the repo (if not already done). Here shown for ```ssh``` but ```https``` also fine. 
    ```sh
-   git clone https://github.com/victor-m-p/humanities-glass
    git clone git@github.com:victor-m-p/humanities-glass.git
    ```
 
