@@ -4,8 +4,8 @@
 <!-- ABOUT THE PROJECT -->
 ## Overview 
 
-```preprocessing.py``` converts ```.json``` obtained from the DRH to ```.csv```.
-```curation.py``` runs data curation before ```MPF``` (can be run through ```run_curation.sh```).
+* ```preprocessing.py``` converts ```.json``` obtained from the DRH to ```.csv```.
+* ```curation.py``` runs data curation before ```MPF``` (can be run through ```run_curation.sh```).
 
 
 
