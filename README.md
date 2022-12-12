@@ -21,10 +21,17 @@ We are very happy to take requests. Our experience has been that iterating with 
 Raw data from the DRH (i.e. pre-curation) is not provided given size limits. 
 This might be available upon request. 
 
+### ```/fig```
+Figures for "Inferring Cultural Landscapes with the Inverse Ising Model". 
 
-Processed DRH data can be found in data/mdl_final, with additional information in data/reference.
+(NB: currently only the figures for ```5. Results: The Database of Religious History```.)
 
-### 
+
+### ```/tables```
+Tables for "Inferring Cultural Landscapes with the Inverse Ising Model". 
+
+### ```/DRH```
+...
 
 ### ```/MPF_CMU``` 
 
