@@ -1,7 +1,7 @@
 load '../../ENT/ent.rb'
 
 list=[]
-(Dir.glob("NAN_TESTS/*NAN_scan_20_5_*").collect { |f|
+(Dir.glob("NAN_TESTS/*exp*_20_5_*").collect { |f|
   file=File.open(f, 'r'); str=file.read; file.close
   if str.include?("[[") then
     ans=eval(str.scan(/^\[\[[^\n]+\n/)[-1])
