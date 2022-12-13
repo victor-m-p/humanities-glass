@@ -379,7 +379,7 @@ void init_params(all *data) {
 }
 
 void create_near(all *data, int n_step) { // creates nearest neighbours, removes duplicates
-	int i, j, k, kp, kpp, count, found, pos, num_near, count_uniq, dist, t_count;
+	int i, j, temp_k, k, kp, kpp, count, found, pos, num_near, count_uniq, dist, t_count;
 	double running;
 	unsigned long int *near_temp;
 	
@@ -390,17 +390,17 @@ void create_near(all *data, int n_step) { // creates nearest neighbours, removes
 	if (n_step >= 1) {	
 		data->n_prox += data->n;
 	}
-	if (n_step >= 2) {	
-		data->n_prox += data->n*(data->n-1)/2;		
-	}
-	if (n_step >= 3) {	
-		data->n_prox += data->n*(data->n-1)*(data->n-2)/6;				
-	}
+	// if (n_step >= 2) {
+	// 	data->n_prox += data->n*(data->n-1)/2;
+	// }
+	// if (n_step >= 3) {
+	// 	data->n_prox += data->n*(data->n-1)*(data->n-2)/6;
+	// }
 	
 	for(i=0;i<data->uniq;i++) {
 		data->obs[i]->prox=(int **)malloc(data->obs[i]->n_config*sizeof(int *));
 		for(j=0;j<data->obs[i]->n_config;j++) {
-			data->obs[i]->prox[j]=(int *)malloc(data->n_prox*sizeof(int));
+			data->obs[i]->prox[j]=(int *)malloc((data->n_prox-data->obs[i]->n_blanks)*sizeof(int));
 		}
 	}
 	
@@ -409,26 +409,30 @@ void create_near(all *data, int n_step) { // creates nearest neighbours, removes
 			
 		for(i=0;i<data->uniq;i++) {
 			
-			for(j=0;j<data->obs[i]->n_config;j++) {
+			for(j=0;j<data->obs[i]->n_config;j++) { // do the total number of configurations here... now if we excluded "neighbours" in the simulated bits, what happens?
 
-				data->near_set=(near_struct **)realloc(data->near_set, (count+data->n)*sizeof(near_struct *));
+				// data->near_set=(near_struct **)realloc(data->near_set, (count+(data->n)*sizeof(near_struct *));
+				data->near_set=(near_struct **)realloc(data->near_set, (count+(data->n-data->obs[i]->n_blanks))*sizeof(near_struct *));
+				temp_k=0;
 				for(k=0;k<data->n;k++) {
 					// little trick -- don't flow into something that you are simulating... let's see what happens to fit quality
 					// hmm -- makes it much worse, it seems
 					found=0;
-					// for(kpp=0;kpp<data->obs[i]->n_blanks;kpp++) {
-					// 	if (k == data->obs[i]->blanks[kpp]) {
-					// 		found=1;
-					// 	}
-					// }
-					data->near_set[count]=(near_struct *)malloc(sizeof(near_struct));
-					if (!found) {
-						data->near_set[count]->config=(data->obs[i]->config[j] ^ (1 << k)); // XOR at that bit to flip it
-					} else {
-						data->near_set[count]->config=gsl_rng_uniform_int(data->r, (1 << data->n)); // choose randomly!						
+					for(kpp=0;kpp<data->obs[i]->n_blanks;kpp++) {
+						if (k == data->obs[i]->blanks[kpp]) {
+							found=1;
+							break;
+						}
 					}
-					data->near_set[count]->data_prox=&(data->obs[i]->prox[j][k]); // pointer to the proximate location
-					count++;						
+					if (found == 0) {
+						data->near_set[count]=(near_struct *)malloc(sizeof(near_struct));
+						data->near_set[count]->config=(data->obs[i]->config[j] ^ (1 << k)); // XOR at that bit to flip it
+						data->near_set[count]->data_prox=&(data->obs[i]->prox[j][temp_k]); // pointer to the proximate location
+						count++;						
+						temp_k++;
+					} else {
+						// data->near_set[count]->config=gsl_rng_uniform_int(data->r, (1 << data->n)); // choose randomly!
+					}
 				}				
 			}
 			
@@ -436,61 +440,57 @@ void create_near(all *data, int n_step) { // creates nearest neighbours, removes
 
 	}
 	
-	if (n_step >= 2) {
-
-		for(i=0;i<data->uniq;i++) {
-			// printf("Datapoint %i has %i configs.\n", i, data->obs[i]->n_config);
-
-			for(j=0;j<data->obs[i]->n_config;j++) {
-
-				data->near_set=(near_struct **)realloc(data->near_set, (count+data->n*(data->n-1)/2)*sizeof(near_struct *));
-				t_count=0;
-				for(k=0;k<(data->n-1);k++) {
-					for(kp=(k+1);kp<(data->n);kp++) {
-						data->near_set[count]=(near_struct *)malloc(sizeof(near_struct));
-						data->near_set[count]->config=((data->obs[i]->config[j] ^ (1 << k)) ^ (1 << kp)); // XOR at that bit to flip it
-						// printf("Setting %i pointer to %i %i %i\n", count, i, j, data->n+t_count);
-						data->near_set[count]->data_prox=&(data->obs[i]->prox[j][data->n+t_count]); // pointer to the proximate location
-						count++;
-						t_count++;
-					}
-				}
-			}
-
-		}
-
-	}
-	
-	if (n_step >= 3) {
-
-		for(i=0;i<data->uniq;i++) {
-			// printf("Datapoint %i has %i configs.\n", i, data->obs[i]->n_config);
-
-			for(j=0;j<data->obs[i]->n_config;j++) {
-
-				data->near_set=(near_struct **)realloc(data->near_set, (count+data->n*(data->n-1)*(data->n-2)/6)*sizeof(near_struct *));
-				t_count=0;
-				for(k=0;k<(data->n-2);k++) {
-					for(kp=(k+1);kp<(data->n-1);kp++) {
-						for(kpp=(kp+1);kpp<(data->n);kpp++) {
-							data->near_set[count]=(near_struct *)malloc(sizeof(near_struct));
-							data->near_set[count]->config=(((data->obs[i]->config[j] ^ (1 << k)) ^ (1 << kp))) ^ (1 << kpp); // XOR at that bit to flip it
-							data->near_set[count]->data_prox=&(data->obs[i]->prox[j][data->n+data->n*(data->n-1)/2+t_count]); // pointer to the proximate location
-							count++;
-							t_count++;
-						}
-					}
-				}
-			}
-
-		}
-
-	}
-	
-	num_near=count;
-	// for(i=0;i<count;i++) {
-	// 	printf("%i %li\n", i, data->near[i]);
+	// if (n_step >= 2) {
+	//
+	// 	for(i=0;i<data->uniq;i++) {
+	// 		// printf("Datapoint %i has %i configs.\n", i, data->obs[i]->n_config);
+	//
+	// 		for(j=0;j<data->obs[i]->n_config;j++) {
+	//
+	// 			data->near_set=(near_struct **)realloc(data->near_set, (count+data->n*(data->n-1)/2)*sizeof(near_struct *));
+	// 			t_count=0;
+	// 			for(k=0;k<(data->n-1);k++) {
+	// 				for(kp=(k+1);kp<(data->n);kp++) {
+	// 					data->near_set[count]=(near_struct *)malloc(sizeof(near_struct));
+	// 					data->near_set[count]->config=((data->obs[i]->config[j] ^ (1 << k)) ^ (1 << kp)); // XOR at that bit to flip it
+	// 					// printf("Setting %i pointer to %i %i %i\n", count, i, j, data->n+t_count);
+	// 					data->near_set[count]->data_prox=&(data->obs[i]->prox[j][data->n+t_count]); // pointer to the proximate location
+	// 					count++;
+	// 					t_count++;
+	// 				}
+	// 			}
+	// 		}
+	//
+	// 	}
+	//
 	// }
+	//
+	// if (n_step >= 3) {
+	//
+	// 	for(i=0;i<data->uniq;i++) {
+	// 		// printf("Datapoint %i has %i configs.\n", i, data->obs[i]->n_config);
+	//
+	// 		for(j=0;j<data->obs[i]->n_config;j++) {
+	//
+	// 			data->near_set=(near_struct **)realloc(data->near_set, (count+data->n*(data->n-1)*(data->n-2)/6)*sizeof(near_struct *));
+	// 			t_count=0;
+	// 			for(k=0;k<(data->n-2);k++) {
+	// 				for(kp=(k+1);kp<(data->n-1);kp++) {
+	// 					for(kpp=(kp+1);kpp<(data->n);kpp++) {
+	// 						data->near_set[count]=(near_struct *)malloc(sizeof(near_struct));
+	// 						data->near_set[count]->config=(((data->obs[i]->config[j] ^ (1 << k)) ^ (1 << kp))) ^ (1 << kpp); // XOR at that bit to flip it
+	// 						data->near_set[count]->data_prox=&(data->obs[i]->prox[j][data->n+data->n*(data->n-1)/2+t_count]); // pointer to the proximate location
+	// 						count++;
+	// 						t_count++;
+	// 					}
+	// 				}
+	// 			}
+	// 		}
+	//
+	// 	}
+	//
+	// }
+	num_near=count;
 	qsort(data->near_set, num_near, sizeof(near_struct *), compare_states_near);
 	
 	count_uniq=1;
@@ -526,8 +526,9 @@ void create_near(all *data, int n_step) { // creates nearest neighbours, removes
 	// for(i=0;i<data->uniq;i++) {
 	// 	for(j=0;j<data->obs[i]->n_config;j++) {
 	// 		print_vec(data->obs[i]->config[j]);
-	// 		printf(" has neighbours...\n");
-	// 		for(k=0;k<data->n_prox;k++) {
+	// 		printf(" has neighbours... (%i)\n", data->obs[i]->n_blanks);
+	//
+	// 		for(k=0;k<data->n_prox-data->obs[i]->n_blanks;k++) {
 	// 			printf("%i %i\n", k, data->obs[i]->prox[j][k]);
 	// 			print_vec(data->near[data->obs[i]->prox[j][k]]);
 	// 			printf("\n");
@@ -679,7 +680,7 @@ double cross(char *filename, double log_sparsity, int nn, double *best_fit) {
 			init_params(data);
 			data->log_sparsity=log_sparsity;
 			create_near(data, nn);
-							
+
 			simple_minimizer(data);
 
 			config=0;
@@ -810,7 +811,7 @@ void compute_k_general(all *data, int do_derivs) {
 			config1=data->obs[d]->config[dp];
 			
 			max_val=-1e300;
-			for(n=0;n<data->n_prox;n++) {
+			for(n=0;n<data->n_prox-data->obs[d]->n_blanks;n++) { // TKTK
 				if ((data->ei[d_count]-data->nei[data->obs[d]->prox[dp][n]]) > max_val) {
 					max_val=(data->ei[d_count]-data->nei[data->obs[d]->prox[dp][n]]);
 				}
@@ -822,7 +823,7 @@ void compute_k_general(all *data, int do_derivs) {
 					running_k[i]=0;
 				}				
 			}
-			for(n=0;n<data->n_prox;n++) {
+			for(n=0;n<data->n_prox-data->obs[d]->n_blanks;n++) { // TKTK
 				loc=data->obs[d]->prox[dp][n];
 				config2=data->near[loc];
 				multiplier=data->obs[d]->mult*data->obs[d]->mult_sim[dp]*exp(0.5*(data->ei[d_count]-data->nei[loc])-max_val); 
@@ -952,21 +953,21 @@ void simple_minimizer(all *data) {
 	for(i=0;i<data->n_params;i++) {
 		gsl_vector_set(x, i, data->big_list[i]); //
 	}
-	// T = gsl_multimin_fdfminimizer_conjugate_fr; // 5867.659379
-	T = gsl_multimin_fdfminimizer_conjugate_pr; // 5866.193340 5865.871289 5866.563172 5868.561687
+	T = gsl_multimin_fdfminimizer_conjugate_fr; // 5867.659379
+	// T = gsl_multimin_fdfminimizer_conjugate_pr; // 5866.193340 5865.871289 5866.563172 5868.561687
 	// T = gsl_multimin_fdfminimizer_vector_bfgs2; // 6118.521483
 	s = gsl_multimin_fdfminimizer_alloc(T, data->n_params);
 	
 	compute_k_general(data, 1);
 
-	gsl_multimin_fdfminimizer_set(s, &k_func, x, ((data->best_fit == NULL) ? 0.01 : 0.0001), 1e-12);
+	gsl_multimin_fdfminimizer_set(s, &k_func, x, 0.01, 1e-6);
 	
 	prev=1e300;
 	do {
 		iter++;
 		status = gsl_multimin_fdfminimizer_iterate(s);
 
-		status = gsl_multimin_test_gradient(s->gradient, 1e-12);
+		status = gsl_multimin_test_gradient(s->gradient, 1e-6);
 		
 		// if (data->best_fit != NULL) {
 			// printf ("%i %li (%lf) : ", status, iter, s->f);

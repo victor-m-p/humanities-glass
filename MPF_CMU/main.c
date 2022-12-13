@@ -168,7 +168,7 @@ int main (int argc, char *argv[]) {
 						
 			init_params(data);
 			data->log_sparsity=best_log_sparsity;
-			create_near(data, cv->nn);
+			create_near(data, atoi(argv[3]));
 			
 			printf("Now doing %i\n", data->m);			
 			simple_minimizer(data);
