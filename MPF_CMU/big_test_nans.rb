@@ -22,7 +22,6 @@ final_chunk=[]
   while(beta < 0.01) do
     beta=rand()**2
   end
-  beta=0.2
   chunk=[]
   
   print "Starting new test #{i} at time #{Time.now} (#{beta})...\n"
