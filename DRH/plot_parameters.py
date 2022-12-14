@@ -14,9 +14,9 @@ from fun import *
 def node_edge_lst(n, corr_J, means_h): 
     nodes = [node+1 for node in range(n)]
     comb = list(itertools.combinations(nodes, 2))
-    d_edgelst = pd.DataFrame(comb, columns = {'n1', 'n2'})
+    d_edgelst = pd.DataFrame(comb, columns = ['n1', 'n2'])
     d_edgelst['weight'] = corr_J
-    d_nodes = pd.DataFrame(nodes, columns = {'n'})
+    d_nodes = pd.DataFrame(nodes, columns = ['n'])
     d_nodes['size'] = means_h
     d_nodes = d_nodes.set_index('n')
     dct_nodes = d_nodes.to_dict('index')
