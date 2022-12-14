@@ -17,3 +17,4 @@ MPF_CMU/TEST/*
 MPF_CMU/TEST_COMP/*
 data/analysis/allstates*
 data/analysis/hamming*
+DRH/DRH_tests
