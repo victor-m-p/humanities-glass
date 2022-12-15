@@ -89,14 +89,19 @@ def main(infile, outpath_mpf, outpath_reference, number_questions, number_nan):
     # only run below if it is actually possible to satisfy constraints
     if weighted_combinations_list: 
         # convert the list of combinations to dataframe (and .txt) for saving
-        data_csv, data_txt = cf.combinations_to_dataframe(weighted_combinations_list)
+        data_csv = cf.combinations_to_dataframe(weighted_combinations_list)
 
         # only those that are from group polls.
         # this would be better to do earlier.
         poll_data = df[['entry_id', 'poll']]
         poll_data = poll_data[poll_data['poll'].str.contains('Group')]
         poll_data = poll_data[['entry_id']].drop_duplicates()
+
+        ## again, additional work because the current structure
+        ## is sub-optimal
         data_csv = data_csv.merge(poll_data, on = 'entry_id', how = 'inner')
+        data_csv = data_csv.sort_values('entry_id').reset_index(drop=True)
+        data_txt = data_csv.drop(columns = 'entry_id')
 
         # save data 
         cf.save_data(best_entries, entry_reference, question_reference, 

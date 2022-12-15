@@ -15,6 +15,5 @@ MPF_CMU/mpf_AMD
 MPF_CMU/PLOTS/*eps
 MPF_CMU/TEST/*
 MPF_CMU/TEST_COMP/*
-data/analysis/allstates*
-data/analysis/hamming*
+data/analysis/configurations.txt
 DRH/DRH_tests

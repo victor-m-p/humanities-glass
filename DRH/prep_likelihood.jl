@@ -20,7 +20,6 @@ n_nodes, maxna = 20, 5
 # read stuff
 p = readdlm(p_file) 
 allstates = readdlm(all_file)
-allstates
 d_unweighted = DataFrame(CSV.File(unweighted_file))
 mat_unweighted = Matrix(d_unweighted)
 
@@ -57,7 +56,7 @@ total_pind = Vector{Int64}(undef, 0)
 for i in [1:1:rows;] 
     println(i)
     entry_id = mat_unweighted[i,1]
-    vals = mat_unweighted[i:i, 2:cols]
+    vals = mat_unweighted[i:i, 2:cols] # uhhh...?
     data_state = expand_nan(vals)
     p_index, obs_states = get_ind(data_state, allstates, n_nodes)
     p_raw = p[p_index]

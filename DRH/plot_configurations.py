@@ -149,6 +149,7 @@ with open('comm_info.txt', 'w') as f:
     f.write(comm_info_latex)
 
 ##### SREF: Questions IDS #######
+## NBNBNB: this is now already done. 
 sref = pd.read_csv('../data/analysis/sref_nrows_455_maxna_5_nodes_20.csv')
 
 sref_questions_dict = {
@@ -177,7 +178,7 @@ sref_questions_dict = {
 sref['question'] = sref['related_q_id'].apply(lambda x: sref_questions_dict.get(x))
 sref.to_csv('../data/analysis/question_reference.csv', index = False)
 
-## TO LATEX (good)
+## TO LATEX (good) --- also now done in other document
 sref_latex = sref[['related_q_id', 'question', 'related_q']]
 sref_latex_string = sref_latex.to_latex(index=False)
 with open('question_overview.txt', 'w') as f: 

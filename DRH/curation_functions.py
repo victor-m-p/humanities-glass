@@ -188,8 +188,8 @@ def combinations_to_dataframe(weighted_combinations):
         print('inconsistent column ordering')
     data_csv = pd.DataFrame(vals, columns = cols)
     data_csv = data_csv.sort_values('entry_id').reset_index(drop=True)
-    data_txt = data_csv.drop(columns = 'entry_id')
-    return data_csv, data_txt
+    #data_txt = data_csv.drop(columns = 'entry_id')
+    return data_csv
 
 def save_data(best_entries, entry_reference, question_reference, 
              data_csv, data_txt, entry_id_column, question_id_column,
