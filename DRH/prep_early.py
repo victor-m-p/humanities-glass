@@ -1,6 +1,7 @@
 '''
-VMP 2022-12-12: 
+VMP 2022-12-15: 
 Prepares key documents for the analysis of DRH data. 
+This runs before 'expand_data.jl'. 
 '''
 
 import numpy as np 
@@ -87,8 +88,11 @@ with open('../tables/entry_table.txt', 'w') as f:
 # i.e. in this case it is the same whether it is (1, -1) or 0. 
 direct_reference = pd.read_csv(f'../data/reference/direct_reference_questions_{n_nodes}_maxna_{n_nan}_nrows_{n_rows}_entries_{n_entries}.csv')
 question_columns = direct_reference.columns[1:-1]
+
 ## mean here because mean(-1, 1) = 0
 direct_flattened = direct_reference.groupby('entry_id')[question_columns].mean().reset_index().astype(int)
+## reset the index 
+direct_flattened['entry_id'] = direct_flattened.index + 1
 direct_flattened.to_csv('../data/analysis/data_flattened.csv', index = False)
 
 # calculate probability of all configurations based on parameters h, J.

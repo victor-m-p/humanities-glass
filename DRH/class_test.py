@@ -26,8 +26,8 @@ class Configuration:
         pass 
     
     # as a string 
-    def to_string():
-        pass 
+    def to_string(self):
+        return "".join([str(x) if x == 1 else str(0) for x in self.configuration])
     
     # depends on whether we require this property
     # otherwise we might include to possibility
@@ -69,21 +69,27 @@ class Configuration:
     def to_civilization(x): 
         pass 
 
-# testing 
+# load documents
+entry_configuration_master = pd.read_csv('../data/analysis/entry_configuration_master.csv')
+configuration_probabilities = np.loadtxt('../data/analysis/configuration_probabilities.txt')
+
+# generate all states
 n_nodes = 20
 from fun import bin_states 
-d = pd.read_csv('/home/vmp/humanities-glass/data/analysis/d_likelihood_nrows_455_maxna_5_nodes_20.csv')
-p = np.loadtxt('/home/vmp/humanities-glass/data/analysis/p_nrows_455_maxna_5_nodes_20.txt')
-allstates = bin_states(n_nodes) 
+configurations = bin_states(n_nodes) 
 
-# testing (checks out)
+# check some functionality for a single configuration
 idx = 769975
-config = allstates[idx]
-prob = p[idx]
+config = configurations[idx]
+prob = configuration_probabilities[idx]
+configuration_probabilities
 
-conf = Configuration(idx, allstates, p)
+conf = Configuration(idx, configurations, configuration_probabilities)
+conf.to_string()
 
-
+configx = conf.configuration
+y = "".join([str(x) if x == 1 else str(0) for x in configx])
+y
 
 class Civilization: 
     def __init__(self, entry)

@@ -5,23 +5,24 @@ I.e. if there are inconsistencies or NAN then expand to all possible.
 Then assign probabilities to each of these possible configurations. 
 =# 
 
-# todo: add entry_name to the dataframe 
-# would save a lot of wrangling. 
+# tested on Julia v1.8 
+# install these packages into environment (e.g. enter Pkg REPL and use 'add [PKG]').
 using Printf, Statistics, Distributions, DelimitedFiles, CSV, DataFrames, IterTools
 
 # check up on how to better manage paths in julia
-p_file = "/home/vpoulsen/humanities-glass/data/analysis/p_nrows_455_maxna_5_nodes_20.txt"
-all_file = "/home/vpoulsen/humanities-glass/data/analysis/allstates_nrows_455_maxna_5_nodes_20.txt"
-unweighted_file = "/home/vpoulsen/humanities-glass/data/analysis/d_collapsed_nrows_455_maxna_5_nodes_20.csv"
+# currently requires manual tweaking of your path.
+prob_file = "/home/vmp/humanities-glass/data/analysis/configuration_probabilities.txt"
+config_file = "/home/vmp/humanities-glass/data/analysis/configurations.txt"
+flat_file = "/home/vmp/humanities-glass/data/analysis/data_flattened.csv"
 
 # setup
 n_nodes, maxna = 20, 5
 
 # read stuff
-p = readdlm(p_file) 
-allstates = readdlm(all_file)
-d_unweighted = DataFrame(CSV.File(unweighted_file))
-mat_unweighted = Matrix(d_unweighted)
+p = readdlm(prob_file) 
+configurations = readdlm(config_file)
+data_flattened = DataFrame(CSV.File(flat_file))
+mat_flattened = Matrix(data_flattened)
 
 # quick functions
 f(iterators...) = vec([collect(x) for x in product(iterators...)])
@@ -34,12 +35,12 @@ function expand_nan(l)
 end 
 
 ## main function
-function get_ind(data_state, allstates, n_nodes)
+function get_ind(data_state, configurations, n_nodes)
     v_ind = Vector{Int64}(undef, 0)
     m_obs = Matrix{Int64}(undef, 0, n_nodes)
     for i in data_state
         m = reshape(i, 1, length(i))
-        hit = matchrow(m, allstates)
+        hit = matchrow(m, configurations)
         v_ind = [v_ind;hit]
         m_obs = [m_obs;m]
     end 
@@ -47,7 +48,7 @@ function get_ind(data_state, allstates, n_nodes)
 end 
 
 ## the major loop
-rows, cols = size(mat_unweighted)
+rows, cols = size(mat_flattened)
 total_states = Matrix{Int64}(undef, 0, n_nodes)
 total_praw = Vector{Float64}(undef, 0)
 total_pnorm = Vector{Float64}(undef, 0)
@@ -55,10 +56,10 @@ total_entry = Vector{Int64}(undef, 0)
 total_pind = Vector{Int64}(undef, 0)
 for i in [1:1:rows;] 
     println(i)
-    entry_id = mat_unweighted[i,1]
-    vals = mat_unweighted[i:i, 2:cols] # uhhh...?
+    entry_id = mat_flattened[i,1]
+    vals = mat_flattened[i:i, 2:cols] # uhhh...?
     data_state = expand_nan(vals)
-    p_index, obs_states = get_ind(data_state, allstates, n_nodes)
+    p_index, obs_states = get_ind(data_state, configurations, n_nodes)
     p_raw = p[p_index]
     p_norm = p_raw./sum(p_raw, dims = 1)
 
@@ -78,11 +79,11 @@ end
 mat = hcat(total_entry, total_states)
 total_pind = total_pind .- 1 # for 0-indexing in python
 d = DataFrame(
-    entry_id = total_entry,
-    p_ind = total_pind, 
-    p_raw = total_praw, 
-    p_norm = total_pnorm)
+    entry_id = total_entry, # entry id 
+    config_id = total_pind, # configuration id 
+    config_prob = total_praw, # configuration probability 
+    entry_prob = total_pnorm) # probability of being in this config for the entry id
 
 # save stuff 
-CSV.write("/home/vpoulsen/humanities-glass/data/analysis/d_likelihood_nrows_455_maxna_5_nodes_20.csv", d)
-writedlm("/home/vpoulsen/humanities-glass/data/analysis/mat_likelihood_nrows_455_maxna_5_nodes_20.txt", mat)
+CSV.write("/home/vmp/humanities-glass/data/analysis/data_expanded.csv", d)
+writedlm("/home/vmp/humanities-glass/data/analysis/matrix_expanded.txt", mat)
