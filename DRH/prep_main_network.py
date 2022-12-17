@@ -74,11 +74,8 @@ network_information = top_config_info.merge(maxlikelihood_sample,
                               how = 'left').fillna(0)
 ## fix dtypes corrupted by the merge 
 network_information['entry_id'] = network_information['entry_id'].astype(int)
-## create dictionary 
-network_information_dict = network_information.to_dict('index')
 
 # Hamming distance
-
 '''
 Compute hamming distance for the edges. 
 Select only hamming distance = 1 (could be expanded of course). 
@@ -142,3 +139,4 @@ This includes the network information and the hamming distances.
 network_information.to_csv('../data/analysis/top_configurations_network.csv', index = False)
 h_distances.to_csv('../data/analysis/top_configurations_hamming.csv', index = False)
 maxlikelihood_datastate.to_csv('../data/analysis/top_configurations_maxlikelihood.csv', index = False)
+config_entry_overlap.to_csv('../data/analysis/top_configurations_overlap.csv', index = False)

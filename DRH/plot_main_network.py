@@ -199,98 +199,94 @@ for index, row in annotations.iterrows():
 plt.savefig('../fig/community_configs_annotation.pdf')
 
 
-### now fix the latex tables ###
+########## TABLES ##########
+# table with all entry_id that appear in a community 
+'''
+Locate all entry_id that are "in" a community, 
+find the community that they have most probability weight in. 
+Save to latex table with columns
+(group, entry_id_drh, entry_name, weight)
+'''
+
+## load the information on top configuration / entry overlap
+config_entry_overlap = pd.read_csv('../data/analysis/top_configurations_overlap.csv')
+## add community information
+network_information_sub = network_information[['config_id', 'comm_label']]
+config_entry_overlap = config_entry_overlap.merge(network_information_sub)
+## groupby community and entry id 
+config_entry_comm = config_entry_overlap.groupby(['comm_label', 'entry_id'])['entry_prob'].sum().reset_index()
+## if there is a tie between two communities 
+## for a specific entry_id, then take first
+config_entry_comm = config_entry_comm.sort_values('entry_prob', ascending=False).groupby('entry_id').head(1)
+## add back name and get the DRH id 
+entry_reference = pd.read_csv('../data/analysis/entry_reference.csv')
+config_entry_comm = config_entry_comm.merge(entry_reference, on = 'entry_id', how = 'inner')
+## select columns 
+config_entry_comm = config_entry_comm[['comm_label', 'entry_id_drh', 'entry_drh', 'entry_prob']]
+## sort 
+config_entry_comm = config_entry_comm.sort_values(['comm_label', 'entry_prob', 'entry_id_drh'], ascending = [True, False, True])
+## rename columns 
+config_entry_comm = config_entry_comm.rename(
+    columns = {'comm_label': 'Group',
+               'entry_id_drh': 'DRH ID',
+               'entry_drh': 'Entry name (DRH)',
+               'entry_prob': 'Weight'})
+## to latex and save
+config_entry_latex = config_entry_comm.to_latex(index=False)
+with open('../tables/top_config_included.txt', 'w') as f: 
+    f.write(config_entry_latex)
 
 
+# table with all entries (entry_id) that do not appear in top states
+'''
+Take all of the entries in our data that do not appear in any community
+(i.e. who only have configurations that are not in the top n = 150 configurations).
+Save to latex table with columns (entry_id_drh, entry_name)
 
+'''
+## anti-join 
+top_config_entries = config_entry_overlap[['entry_id']]
+excluded_entries = entry_reference.merge(top_config_entries, on = 'entry_id', how = 'left', indicator = True)
+excluded_entries = excluded_entries[excluded_entries['_merge'] == 'left_only']
+## select columns
+excluded_entries = excluded_entries[['entry_id_drh', 'entry_drh']]
+## sort values 
+excluded_entries = excluded_entries.sort_values('entry_id_drh', ascending = True)
+## rename columns 
+excluded_entries = excluded_entries.rename(
+    columns = {'entry_id_drh': 'DRH ID',
+               'entry_drh': 'Entry name (DRH)'})
+## to latex and save
+excluded_entries_latex = excluded_entries.to_latex(index=False)
+with open('../tables/top_config_excluded.txt', 'w') as f: 
+    f.write(excluded_entries_latex)
 
-# write to latex table 
-node_attr['comm_weight'] = node_attr['comm_weight'].apply(lambda x: round(x*100, 2))
-comm_info = node_attr[['comm_label', 'comm_color', 'comm_weight']].drop_duplicates()
-comm_info_latex = comm_info.to_latex(index=False)
-with open('comm_info.txt', 'w') as f: 
-    f.write(comm_info_latex)
+# table with distinctive features for each community
+'''
+We should make this cleaner.
+'''
 
-############## ................ ################
-
-
-
-# for latex (main figure entry_id)
-## add color and weight of community 
-d_latex_lookup = d_annot[['entry_name_short', 'entry_name', 'p_ind']]
-entry_labels = node_attr[['p_ind', 'comm_label']].drop_duplicates()
-entry_labels = entry_labels.dropna()
-d_latex_lookup = d_latex_lookup.merge(entry_labels, on = 'p_ind', how = 'inner')
-d_latex_lookup = d_latex_lookup.sort_values('comm_label')
-d_latex_lookup = d_latex_lookup[['comm_label', 'entry_name_short', 'entry_name']]
-latex_lookup_string = d_latex_lookup.to_latex(index=False)
-with open('entry_reference.txt', 'w') as f: 
-    f.write(latex_lookup_string)
-
-######## ANNOTATION PLOT ########
-
-
-fig, ax = plt.subplots(figsize = (6, 8), dpi = 500)
-plt.axis('off')
-cmap = plt.cm.get_cmap("Accent")
-nx.draw_networkx_nodes(G_full, pos, 
-                        nodelist = nodelst_full,
-                        node_size = [x*2 for x in nodesize_full], 
-                        node_color = comm_lst_full,
-                        linewidths = 0.5, edgecolors = 'black',
-                        cmap = cmap)
-rgba = rgb2hex(cmap(5))
-nx.draw_networkx_edges(G_full, pos, alpha = 0.7,
-                       width = edgew_full,
-                       edgelist = edgelst_full,
-                       edge_color = rgba
-                       )
-for index, row in d_annot.iterrows(): 
-    node_idx = row['node_id']
-    name = row['entry_name_short']
-    pos_x, pos_y = pos[node_idx]
-    xx, yy = pos_annot.get(node_idx)
-    color_code = row['comm_color_code']
-    color = rgb2hex(cmap(color_code))
-    ax.annotate(name, xy = [pos_x, pos_y],
-                color = color,
-                #xycoords = 'figure fraction',
-                xytext=[pos_x+xx, pos_y+yy],
-                #textcoords = 'figure fraction', 
-                arrowprops = dict(arrowstyle="->",
-                                  connectionstyle='arc3',
-                                  color='black'))
-plt.savefig('../fig/community_configs_annotation.pdf')
-
-
-
-
-
-
-
-
-
-############## ................. ###############
-
-
-
-
-### clean this up ###
-# biggest differences between communities (to latex)
-question_ids = sref['related_q_id'].to_list() 
+## read question reference
+question_reference = pd.read_csv('../data/analysis/question_reference.csv')
+## get the list of questions
+question_id_list = question_reference['question_id'].tolist()
+## generate allstates 
+n_nodes = 20 
+allstates = bin_states(n_nodes)
+## loop through five communities
+## consider rewriting this (this can be made better)
 bit_lst = []
 for comm in range(5): # five communities 
-    idx_focal = list(louvain_comm[comm])
-    idx_other = [list(ele) for num, ele in enumerate(louvain_comm) if num != comm]
-    idx_other = [item for sublist in idx_other for item in sublist]
-    bit_focal = avg_bitstring(allstates, node_attr, question_ids, idx_focal, 'node_id', 'p_ind', 'related_q_id', 'p_raw')
-    bit_other = avg_bitstring(allstates, node_attr, question_ids, idx_other, 'node_id', 'p_ind', 'related_q_id', 'p_raw')
+    idx_focal = network_information[network_information['community'] == comm]['node_id'].tolist()
+    idx_other = network_information[network_information['community'] != comm]['node_id'].tolist()
+    bit_focal = avg_bitstring(allstates, network_information, question_id_list, idx_focal, 'node_id', 'config_id', 'question_id', 'config_prob')
+    bit_other = avg_bitstring(allstates, network_information, question_id_list, idx_other, 'node_id', 'config_id', 'question_id', 'config_prob')
     bit_focal = bit_focal.rename(columns = {'weighted_avg': f'weighted_avg_focal'})
     bit_other = bit_other.rename(columns = {'weighted_avg': 'weighted_avg_other'})
-    bit_diff = bit_focal.merge(bit_other, on = 'related_q_id', how = 'inner')
+    bit_diff = bit_focal.merge(bit_other, on = 'question_id', how = 'inner')
     bit_diff = bit_diff.assign(focal_minus_other = lambda x: x[f'weighted_avg_focal']-x['weighted_avg_other'])
     bit_diff['focal_minus_other_abs'] = np.abs(bit_diff['focal_minus_other'])
-    bit_diff = sref.merge(bit_diff, on = 'related_q_id', how = 'inner')
+    bit_diff = question_reference.merge(bit_diff, on = 'question_id', how = 'inner')
     bit_diff = bit_diff.sort_values('focal_minus_other_abs', ascending = False)
     bit_diff['community'] = comm
     bit_lst.append(bit_diff)
@@ -301,23 +297,68 @@ bit_df = pd.concat(bit_lst)
 # to percent, and round 
 bit_df = bit_df.assign(weighted_avg_focal = lambda x: round(x['weighted_avg_focal']*100, 2),
                        weighted_avg_other = lambda x: round(x['weighted_avg_other']*100, 2),
-                       focal_minus_other = lambda x: round(x['focal_minus_other']*100, 2),
-                       focal_minus_other_abs = lambda x: round(x['focal_minus_other_abs']*100, 2)
+                       focal_minus_other = lambda x: round(x['focal_minus_other']*100, 2)
                        )
 
-### shared across? ###
-pd.set_option('display.max_colwidth', None)
-bit_df.groupby('related_q')['weighted_avg_focal'].mean().reset_index(name='mean').sort_values('mean')
-bit_df.groupby('related_q')['weighted_avg_focal'].mean().reset_index(name='mean').sort_values('mean', ascending=False)
-
 # three most different per community
-comm_color = node_attr[['comm_label', 'community', 'comm_color']].drop_duplicates()
+comm_color = network_information[['comm_label', 'community', 'comm_color']].drop_duplicates()
 bit_df = bit_df.merge(comm_color, on = 'community', how = 'inner')
+# top three most distinctive features
 bit_diff = bit_df.sort_values(['focal_minus_other_abs'], ascending=False).groupby('community').head(3)
+# sort values
 bit_diff = bit_diff.sort_values(['comm_label', 'focal_minus_other_abs'], ascending = [True, False])
+# select columns
 bit_diff = bit_diff[['comm_label', 'comm_color', 'question', 'weighted_avg_focal', 'weighted_avg_other', 'focal_minus_other']]
-
-# to latex table (sort communities by total weight)
+# rename columns
+bit_diff = bit_diff.rename(columns = {'comm_label': 'Group',
+                                      'comm_color': 'Color',
+                                      'question': 'Question',
+                                      'weighted_avg_focal': 'Avg. S',
+                                      'weighted_avg_other': 'Avg. O',
+                                      'focal_minus_other': 'Diff'
+                                      })
+# to latex table 
 bit_latex_string = bit_diff.to_latex(index=False)
-with open('community_differences.txt', 'w') as f: 
+with open('../tables/community_questions_table.txt', 'w') as f: 
     f.write(bit_latex_string)
+
+# table with information on the entries that we highlight/annotate in 4A
+'''
+Save to latex table with columns: 
+(community, entry_name, entry_name_drh)
+'''
+## get the community labels (groups)
+network_information_comm = network_information[['comm_label', 'config_id']]
+## merge with annotation dataframe
+annotation_table = network_information_comm.merge(annotations, on = 'config_id', how = 'inner')
+## select subset of columns
+annotation_table = annotation_table[['comm_label', 'entry_name', 'entry_drh']]
+## rename columns 
+annotation_table = annotation_table.rename(
+    columns = {'comm_label': 'Group',
+               'entry_name': 'Entry name (short)',
+               'entry_drh': 'Entry name (DRH)'})
+## to latex 
+annotation_latex = annotation_table.style.hide(axis = 'index').to_latex()
+## save 
+with open('../tables/annotation_table.txt', 'w') as f: 
+    f.write(annotation_latex)
+
+# table with total probability mass per community
+'''
+Not included in the manuscript, but used as reference
+'''
+## select needed columns
+community_table = network_information[['comm_label', 'community_weight']].drop_duplicates()
+## convert from fraction to percentage and round to 2 decimals
+community_table['community_weight'] = community_table['community_weight'].apply(lambda x: round(x*100, 2))
+## rename columns
+community_table = community_table.rename(
+    columns = {'comm_label': 'Group',
+               'community_weight': 'Weight'}
+)
+## to latex table (might want to come back and fix decimals)
+community_table = community_table.to_latex(index = False)
+## save 
+with open('../tables/community_weight_table.txt', 'w') as f: 
+    f.write(community_table)

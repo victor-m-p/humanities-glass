@@ -165,9 +165,6 @@ for idx, row in param_mean.iterrows():
     G.nodes[question_id]['ID'] = question_id # sanity
     G.nodes[question_id]['size'] = row['mean']
 
-## plot it 
-
-
 ## plot 
 fig, ax = plt.subplots(figsize = (6, 6), facecolor = 'w', dpi = 500)
 plt.axis('off')
