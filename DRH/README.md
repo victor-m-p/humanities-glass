@@ -4,7 +4,7 @@ This folder documents the the analysis of DRH data reported in "Inferring Cultur
 
 * Preprocessing of the DRH data. 
 * Data curation for the subset used in the paper. 
-* Table creation (tables X-X). 
+* Table creation. 
 * Figures 3 and 4. 
 
 
@@ -12,11 +12,14 @@ This folder documents the the analysis of DRH data reported in "Inferring Cultur
 ## Files
 
 * ```preprocessing.py``` converts ```.json``` obtained from the DRH to ```.csv```.
-* ```curation.py``` runs data curation before ```MPF``` (see also: ```run_curation.sh```).
-* ```plot_parameters.py``` creates figure 3A and figure 3B. 
-* ```plot_configurations.py``` creates figure 4A.
-* ```seed_methodist.py``` creates figure 4B. 
-* ```seed_roman.py``` creates figure 4C.
+* ```curation.py``` runs data curation before ```MPF``` (relies on ```curation_functions.py```. See also ```run_curation.sh```).
+* ```prep_early.py``` creates central dataframes used across the analysis (as well as some of the tables). 
+* ```expand_data.jl``` expands the entries with missing or inconsistent data. 
+* ```prep_late.py``` combines information from ```prep_early.py``` and ```expand_data.jl```.
+* ```plot_parameters.py``` creates figure 3A and figure 3B (currently broken because of ongoing rework). 
+* ```plot_landscape.py``` creates figure 4A and several tables (relies on ```prep_landscape.py```. 
+* ```seed_methodist.py``` creates figure 4B (currently broken because of ongoing rework).
+* ```seed_roman.py``` creates figure 4C (currently broken becaues of ongoing rework). 
 
 <!-- GETTING STARTED -->
 ## Getting Started
