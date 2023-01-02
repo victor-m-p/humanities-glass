@@ -143,7 +143,7 @@ for idx, val in network_information_dict.items():
 # process network information
 ## check up on this (i.e. can we avoid imports here and make it easy?)
 from fun import * 
-G = edge_strength(G, 'config_prob') 
+G = edge_strength(G, 'config_prob') # would be nice to get rid of this. 
 edgelist_sorted, edgeweight_sorted = edge_information(G, 'pmass_mult', 'hamming', 30000)
 
 ## thing here is that we need to sort the node information similarly

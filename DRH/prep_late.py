@@ -17,3 +17,8 @@ entry_configuration_master = data_expanded.merge(entry_reference, on = 'entry_id
 entry_configuration_master = entry_configuration_master.drop(columns = ['entry_id_drh'])
 ## save 
 entry_configuration_master.to_csv('../data/analysis/entry_configuration_master.csv', index = False)
+
+# entry_id/configuration only maxlikelihood
+'''just takes one if there is a tie (which there should generally not be'''
+entry_maxlikelihood = entry_configuration_master.sort_values(['entry_id', 'entry_prob'], ascending = False).groupby('entry_id').head(1)
+entry_maxlikelihood.to_csv('../data/analysis/entry_maxlikelihood.csv', index = False)
