@@ -236,7 +236,6 @@ config_entry_latex = config_entry_comm.to_latex(index=False)
 with open('../tables/top_config_included.txt', 'w') as f: 
     f.write(config_entry_latex)
 
-
 # table with all entries (entry_id) that do not appear in top states
 '''
 Take all of the entries in our data that do not appear in any community
@@ -362,3 +361,6 @@ community_table = community_table.to_latex(index = False)
 ## save 
 with open('../tables/community_weight_table.txt', 'w') as f: 
     f.write(community_table)
+
+# save additional information
+network_information.to_csv('../data/analysis/network_information_enriched.csv', index = False)
