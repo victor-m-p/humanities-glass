@@ -1,6 +1,5 @@
 import pandas as pd 
 import numpy as np
-from tqdm import tqdm 
 
 class Configuration: 
     def __init__(self, 
@@ -10,6 +9,7 @@ class Configuration:
         self.id = id
         self.configuration = self.get_configuration(states)
         self.p = self.get_probability(probabilities)
+        self.len = len(self.configuration)
         
     # consider: is entry something we NEED to have
     # or is entry something that we can add when needed?
@@ -85,15 +85,11 @@ class Configuration:
     # hamming neighbors
     # NB: need to solve the problem of not recomputing
     def hamming_neighbors(self): # for now only immediate neighbors
-        #if self.hamming_array: 
-        #    return hamming_array
-        #else: 
         hamming_lst = [] 
         for num, _ in enumerate(self.configuration): 
             tmp_arr = self.flip_index(num)
             hamming_lst.append(tmp_arr)
         hamming_array = np.array(hamming_lst)
-        #self.hamming_array = hamming_array
         return hamming_array 
 
     # would be nice to do so that it can take another class 
@@ -104,6 +100,62 @@ class Configuration:
         array_overlap = (x == y)
         h_distance = len(x) - sum(array_overlap)
         return h_distance 
+  
+    # used by overlap, diverge
+    def answer_comparison(self, other, question_reference):  
+        answers = pd.DataFrame([(x, y) for x, y in zip(self.configuration, other.configuration)], 
+                                columns = [self.id, other.id])
+        answers = pd.concat([question_reference, answers], axis = 1)
+        return answers
+    
+    # overlap in answers between two configuration instances 
+    def overlap(self, other, question_reference): 
+        answers = self.answer_comparison(other, question_reference)
+        answers_overlap = answers[answers[self.id] == answers[other.id]]
+        return answers_overlap
+    
+    # difference in answers between two configuration instances 
+    def diverge(self, other, question_reference):  
+        answers = self.answer_comparison(other, question_reference)
+        answers_nonoverlap = answers[answers[self.id] != answers[other.id]]
+        return answers_nonoverlap 
+  
+    def neighbor_probabilities(self, configurations, configuration_probabilities, 
+                               question_reference, enforce_move = False, top_n = False):
+        # if enforce move it is simple 
+        if enforce_move: 
+            config_ids, config_probs = self.transition_probabilities(configurations, configuration_probabilities, enforce_move = True)
+            d = pd.DataFrame([(config_id, config_prob) for config_id, config_prob in zip(config_ids, config_probs)],
+                            columns = ['config_id', 'config_prob'])
+            d = pd.concat([d, question_reference], axis = 1)
+            d[self.id] = self.configuration
+        # else it is a bit more complicated 
+        else: 
+            config_ids, config_probs = self.transition_probabilities(configurations, configuration_probabilities, enforce_move = True)
+            d = pd.DataFrame([(config_id, config_prob) for config_id, config_prob in zip(config_ids, config_probs)],
+                        columns = ['config_id', 'config_prob'])
+            self_columns = question_reference.columns
+            self_row = pd.DataFrame([['remain', 'remain', 'remain', 'remain']], columns = self_columns)
+            question_referencex = pd.concat([question_reference, self_row])
+            question_referencex = question_referencex.reset_index(drop = True)
+            d = pd.concat([d, question_referencex], axis = 1)
+            d[self.id] = list(self.configuration) + [0] 
+        # common for both 
+        d['transition_prob'] = d['config_prob']/d['config_prob'].sum()
+        d = d.sort_values('transition_prob', ascending = False)
+        # if we are only interested in the most probable n neighboring probabilities 
+        if top_n: 
+            d = d.head(top_n)
+        return d 
+    
+    def probability_remain(self, configurations, configuration_probabilities, n = 0): 
+        _, config_prob_neighbors = config.transition_probabilities(configurations, configuration_probabilities, enforce_move = True)
+        config_prob_self = config.p 
+        neighbors_unfixed = np.argpartition(-config_prob_neighbors, n)[n:]
+        config_prob_neighbors = config_prob_neighbors[neighbors_unfixed]
+        config_prob_neighbors = np.sum(config_prob_neighbors)
+        prob_remain = config_prob_self/(config_prob_self+config_prob_neighbors) # 
+        return prob_remain
   
     # naive path between two configuration
     def naive_path(other): 
@@ -140,35 +192,70 @@ class Configuration:
     def to_civilization(x): 
         pass 
 
+
+
 # load documents
 entry_configuration_master = pd.read_csv('../data/analysis/entry_configuration_master.csv')
 configuration_probabilities = np.loadtxt('../data/analysis/configuration_probabilities.txt')
+question_reference = pd.read_csv('../data/analysis/question_reference.csv')
 
 # generate all states
 n_nodes = 20
 from fun import bin_states 
 configurations = bin_states(n_nodes) 
 
-## experiment 
-track_list = []
-idx = 769927 # Roman Imperial Cult 
-config_orig = Configuration(idx, configurations, configuration_probabilities)
-config = Configuration(idx, configurations, configuration_probabilities)
-h_distance = 0
-probability = config.get_probability(configuration_probabilities)
-for i in tqdm(range(1000)): 
-    track_list.append((idx, h_distance, probability))
-    config = config.push_forward(configurations,
-                                 configuration_probabilities)
-    idx = config.id 
-    h_distance = config_orig.hamming_distance(config)
-    probability = config.get_probability(configuration_probabilities)
+# make a method with "probability" transition 
+# NBNBNBNB: cache "transition_probabilities"!! 
+conf = Configuration(1, configurations, configuration_probabilities)
+p_lst = []
+for i in range(20): 
+    prob_remain = conf.probability_remain(configurations, configuration_probabilities, n = i)
+    p_lst.append(prob_remain) 
 
-# to pandas
-d = pd.DataFrame(track_list, columns = ['config_id', 'hamming', 'prob'])
-d = d[['config_id', 'hamming']]
-d.to_csv('../data/push_forward/random_n_1000_config_769927.csv', index = False)
+# need a way to just do all of them at once; 
 
+
+
+x, y = conf.transition_probabilities(configurations, configuration_probabilities, enforce_move = True)
+p_self = conf.p
+# fix n (i.e. remove the n most probable) 
+for i in 
+n = 2
+ind = np.argpartition(-y, n)[n:]
+yy = y[ind]
+p_other = np.sum(yy)
+# probability stay 
+pstay = p_self/(p_self+p_other) # 5% probability of staying 
+
+config = Configuration(769927, configurations, configuration_probabilities)
+x, y = config.transition_probabilities(configurations, configuration_probabilities, enforce_move = True)
+p_self = config.p 
+ind = np.argpartition(-y, n)[n:]
+yy = y[ind]
+p_other = np.sum(yy)
+prob_stay = p_self/(p_self+p_other) # 
+return prob_stay
+
+
+#
+t = 2
+tt = 1 
+t/(t+tt)
+
+len(yy)
+np.concatenate([yy, p_self])
+
+yy
+np.sort(y)
+np.sort(yy)
+
+
+idx = (-y).argsort()[:19]
+idx
+
+
+xx = conf.configuration
+len(xx)
 ## this we can actually plot in interesting ways ...
 ## i.e. we can do it as in the earlier DeDeo work. 
 ## or if we run a lot of iterations (needs to be more efficient)
@@ -185,7 +272,6 @@ d.to_csv('../data/push_forward/random_n_1000_config_769927.csv', index = False)
 # i.e. I actually want to know which 
 # questions they disagree about. 
 
-
 # options: 
 ## (1) move probabilistically, possible to stay
 ## (2) move probabilistically, enforce move 
@@ -193,6 +279,3 @@ d.to_csv('../data/push_forward/random_n_1000_config_769927.csv', index = False)
 ## (4) hamming distance to other idx 
 ## (5) probability to move to other idx neighbor (enforce move)
 ## (6) probability to move to other idx neighbor (possible to stay)
-
-class Civilization: 
-    def __init__(self, entry)
