@@ -1,5 +1,6 @@
 import pandas as pd 
-import numpy as np 
+import numpy as np
+from tqdm import tqdm 
 
 class Configuration: 
     def __init__(self, 
@@ -43,16 +44,67 @@ class Configuration:
         configuration = configurations[self.id]
         return configuration
 
+    # flip a bit (static)
+    @staticmethod
+    def flip(x): 
+        return -1 if x == 1 else 1 
+    
+    # flip a specific index in array 
+    def flip_index(self, index): 
+        new_arr = np.copy(self.configuration)
+        new_arr[index] = self.flip(new_arr[index]) # not sure whether this should be "flip" or "self.flip"
+        return new_arr 
+
+    # sum array to one (static)
+    @staticmethod
+    def array_sum_to_one(array): 
+        array = array / array.min()
+        array = array / array.sum()
+        return array 
+
     # flip probabilities (including or excluding self)
-    def transition_probabiliies():
-        pass 
+    # make sure that this checks as well whether it is already computed 
+    def transition_probabilities(self, configurations, 
+                                 configuration_probabilities, enforce_move = False):
+        # check whether it is already computed 
+        hamming_array = self.hamming_neighbors()
+        
+        # if enforce move we do not add self 
+        if not enforce_move: 
+            hamming_array = np.concatenate([hamming_array, [self.configuration]], axis = 0)
+             
+        # get configuration ids, and configuration probabilities
+        config_ids = [np.where((configurations == i).all(1))[0][0] for i in hamming_array]
+        config_probs = configuration_probabilities[config_ids]
+        
+        # return 
+        return config_ids, config_probs         
     
     # flip probability to specific other ..?
     
     # hamming neighbors
-    def hamming_neighbors(n):
-        pass 
+    # NB: need to solve the problem of not recomputing
+    def hamming_neighbors(self): # for now only immediate neighbors
+        #if self.hamming_array: 
+        #    return hamming_array
+        #else: 
+        hamming_lst = [] 
+        for num, _ in enumerate(self.configuration): 
+            tmp_arr = self.flip_index(num)
+            hamming_lst.append(tmp_arr)
+        hamming_array = np.array(hamming_lst)
+        #self.hamming_array = hamming_array
+        return hamming_array 
 
+    # would be nice to do so that it can take another class 
+    # other assumed to be a class as well 
+    def hamming_distance(self, other): 
+        x = self.configuration 
+        y = other.configuration
+        array_overlap = (x == y)
+        h_distance = len(x) - sum(array_overlap)
+        return h_distance 
+  
     # naive path between two configuration
     def naive_path(other): 
         pass 
@@ -62,9 +114,28 @@ class Configuration:
     # (1) probabilistic
     # (2) deterministic
     # (x) include/exclude probability to stay
-    def push_forward():
-        pass 
-    
+    def push_forward(self, configurations, configuration_probabilities,
+                     probabilistic = True, enforce_move = False):
+        
+        # with or without enforcing move 
+        config_ids, config_probs = self.transition_probabilities(configurations, 
+                                                                    configuration_probabilities,
+                                                                    enforce_move)
+        
+        # either sample probabilistically
+        if probabilistic:
+            transition_normalized = self.array_sum_to_one(config_probs) 
+            transition_ids = np.arange(len(transition_normalized))
+            sample = np.random.choice(transition_ids, size=1, p=transition_normalized)
+            sample = sample[0]
+            
+        # or deteministically take the maximum 
+        else: 
+            sample = np.argmax(config_probs)
+            
+        sample_id = config_ids[sample]
+        return Configuration(sample_id, configurations, configuration_probabilities)
+        
     # instantiate civilization class
     def to_civilization(x): 
         pass 
@@ -78,89 +149,50 @@ n_nodes = 20
 from fun import bin_states 
 configurations = bin_states(n_nodes) 
 
-# check some functionality for a single configuration
-idx = 769975
-config = configurations[idx]
-prob = configuration_probabilities[idx]
+## experiment 
+track_list = []
+idx = 769927 # Roman Imperial Cult 
+config_orig = Configuration(idx, configurations, configuration_probabilities)
+config = Configuration(idx, configurations, configuration_probabilities)
+h_distance = 0
+probability = config.get_probability(configuration_probabilities)
+for i in tqdm(range(1000)): 
+    track_list.append((idx, h_distance, probability))
+    config = config.push_forward(configurations,
+                                 configuration_probabilities)
+    idx = config.id 
+    h_distance = config_orig.hamming_distance(config)
+    probability = config.get_probability(configuration_probabilities)
 
-conf = Configuration(idx, configurations, configuration_probabilities)
+# to pandas
+d = pd.DataFrame(track_list, columns = ['config_id', 'hamming', 'prob'])
+d = d[['config_id', 'hamming']]
+d.to_csv('../data/push_forward/random_n_1000_config_769927.csv', index = False)
 
-# get information out 
-conf.to_string()
-conf.configuration
-conf.p 
+## this we can actually plot in interesting ways ...
+## i.e. we can do it as in the earlier DeDeo work. 
+## or if we run a lot of iterations (needs to be more efficient)
+## then we can just summarize the avg. time in neighborhood
+## (defined as any hamming distance we want, but e.g. 0, 1, or 2). 
+## ALSO: (annotate which other known religions it hits). 
+## ALSO: (Simon had the idea with floodplains, so ...)
+## we could do this for the top 150 communities and gather
+## some kind of information on how stable they are 
+## e.g. % stay on same, % stay close (e.g. within 2H) % stay in comm. 
 
-# implement push_forward
-
-# implement bit_flip(): 
-flip = lambda x: -1 if x == 1 else 1 
-
-# so, we can flip a bit, but ... 
-# requires us to make a copy ... 
-def flip_index(array, index): 
-    new_arr = np.copy(array)
-    new_arr[index] = flip(new_arr[index])
-    return new_arr 
-
-def hamming_neighbors(array): 
-    arr_lst = [] 
-    for num, _ in enumerate(array): 
-        new_arr = flip_index(array, num)
-        arr_lst.append(new_arr)
-    return arr_lst 
-
-flips = hamming_neighbors(test)
-
-config_ids = [np.where((configurations == i).all(1))[0][0] for i in flips]
-config_probs = configuration_probabilities[config_ids]
-
-def array_sum_to_one(array): 
-    array = array / array.min()
-    array = array / array.sum()
-    return array 
-
-normalized_array = array_sum_to_one(config_probs)
-array_indices = np.arange(20)
-x = np.random.choice(array_indices, size=1, p=normalized_array)
-x = x[0]
-
-# test whether this works (it works)
-l = []
-for i in range(1000): 
-    x = np.random.choice(array_indices, size = 1, p = normalized_array)
-    x = x[0]
-    l.append(x)
-
-d = pd.DataFrame(l, columns = ['id'])
-normalized_array.max()
-np.where(normalized_array > 0.1)
-d.groupby('id').size().reset_index(name = 'size').sort_values('size', ascending = False)
+# want a function which tells me the difference 
+# between two different configurations 
+# i.e. I actually want to know which 
+# questions they disagree about. 
 
 
-
-
-
-# implement hamming neighbors
-def get_n_neighbors(n_neighbors, idx_focal, config_allstates, prob_allstates):
-    config_focal = config_allstates[idx_focal]
-    prob_focal = prob_allstates[idx_focal]
-    lst_neighbors = []
-    for idx_neighbor, config_neighbor in enumerate(config_allstates): 
-        h_dist = np.count_nonzero(config_focal!=config_neighbor)
-        if h_dist <= n_neighbors and idx_focal != idx_neighbor: 
-            prob_neighbor = prob_allstates[idx_neighbor]
-            lst_neighbors.append((idx_focal, prob_focal, idx_neighbor, prob_neighbor, h_dist ))
-    df_neighbor = pd.DataFrame(
-        lst_neighbors, 
-        columns = ['idx_neighbor', 'prob_neighbor', 'hamming']
-    )
-    return df_neighbor
-
-
-
-### old stuff ###
-y = "".join([str(x) if x == 1 else str(0) for x in configx])
-y
+# options: 
+## (1) move probabilistically, possible to stay
+## (2) move probabilistically, enforce move 
+## (3) move to specific neighbor 
+## (4) hamming distance to other idx 
+## (5) probability to move to other idx neighbor (enforce move)
+## (6) probability to move to other idx neighbor (possible to stay)
 
 class Civilization: 
     def __init__(self, entry)

@@ -149,7 +149,6 @@ def edge_strength(G, nodestrength):
         Gcopy.edges[(edge_x, edge_y)]['pmass_add'] = pmass_add  
     return Gcopy 
 
-
 def weighted_average(df, values, weights):
     return sum(df[weights] * df[values]) / df[weights].sum()
 

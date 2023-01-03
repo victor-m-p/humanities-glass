@@ -6,3 +6,4 @@ pandas_stubs==1.2.0.35
 scikit_learn==1.2.0
 ptitprince
 geopandas
+tqdm
