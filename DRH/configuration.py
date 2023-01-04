@@ -10,6 +10,7 @@ class Configuration:
         self.configuration = self.get_configuration(states)
         self.p = self.get_probability(probabilities)
         self.len = len(self.configuration)
+        self.enforce_move = np.nan
         
     # consider: is entry something we NEED to have
     # or is entry something that we can add when needed?
@@ -65,7 +66,13 @@ class Configuration:
     # flip probabilities (including or excluding self)
     # make sure that this checks as well whether it is already computed 
     def transition_probabilities(self, configurations, 
-                                 configuration_probabilities, enforce_move = False):
+                                 configuration_probabilities, 
+                                 enforce_move = False):
+        
+        # if already computed with same settings then just return
+        if self.enforce_move == enforce_move: 
+            return self.config_ids, self.config_probs 
+        
         # check whether it is already computed 
         hamming_array = self.hamming_neighbors()
         
@@ -74,11 +81,12 @@ class Configuration:
             hamming_array = np.concatenate([hamming_array, [self.configuration]], axis = 0)
              
         # get configuration ids, and configuration probabilities
-        config_ids = [np.where((configurations == i).all(1))[0][0] for i in hamming_array]
-        config_probs = configuration_probabilities[config_ids]
+        self.config_ids = [np.where((configurations == i).all(1))[0][0] for i in hamming_array]
+        self.config_probs = configuration_probabilities[self.config_ids]
+        self.enforce_move = enforce_move 
         
         # return 
-        return config_ids, config_probs         
+        return self.config_ids, self.config_probs         
     
     # flip probability to specific other ..?
     
@@ -149,12 +157,9 @@ class Configuration:
         return d 
     
     def probability_remain(self, configurations, configuration_probabilities, n = 0): 
-        _, config_prob_neighbors = config.transition_probabilities(configurations, configuration_probabilities, enforce_move = True)
-        config_prob_self = config.p 
-        neighbors_unfixed = np.argpartition(-config_prob_neighbors, n)[n:]
-        config_prob_neighbors = config_prob_neighbors[neighbors_unfixed]
-        config_prob_neighbors = np.sum(config_prob_neighbors)
-        prob_remain = config_prob_self/(config_prob_self+config_prob_neighbors) # 
+        _, config_prob_neighbors = self.transition_probabilities(configurations, configuration_probabilities, enforce_move = True)
+        config_prob_neighbors = np.sum(np.sort(config_prob_neighbors)[:self.len-n])
+        prob_remain = self.p/(self.p+config_prob_neighbors) # 
         return prob_remain
   
     # naive path between two configuration
@@ -204,58 +209,6 @@ n_nodes = 20
 from fun import bin_states 
 configurations = bin_states(n_nodes) 
 
-# make a method with "probability" transition 
-# NBNBNBNB: cache "transition_probabilities"!! 
-conf = Configuration(1, configurations, configuration_probabilities)
-p_lst = []
-for i in range(20): 
-    prob_remain = conf.probability_remain(configurations, configuration_probabilities, n = i)
-    p_lst.append(prob_remain) 
-
-# need a way to just do all of them at once; 
-
-
-
-x, y = conf.transition_probabilities(configurations, configuration_probabilities, enforce_move = True)
-p_self = conf.p
-# fix n (i.e. remove the n most probable) 
-for i in 
-n = 2
-ind = np.argpartition(-y, n)[n:]
-yy = y[ind]
-p_other = np.sum(yy)
-# probability stay 
-pstay = p_self/(p_self+p_other) # 5% probability of staying 
-
-config = Configuration(769927, configurations, configuration_probabilities)
-x, y = config.transition_probabilities(configurations, configuration_probabilities, enforce_move = True)
-p_self = config.p 
-ind = np.argpartition(-y, n)[n:]
-yy = y[ind]
-p_other = np.sum(yy)
-prob_stay = p_self/(p_self+p_other) # 
-return prob_stay
-
-
-#
-t = 2
-tt = 1 
-t/(t+tt)
-
-len(yy)
-np.concatenate([yy, p_self])
-
-yy
-np.sort(y)
-np.sort(yy)
-
-
-idx = (-y).argsort()[:19]
-idx
-
-
-xx = conf.configuration
-len(xx)
 ## this we can actually plot in interesting ways ...
 ## i.e. we can do it as in the earlier DeDeo work. 
 ## or if we run a lot of iterations (needs to be more efficient)
