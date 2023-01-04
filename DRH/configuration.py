@@ -58,7 +58,7 @@ class Configuration:
 
     # sum array to one (static)
     @staticmethod
-    def array_sum_to_one(array): 
+    def normalize(array): 
         array = array / array.min()
         array = array / array.sum()
         return array 
@@ -181,7 +181,7 @@ class Configuration:
         
         # either sample probabilistically
         if probabilistic:
-            transition_normalized = self.array_sum_to_one(config_probs) 
+            transition_normalized = self.normalize(config_probs) 
             transition_ids = np.arange(len(transition_normalized))
             sample = np.random.choice(transition_ids, size=1, p=transition_normalized)
             sample = sample[0]
