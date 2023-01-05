@@ -10,11 +10,8 @@ import os
 small_text = 12
 large_text = 18
 
-# all 
-test = pd.read_csv('../data/COGSCI23/evo/num_20_s_100_t_100.csv')
-
 ## read all of them 
-path = '../data/COGSCI23/evo'
+path = '../data/COGSCI23/evo_raw'
 dir_list = os.listdir(path)
 
 for i in range(10, 110, 10): 
@@ -26,6 +23,7 @@ list_from = []
 list_to = []
 for filename in dir_list:
     d = pd.read_csv(f'{path}/{filename}')
+    d['config_id'] = d['config_id'] - 1
     for t2 in range(10, 110, 10): 
         d_from = d[d['timestep'] == 1]
         d_to = d[d['timestep'] == t2]
@@ -43,6 +41,10 @@ d_to = pd.concat(list_to)
 d_edgelist = pd.concat([d_from.reset_index(drop=True),
                         d_to.reset_index(drop=True)],
                         axis = 1)
+
+## save 
+d_edgelist_save = d_edgelist.drop(columns = ['t_from'])
+d_edgelist_save.to_csv('../data/COGSCI23/evo_clean/overview.csv', index = False)
 
 # compute hamming
 d_pairs = d_edgelist[['config_from', 'config_to']].drop_duplicates()
@@ -77,7 +79,6 @@ d_hamming = pd.DataFrame(hamming_list,
 d_edgelist = d_edgelist.merge(d_hamming, 
                               on = ['config_from', 'config_to'],
                               how = 'inner')
-
 
 # make the t = 10 plots 
 d_edgelist_10 = d_edgelist[d_edgelist['t_to'] == 10]
