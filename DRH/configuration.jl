@@ -1,4 +1,6 @@
 # install these packages into environment (e.g. enter Pkg REPL and use 'add [PKG]').
+
+module cn # begin module
 using Printf, Statistics, Distributions, DelimitedFiles, CSV, DataFrames, IterTools, StatsBase, Chain
 
 # little function here 
@@ -141,64 +143,4 @@ mutable struct Configuration
     end 
 end 
 
-# load shit 
-configuration_probabilities = readdlm("/home/vmp/humanities-glass/data/analysis/configuration_probabilities.txt")
-configurations = readdlm("/home/vmp/humanities-glass/data/analysis/configurations.txt", Int)
-## I need an array, rather than a matrix 
-configurations = slicematrix(configurations)
-
-# checking functionality 
-ex = Configuration(1, configurations, configuration_probabilities) # types 
-ex.p # looks good 
-ex.configuration # looks good 
-flip_test = ex.flip(1) # looks good 
-flip_arr = ex.flip_index(2) # looks good 
-h_list = ex.hamming_neighbors() # looks good 
-conf_ids, conf_probs = ex.get_transition(configurations, configuration_probabilities) # looks good 
-conf_ids_t, conf_probs_t = ex.get_transition(configurations, configuration_probabilities, true) # looks good 
-
-# try to push forward
-newclass_prob_self = ex.push_forward(configurations, configuration_probabilities) # looks good
-newclass_det_self = ex.push_forward(configurations, configuration_probabilities, false) # looks good 
-newclass_prob_noself = ex.push_forward(configurations, configuration_probabilities, true, true) # looks good 
-newclass_det_self = ex.push_forward(configurations, configuration_probabilities, false, true) # looks good 
-
-## main test ## 
-
-# load all configs 
-entry_config_filename = "/home/vmp/humanities-glass/data/analysis/entry_configuration_master.csv"
-entry_config_master = DataFrame(CSV.File(entry_config_filename))
-config_ids = @chain entry_config_master begin _.config_id end
-unique_configs = unique(config_ids) # think right, but double check 
-unique_configs = unique_configs .+ 1 # because of 0-indexing in python 
-
-unique_configs = unique_configs[1:50] # around 70-75 seconds 
-# setup 
-sample_list = [] 
-conf_list = []
-@time begin 
-for unique_config in unique_configs 
-    for sim_number in 1:1
-        x = findfirst(isequal(unique_config), [x for (x, y) in conf_list]) # is this what we want?
-        if x isa Number 
-            ConfObj = conf_list[x][2] # return the corresponding class 
-        else 
-            ConfObj = Configuration(unique_config, configurations, configuration_probabilities)
-        end 
-        id = ConfObj.id 
-        for time_step in 1:10
-                push!(sample_list, (sim_number, time_step, id))
-                if id ∉ [x for (x, y) in conf_list]
-                    push!(conf_list, [id, ConfObj]) 
-                end 
-                ConfObj = ConfObj.push_forward(configurations, configuration_probabilities, true, false, conf_list)
-                id = ConfObj.id 
-        end 
-    end 
-end 
-end 
-
-# todo: 
-## 1. check against python to make sure that it works 
-## 2. make sure that we can save something useful 
-## 3. set up to run on server (faster? multi-threading? ...)  
+end # end module 

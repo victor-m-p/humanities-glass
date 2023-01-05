@@ -65,7 +65,7 @@ class Configuration:
 
     # flip probabilities (including or excluding self)
     # make sure that this checks as well whether it is already computed 
-    def transition_probabilities(self, configurations, 
+    def get_transition(self, configurations, 
                                  configuration_probabilities, 
                                  enforce_move = False):
         
@@ -132,14 +132,14 @@ class Configuration:
                                question_reference, enforce_move = False, top_n = False):
         # if enforce move it is simple 
         if enforce_move: 
-            config_ids, config_probs = self.transition_probabilities(configurations, configuration_probabilities, enforce_move = True)
+            config_ids, config_probs = self.get_transition(configurations, configuration_probabilities, enforce_move = True)
             d = pd.DataFrame([(config_id, config_prob) for config_id, config_prob in zip(config_ids, config_probs)],
                             columns = ['config_id', 'config_prob'])
             d = pd.concat([d, question_reference], axis = 1)
             d[self.id] = self.configuration
         # else it is a bit more complicated 
         else: 
-            config_ids, config_probs = self.transition_probabilities(configurations, configuration_probabilities, enforce_move = True)
+            config_ids, config_probs = self.get_transition(configurations, configuration_probabilities, enforce_move = True)
             d = pd.DataFrame([(config_id, config_prob) for config_id, config_prob in zip(config_ids, config_probs)],
                         columns = ['config_id', 'config_prob'])
             self_columns = question_reference.columns
@@ -157,7 +157,7 @@ class Configuration:
         return d 
     
     def probability_remain(self, configurations, configuration_probabilities, n = 0): 
-        _, config_prob_neighbors = self.transition_probabilities(configurations, configuration_probabilities, enforce_move = True)
+        _, config_prob_neighbors = self.get_transition(configurations, configuration_probabilities, enforce_move = True)
         config_prob_neighbors = np.sum(np.sort(config_prob_neighbors)[:self.len-n])
         prob_remain = self.p/(self.p+config_prob_neighbors) # 
         return prob_remain
@@ -175,7 +175,7 @@ class Configuration:
                      probabilistic = True, enforce_move = False):
         
         # with or without enforcing move 
-        config_ids, config_probs = self.transition_probabilities(configurations, 
+        config_ids, config_probs = self.get_transition(configurations, 
                                                                     configuration_probabilities,
                                                                     enforce_move)
         
