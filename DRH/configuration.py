@@ -200,14 +200,14 @@ class Configuration:
 
 
 # load documents
-entry_configuration_master = pd.read_csv('../data/analysis/entry_configuration_master.csv')
-configuration_probabilities = np.loadtxt('../data/analysis/configuration_probabilities.txt')
-question_reference = pd.read_csv('../data/analysis/question_reference.csv')
+#entry_configuration_master = pd.read_csv('../data/analysis/entry_configuration_master.csv')
+#configuration_probabilities = np.loadtxt('../data/analysis/configuration_probabilities.txt')
+#question_reference = pd.read_csv('../data/analysis/question_reference.csv')
 
 # generate all states
-n_nodes = 20
-from fun import bin_states 
-configurations = bin_states(n_nodes) 
+#n_nodes = 20
+#from fun import bin_states 
+#configurations = bin_states(n_nodes) 
 
 ## this we can actually plot in interesting ways ...
 ## i.e. we can do it as in the earlier DeDeo work. 
