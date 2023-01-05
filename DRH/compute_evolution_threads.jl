@@ -15,8 +15,9 @@ unique_configs = unique(config_ids) # think right, but double check
 unique_configs = unique_configs .+ 1 # because of 0-indexing in python 
 
 # command line arguments 
-start, stop = ARGS
-unique_configs = unique_configs[parse(Int64, start):parse(Int64, stop)]
+start = ARGS[1]
+start = parse(Int64, start)
+unique_configs = unique_configs[start:start+9]
 
 # setup 
 n_simulation = 10
@@ -55,4 +56,4 @@ simulation = [x for (x, y, z) in sample_list],
 timestep = [y for (x, y, z) in sample_list],
 config_id = [z for (x, y, z) in sample_list]
 )
-CSV.write(f"/home/vmp/humanities-glass/data/COGSCI23/evo/s_{n_simulation}_t_{n_timestep}_n_{num}_f_{start}_l_{stop}.csv", d)
+CSV.write(f"/home/vmp/humanities-glass/data/COGSCI23/evo/s_{n_simulation}_t_{n_timestep}_f_{start}.csv", d)
