@@ -1,10 +1,10 @@
 import pandas as pd 
 import matplotlib.pyplot as plt 
-import seaborn as sns 
-import numpy as np 
+#import seaborn as sns 
+#import numpy as np 
 
 d_evo = pd.read_csv('../data/COGSCI23/evolution_maxlik_s_100_t_10.csv')
-test = pd.read_csv('../data/COGSCI23/evo/s_10_t_10_n_10_f_1_l_10.csv')
+test = pd.read_csv('../data/COGSCI23/evo/n_1_s_10_t_10_f_1.csv')
 len(test)
 
 test.groupby('simulation').size()
