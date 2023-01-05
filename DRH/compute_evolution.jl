@@ -1,5 +1,5 @@
 include("configuration.jl")
-using .cn, Printf, Statistics, Distributions, DelimitedFiles, CSV, DataFrames, IterTools, StatsBase, Chain, FStrings
+using .cn, Printf, Statistics, Distributions, DelimitedFiles, CSV, DataFrames, IterTools, StatsBase, Chain, FStrings, Base.Threads
 
 # load shit 
 configuration_probabilities = readdlm("/home/vmp/humanities-glass/data/analysis/configuration_probabilities.txt")
@@ -14,18 +14,21 @@ config_ids = @chain entry_maxlikelihood begin _.config_id end
 unique_configs = unique(config_ids) # think right, but double check 
 unique_configs = unique_configs .+ 1 # because of 0-indexing in python 
 
+# command line arguments 
+start, stop = ARGS
+unique_configs = unique_configs[parse(Int64, start):parse(Int64, stop)]
+
 # setup 
-n_simulation = 100
-n_timestep = 100
-batch_size = 10
-sample_list = [] 
-conf_list = []
+n_simulation = 10
+n_timestep = 10
+global sample_list = [] 
+global conf_list = []
 total_configs = length(unique_configs)
 @time begin 
-for (num, unique_config) in enumerate(unique_configs)
+global num = 0
+@threads for unique_config in unique_configs
+    global num += 1
     println("$num / $total_configs")
-    lx = length(sample_list)
-    println("length: $lx")
     for sim_number in 1:n_simulation
         x = findfirst(isequal(unique_config), [x for (x, y) in conf_list]) # is this what we want?
         if x isa Number 
@@ -43,20 +46,13 @@ for (num, unique_config) in enumerate(unique_configs)
             id = ConfObj.id 
         end 
     end 
-    # save as we go for larger ones 
-    # memory becomes pretty wild 
-    if num % batch_size == 0
-        println("saving file")
-        d = DataFrame(
-        simulation = [x for (x, y, z) in sample_list],
-        timestep = [y for (x, y, z) in sample_list],
-        config_id = [z for (x, y, z) in sample_list]
-        )
-        CSV.write(f"/home/vmp/humanities-glass/data/COGSCI23/evo/s_{n_simulation}_t_{n_timestep}_n_{num}.csv", d)
-        global sample_list = []
-    end 
 end 
 end 
 
-x = []
-length(x)
+println("saving file")
+d = DataFrame(
+simulation = [x for (x, y, z) in sample_list],
+timestep = [y for (x, y, z) in sample_list],
+config_id = [z for (x, y, z) in sample_list]
+)
+CSV.write(f"/home/vmp/humanities-glass/data/COGSCI23/evo/s_{n_simulation}_t_{n_timestep}_n_{num}_f_{start}_l_{stop}.csv", d)

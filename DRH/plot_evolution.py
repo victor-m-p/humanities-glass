@@ -4,6 +4,11 @@ import seaborn as sns
 import numpy as np 
 
 d_evo = pd.read_csv('../data/COGSCI23/evolution_maxlik_s_100_t_10.csv')
+test = pd.read_csv('../data/COGSCI23/evo/s_10_t_10_n_10_f_1_l_10.csv')
+len(test)
+
+test.groupby('simulation').size()
+test.groupby('timestep').size()
 
 # 1871/4683 unique 
 len(d_evo['config_id'].unique())
