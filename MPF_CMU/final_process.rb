@@ -3,8 +3,8 @@
 
 # sbatch -N 1 -o UPDATED_FITS -t 24:00:00 -p RM ./final_process.rb
 
-prefix="../data/clean/"
-new_prefix="../data/mdl_experiments/"
+prefix="/jet/home/sdedeo/humanities-glass/data/clean/"
+new_prefix="/jet/home/sdedeo/humanities-glass/data/mdl_experiments/"
 
 `ls ../data/clean`.split("\n").each { |filename|
   filename_out=filename+".mpf"
