@@ -12,8 +12,9 @@ new_prefix="/jet/home/sdedeo/humanities-glass/data/mdl_experiments/"
   
   n_lines=`wc -l #{prefix+filename}`.split(" ")[0].to_i
   n=filename.split("_")[2].to_i
+  num_na=filename.split("_")[4].to_i
   
-  if (n == 20) then
+  if (n == 20) and (num_na == 5) then
   
     file=File.new(prefix+filename, 'r')
     str=""

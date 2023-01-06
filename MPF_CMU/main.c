@@ -121,7 +121,7 @@ int main (int argc, char *argv[]) {
 				cv->filename=filename_sav;
 				cv->nn=atoi(argv[3]);
 				cv->best_fit=NULL;
-				best_log_sparsity=minimize_kl(cv, 1);
+				best_log_sparsity=minimize_kl(cv, 0);
 				printf("Found a best sparsity without NaNs (%lf)\n", best_log_sparsity);
 
 				data=new_data();
@@ -148,7 +148,7 @@ int main (int argc, char *argv[]) {
 				cv->filename=argv[2];
 				cv->nn=atoi(argv[3]);
 				cv->best_fit=best_fit;
-				best_log_sparsity=minimize_kl(cv, 1); // don't use fast version, just for safety
+				best_log_sparsity=minimize_kl(cv, 0); // don't use fast version, just for safety
 
 				printf("Found a best sparsity with NaNs (%lf): ", best_log_sparsity);
 			} else {
@@ -156,7 +156,7 @@ int main (int argc, char *argv[]) {
 				cv->filename=argv[2];
 				cv->nn=atoi(argv[3]);
 				cv->best_fit=best_fit;
-				best_log_sparsity=minimize_kl(cv, 1); // don't use fast version, just for safety
+				best_log_sparsity=minimize_kl(cv, 0); // don't use fast version, just for safety
 			}
 						
 			printf("Best log_sparsity: %lf\n", best_log_sparsity);
@@ -257,7 +257,7 @@ int main (int argc, char *argv[]) {
 			strcpy(filename_sav, argv[2]);
 			strcat(filename_sav, "_data.dat");
 			cv->filename=filename_sav;
-			best_log_sparsity=minimize_kl(cv, 1); // use fast version
+			best_log_sparsity=minimize_kl(cv, 0); // use fast version
 			
 			printf("Best log_sparsity CV: %lf\n", best_log_sparsity);
 			
@@ -324,7 +324,7 @@ int main (int argc, char *argv[]) {
 			cv=(cross_val *)malloc(sizeof(cross_val));
 			cv->filename=argv[2];
 			cv->nn=atoi(argv[4]);
-			best_log_sparsity=minimize_kl(cv, 1); // use fast version
+			best_log_sparsity=minimize_kl(cv, 0); // use fast version
 			
 			printf("Best log_sparsity: %lf\n", best_log_sparsity);
 			
