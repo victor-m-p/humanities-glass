@@ -340,3 +340,5 @@ nx.draw_networkx_edges(G, pos,
                        edge_color = 'tab:blue')
 plt.suptitle('Directed (n=2)', size = large_text)
 plt.savefig('../fig/COGSCI23/networks/t10_n2_directed.pdf')
+
+# layout based on undirected but show the directed ones? 
