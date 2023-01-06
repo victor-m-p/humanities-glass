@@ -7,6 +7,7 @@ prefix="/jet/home/sdedeo/humanities-glass/data/clean/"
 new_prefix="/jet/home/sdedeo/humanities-glass/data/mdl_experiments/"
 
 `ls #{prefix}`.split("\n").each { |filename|
+  print "Doing #{filename}\n"
   filename_out=filename+".mpf"
   
   n_lines=`wc -l #{prefix+filename}`.split(" ")[0].to_i
@@ -21,7 +22,8 @@ new_prefix="/jet/home/sdedeo/humanities-glass/data/mdl_experiments/"
   file_out.write("#{n_lines}\n#{n}\n")
   file_out.write(str); file_out.close
 
-  ans=`./mpf -c #{new_prefix+filename_out} 1`
+  ans=`OMP_NUM_THREADS=128 ./mpf -c #{new_prefix+filename_out} 1`
+  print "FINAL VERSION for #{filename_out}:\n #{ans}\n\n"
   ans.split("\n").select { |i| i.include?("params") }
   file_out=File.new(new_prefix+filename_out+"_params_NN1", 'w')
   file_out.write(ans.split("\n").select { |i| i.include?("params") }[0])
