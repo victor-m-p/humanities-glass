@@ -6,11 +6,11 @@
 prefix="/jet/home/sdedeo/humanities-glass/data/clean/"
 new_prefix="/jet/home/sdedeo/humanities-glass/data/mdl_experiments/"
 
-`ls ../data/clean`.split("\n").each { |filename|
+`ls #{prefix}`.split("\n").each { |filename|
   filename_out=filename+".mpf"
   
   n_lines=`wc -l #{prefix+filename}`.split(" ")[0].to_i
-  n=trial[0]
+  n=filename.split("_")[2].to_i
   file=File.new(filename, 'r')
   str=""
   file.each_line { |set|
