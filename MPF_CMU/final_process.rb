@@ -12,6 +12,9 @@ new_prefix="/jet/home/sdedeo/humanities-glass/data/mdl_experiments/"
   
   n_lines=`wc -l #{prefix+filename}`.split(" ")[0].to_i
   n=filename.split("_")[2].to_i
+  
+  if (n == 5) 
+  
   file=File.new(prefix+filename, 'r')
   str=""
   file.each_line { |set|
