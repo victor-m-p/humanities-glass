@@ -1,3 +1,4 @@
+# COGSCI23
 include("configuration.jl")
 using .cn, Printf, Statistics, Distributions, DelimitedFiles, CSV, DataFrames, IterTools, StatsBase, Chain, FStrings, Base.Threads
 

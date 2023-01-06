@@ -1,3 +1,9 @@
+'''
+VMP 2023-01-05: 
+COGSCI23
+come back and save the plots.
+also just save the diam....
+'''
 import pandas as pd 
 import matplotlib.pyplot as plt 
 import seaborn as sns 
