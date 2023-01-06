@@ -223,7 +223,7 @@ sort_conf = pd.DataFrame(sort_conf, columns = ['config_from'])
 network_top = network_info.merge(sort_conf, on = 'config_from', how = 'inner')
 network_top[['config_from', 'religions']].head(20)
 
-annotated = {1025926: 'Islamic modernists*',
+annotated = {1025926: 'Cistercians*',
              1027974: 'Jesuits*',
              1027975: 'Ancient Egypt*',
              362374: 'Jehovah',
