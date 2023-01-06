@@ -4,9 +4,11 @@ import matplotlib.pyplot as plt
 import networkx as nx 
 import numpy as np 
 
+small_text, large_text = 12, 18
+
 # load JSD 
 d_JSD = pd.read_csv('../data/COGSCI23/evo_entropy/JSD_10.csv')
-d_JSD['weight'] = d_JSD['JSD']
+d_JSD['weight'] = 1-d_JSD['JSD']
 d_JSD = d_JSD[['i', 'j', 'weight']]
 
 # load GMM
@@ -66,6 +68,7 @@ node_cluster = dict(nx.get_node_attributes(G, 'cluster'))
 node_color = ['tab:blue' if x == 0 else 'tab:orange' for x in node_cluster.values()]
 
 # plot 1: hairball 
+fig, ax = plt.subplots(dpi = 300)
 pos = nx.spring_layout(G, weight = 'weight',
                        k = 1/np.sqrt(260),
                        seed = 4)
@@ -77,19 +80,8 @@ nx.draw_networkx_edges(G, pos,
                        edgelist = edge_list,
                        width = [x*0.01 for x in edge_w])
 
-# plot 2: force spread
-pos = nx.spring_layout(G, weight = 'weight',
-                       k = 0.2/np.sqrt(260),
-                       seed = 4)
-nx.draw_networkx_nodes(G, pos, 
-                       nodelist = node_list, 
-                       node_size = [x*0.01 for x in node_size],
-                       node_color = node_color)
-nx.draw_networkx_edges(G, pos, 
-                       edgelist = edge_list,
-                       width = [x*0.01 for x in edge_w])
-
-# plot 3: more spread
+# plot 2: more spread
+fig, ax = plt.subplots(dpi = 300)
 pos = nx.spring_layout(G, weight = 'weight',
                        k = 0.15/np.sqrt(260),
                        seed = 12)
@@ -99,30 +91,8 @@ nx.draw_networkx_nodes(G, pos,
                        node_color = node_color)
 nx.draw_networkx_edges(G, pos, 
                        edgelist = edge_list,
-                       width = [x*0.001 for x in edge_w])
-
-# find some of the nodes that we know 
-config_ids = nx.get_node_attributes(G, 'config_id')
-config_ids = {key:int(val) for key, val in config_ids.items()}
-labels = {}
-for node, attr in G.nodes(data=True): 
-    nsize = attr['nodesize']
-    if nsize > 1000: 
-        labels[node] = int(attr['config_id'])
-    else: 
-        labels[node] = ""
-labels    
-pos = nx.spring_layout(G, weight = 'weight',
-                       k = 1/np.sqrt(260),
-                       seed = 4)
-nx.draw_networkx_nodes(G, pos, 
-                       nodelist = node_list, 
-                       node_size = [x*0.01 for x in node_size],
-                       node_color = node_color)
-nx.draw_networkx_edges(G, pos, 
-                       edgelist = edge_list,
                        width = [x*0.01 for x in edge_w])
-nx.draw_networkx_labels(G, pos, labels)
+
 
 # find interesting states to label
 pd.set_option('display.max_colwidth', None)
@@ -147,4 +117,226 @@ d_labeling.sort_values(['cluster', 'count'],
 
 # network with color / size by diameter (or mean dist. from home).
 
-# actually run for 100 time-steps and run all 261. 
+# plot something different 
+d_edgelist_10 = d_edgelist[d_edgelist['t_to'] == 10]
+d_edgelist_10_max = d_edgelist_10.groupby(['config_from', 'config_to']).size().reset_index(name = 'weight')
+
+# n = 2
+d_edgelist_samp = d_edgelist_10_max.sort_values('weight').groupby('config_from').tail(2)
+
+# try to just plot this as is ...
+G = nx.from_pandas_edgelist(d_edgelist_samp,
+                            source = 'config_from',
+                            target = 'config_to',
+                            edge_attr = 'weight')
+
+# only the main component
+Gcc = sorted(nx.connected_components(G), key=len, reverse=True)
+G = G.subgraph(Gcc[0])
+
+# prepare plot 
+## edgeweight 
+edge_weight = dict(nx.get_edge_attributes(G, 'weight'))
+edge_list = []
+edge_w = []
+for x, y in edge_weight.items(): 
+    edge_list.append(x)
+    edge_w.append(y)
+    
+## degree 
+degree = dict(G.degree())
+node_list = []
+node_deg = []
+for x, y in degree.items(): 
+    node_list.append(x)
+    node_deg.append(y)
+
+n = len(G.nodes())
+
+## plot (takes a while) 
+pos = nx.spring_layout(G, weight = 'weight',
+                       k = 1/np.sqrt(n),
+                       seed = 4)
+
+fig, ax = plt.subplots(dpi = 300)
+plt.axis('off')
+nx.draw_networkx_nodes(G, pos, 
+                       nodelist = node_list, 
+                       node_size = [x for x in node_deg],
+                       node_color = 'tab:orange',
+                       linewidths = 0.5,
+                       edgecolors = 'black')
+nx.draw_networkx_edges(G, pos, 
+                       edgelist = edge_list,
+                       width = [x*0.1 for x in edge_w],
+                       alpha = [x/max(edge_w)*0.5 for x in edge_w],
+                       edge_color = 'tab:blue')
+plt.suptitle('Undirected (n=2)', size = large_text)
+plt.savefig('../fig/COGSCI23/networks/t10_n2_undirected.pdf')
+
+
+# n = 1
+d_edgelist_samp = d_edgelist_10_max.sort_values('weight').groupby('config_from').tail(1)
+
+# try to just plot this as is ...
+G = nx.from_pandas_edgelist(d_edgelist_samp,
+                            source = 'config_from',
+                            target = 'config_to',
+                            edge_attr = 'weight')
+
+# only GCC
+#H = G.to_undirected()
+Gcc = sorted(nx.connected_components(G), key=len, reverse=True)
+G = G.subgraph(Gcc[0])
+
+# prepare plot 
+## edgeweight 
+edge_weight = dict(nx.get_edge_attributes(G, 'weight'))
+edge_list = []
+edge_w = []
+for x, y in edge_weight.items(): 
+    edge_list.append(x)
+    edge_w.append(y)
+    
+## degree 
+degree = dict(G.degree())
+node_list = []
+node_deg = []
+for x, y in degree.items(): 
+    node_list.append(x)
+    node_deg.append(y)
+
+n = len(G.nodes())
+
+## plot (takes a while) 
+pos = nx.spring_layout(G, weight = 'weight',
+                       k = 1/np.sqrt(n),
+                       seed = 4)
+
+fig, ax = plt.subplots(dpi = 300)
+plt.axis('off')
+nx.draw_networkx_nodes(G, pos, 
+                       nodelist = node_list, 
+                       node_size = [x*5 for x in node_deg],
+                       node_color = 'tab:orange',
+                       linewidths = 0.5,
+                       edgecolors = 'black')
+nx.draw_networkx_edges(G, pos, 
+                       edgelist = edge_list,
+                       width = [x*0.05 for x in edge_w],
+                       alpha = [x/max(edge_w) for x in edge_w],
+                       edge_color = 'tab:blue')
+plt.suptitle('Undirected (n=1)', size = large_text)
+plt.savefig('../fig/COGSCI23/networks/t10_n1_undirected.pdf')
+
+# directed graph version 
+d_edgelist_samp = d_edgelist_10_max.sort_values('weight').groupby('config_from').tail(1)
+
+# try to just plot this as is ...
+G = nx.from_pandas_edgelist(d_edgelist_samp,
+                            source = 'config_from',
+                            target = 'config_to',
+                            edge_attr = 'weight',
+                            create_using = nx.DiGraph)
+
+# only GCC
+H = G.to_undirected()
+Gcc = sorted(nx.connected_components(H), key=len, reverse=True)
+G = G.subgraph(Gcc[0])
+
+# prepare plot 
+## edgeweight 
+edge_weight = dict(nx.get_edge_attributes(G, 'weight'))
+edge_list = []
+edge_w = []
+for x, y in edge_weight.items(): 
+    edge_list.append(x)
+    edge_w.append(y)
+    
+## degree 
+degree = dict(G.degree())
+node_list = []
+node_deg = []
+for x, y in degree.items(): 
+    node_list.append(x)
+    node_deg.append(y)
+
+n = len(G.nodes())
+
+## plot (takes a while) 
+pos = nx.spring_layout(G, weight = 'weight',
+                       k = 1/np.sqrt(n),
+                       seed = 4)
+
+# plot
+fig, ax = plt.subplots(dpi = 300)
+plt.axis('off')
+nx.draw_networkx_nodes(G, pos, 
+                       nodelist = node_list, 
+                       node_size = [x*5 for x in node_deg],
+                       node_color = 'tab:orange',
+                       linewidths = 0.5,
+                       edgecolors = 'black')
+nx.draw_networkx_edges(G, pos, 
+                       edgelist = edge_list,
+                       width = [x*0.05 for x in edge_w],
+                       alpha = [x/max(edge_w)*0.5 for x in edge_w],
+                       edge_color = 'tab:blue')
+plt.suptitle('Directed (n=1)', size = large_text)
+plt.savefig('../fig/COGSCI23/networks/t10_n1_directed.pdf')
+
+# n = 2 again
+d_edgelist_samp = d_edgelist_10_max.sort_values('weight').groupby('config_from').tail(2)
+
+# try to just plot this as is ...
+G = nx.from_pandas_edgelist(d_edgelist_samp,
+                            source = 'config_from',
+                            target = 'config_to',
+                            edge_attr = 'weight',
+                            create_using = nx.DiGraph)
+
+# only GCC
+H = G.to_undirected()
+Gcc = sorted(nx.connected_components(H), key=len, reverse=True)
+G = G.subgraph(Gcc[0])
+
+# prepare plot 
+## edgeweight 
+edge_weight = dict(nx.get_edge_attributes(G, 'weight'))
+edge_list = []
+edge_w = []
+for x, y in edge_weight.items(): 
+    edge_list.append(x)
+    edge_w.append(y)
+    
+## degree 
+degree = dict(G.degree())
+node_list = []
+node_deg = []
+for x, y in degree.items(): 
+    node_list.append(x)
+    node_deg.append(y)
+
+n = len(G.nodes())
+
+## plot (takes a while) 
+pos = nx.spring_layout(G, weight = 'weight',
+                       k = 1/np.sqrt(n),
+                       seed = 4)
+
+# plot
+fig, ax = plt.subplots(dpi = 300)
+plt.axis('off')
+nx.draw_networkx_nodes(G, pos, 
+                       nodelist = node_list, 
+                       node_size = [x*5 for x in node_deg],
+                       node_color = 'tab:orange',
+                       linewidths = 0.5,
+                       edgecolors = 'black')
+nx.draw_networkx_edges(G, pos, 
+                       edgelist = edge_list,
+                       width = [x*0.05 for x in edge_w],
+                       alpha = [x/max(edge_w) for x in edge_w],
+                       edge_color = 'tab:blue')
+plt.suptitle('Directed (n=2)', size = large_text)
+plt.savefig('../fig/COGSCI23/networks/t10_n2_directed.pdf')

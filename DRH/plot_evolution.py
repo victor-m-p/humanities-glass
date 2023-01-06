@@ -183,8 +183,8 @@ plt.suptitle('Number visit mode attractor', size = large_text)
 plt.xlabel('Number Visit', size = small_text)
 plt.savefig('../fig/COGSCI23/evo/mode_visit_across.pdf')
 
-####### OLD #########
 
+#### old ####
 
 
 ## visualize as a directed network 
