@@ -1,7 +1,7 @@
 #!/usr/bin/ruby
 #!/opt/local/bin/ruby
 
-# sbatch -N 1 -o UPDATED_FITS -t 24:00:00 -p RM ./final_process.rb
+# sbatch -N 1 -o UPDATED_FITS -t 48:00:00 -p RM ./final_process.rb
 
 prefix="/jet/home/sdedeo/humanities-glass/data/clean/"
 new_prefix="/jet/home/sdedeo/humanities-glass/data/mdl_experiments/"
@@ -12,7 +12,7 @@ new_prefix="/jet/home/sdedeo/humanities-glass/data/mdl_experiments/"
   
   n_lines=`wc -l #{prefix+filename}`.split(" ")[0].to_i
   n=filename.split("_")[2].to_i
-  file=File.new(filename, 'r')
+  file=File.new(prefix+filename, 'r')
   str=""
   file.each_line { |set|
     str << set.split(" ")[0..-2].collect { |i| (i.to_i == 0) ? "X" : ((i.to_i < 0) ? "0" : "1") }.join()+" "+set.split(" ")[-1]+"\n"
