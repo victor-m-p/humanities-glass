@@ -116,7 +116,7 @@ network_information = network_information.merge(pos_dataframe,
 
 # Louvain communities 
 ## resolution = 0.5 gives bias towards fewer and larger communities
-louvain_communities = nx_comm.louvain_communities(G, resolution = 0.5, seed = 152)
+louvain_communities = nx_comm.louvain_communities(G, resolution = 0.7, seed = 152)
 ## might be a better way to do this  
 louvain_communities_dict = {}
 for num, ele in enumerate(louvain_communities):

@@ -99,24 +99,25 @@ network_information_subset = network_information[['config_id', 'comm_color_code'
 annotations = annotations.merge(network_information_subset, on = 'config_id', how = 'inner') 
 
 ## remove a specific node because it is Sokoto twice...
-annotations = annotations[annotations['node_id'] != 106] 
+annotations = annotations[annotations['node_id'] != 101] 
+annotations.sort_values('node_id')
 
 ## now nudge the position of labels 
 pos_annot = {
-    0: (300, -30), # Cistercians
-    1: (500, 0), # Jesuits
-    2: (600, -20), # Egypt
-    3: (480, -20), # Jehovah
-    4: (300, -20), # Islam
-    5: (-90, 350), # Tsonga
-    9: (-170, 400), # Meso
-    13: (350, -20), # Calvinism
-    18: (200, -120), # Free Methodist
-    27: (-85, 400), # Roman Imperial
-    60: (-600, -10), # Pythagoreanism
-    78: (-400, -10), # Sokoto
-    93: (-300, -10), # Peyote
-    148: (-400, -10) # Wogeo
+    0: (-400, -30), # Cistercians
+    1: (400, 0), # Egypt
+    2: (450, -20), # Jesuit
+    3: (-500, 0), # Jehovah
+    4: (-400, -20), # Islam
+    9: (300, 0), # Tsonga
+    11: (-700, 0), # Calvinism
+    12: (250, -20), # Meso
+    16: (-600, 0), # Free Methodist
+    24: (200, 0), # Roman Imperial
+    54: (200, 100), # Pythagoreanism
+    79: (-400, -10), # Sokoto
+    108: (200, 100), # Peyote
+    138: (-400, -10) # Wogeo
 }
 
 # create network
@@ -197,7 +198,6 @@ for index, row in annotations.iterrows():
                                   connectionstyle='arc3',
                                   color='black'))
 plt.savefig('../fig/community_configs_annotation.pdf')
-
 
 ########## TABLES ##########
 # table with all entry_id that appear in a community 
