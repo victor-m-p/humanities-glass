@@ -97,7 +97,7 @@ direct_flattened.to_csv('../data/analysis/data_flattened.csv', index = False)
 
 # calculate probability of all configurations based on parameters h, J.
 ## load parameter file (NB: this will be subject to slight change because of improvements)
-params = np.loadtxt(f'../data/mdl_original/cleaned_nrows_{n_rows}_maxna_{n_nan}.dat_params.dat')
+params = np.loadtxt(f'../data/mdl_experiments/matrix_questions_{n_nodes}_maxna_{n_nan}_nrows_{n_rows}_entries_{n_entries}.txt.mpf_params.dat')
 nJ = int(n_nodes*(n_nodes-1)/2)
 J = params[:nJ]
 h = params[nJ:]

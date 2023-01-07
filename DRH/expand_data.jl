@@ -1,5 +1,5 @@
 #=
-VMP 2022-12-12:
+vpoulsen 2022-12-12:
 For each entry_id (religious culture) find all possible configurations.
 I.e. if there are inconsistencies or NAN then expand to all possible. 
 Then assign probabilities to each of these possible configurations. 
@@ -11,9 +11,9 @@ using Printf, Statistics, Distributions, DelimitedFiles, CSV, DataFrames, IterTo
 
 # check up on how to better manage paths in julia
 # currently requires manual tweaking of your path.
-prob_file = "/home/vmp/humanities-glass/data/analysis/configuration_probabilities.txt"
-config_file = "/home/vmp/humanities-glass/data/analysis/configurations.txt"
-flat_file = "/home/vmp/humanities-glass/data/analysis/data_flattened.csv"
+prob_file = "/home/vpoulsen/humanities-glass/data/analysis/configuration_probabilities.txt"
+config_file = "/home/vpoulsen/humanities-glass/data/analysis/configurations.txt"
+flat_file = "/home/vpoulsen/humanities-glass/data/analysis/data_flattened.csv"
 
 # setup
 n_nodes, maxna = 20, 5
@@ -85,5 +85,5 @@ d = DataFrame(
     entry_prob = total_pnorm) # probability of being in this config for the entry id
 
 # save stuff 
-CSV.write("/home/vmp/humanities-glass/data/analysis/data_expanded.csv", d)
-writedlm("/home/vmp/humanities-glass/data/analysis/matrix_expanded.txt", mat)
+CSV.write("/home/vpoulsen/humanities-glass/data/analysis/data_expanded.csv", d)
+writedlm("/home/vpoulsen/humanities-glass/data/analysis/matrix_expanded.txt", mat)

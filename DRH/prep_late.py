@@ -9,8 +9,8 @@ import numpy as np
 
 # entry_id/configuration master dataset
 ## load relevant data-sets 
-data_expanded = pd.read_csv('/home/vmp/humanities-glass/data/analysis/data_expanded.csv')
-entry_reference = pd.read_csv('/home/vmp/humanities-glass/data/analysis/entry_reference.csv')
+data_expanded = pd.read_csv('../data/analysis/data_expanded.csv')
+entry_reference = pd.read_csv('../data/analysis/entry_reference.csv')
 ## merge them
 entry_configuration_master = data_expanded.merge(entry_reference, on = 'entry_id', how = 'inner')
 ## drop the entry_id_drh (can always cross-reference w. entry_reference)

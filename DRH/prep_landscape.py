@@ -108,6 +108,7 @@ pos_dataframe = pd.DataFrame.from_dict(pos,
                                        orient='index', 
                                        columns = ['pos_x', 'pos_y'])
 pos_dataframe['node_id'] = pos_dataframe.index
+
 ## merge with network_information
 network_information = network_information.merge(pos_dataframe, 
                                                 on = 'node_id', 
