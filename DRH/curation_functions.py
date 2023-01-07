@@ -157,7 +157,6 @@ def apply_combinations(best_entries, entry_id_column,
         
     return entry_combinations_lst 
 
-
 def combinations_to_dataframe(weighted_combinations):
     ## prepare dataframe
     vals = []

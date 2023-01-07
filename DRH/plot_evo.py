@@ -137,6 +137,33 @@ plot_net(d = d_edgelist_10_max,
          filename = 't10_n2_mixed',
          pos = pos_undirected_2)
 
+# n = 3
+plot_net(d = d_edgelist_10_max,
+         n = 3, 
+         graph_type = nx.Graph, 
+         suptitle = 'Undirected (n = 3)',
+         filename = 't10_n3_undirected')
+
+plot_net(d = d_edgelist_10_max,
+         n = 3, 
+         graph_type = nx.DiGraph, 
+         suptitle = 'Directed (n = 3)',
+         filename = 't10_n3_directed')
+
+pos_undirected_3 = get_pos(d = d_edgelist_10_max,
+                           n = 3,
+                           graph_type = nx.Graph,
+                           bias = 1)
+
+plot_net(d = d_edgelist_10_max,
+         n = 3,
+         graph_type = nx.DiGraph,
+         suptitle = 'Mixed (n = 3)',
+         filename = 't10_n3_mixed',
+         pos = pos_undirected_3)
+
+
+
 
 ########## labeling ###########
 
@@ -236,7 +263,8 @@ annotated = {1025926: 'Cistercians*',
              634754: 'Badjau',
              634752: 'Kapauku',
              361984: 'Messalians',
-             385536: 'Pythagorean'}
+             385536: 'Pythagorean',
+             377344: '?'}
 
 # labels first 
 labels = {}
