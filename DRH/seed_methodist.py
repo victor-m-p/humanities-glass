@@ -130,11 +130,12 @@ annotations = annotations.merge(entry_reference, on = ['entry_id', 'entry_drh'],
 match_node(annotations, 0) # Free Methodist (*)
 match_node(annotations, 1) # Jehovah (*)
 match_node(annotations, 2) # Southern Baptist
-match_node(annotations, 4) # No maximum likelihood (or data state?)
+match_node(annotations, 4) # No MAXLIK (or data-state?)
 match_node(annotations, 5) # Sachchai
-match_node(annotations, 6) # Tunisian Women
-match_node(annotations, 9) # Pauline
-match_node(annotations, 8) # No maximum likelihood (or data state?)
+match_node(annotations, 6) # No MAXLIK (or data-state?)
+match_node(annotations, 9) # Tunisian
+match_node(annotations, 8) # Pauline
+match_node(annotations, 3) # Messalians
 
 transl_dict = {
     879: 'Free Methodist',
@@ -147,12 +148,12 @@ transl_dict = {
 }
 
 pos_annot = {
-    0: (-95, 360), # Free Meth
-    1: (-48, -200), # Jehova
-    2: (-65, -250), # S. Baptist
-    5: (-55, -270), # Sachchai
-    6: (-95, -300), # Tunisian
-    9: (-122, 280) # Pauline
+    0: (-110, 400), # Free Meth
+    1: (-65, 200), # Jehova
+    2: (-70, -450), # S. Baptist
+    5: (-60, -270), # Sachchai
+    9: (-100, -550), # Tunisian
+    8: (-145, 350) # Pauline
 }
 
 d_annot = pd.DataFrame.from_dict(transl_dict, 
@@ -160,6 +161,7 @@ d_annot = pd.DataFrame.from_dict(transl_dict,
                        columns = ['entry_name'])
 d_annot['entry_id_drh'] = d_annot.index
 d_annot = d_annot.merge(annotations, on = ['entry_id_drh'], how = 'inner')
+
 d_annot = d_annot.iloc[[0, 1, 2, 3, 5, 8]]
 
 ### main plot (mixed) ###
@@ -174,7 +176,7 @@ nx.draw_networkx_nodes(G, pos,
                         cmap = cmap)
 rgba = rgb2hex(cmap(0.8))
 nx.draw_networkx_edges(G, pos, alpha = 0.7,
-                       width = [x*5 for x in edgew_sorted],
+                       width = [x*5 if x > 0.05 else 0 for x in edgew_sorted],
                        edgelist = edgelst_sorted,
                        edge_color = rgba
                        )
@@ -186,9 +188,7 @@ for index, row in d_annot.iterrows():
     color = rgb2hex(cmap(0.99))
     ax.annotate(name, xy = [pos_x, pos_y],
                 color = rgba,
-                #xycoords = 'figure fraction',
                 xytext=[pos_x+xx, pos_y+yy],
-                #textcoords = 'figure fraction', 
                 arrowprops = dict(arrowstyle="->",
                                   connectionstyle='arc3',
                                   color='black'))
