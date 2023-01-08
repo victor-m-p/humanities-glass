@@ -134,13 +134,13 @@ class Configuration:
                                  configuration_probabilities)
         # if n == 1 move to the neighbor
         if n == 1: 
-            new_id = ConfObj.id_neighbor[targets][0]
+            new_id = self.id_neighbor[targets][0]
             return Configuration(new_id, configurations, 
                                  configuration_probabilities)
         # if n > 1 the move is not necessarily to a neighbor 
         else: 
             feature_changes = [x for x, y in zip(targets, move_bin) if y]
-            new_configuration = ConfObj.flip_indices(feature_changes)
+            new_configuration = self.flip_indices(feature_changes)
             new_id = np.where(np.all(configurations == new_configuration,
                                     axis = 1))[0][0]
             return Configuration(new_id, configurations,
@@ -173,23 +173,33 @@ class Configuration:
         answers_nonoverlap = answers[answers[self.id] != answers[other.id]]
         return answers_nonoverlap 
  
-    
-    # probability remain (old schema)
-    #def probability_remain(self, configurations, configuration_probabilities, n = 0):
-    #    _, config_prob_neighbors = self.get_transition(configurations, configuration_probabilities, enforce_move = True)
-    #    config_prob_neighbors = np.sum(np.sort(config_prob_neighbors)[:self.len-n])
-    #    prob_remain = self.p/(self.p+config_prob_neighbors) # 
-    #    return prob_remain
+        # getting more information about neighbor probs 
+    def neighbor_probabilities(self, configurations, configuration_probabilities, 
+                               question_reference, top_n = False):
+        # if enforce move it is simple 
+        config_ids, config_probs = self.pid_neighbors(configurations, configuration_probabilities)
+        d = pd.DataFrame([(config_id, config_prob) for config_id, config_prob in zip(config_ids, config_probs)],
+                        columns = ['config_id', 'config_prob'])
+        d = pd.concat([d, question_reference], axis = 1)
+        d[self.id] = self.configuration
+
+        # common for both 
+        d['transition_prob'] = d['config_prob']/d['config_prob'].sum()
+        d = d.sort_values('transition_prob', ascending = False)
+        # if we are only interested in the most probable n neighboring probabilities 
+        if top_n: 
+            d = d.head(top_n)
+        return d 
   
     # naive path between two configuration
     def naive_path(other): 
         pass 
-    
 
     # instantiate civilization class
     def to_civilization(x): 
         pass 
 
+'''
 # load documents
 entry_configuration_master = pd.read_csv('../data/analysis/entry_configuration_master.csv')
 configuration_probabilities = np.loadtxt('../data/analysis/configuration_probabilities.txt')
@@ -222,3 +232,4 @@ for i in range(1000):
         num_move.append(1)
 
 sum(num_move) # 131 reasonable. 
+'''

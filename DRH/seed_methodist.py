@@ -8,6 +8,7 @@ import numpy as np
 import matplotlib.pyplot as plt 
 import networkx as nx
 from fun import *
+pd.set_option('display.max_colwidth', None)
 
 # setup
 n_rows, n_nan, n_nodes = 455, 5, 20
@@ -194,132 +195,60 @@ for index, row in d_annot.iterrows():
                                   color='black'))
 plt.savefig('../fig/seed_FreeMethChurch_annotated_mix.pdf')
 
-##### below has not been revised yet ######
+# transition probabilities
+import configuration as cn 
 
-### what is the probability of changing away ###
-entry_config_reference = entry_config_master[['entry_id', 'config_id']].drop_duplicates()
-entry_config_reference = entry_config_reference.merge(entry_reference, on = 'entry_id', how = 'inner')
+# prep 
+configuration_probabilities = np.loadtxt('../data/analysis/configuration_probabilities.txt')
+question_reference = pd.read_csv('../data/analysis/question_reference.csv')
+configurations = bin_states(n_nodes)  
 
-def transition_prob(d_main, hamming_dist): 
-    d_hamming = d_main[d_main['hamming'] == 1]
-    d_hamming = d_hamming[['idx_neighbor', 'prob_neighbor']]
-    d_hamming = d_hamming.assign(prob_norm = lambda x: x['prob_neighbor']/sum(x['prob_neighbor']))
-    d_hamming = d_hamming.sort_values('prob_neighbor', ascending = False)
-    d_hamming = d_hamming.rename(columns = {'idx_neighbor': 'config_id'})
-    return d_hamming    
+# initialize Roman
+Methodist = cn.Configuration(config_idx, 
+                             configurations, 
+                             configuration_probabilities)
 
-### what is the bit-string of the Roman Imperial Cult?
-def uniq_bitstring(allstates, config_idx, question_ids, type):
-    focal_config = allstates[config_idx]
-    focal_config[focal_config == -1] = 0
-    focal_string = ''.join([str(x) for x in focal_config])
-    focal_df = pd.DataFrame([focal_config], columns = question_ids)
-    focal_df['config_id'] = config_idx
-    focal_df = pd.melt(focal_df, id_vars = 'config_id', value_vars = question_ids, var_name = 'related_q_id')
-    focal_df = focal_df.rename(columns = {
-        'config_id': f'config_id_{type}',
-        'value': f'value_{type}'})
-    return focal_string, focal_df 
+# transition probabilities
+transition_probabilities = Methodist.neighbor_probabilities(configurations,
+                                                        configuration_probabilities,
+                                                        question_reference)
 
-d_main = get_n_neighbors(1, config_idx, allstates, p)
-d_transition_prob = transition_prob(d_main, 1)
-d_transition_prob = d_transition_prob.merge(entry_config_reference, on = 'config_id', how = 'left')
-d_transition_prob # 
+# these are the transition_probabilities
+# if we enforce move. 
+transition_probabilities['transition_prob'] = transition_probabilities['transition_prob']*100
+transition_probabilities
+# most likely (least stable traits)
+## 15.01% (0.00029): having large-scale rituals required
+## 13.34% (0.00026): having special treatment for corpses
+## 12.27% (0.00024): not having formal burials
 
-question_ids = question_reference['related_q_id'].to_list() 
-bitstr_baptist, bitdf_baptist = uniq_bitstring(allstates, 362370, question_ids, 'other')
-bitstr_pauline, bitdf_pauline = uniq_bitstring(allstates, 362372, question_ids, 'other')
-bitstr_methodist, bitdf_methodist = uniq_bitstring(allstates, config_idx, question_ids, 'focal')
+# least likely (most stable traits)
+## 0.02%: having adult sacrifice required
+## 0.03%: having child sacrifice required
+## 0.19%: having castration required 
 
-baptist_neighbors = pd.concat([bitdf_baptist, bitdf_pauline])
-baptist_difference = baptist_neighbors.merge(bitdf_methodist, on = 'related_q_id', how = 'inner')
-baptist_difference = baptist_difference.assign(difference = lambda x: x['value_focal']-x['value_other'])
-baptist_difference = baptist_difference[baptist_difference['difference'] != 0]
+# which religions do these correspond to?
+## most likely 
+most_likely = transition_probabilities.head(3)
+most_likely = most_likely[['config_id', 'question', 'transition_prob']]
+most_likely = entry_config_master.merge(most_likely, on = 'config_id', how = 'inner')
+most_likely = most_likely.sort_values('config_prob', ascending = False)
+most_likely
+## 1. Soutern Baptists
+## 2. Circumcellions
+## 3. Sachchai
 
-pd.set_option('display.max_colwidth', None)
-baptist_interpret = baptist_difference.merge(question_reference, on = 'related_q_id', how = 'inner')
-baptist_interpret = baptist_interpret.rename(columns = {'config_id_other': 'config_id'})
+## least likely 
+least_likely = transition_probabilities.tail(3)
+least_likely = least_likely[['config_id', 'question', 'transition_prob']]
+least_likely = entry_config_master.merge(least_likely, on = 'config_id')
+least_likely = least_likely.sort_values('config_prob')
+least_likely
+## 1. does not exist
+## 2. does not exist
+## 3. does not exist
 
-entry_config_reference_uniq = entry_config_reference[['config_id', 'entry_name']].drop_duplicates()
-baptist_interpret = entry_config_reference_uniq.merge(baptist_interpret, on = 'config_id', how = 'inner')
-
-d_transition_uniq = d_transition_prob[['config_id', 'prob_norm']].drop_duplicates() 
-baptist_interpret = d_transition_uniq.merge(baptist_interpret, on = 'config_id', how = 'inner')
-baptist_interpret
-
-# probability for each of the states
-p[bitdf_baptist['config_id_other'].unique()[0]] # 0.0291
-p[bitdf_pauline['config_id_other'].unique()[0]] # 0.0196
-p[bitdf_methodist['config_id_focal'].unique()[0]] # 0.0575
-
-#### old shit (some of it useful, e.g. the loop) ####
-def get_n_neighbors(n_neighbors, idx_focal, config_allstates, prob_allstates):
-    config_focal = config_allstates[idx_focal]
-    prob_focal = prob_allstates[idx_focal]
-    lst_neighbors = []
-    for idx_neighbor, config_neighbor in enumerate(config_allstates): 
-        h_dist = np.count_nonzero(config_focal!=config_neighbor)
-        if h_dist <= n_neighbors and idx_focal != idx_neighbor: 
-            prob_neighbor = prob_allstates[idx_neighbor]
-            lst_neighbors.append((idx_focal, prob_focal, idx_neighbor, prob_neighbor, h_dist ))
-    df_neighbor = pd.DataFrame(
-        lst_neighbors, 
-        columns = ['idx_focal', 'prob_focal', 'idx_neighbor', 'prob_neighbor', 'hamming']
-    )
-    return df_neighbor
-
-d_main = get_n_neighbors(1, config_idx, allstates, p)
-
-## prep 
-question_ids = question_reference['related_q_id'].to_list() 
-d_weight = d_max_weight[['p_norm', 'p_raw', 'config_id']]
-
-## run for the focal state
-string_focal, df_focal = uniq_bitstring(allstates, config_idx, question_ids, 'focal')
-
-df_focal
-## get all neighboring config_id for this 
-## and get the probability of those configurations
-
-## run for selected neighboring states
-p_neighbors = [769926, 1027975, 1032071, 638854, 
-          1032070, 765830, 765831]
-dflst_neighbors = []
-bitlst_neighbors = []
-for config_index in p_neighbors:
-    bitstring_neighbor, df_neighbor = uniq_bitstring(allstates, config_index, question_ids, 'other')
-    dflst_neighbors.append(df_neighbor)
-    bitlst_neighbors.append(bitstring_neighbor)
-df_neighbors = pd.concat(dflst_neighbors)
-
-## merge together
-df_complete = df_neighbors.merge(df_focal, on = 'related_q_id', how = 'inner')
-df_complete = df_complete.assign(difference = lambda x: x['value_focal']-x['value_other'])
-df_complete = df_complete[df_complete['difference'] == 1]
-
-## add entry information 
-entry_ids = [230, 738, 424, 1323, 993, 1248, 470]
-entry_ref = entry_config_master[entry_config_master['entry_id'].isin(entry_ids)]
-entry_ref
-
-
-
-entry_ref = entry_ref[['config_id', 'entry_name']].drop_duplicates()
-entry_ref = entry_ref.rename(columns = {'config_id': 'config_id_other'}) 
-
-entry_ref
-
-
-df_complete = df_complete.merge(entry_ref, on = 'config_id_other', how = 'inner')
-
-
-## add question information
-df_complete = df_complete.merge(question_reference, on = 'related_q_id', how = 'inner')
-df_complete
-
-## write information about focal state
-df_focal = df_focal.merge(question_reference, on = 'related_q_id', how = 'inner')
-df_focal
-
-pd.set_option('display.max_colwidth', None)
-d_max_weight[d_max_weight['config_id'] == 769927]
+# How likely compared to self 
+methodist_prob = Methodist.p
+methodist_prob # 0.0055 
+## more probable than all neighbors

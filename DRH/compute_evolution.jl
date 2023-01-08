@@ -15,12 +15,6 @@ config_ids = @chain entry_maxlikelihood begin _.config_id end
 unique_configs = unique(config_ids) # think right, but double check 
 unique_configs = unique_configs .+ 1 # because of 0-indexing in python 
 
-# command line arguments 
-#sim_n, start = ARGS
-#start = parse(Int64, start)
-#sim_n = parse(Int64, sim_n)
-#unique_configs = unique_configs[start:start+99] # 10 total 
-
 # setup 
 n_simulation = 100
 n_timestep = 101 # first timestep is self 
@@ -61,12 +55,4 @@ for unique_config in unique_configs
         global sample_list = []
     end 
 end 
-# for the last one 
-#println("saving file")
-#d_ = DataFrame(
-#simulation = [x for (x, y, z) in sample_list],
-#timestep = [y for (x, y, z) in sample_list],
-#config_id = [z-1 for (x, y, z) in sample_list] # -1 for python indexing
-#)
-#CSV.write(f"/home/vpoulsen/humanities-glass/data/COGSCI23/evo_raw/c{n_config}_nn{n_neighbors}_s_{n_simulation}_t_{n_timestep}.csv", d_)
 end 
