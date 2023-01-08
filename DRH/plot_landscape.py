@@ -104,11 +104,11 @@ annotations.sort_values('node_id')
 
 ## now nudge the position of labels 
 pos_annot = {
-    0: (-400, -30), # Cistercians
+    0: (-500, -200), # Cistercians
     1: (400, 0), # Egypt
     2: (450, -20), # Jesuit
     3: (-500, 0), # Jehovah
-    4: (-400, -20), # Islam
+    4: (-500, -200), # Islam
     9: (300, 0), # Tsonga
     11: (-700, 0), # Calvinism
     12: (250, -20), # Meso

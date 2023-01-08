@@ -2,10 +2,10 @@
 \toprule
   Group &  Weight \\
 \midrule
-Group 1 &   18.84 \\
-Group 2 &   13.14 \\
-Group 3 &   12.20 \\
-Group 4 &    0.75 \\
-Group 5 &    0.54 \\
+Group 1 &    9.11 \\
+Group 2 &   12.65 \\
+Group 3 &   12.70 \\
+Group 4 &    4.36 \\
+Group 5 &    3.35 \\
 \bottomrule
 \end{tabular}
