@@ -43,8 +43,8 @@ def create_graph(d_edgelst, dct_nodes,):
     return G, labeldict
 
 # PLOT PARAMETERS 
-n_nodes, n_nan, n_rows = 20, 5, 455
-A = np.loadtxt(f'../data/mdl_original/cleaned_nrows_{n_rows}_maxna_{n_nan}.dat_params.dat')
+n_nodes, n_nan, n_rows, n_entries = 20, 5, 455, 407
+A = np.loadtxt(f'../data/mdl_experiments/matrix_questions_{n_nodes}_maxna_{n_nan}_nrows_{n_rows}_entries_{n_entries}.txt.mpf_params.dat')
 n_J = int(n_nodes*(n_nodes-1)/2)
 J = A[:n_J] 
 h = A[n_J:]
@@ -66,14 +66,12 @@ cutoff_n = 15
 pos = nx.nx_agraph.graphviz_layout(G, prog = "fdp")
 
 # a few manual tweaks 
-x, y = pos[16]
-pos[16] = (x-25, y+0)
-x, y = pos[7]
-pos[7] = (x-10, y+0)
+x, y = pos[12]
+pos[12] = (x-10, y-5)
+x, y = pos[11]
+pos[11] = (x+20, y+25)
 x, y = pos[1]
-pos[1] = (x+5, y+5)
-x, y = pos[4]
-pos[4] = (x+25, y+25)
+pos[1] = (x+15, y-5)
 
 # plot 
 fig, ax = plt.subplots(figsize = (6, 6), facecolor = 'w', dpi = 500)
@@ -199,17 +197,11 @@ sm_edge._A = []
 sm_node = plt.cm.ScalarMappable(cmap=cmap, norm=plt.Normalize(vmin = vmin_n, vmax=vmax_n))
 sm_node._A = []
 axis = plt.gca()
-# maybe smaller factors work as well, but 1.1 works fine for this minimal example
-#axis.set_xlim([1.1*x for x in axis.get_xlim()])
-#axis.set_ylim([1.1*y for y in axis.get_ylim()])
 plt.subplots_adjust(bottom=0.1, right=1, left=0, top=1)
-#ax_edge = plt.axes([0.95, 0.12, 0.04, 0.74])
 ax_edge = plt.axes([0.05, 0, 0.90, 0.05])
 ax_node = plt.axes([0.05, -0.2, 0.9, 0.05])
 plt.colorbar(sm_edge, cax = ax_edge, orientation='horizontal')
 plt.colorbar(sm_node, cax = ax_node, orientation='horizontal')
-
-#cbar.ax.yaxis.set_ticks_position('left') #yaxis.tick_left()
 ax.text(0.25, -0.03, r"Pearson's correlation", size=20, transform=ax.transAxes)
 ax.text(0.43, -0.25, r'Mean', size = 20, transform = ax.transAxes)
 plt.savefig('../fig/observation.pdf', bbox_inches='tight')
