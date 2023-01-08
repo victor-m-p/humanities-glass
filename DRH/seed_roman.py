@@ -129,11 +129,11 @@ annotations = annotations.merge(entry_reference, on = ['entry_id', 'entry_drh'],
 
 match_node(annotations, 2) # Mesopotamia (*)
 match_node(annotations, 1) # Ancient Egypt (*)
-match_node(annotations, 6) # Achaemenid (**)
+match_node(annotations, 6) # Old Assyrian
 match_node(annotations, 3) # Luguru (**)
 match_node(annotations, 4) # Pontifex Maximus 
-match_node(annotations, 5) # Old Assyrian
-match_node(annotations, 7) # Archaic dn cults (**)
+match_node(annotations, 5) # Achaemenid
+match_node(annotations, 7) # Archaic cults (**)
 match_node(annotations, 0) # Roman Imperial cult
 
 transl_dict = {
@@ -148,14 +148,14 @@ transl_dict = {
 }
 
 pos_annot = {
-    0: (150, 420), # Roman
-    1: (100, 0), # Egypt
+    0: (-50, 370), # Roman
+    1: (-120, 370), # Egypt
     2: (-100, -300), # Meso 
-    3: (-300, 250), # Luguru
+    3: (-50, -400), # Luguru
     4: (-130, -350), # Pontifex
-    5: (-300, 0), # Old Assyrian
-    6: (-90, -350), # Achaemenid
-    7: (-105, 250), # Archaic Spartan
+    5: (-100, 400), # Achaemenid
+    6: (-90, -350), # Old Assyrian
+    7: (-100, 250), # Archaic Spartan
 }
 
 d_annot = pd.DataFrame.from_dict(transl_dict, 
@@ -163,6 +163,7 @@ d_annot = pd.DataFrame.from_dict(transl_dict,
                        columns = ['entry_name'])
 d_annot['entry_id_drh'] = d_annot.index
 d_annot = d_annot.merge(annotations, on = ['entry_id_drh'], how = 'inner')
+
 d_annot = d_annot.iloc[[0, 1, 2, 4, 5, 6, 7, 8]]
 
 ### main plot (mixed) ###
@@ -178,7 +179,7 @@ nx.draw_networkx_nodes(G, pos,
                         cmap = cmap)
 rgba = rgb2hex(cmap(0.9))
 nx.draw_networkx_edges(G, pos, alpha = 0.7,
-                       width = [x*3 for x in edgew_sorted],
+                       width = [x*3 if x > 0.05 else 0 for x in edgew_sorted],
                        edgelist = edgelst_sorted,
                        edge_color = rgba
                        )
