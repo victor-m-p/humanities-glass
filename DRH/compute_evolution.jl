@@ -22,8 +22,8 @@ unique_configs = unique_configs .+ 1 # because of 0-indexing in python
 #unique_configs = unique_configs[start:start+99] # 10 total 
 
 # setup 
-n_simulation = 10
-n_timestep = 11 # first timestep is self 
+n_simulation = 100
+n_timestep = 101 # first timestep is self 
 global sample_list = [] 
 global conf_list = []
 total_configs = length(unique_configs)
@@ -62,11 +62,11 @@ for unique_config in unique_configs
     end 
 end 
 # for the last one 
-println("saving file")
-d_ = DataFrame(
-simulation = [x for (x, y, z) in sample_list],
-timestep = [y for (x, y, z) in sample_list],
-config_id = [z-1 for (x, y, z) in sample_list] # -1 for python indexing
-)
-CSV.write(f"/home/vpoulsen/humanities-glass/data/COGSCI23/evo_raw/c{n_config}_nn{n_neighbors}_s_{n_simulation}_t_{n_timestep}.csv", d_)
+#println("saving file")
+#d_ = DataFrame(
+#simulation = [x for (x, y, z) in sample_list],
+#timestep = [y for (x, y, z) in sample_list],
+#config_id = [z-1 for (x, y, z) in sample_list] # -1 for python indexing
+#)
+#CSV.write(f"/home/vpoulsen/humanities-glass/data/COGSCI23/evo_raw/c{n_config}_nn{n_neighbors}_s_{n_simulation}_t_{n_timestep}.csv", d_)
 end 
