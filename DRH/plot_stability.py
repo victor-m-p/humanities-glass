@@ -1,3 +1,9 @@
+'''
+VMP 2023-01-08: 
+updated and run on new parameter file.
+produces scatterplot of log(p(configuration)) x p(remain)
+'''
+
 import pandas as pd 
 import matplotlib.pyplot as plt 
 import seaborn as sns 
@@ -59,7 +65,7 @@ entry_configuration = entry_configuration[['config_id', 'entry_drh']].drop_dupli
 entry_configuration = entry_configuration.groupby('config_id')['entry_drh'].unique().reset_index(name = 'entry_drh')
 annotations = entry_configuration.merge(annotations, on = 'config_id', how = 'inner')
 annotations = annotations.sort_values('config_id')
-
+annotations
 ## short names for the entries 
 entries = pd.DataFrame({
     'config_id': [362374, 
@@ -76,7 +82,7 @@ entries = pd.DataFrame({
                     'Muslim Students US/CA',
                     'Yolngu', 'Donatism', #'Soviet Atheism',
                     #'Santal', 
-                    'Astec', 'Pagans under Julian',
+                    'Aztec', 'Pagans under Julian',
                     #'Circumcellions', 
                     'Iban', 'Rwala Bedouin',
                     'Sadducees', 'Tang Tantrism', 'Samaritans',
@@ -131,4 +137,4 @@ plt.xlabel('log(p(configuration))', size = small_text)
 plt.ylabel('p(remain)', size = small_text)
 plt.xlim(-14, -3.6)
 ## save figure 
-plt.savefig('../fig/COGSCI23/evo/stability.pdf')
+plt.savefig('../fig/COGSCI23/overview/config_remain.pdf')

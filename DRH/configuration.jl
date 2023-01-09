@@ -44,7 +44,7 @@ mutable struct Configuration
         self = new()
         self.id = id 
         self.transition = false
-        self.prob_targets = false 
+        self.prob_move = false 
 
         # functions to run on init 
         ## get probability function
@@ -141,15 +141,14 @@ mutable struct Configuration
         # i.e. if we same prob_targets then we just have to throw the dice 
         self.move = function(configurations, configuration_probabilities, n, conf_list = false)
             
-            if self.prob_targets == false
-                ## sample targets 
-                self.targets = rand(1:self.len, n)
-                ## probability move
+            # this has to be sampled every time 
+            if self.prob_move == false
                 self.prob_move = self.p_move(configurations, configuration_probabilities, false)
-                self.prob_targets = self.prob_move[self.targets]
             end 
 
             ## binary move 
+            self.targets = rand(1:self.len, n)
+            self.prob_targets = self.prob_move[self.targets]
             move_bin = self.prob_targets .>= rand(n)
 
             ## if no moves then return current configuration
@@ -170,6 +169,7 @@ mutable struct Configuration
                 end 
 
                 return Configuration(new_id, configurations, configuration_probabilities)
+            
             ## if n > 1 move is not necessarily to a neighbor 
             else 
                 feature_changes = [x for (x, y) in zip(self.targets, move_bin) if y]
