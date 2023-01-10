@@ -29,28 +29,23 @@ def plot_dendrogram(model, **kwargs):
 
 ### preprocessing ###
 # generate all states
-maxlik = pd.read_csv('../data/analysis/entry_maxlikelihood.csv')
-maxlik = maxlik['config_id'].unique().tolist()
-
-n_nodes, n_top_states = 20, 150  
-from fun import bin_states, top_n_idx
-allstates = bin_states(n_nodes) 
-
-# take out top states
-obs_configurations = allstates[maxlik]
+maxlik_config_id = np.loadtxt('../data/analysis/maxlik_configuration_id.txt')
+maxlik_config = np.loadtxt('../data/analysis/maxlik_configurations.txt')
+maxlik_config_id = [int(x) for x in maxlik_config_id]
 
 ### clustering ###
 # setting distance_threshold = 0 ensures we compute the full tree.
 model = AgglomerativeClustering(distance_threshold=0, 
                                 n_clusters=None)
 
-model = model.fit(obs_configurations)
+model = model.fit(maxlik_config)
 
 # https://docs.scipy.org/doc/scipy/reference/generated/scipy.cluster.hierarchy.dendrogram.html
 # Q: how do we extract things 
 # *: there is some color threshold argument
 
 # first just get number of colors
+
 dendrogram_dict = plot_dendrogram(model, 
                                   color_threshold=0.6*max(model.distances_),
                                   get_leaves = True)
@@ -83,7 +78,8 @@ dendrogram_dict = plot_dendrogram(model,
                                   orientation = 'left',
                                   get_leaves = True,
                                   leaf_font_size = 7.5,
-                                  leaf_label_func = lambda x: str(x + 1),
+                                  labels = maxlik_config_id,
+                                  #leaf_label_func = lambda x: str(x + 1),
                                   link_color_func = lambda k: link_cols[k],
                                   above_threshold_color = 'black')
 ax.get_xaxis().set_visible(False)
@@ -92,9 +88,11 @@ plt.savefig('../fig/dendrogram_observed.pdf')
 # extract information
 leaves = dendrogram_dict.get('leaves')
 leaves_color = dendrogram_dict.get('leaves_color_list')
+configid = [maxlik_config_id[x] for x in leaves]
+
 leaf_dataframe = pd.DataFrame(
-    {'node_id': leaves,
-     'node_cluster': leaves_color}
+    {'config_id': configid,
+     'comm_color': leaves_color}
 )
 
 # save information

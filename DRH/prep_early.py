@@ -60,20 +60,8 @@ question_latex = question_reference.style.hide(axis='index').to_latex()
 with open('../tables/question_table.txt', 'w') as f: 
     f.write(question_latex)
 
-# entries 
+# entries just rename and move
 entry_reference = pd.read_csv(f'../data/reference/entry_reference_questions_{n_nodes}_maxna_{n_nan}_nrows_{n_rows}_entries_{n_entries}.csv')
-
-## again, rename columns
-entry_reference = entry_reference.rename(columns = {'entry_id': 'entry_id_drh',
-                                                    'entry_name': 'entry_drh'})
-
-## assign new index column
-entry_reference['entry_id'] = entry_reference.index + 1 
-
-## order columns
-entry_reference = entry_reference[['entry_id', 'entry_id_drh', 'entry_drh']]
-
-## save 
 entry_reference.to_csv('../data/analysis/entry_reference.csv', index = False)
 
 ## save as latex 
@@ -91,8 +79,6 @@ question_columns = direct_reference.columns[1:-1]
 
 ## mean here because mean(-1, 1) = 0
 direct_flattened = direct_reference.groupby('entry_id')[question_columns].mean().reset_index().astype(int)
-## reset the index 
-direct_flattened['entry_id'] = direct_flattened.index + 1
 direct_flattened.to_csv('../data/analysis/data_flattened.csv', index = False)
 
 # calculate probability of all configurations based on parameters h, J.
