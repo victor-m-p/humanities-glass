@@ -65,6 +65,7 @@ In cases where no datastate exists for the configuration
 we will still want to include this configuration in the network.
 Thus, we merge with the configuration_ids and fill nan. 
 '''
+
 ## sample n = 1 
 maxlikelihood_sample = maxlikelihood_datastate.groupby('node_id').sample(n = 1, random_state = 421)
 maxlikelihood_sample = maxlikelihood_sample.drop(columns = {'config_prob'})
