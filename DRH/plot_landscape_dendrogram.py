@@ -229,6 +229,7 @@ for index, row in annotations.iterrows():
                 arrowprops = dict(arrowstyle="->",
                                   connectionstyle='arc3',
                                   color='black'))
+plt.tight_layout();
 plt.savefig('../fig/landscape_dendrogram.pdf')
 
 ########## TABLES ##########
