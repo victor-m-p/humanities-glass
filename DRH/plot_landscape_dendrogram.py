@@ -243,8 +243,43 @@ nx.draw_networkx_edges(H, pos)
 nx.draw_networkx_labels(H, pos, labels)
 plt.savefig('../fig/tmp.pdf')
 
-yellow_comm = yellow_comm.sort_values('config_id')
-yellow_ids = yellow_comm['config_id'].tolist()
+H1 = H.subgraph([126, 127, 91, 148, 117, 75, 142, 104])
+H2 = H.subgraph([138, 101, 136, 116, 131, 79])
+c1 = nx.get_node_attributes(H1, 'config_id')
+c2 = nx.get_node_attributes(H2, 'config_id')
+
+# hamming 
+import configuration as cn 
+from fun import bin_states 
+
+# preparation
+configuration_probabilities = np.loadtxt('../data/analysis/configuration_probabilities.txt')
+n_nodes = 20
+configurations = bin_states(n_nodes) 
+
+c1_l = [i for i in c1.values()]
+c2_l = [i for i in c2.values()]
+
+h_list_outer = []
+h_list_inner = []
+for i in c1_l: 
+    h_list_inner = []
+    for j in c2_l: 
+        conf_c1 = cn.Configuration(i, configurations, 
+                                   configuration_probabilities)
+        conf_c2 = cn.Configuration(j, configurations, 
+                                   configuration_probabilities)
+        h_distance = conf_c1.hamming_distance(conf_c2)
+        h_list_inner.append(h_distance)
+    h_list_outer.append(h_list_inner)
+h_list_outer
+
+
+
+# bind back onto the original data 
+d_hamming = pd.DataFrame(hamming_list, 
+                         columns = ['config_from', 'config_to', 'hamming_dist'])
+
 
 from fun import bin_states
 n_nodes = 20 
