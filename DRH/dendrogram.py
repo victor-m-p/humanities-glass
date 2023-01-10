@@ -73,10 +73,10 @@ color_dict = {
 
 ## try wes anderson
 color_dict = {
-    'C1': "#3B9AB2", 
+    'C1': "#34649e", 
     'C2': "#78B7C5", 
     'C5': "#EBCC2A", 
-    'C4': "#E1AF00", 
+    'C4':  "#c99700", 
     'C3': "#F21A00"
 }
 
@@ -98,7 +98,7 @@ dendrogram_dict = plot_dendrogram(model,
                                   link_color_func = lambda k: link_cols[k],
                                   above_threshold_color = 'black')
 ax.get_xaxis().set_visible(False)
-plt.savefig('../fig/dendrogram.pdf')
+plt.savefig('../fig/dendrogram_wes_anderson.pdf')
 
 # extract information
 leaves = dendrogram_dict.get('leaves')

@@ -20,9 +20,8 @@ hamming_information = pd.read_csv('../data/analysis/top_configurations_hamming.c
 
 # add dendrogram information
 network_information = network_information.drop(columns = 'community')
-dendrogram_information = pd.read_csv('../data/analysis/dendrogram_clusters.csv')
+dendrogram_information = pd.read_csv('../data/analysis/dendrogram_clusters_wes_anderson.csv')
 dendrogram_information = dendrogram_information.rename(columns = {'node_cluster': 'community'})
-dendrogram_information = dendrogram_information.replace({'community': {'C1': 1, 'C2': 2, 'C3': 3}})
 network_information = network_information.merge(dendrogram_information, on = 'node_id', how = 'inner')
 
 #  add more community details to the network_information dataframe
@@ -34,24 +33,7 @@ network_information = network_information.merge(dendrogram_information, on = 'no
 ## add community weight to data 
 community_weight = network_information.groupby('community')['config_prob'].sum().reset_index(name = 'community_weight')
 network_information = network_information.merge(community_weight, on = 'community', how = 'inner')
-
-## community color (NB: contingent on cmap)
-community_color = {
-    1: 'Green',
-    2: 'Pastel',
-    3: 'Blue'
-}
-
-network_information['comm_color'] =  network_information['community'].apply(lambda x: community_color.get(x))
-
-## community cmap
-cmap_dict = {
-    1: 1,
-    2: 2,
-    3: 3
-}
-
-network_information['comm_color_code'] = network_information['community'].apply(lambda x: cmap_dict.get(x))
+network_information['comm_color_code'] =  network_information['community']
 
 ## community labels (descending order of total weight)
 comm_order = network_information[['community_weight']].drop_duplicates().reset_index(drop=True)
@@ -67,64 +49,108 @@ This is a manual process (e.g. picking and giving short names).
 **: this configuration is not maximum likelihood (but still most likely for config.)
 '''
 
+### LABELS ###
+## most weighted configurations within each community
+top = network_information[['config_id', 'config_prob', 'comm_label']]
+top = top.sort_values('config_prob').groupby('comm_label').tail(10)
+
+## specific nodes to show breadth 
+outlier_list = ['Pythagoreanism', 'Peyote', 'Calvinism', 'Wogeo']
+outliers = [network_information[network_information['entry_drh'].str.contains(x)] for x in outlier_list]
+outliers = pd.concat(outliers)
+outliers = outliers[['config_id', 'config_prob', 'comm_label']]
+
+## all configs to label
+label_configs = pd.concat([top, outliers], axis = 0)
+maxlik = pd.read_csv('../data/analysis/entry_maxlikelihood.csv')
+maxlik = maxlik[['config_id', 'entry_drh']]
+label_configs = maxlik.merge(label_configs, on = 'config_id', how = 'inner')
+label_configs = label_configs.sort_values(['comm_label', 'config_prob'],
+                                          ascending = [True, False])
+label_configs[label_configs['comm_label'] == "Group 1"].tail(10)
+
 ## translation dictionary
 transl_dict = {
-    230: 'Mesopotamia', # *
-    1251: 'Tsonga',
-    534: 'Roman',
-    654: 'Cistercians', # *
-    931: 'Jesuits in Britain', # *
-    738: 'Ancient Egyptian', # *
-    1043: 'Islam in Aceh',
-    1311: 'Jehovah', # *
-    879: 'Free Methodist', # *
-    984: 'Calvinism', # *
-    1010: 'Pythagoreanism', # **
-    1304: 'Peyote',
-    769: 'Wogeo', # **
-    1511: 'Sokoto' # **
+    # community 1 
+    1025926: 'Cistercians',
+    1027975: 'Ancient Egypt',
+    1044359: 'Pre-Christian Ireland',
+    1027974: 'Jesuits in Britain',
+    1025927: 'Islam in Aceh',
+    1044358: 'Vaisnava',
+    894854: 'The Essenes',
+    886662: 'Calvinism',
+    1017734: 'Yiguan Dao', 
+    # community 2
+    361984: 'Messalians',
+    362368: 'No-debt Evangelicalism',
+    362374: "Jehovah's Witnesses",
+    362370: 'Southern Baptists',
+    362246: 'Valentinians',
+    360960: 'Peyote Religion',
+    385536: 'Pythagoreanism',
+    # community 3
+    1017730: 'Church of England',
+    1025920: 'German Protestant',
+    1025922: 'Muslims in UAE',
+    632710: 'Tallensi',
+    501634: 'Catholics in PRC',
+    # community 4
+    634758: 'Tsonga',
+    769926: 'Mesopotamia',
+    638854: 'Luguru',
+    # community 5
+    1025538: 'Sokoto',
+    634496: 'Trumai',
+    634370: 'Hidatsa',
+    1041926: 'Wogeo',
 }
 
 ## to dataframe 
 annotations = pd.DataFrame.from_dict(transl_dict, 
                        orient = 'index',
                        columns = ['entry_name'])
-annotations['entry_id_drh'] = annotations.index
 
-## because this refers to the entry_id_drh import reference file
-entry_reference = pd.read_csv('../data/analysis/entry_reference.csv')
-annotations = annotations.merge(entry_reference, on = 'entry_id_drh', how = 'inner')
-
-## now merge with the maximum likelihood dataframe, which is needed because --
-## some of the selected states are not in the randomly sampled set subset.  
-maxlikelihood_datastates = pd.read_csv('../data/analysis/top_configurations_maxlikelihood.csv')
-maxlikelihood_datastates = maxlikelihood_datastates[['entry_id', 'config_id', 'node_id']]
-annotations = annotations.merge(maxlikelihood_datastates, on = 'entry_id', how = 'inner')
-
-## merge with the network information to get community information
-network_information_subset = network_information[['config_id', 'comm_color_code']].drop_duplicates()
-annotations = annotations.merge(network_information_subset, on = 'config_id', how = 'inner') 
-
-## remove a specific node because it is Sokoto twice...
-annotations = annotations[annotations['node_id'] != 101] 
-annotations.sort_values('node_id')
+annotations['config_id'] = annotations.index
+network_color = network_information[['config_id', 'comm_color_code', 'node_id']].drop_duplicates()
+annotations = annotations.merge(network_color, on = 'config_id', how = 'inner')
+annotations.sort_values(['comm_color_code', 'node_id'])
 
 ## now nudge the position of labels 
 pos_annot = {
+    # 
+    3: (-700, 0), # Jehovah
+    16: (-750, 0), # No-debt Evangelic
+    35: (-650, 20), # Southern Baptists
+    43: (-500, 0), # Messalians
+    45: (-500, 0), # Valentinians
+    54: (-400, -100), # Pythagoreanism
+    108: (-450, -50), # Peyote
+    # next community 
+    7: (-900, 0), # Muslims UAE
+    23: (600, 180), # German Protestant
+    36: (-850, 50), # Church of England
+    53: (500, 150), # Tallensi
+    57: (-650, -150), # Catholics in PRC
+    # next community 
+    75: (200, 0), # Trumai
+    79: (200, 0), # Sokoto
+    91: (200, 0), # Hidatsa
+    138: (200, 0), # Wogeo
+    # next community 
     0: (-500, -200), # Cistercians
-    1: (400, 0), # Egypt
-    2: (450, -20), # Jesuit
-    3: (-500, 0), # Jehovah
-    4: (-500, -200), # Islam
-    9: (300, 0), # Tsonga
-    11: (-700, 0), # Calvinism
-    12: (250, -20), # Meso
-    16: (-600, 0), # Free Methodist
-    24: (200, 0), # Roman Imperial
-    54: (200, 100), # Pythagoreanism
-    79: (-400, -10), # Sokoto
-    108: (200, 100), # Peyote
-    138: (-400, -10) # Wogeo
+    1: (400, 0), # Ancient Egypt
+    2: (450, 0), # Jesuits
+    4: (-500, -200), # Islam Aceh 
+    5: (200, 0), # Pre-Christian Ireland
+    8: (500, 0), # Vaisnava
+    6: (-500, -200), # Yiguan Dao
+    10: (-750, -250), # The Essenes
+    11: (-700, 60), # Calvinism
+    # next community 
+    9: (400, 30), # Tsonga
+    12: (230, 0), # Mesopotamia
+    19: (200, -20) # Luguru
 }
 
 # create network
@@ -176,29 +202,27 @@ nodesize_sorted
 node_scalar = 10000
 fig, ax = plt.subplots(figsize = (6, 8), dpi = 500)
 plt.axis('off')
-cmap = plt.cm.get_cmap("Accent")
+
 nx.draw_networkx_nodes(G, pos, 
                         nodelist = nodelist_sorted,
                         node_size = [x*node_scalar for x in nodesize_sorted], 
                         node_color = community_sorted,
-                        linewidths = 0.5, edgecolors = 'black',
-                        cmap = cmap)
-rgba = rgb2hex(cmap(5))
+                        linewidths = 0.5, edgecolors = 'black')
 nx.draw_networkx_edges(G, pos, alpha = 0.7,
                        width = edgeweight_sorted,
                        edgelist = edgelist_sorted,
-                       edge_color = rgba
+                       edge_color = 'tab:grey'
                        )
-# so this breaks down right now ....
+
+# annotations
 for index, row in annotations.iterrows(): 
     node_idx = row['node_id']
     name = row['entry_name']
     pos_x, pos_y = pos[node_idx]
     xx, yy = pos_annot.get(node_idx)
     color_code = row['comm_color_code']
-    color = rgb2hex(cmap(color_code))
     ax.annotate(name, xy = [pos_x, pos_y],
-                color = 'black',#color,
+                color = color_code,
                 #xycoords = 'figure fraction',
                 xytext=[pos_x+xx, pos_y+yy],
                 #textcoords = 'figure fraction', 
