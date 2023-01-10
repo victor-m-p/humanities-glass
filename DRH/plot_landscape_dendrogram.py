@@ -225,8 +225,40 @@ for index, row in annotations.iterrows():
                 arrowprops = dict(arrowstyle="->",
                                   connectionstyle='arc3',
                                   color='black'))
-#plt.subplots_adjust(left=0.15, right=0.8, top=1, bottom=0)
+plt.subplots_adjust(left=0.15, right=0.8, top=1, bottom=0)
 plt.savefig('../fig/landscape_dendrogram.pdf')
+
+## investigate the small community ##
+yellow_comm = network_information[network_information['comm_label'] == 'Group 5']
+yellow_comm = yellow_comm['node_id'].tolist()
+H = G.subgraph(yellow_comm)
+
+# plot 
+labels = {i:i+1 for i in H.nodes()}
+pos = nx.spring_layout(H)
+
+fig, ax = plt.subplots(dpi = 300)
+nx.draw_networkx_nodes(H, pos)
+nx.draw_networkx_edges(H, pos)
+nx.draw_networkx_labels(H, pos, labels)
+plt.savefig('../fig/tmp.pdf')
+
+yellow_comm = yellow_comm.sort_values('config_id')
+yellow_ids = yellow_comm['config_id'].tolist()
+
+from fun import bin_states
+n_nodes = 20 
+allstates = bin_states(n_nodes) 
+yellow_config = allstates[yellow_ids]
+
+## hamming distances ## 
+n_states = len(yellow_ids)
+h_distances = hamming_distance(yellow_config)
+h_distances = hamming_edges(n_states, h_distances)
+h_distances = h_distances[h_distances['hamming'] < 2]
+
+
+
 
 ########## TABLES ##########
 # table with all entry_id that appear in a community 
