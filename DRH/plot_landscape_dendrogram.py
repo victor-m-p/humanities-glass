@@ -52,14 +52,14 @@ top = top.sort_values('config_prob').groupby('comm_label').tail(10)
 
 ## specific nodes to show breadth 
 outlier_list = ['Pythagoreanism', 'Peyote', 'Calvinism', 'Wogeo']
-outliers = [network_information[network_information['entry_drh'].str.contains(x)] for x in outlier_list]
+outliers = [network_information[network_information['entry_name'].str.contains(x)] for x in outlier_list]
 outliers = pd.concat(outliers)
 outliers = outliers[['config_id', 'config_prob', 'comm_label']]
 
 ## all configs to label
 label_configs = pd.concat([top, outliers], axis = 0)
 maxlik = pd.read_csv('../data/analysis/entry_maxlikelihood.csv')
-maxlik = maxlik[['config_id', 'entry_drh']]
+maxlik = maxlik[['config_id', 'entry_name']]
 label_configs = maxlik.merge(label_configs, on = 'config_id', how = 'inner')
 label_configs = label_configs.sort_values(['comm_label', 'config_prob'],
                                           ascending = [True, False])
@@ -225,7 +225,7 @@ for index, row in annotations.iterrows():
                 arrowprops = dict(arrowstyle="->",
                                   connectionstyle='arc3',
                                   color='black'))
-plt.subplots_adjust(left=0.15, right=0.8, top=1, bottom=0)
+#plt.subplots_adjust(left=0.15, right=0.8, top=1, bottom=0)
 plt.savefig('../fig/landscape_dendrogram.pdf')
 
 ########## TABLES ##########
@@ -251,14 +251,14 @@ config_entry_comm = config_entry_comm.sort_values('entry_prob', ascending=False)
 entry_reference = pd.read_csv('../data/analysis/entry_reference.csv')
 config_entry_comm = config_entry_comm.merge(entry_reference, on = 'entry_id', how = 'inner')
 ## select columns 
-config_entry_comm = config_entry_comm[['comm_label', 'entry_id_drh', 'entry_drh', 'entry_prob']]
+config_entry_comm = config_entry_comm[['comm_label', 'entry_id_drh', 'entry_name', 'entry_prob']]
 ## sort 
 config_entry_comm = config_entry_comm.sort_values(['comm_label', 'entry_prob', 'entry_id_drh'], ascending = [True, False, True])
 ## rename columns 
 config_entry_comm = config_entry_comm.rename(
     columns = {'comm_label': 'Group',
                'entry_id_drh': 'DRH ID',
-               'entry_drh': 'Entry name (DRH)',
+               'entry_name': 'Entry name (DRH)',
                'entry_prob': 'Weight'})
 ## to latex and save
 config_entry_latex = config_entry_comm.to_latex(index=False)
@@ -277,13 +277,13 @@ top_config_entries = config_entry_overlap[['entry_id']]
 excluded_entries = entry_reference.merge(top_config_entries, on = 'entry_id', how = 'left', indicator = True)
 excluded_entries = excluded_entries[excluded_entries['_merge'] == 'left_only']
 ## select columns
-excluded_entries = excluded_entries[['entry_id_drh', 'entry_drh']]
+excluded_entries = excluded_entries[['entry_id_drh', 'entry_name']]
 ## sort values 
 excluded_entries = excluded_entries.sort_values('entry_id_drh', ascending = True)
 ## rename columns 
 excluded_entries = excluded_entries.rename(
     columns = {'entry_id_drh': 'DRH ID',
-               'entry_drh': 'Entry name (DRH)'})
+               'entry_name': 'Entry name (DRH)'})
 ## to latex and save
 excluded_entries_latex = excluded_entries.to_latex(index=False)
 with open('../tables/top_config_excluded.txt', 'w') as f: 
@@ -360,12 +360,12 @@ network_information_comm = network_information[['comm_label', 'config_id']]
 ## merge with annotation dataframe
 annotation_table = network_information_comm.merge(annotations, on = 'config_id', how = 'inner')
 ## select subset of columns
-annotation_table = annotation_table[['comm_label', 'entry_name', 'entry_drh']]
+annotation_table = annotation_table[['comm_label', 'entry_name', 'entry_name']]
 ## rename columns 
 annotation_table = annotation_table.rename(
     columns = {'comm_label': 'Group',
                'entry_name': 'Entry name (short)',
-               'entry_drh': 'Entry name (DRH)'})
+               'entry_name': 'Entry name (DRH)'})
 ## to latex 
 annotation_latex = annotation_table.style.hide(axis = 'index').to_latex()
 ## save 

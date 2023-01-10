@@ -27,7 +27,7 @@ top_config_info['node_id'] = top_config_info.index
 
 # merge with entry information 
 ## take out needed columns from entry master
-entry_subset = entry_master[['entry_id', 'config_id', 'entry_prob', 'entry_drh']]
+entry_subset = entry_master[['entry_id', 'config_id', 'entry_prob', 'entry_name']]
 ## merge with the selected configurations
 config_entry_overlap = entry_subset.merge(top_config_info, on = 'config_id', how = 'inner')
 
@@ -128,6 +128,7 @@ louvain_communities_df = pd.DataFrame.from_dict(louvain_communities_dict,
                                                 orient = 'index',
                                                 columns = ['community'])
 louvain_communities_df['node_id'] = louvain_communities_df.index
+
 ## merge with network information
 network_information = network_information.merge(louvain_communities_df, 
                                                 on = 'node_id',
@@ -138,6 +139,7 @@ network_information = network_information.merge(louvain_communities_df,
 Save the information needed for visualizing the network of top configurations.
 This includes the network information and the hamming distances. 
 '''
+
 network_information.to_csv('../data/analysis/top_configurations_network.csv', index = False)
 h_distances.to_csv('../data/analysis/top_configurations_hamming.csv', index = False)
 maxlikelihood_datastate.to_csv('../data/analysis/top_configurations_maxlikelihood.csv', index = False)
