@@ -196,7 +196,7 @@ nodesize_sorted
 
 # main plot (Figure 4A)
 node_scalar = 10000
-fig, ax = plt.subplots(figsize = (6, 8), dpi = 500)
+fig, ax = plt.subplots(figsize = (8, 8), dpi = 500)
 plt.axis('off')
 
 nx.draw_networkx_nodes(G, pos, 
@@ -225,7 +225,7 @@ for index, row in annotations.iterrows():
                 arrowprops = dict(arrowstyle="->",
                                   connectionstyle='arc3',
                                   color='black'))
-plt.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.1)
+plt.subplots_adjust(left=0.15, right=0.8, top=1, bottom=0)
 plt.savefig('../fig/landscape_dendrogram.pdf')
 
 ########## TABLES ##########
