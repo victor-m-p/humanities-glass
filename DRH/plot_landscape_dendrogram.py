@@ -4,6 +4,10 @@ Visualization of top configurations (n = 150) for figure 4A.
 Writes some tables for reference as well. 
 '''
 
+# dendrogram red = network grey
+# dendrogram green = network blue
+# dendrogram orange = network green
+
 # imports 
 import pandas as pd 
 import numpy as np 

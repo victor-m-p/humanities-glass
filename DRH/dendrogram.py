@@ -27,23 +27,22 @@ def plot_dendrogram(model, **kwargs):
 
     return dendrogram(linkage_matrix, **kwargs)
 
-
-iris = load_iris()
-
-X = iris.data
-
-# get our data in here
-n_nodes = 20 
+### preprocessing ###
+# generate all states
+n_nodes, n_top_states = 20, 150  
 from fun import bin_states, top_n_idx
 allstates = bin_states(n_nodes) 
+
+# find the top 150 states 
 config_prob = np.loadtxt('../data/analysis/configuration_probabilities.txt')
-n_top_states = 150
 top_config_info = top_n_idx(n_top_states, config_prob, 'config_id', 'config_prob') 
-top_config_info['node_id'] = top_config_info.index
 configuration_ids = top_config_info['config_id'].tolist()
+
+# take out top states
 top_configurations = allstates[configuration_ids]
 
-# setting distance_threshold=0 ensures we compute the full tree.
+### clustering ###
+# setting distance_threshold = 0 ensures we compute the full tree.
 model = AgglomerativeClustering(distance_threshold=0, 
                                 n_clusters=None)
 
@@ -52,10 +51,53 @@ model = model.fit(top_configurations)
 # https://docs.scipy.org/doc/scipy/reference/generated/scipy.cluster.hierarchy.dendrogram.html
 # Q: how do we extract things 
 # *: there is some color threshold argument
-fig, ax = plt.subplots(figsize = (8, 15), dpi = 300)
+
+# first do not plot, but just get the list so that we can change the colors
+dendrogram_dict = plot_dendrogram(model, 
+                                  color_threshold=0.6*max(model.distances_),
+                                  get_leaves = True,
+                                  no_plot = True)
+
+# extract the information that we need 
+Z = model.children_
+leaves = dendrogram_dict.get('leaves')
+leaves_color = dendrogram_dict.get('leaves_color_list')
+
+## color-brewer and
+color_dict = {
+    'C1': '#0571b0', # blue  
+    'C2': '#5e3c99', # purple 
+    'C3': '#a6611a', # earth
+    'C4':  '#e66101', # orange
+    'C5': '#ca0020'} #red 
+
+## try wes anderson
+color_dict = {
+    'C1': "#3B9AB2", 
+    'C2': "#78B7C5", 
+    'C5': "#EBCC2A", 
+    'C4': "#E1AF00", 
+    'C3': "#F21A00"
+}
+
+leaf_cols = {leaf:color_dict.get(c) for leaf, c in zip(leaves, leaves_color)}
+
+link_cols = {}
+for i, i12 in enumerate(Z[:,:2].astype(int)):
+    c1, c2 = (link_cols[x] if x > len(Z) else leaf_cols.get(x) for x in i12)
+    link_cols[i+1+len(Z)] = c1 if c1 == c2 else '#000000'
+link_cols
+
+# actually plot it 
+fig, ax = plt.subplots(figsize = (8, 20), dpi = 300)
 dendrogram_dict = plot_dendrogram(model, 
                                   orientation = 'left',
-                                  get_leaves = True)
+                                  get_leaves = True,
+                                  leaf_font_size = 8,
+                                  leaf_label_func = lambda x: str(x + 1),
+                                  link_color_func = lambda k: link_cols[k],
+                                  above_threshold_color = 'black')
+ax.get_xaxis().set_visible(False)
 plt.savefig('../fig/dendrogram.pdf')
 
 # extract information
@@ -67,4 +109,4 @@ leaf_dataframe = pd.DataFrame(
 )
 
 # save information
-leaf_dataframe.to_csv('../data/analysis/dendrogram_clusters.csv', index = False)
+leaf_dataframe.to_csv('../data/analysis/dendrogram_clusters_wes_anderson.csv', index = False)
