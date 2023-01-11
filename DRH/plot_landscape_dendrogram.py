@@ -228,6 +228,10 @@ for index, row in annotations.iterrows():
 plt.subplots_adjust(left=0.15, right=0.8, top=1, bottom=0)
 plt.savefig('../fig/landscape_dendrogram.pdf')
 
+# save network information
+network_information.to_csv('../data/analysis/network_information_enriched.csv', index = False)
+
+'''
 ## investigate the small community ##
 yellow_comm = network_information[network_information['comm_label'] == 'Group 5']
 yellow_comm = yellow_comm['node_id'].tolist()
@@ -274,44 +278,44 @@ for i in c1_l:
     h_list_outer.append(h_list_inner)
 h_list_outer
 
+'''
 ## table with splits ##
 network_information['comm_color_code'].unique()
 
-#F21A00: red
-#34649e: dark blue
-#78B7C5: light blue
-#c99700: dark yellow
-#EBCC2A: dark yellow
-
 # first split 
-split_1 = {'#F21A00': 1, # Group 1
-           '#c99700': 1, # Group 4
-           '#EBCC2A': 1, # Group 5
-           '#34649e': 2, # Group 2
-           '#78B7C5': 2} # Group 3
+split_1 = {'#F21A00': 1, # red (Group 1)
+           '#c99700': 1, # dark yellow (Group 4)
+           '#EBCC2A': 1, # light yellow (Group 5)
+           '#34649e': 2, # dark blue (Group 2)
+           '#78B7C5': 2} # light blue (Group 3)
 
 network_information = network_information[['config_id', 'config_prob', 'comm_color_code']]
 network_information = network_information.replace({'comm_color_code': split_1})
 network_information = network_information.sort_values('comm_color_code')
 
 # run loop
-config_dict = {}
-weight_dict = {}
-for comm in network_information['comm_color_code'].unique(): 
-    config_list = []
-    weight_list = []
-    network_comm = network_information[network_information['comm_color_code'] == comm]
-    for _, row in network_comm.iterrows():
-        config_id = int(row['config_id'])
-        config_prob = row['config_prob']
-        CommObj = cn.Configuration(config_id, configurations,
-                                   configuration_probabilities)
-        conf = CommObj.configuration
-        config_list.append(conf)
-        weight_list.append(config_prob)
-    config_dict[comm] = config_list 
-    weight_dict[comm] = weight_list
+def commmunity_weight(network_information, sort_column):
+    config_dict = {}
+    weight_dict = {}
+    for comm in network_information[sort_column].unique(): 
+        config_list = []
+        weight_list = []
+        network_comm = network_information[network_information[sort_column] == comm]
+        for _, row in network_comm.iterrows():
+            config_id = int(row['config_id'])
+            config_prob = row['config_prob']
+            CommObj = cn.Configuration(config_id, configurations,
+                                    configuration_probabilities)
+            conf = CommObj.configuration
+            config_list.append(conf)
+            weight_list.append(config_prob)
+        config_dict[comm] = config_list 
+        weight_dict[comm] = weight_list
+    return config_dict, weight_dict 
     
+cdict = community_weight(network_information, sort_column)
+wdict = community_weight(network_information, sort_column)
+
 # get values out 
 c1, w1 = config_dict.get(1), weight_dict.get(1)
 c2, w2 = config_dict.get(2), weight_dict.get(2)
