@@ -138,7 +138,7 @@ match_node(annotations, 7) # Archaic cults (**)
 match_node(annotations, 0) # Roman Imperial cult
 
 transl_dict = {
-    534: 'Roman',
+    534: 'Roman Imperial',
     230: 'Mesopotamia', # *
     424: 'Achaemenid',
     738: 'Ancient Egyptian', # *
@@ -149,13 +149,13 @@ transl_dict = {
 }
 
 pos_annot = {
-    0: (-500, 30), # Roman
-    1: (-120, 370), # Egypt
+    0: (-700, 30), # Roman
+    1: (-123, 370), # Egypt
     2: (-100, -300), # Meso 
-    3: (-300, 0), # Luguru
-    4: (-130, -350), # Pontifex
-    5: (-100, 400), # Achaemenid
-    6: (-400, -30), # Old Assyrian
+    3: (-460, -5), # Luguru
+    4: (-126, -350), # Pontifex
+    5: (-95, 400), # Achaemenid
+    6: (-550, -30), # Old Assyrian
     7: (-100, 250), # Archaic Spartan
 }
 
@@ -221,7 +221,7 @@ transition_probabilities = Roman.neighbor_probabilities(configurations,
 # these are the transition_probabilities
 # if we enforce move. 
 transition_probabilities['transition_prob'] = transition_probabilities['transition_prob']*100
-transition_probabilities
+
 # most likely (least stable traits)
 ## 30.86% (0.00059): not having distinct written language
 ## 22.92% (0.00044): having scriptures

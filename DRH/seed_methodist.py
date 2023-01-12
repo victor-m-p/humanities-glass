@@ -140,8 +140,8 @@ match_node(annotations, 3) # Messalians
 
 transl_dict = {
     879: 'Free Methodist',
-    1311: 'Jehovah', # *
-    1307: 'S. Baptists',
+    1311: "Jehovah's\nWitnesses", # *
+    1307: 'Southern\nBaptists',
     953: 'Sachchai', # *
     1517: 'Tunisian Women',
     993: 'Pontifical College',
@@ -150,11 +150,11 @@ transl_dict = {
 
 pos_annot = {
     0: (-110, 400), # Free Meth
-    1: (-65, 200), # Jehova
-    2: (-70, -450), # S. Baptist
+    1: (-75, 200), # Jehova
+    2: (-70, -460), # S. Baptist
     5: (-60, -270), # Sachchai
-    9: (-100, -550), # Tunisian
-    8: (-145, 350) # Pauline
+    9: (-105, -550), # Tunisian
+    8: (-145, 390) # Pauline
 }
 
 d_annot = pd.DataFrame.from_dict(transl_dict, 

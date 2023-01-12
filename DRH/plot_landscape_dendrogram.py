@@ -125,9 +125,9 @@ pos_annot = {
     108: (-450, -50), # Peyote
     # next community 
     7: (-900, 0), # Muslims UAE
-    23: (600, 180), # German Protestant
+    23: (570, 200), # German Protestant
     36: (-850, 50), # Church of England
-    53: (500, 150), # Tallensi
+    53: (450, 200), # Tallensi
     57: (-650, -150), # Catholics in PRC
     # next community 
     75: (200, 0), # Trumai
@@ -136,11 +136,11 @@ pos_annot = {
     138: (200, 0), # Wogeo
     # next community 
     0: (-500, -200), # Cistercians
-    1: (400, 0), # Ancient Egypt
-    2: (450, 0), # Jesuits
+    1: (400, -40), # Ancient Egypt
+    2: (450, -50), # Jesuits
     4: (-500, -200), # Islam Aceh 
     5: (200, 0), # Pre-Christian Ireland
-    8: (500, 0), # Vaisnava
+    8: (500, -40), # Vaisnava
     6: (-500, -200), # Yiguan Dao
     10: (-750, -250), # The Essenes
     11: (-700, 60), # Calvinism
@@ -176,7 +176,7 @@ for idx, val in network_information_dict.items():
 ## check up on this (i.e. can we avoid imports here and make it easy?)
 from fun import * 
 G = edge_strength(G, 'config_prob') # would be nice to get rid of this. 
-edgelist_sorted, edgeweight_sorted = edge_information(G, 'pmass_mult', 'hamming', 30000)
+edgelist_sorted, edgeweight_sorted = edge_information(G, 'pmass_mult', 'hamming', 34000)
 
 ## thing here is that we need to sort the node information similarly
 def node_attributes(Graph, sorting_attribute, value_attribute):
@@ -197,7 +197,7 @@ _, community_sorted = node_attributes(G, 'config_prob', 'comm_color_code')
 nodesize_sorted
 
 # main plot (Figure 4A)
-node_scalar = 10000
+node_scalar = 13000
 fig, ax = plt.subplots(figsize = (8, 8), dpi = 500)
 plt.axis('off')
 
