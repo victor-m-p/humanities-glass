@@ -100,7 +100,7 @@ for idx, val in node_attr_dict.items():
         
 # process 
 G = edge_strength(G, 'config_prob') # we need p_raw assigned to nodes
-edgelst_sorted, edgew_sorted = edge_information(G, 'pmass_mult', 'hamming', 30000)
+edgelst_sorted, edgew_sorted = edge_information(G, 'pmass_mult', 'hamming', 40000)
 
 ## thing here is that we need to sort the node information similarly
 def node_attributes(Graph, sorting_attribute, value_attribute):
@@ -171,13 +171,13 @@ plt.axis('off')
 cmap = plt.cm.get_cmap("Blues") # reverse code this
 nx.draw_networkx_nodes(G, pos, 
                         nodelist = nodelst_sorted,
-                        node_size = [x*10000 for x in nodesize_sorted], 
+                        node_size = [x*15000 for x in nodesize_sorted], 
                         node_color = [3-x for x in color_lst],
                         linewidths = 0.5, edgecolors = 'black',
                         cmap = cmap)
 rgba = rgb2hex(cmap(0.8))
 nx.draw_networkx_edges(G, pos, alpha = 0.7,
-                       width = [x*5 if x > 0.05 else 0 for x in edgew_sorted],
+                       width = [x*5 if x > 0.1 else 0 for x in edgew_sorted],
                        edgelist = edgelst_sorted,
                        edge_color = rgba
                        )

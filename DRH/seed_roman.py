@@ -100,7 +100,7 @@ for idx, val in node_attr_dict.items():
         
 # process 
 G = edge_strength(G, 'config_prob') 
-edgelst_sorted, edgew_sorted = edge_information(G, 'pmass_mult', 'hamming', 30000)
+edgelst_sorted, edgew_sorted = edge_information(G, 'pmass_mult', 'hamming', 40000)
 
 ## thing here is that we need to sort the node information similarly
 def node_attributes(Graph, sorting_attribute, value_attribute):
@@ -138,25 +138,25 @@ match_node(annotations, 7) # Archaic cults (**)
 match_node(annotations, 0) # Roman Imperial cult
 
 transl_dict = {
-    534: 'Roman Imperial',
+    534: 'Roman\nImperial',
     230: 'Mesopotamia', # *
-    424: 'Achaemenid',
+    424: 'Achaemenid\nReligion',
     738: 'Ancient Egyptian', # *
-    1323: 'Luguru',
+    #1323: 'Luguru',
     993: 'Pontifical College',
-    1248: 'Old Assyrian',
+    #1248: 'Old Assyrian',
     470: 'Spartan Cults'
 }
 
 pos_annot = {
-    0: (-700, 30), # Roman
-    1: (-123, 370), # Egypt
-    2: (-100, -300), # Meso 
-    3: (-460, -5), # Luguru
-    4: (-126, -350), # Pontifex
-    5: (-95, 400), # Achaemenid
-    6: (-550, -30), # Old Assyrian
-    7: (-100, 250), # Archaic Spartan
+    0: (-60, -750), # Roman
+    1: (-150, 450), # Egypt
+    2: (-250, -400), # Meso 
+    #3: (-460, -5), # Luguru
+    4: (-100, -430), # Pontifex
+    5: (-100, 400), # Achaemenid
+    #6: (-550, -30), # Old Assyrian
+    7: (-120, 250), # Archaic Spartan
 }
 
 d_annot = pd.DataFrame.from_dict(transl_dict, 
@@ -164,23 +164,26 @@ d_annot = pd.DataFrame.from_dict(transl_dict,
                        columns = ['entry_name_short'])
 d_annot['entry_id'] = d_annot.index
 d_annot = d_annot.merge(annotations, on = ['entry_id'], how = 'inner')
-
-d_annot = d_annot.iloc[[0, 1, 2, 4, 5, 6, 7, 8]]
+d_annot = d_annot.iloc[[0, 1, 2, 4, 5, 6]]
 
 ### main plot (mixed) ###
-fig, ax = plt.subplots(figsize = (6, 4), dpi = 500)
+fig, ax = plt.subplots(figsize = (6, 5.5), dpi = 500)
 plt.axis('off')
-cmap = plt.cm.get_cmap("Oranges") # reverse code this
+#cmap = plt.cm.get_cmap("Oranges") # reverse code this
 #edgew_threshold = [x if x > 0.1 else 0 for x in edgew_full]
+cols = {0: '#c99700',
+        1: '#EBCC2A',
+        2: '#f7d15c'}
+color_codes = [cols.get(x) for x in color_lst]
+
 nx.draw_networkx_nodes(G, pos, 
                         nodelist = nodelst_sorted,
-                        node_size = [x*10000 for x in nodesize_sorted], 
-                        node_color = [3-x for x in color_lst],
-                        linewidths = 0.5, edgecolors = 'black',
-                        cmap = cmap)
-rgba = rgb2hex(cmap(0.9))
+                        node_size = [x*15000 for x in nodesize_sorted], 
+                        node_color = color_codes,
+                        linewidths = 0.5, edgecolors = 'black')
+rgba = '#c99700'
 nx.draw_networkx_edges(G, pos, alpha = 0.7,
-                       width = [x*3 if x > 0.05 else 0 for x in edgew_sorted],
+                       width = [x*3 if x > 0.1 else 0 for x in edgew_sorted],
                        edgelist = edgelst_sorted,
                        edge_color = rgba
                        )
@@ -189,15 +192,17 @@ for index, row in d_annot.iterrows():
     name = row['entry_name_short']
     pos_x, pos_y = pos[node_idx]
     xx, yy = pos_annot.get(node_idx)
-    color = rgb2hex(cmap(0.99))
+    color = rgba
     ax.annotate(name, xy = [pos_x, pos_y],
                 color = rgba,
+                size = 16,
                 #xycoords = 'figure fraction',
                 xytext=[pos_x+xx, pos_y+yy],
                 #textcoords = 'figure fraction', 
                 arrowprops = dict(arrowstyle="->",
                                   connectionstyle='arc3',
                                   color='black'))
+plt.subplots_adjust(left=0, right=1, top=0.8, bottom=0.2)
 plt.savefig('../fig/seed_RomanImpCult_annotated_mix.pdf')
 
 # transition probabilities
