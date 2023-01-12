@@ -170,7 +170,7 @@ d_annot = d_annot.iloc[[0, 1, 2, 4, 5, 6, 7, 8]]
 ### main plot (mixed) ###
 fig, ax = plt.subplots(figsize = (6, 4), dpi = 500)
 plt.axis('off')
-cmap = plt.cm.get_cmap("Greens") # reverse code this
+cmap = plt.cm.get_cmap("Oranges") # reverse code this
 #edgew_threshold = [x if x > 0.1 else 0 for x in edgew_full]
 nx.draw_networkx_nodes(G, pos, 
                         nodelist = nodelst_sorted,

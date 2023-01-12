@@ -173,7 +173,7 @@ class Configuration:
         answers_nonoverlap = answers[answers[self.id] != answers[other.id]]
         return answers_nonoverlap 
  
-        # getting more information about neighbor probs 
+    # getting more information about neighbor probs 
     def neighbor_probabilities(self, configurations, configuration_probabilities, 
                                question_reference, top_n = False):
         # if enforce move it is simple 

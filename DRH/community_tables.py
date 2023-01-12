@@ -142,3 +142,5 @@ g4 = clade_list[3] # g4 = dark yellow
 g4.sort_values('difference', ascending = False).head(5)
 g5 = clade_list[4] # g5 = light yellow
 g5.sort_values('difference', ascending = False).head(5)
+
+## NB: save the long-versions

@@ -14,12 +14,12 @@ pd.set_option('display.max_colwidth', None)
 n_rows, n_nan, n_nodes = 455, 5, 20
 
 def match_node(d, n):
-    d = d[d['node_id'] == n][['entry_drh', 'entry_id_drh', 'entry_prob']]
+    d = d[d['node_id'] == n][['entry_name', 'entry_id', 'entry_prob']]
     d = d.sort_values('entry_prob', ascending = False)
     print(d.head(10))
 
 def match_soft(d, s):
-    d = d[d['entry_drh'].str.contains(s)]
+    d = d[d['entry_name'].str.contains(s)]
     print(d.head(10))
 
 #node_attr = pd.read_csv('../data/analysis/node_attr.csv') 
@@ -124,9 +124,9 @@ for node in nodelst_sorted:
     color_lst.append(hamming_dist)
 
 #### annotations #####
-entry_config_weight = entry_config_master[['config_id', 'entry_drh', 'entry_id', 'entry_prob']]
+entry_config_weight = entry_config_master[['config_id', 'entry_name', 'entry_id', 'entry_prob']]
 annotations = entry_config_weight.merge(d_ind, on = 'config_id', how = 'inner')
-annotations = annotations.merge(entry_reference, on = ['entry_id', 'entry_drh'], how = 'inner')
+annotations = annotations.merge(entry_reference, on = ['entry_id', 'entry_name'], how = 'inner')
 
 match_node(annotations, 0) # Free Methodist (*)
 match_node(annotations, 1) # Jehovah (*)
@@ -159,16 +159,16 @@ pos_annot = {
 
 d_annot = pd.DataFrame.from_dict(transl_dict, 
                        orient = 'index',
-                       columns = ['entry_name'])
-d_annot['entry_id_drh'] = d_annot.index
-d_annot = d_annot.merge(annotations, on = ['entry_id_drh'], how = 'inner')
+                       columns = ['entry_name_short'])
+d_annot['entry_id'] = d_annot.index
 
+d_annot = d_annot.merge(annotations, on = ['entry_id'], how = 'inner')
 d_annot = d_annot.iloc[[0, 1, 2, 3, 5, 8]]
 
 ### main plot (mixed) ###
 fig, ax = plt.subplots(figsize = (6, 4), dpi = 500)
 plt.axis('off')
-cmap = plt.cm.get_cmap("Oranges") # reverse code this
+cmap = plt.cm.get_cmap("Blues") # reverse code this
 nx.draw_networkx_nodes(G, pos, 
                         nodelist = nodelst_sorted,
                         node_size = [x*10000 for x in nodesize_sorted], 
@@ -183,7 +183,7 @@ nx.draw_networkx_edges(G, pos, alpha = 0.7,
                        )
 for index, row in d_annot.iterrows(): 
     node_idx = row['node_id']
-    name = row['entry_name']
+    name = row['entry_name_short']
     pos_x, pos_y = pos[node_idx]
     xx, yy = pos_annot.get(node_idx)
     color = rgb2hex(cmap(0.99))
@@ -233,7 +233,6 @@ most_likely = transition_probabilities.head(3)
 most_likely = most_likely[['config_id', 'question', 'transition_prob']]
 most_likely = entry_config_master.merge(most_likely, on = 'config_id', how = 'inner')
 most_likely = most_likely.sort_values('config_prob', ascending = False)
-most_likely
 ## 1. Soutern Baptists
 ## 2. Circumcellions
 ## 3. Sachchai

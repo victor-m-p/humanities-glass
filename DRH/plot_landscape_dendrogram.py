@@ -51,7 +51,7 @@ top = network_information[['config_id', 'config_prob', 'comm_label']]
 top = top.sort_values('config_prob').groupby('comm_label').tail(10)
 
 ## specific nodes to show breadth 
-outlier_list = ['Pythagoreanism', 'Peyote', 'Calvinism', 'Wogeo']
+outlier_list = ['Pythagoreanism', 'Peyote', 'Calvinism', 'Wogeo', 'Roman', 'Method']
 outliers = [network_information[network_information['entry_name'].str.contains(x)] for x in outlier_list]
 outliers = pd.concat(outliers)
 outliers = outliers[['config_id', 'config_prob', 'comm_label']]
@@ -79,7 +79,7 @@ transl_dict = {
     1017734: 'Yiguan Dao', 
     # community 2
     361984: 'Messalians',
-    362368: 'No-debt Evangelicalism',
+    362368: 'Free Methodist', # still maxlik 
     362374: "Jehovah's Witnesses",
     362370: 'Southern Baptists',
     362246: 'Valentinians',
@@ -92,6 +92,7 @@ transl_dict = {
     632710: 'Tallensi',
     501634: 'Catholics in PRC',
     # community 4
+    769927: 'Roman Imperial', 
     634758: 'Tsonga',
     769926: 'Mesopotamia',
     638854: 'Luguru',
@@ -116,7 +117,7 @@ annotations.sort_values(['comm_color_code', 'node_id'])
 pos_annot = {
     # 
     3: (-700, 0), # Jehovah
-    16: (-750, 0), # No-debt Evangelic
+    16: (-750, 0), # Free Methodist
     35: (-650, 20), # Southern Baptists
     43: (-500, 0), # Messalians
     45: (-500, 0), # Valentinians
@@ -146,7 +147,8 @@ pos_annot = {
     # next community 
     9: (400, 30), # Tsonga
     12: (230, 0), # Mesopotamia
-    19: (200, -20) # Luguru
+    19: (200, -20), # Luguru
+    24: (200, 50) # Roman Imperial
 }
 
 # create network
