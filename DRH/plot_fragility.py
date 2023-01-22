@@ -1,3 +1,8 @@
+'''
+VMP: Updated data. 
+Number of fixed traits. 
+'''
+
 # COGSCI23
 import pandas as pd 
 import numpy as np 
@@ -11,7 +16,7 @@ large_text = 18
 
 # read data
 d_fragility = pd.read_csv('../data/COGSCI23/fragility_observed.csv')
-d_fragility['prob_remain'] = d_fragility['prob_remain']*100
+d_fragility['prob_remain'] = (1-d_fragility['prob_move'])*100
 
 # overall patterns (i.e. for each time-step)
 ## different kinds of uncertainty: 
@@ -133,9 +138,7 @@ config_max_std = config_max_std[['config_id']]
 config_max_std['type'] = 'max(std)'
 case_studies = pd.concat([config_min_sum, config_max_sum, config_max_std])
 case_studies = entry_conf.merge(case_studies, on = 'config_id', how = 'inner')
-
-# min: Warrau (one possible variation which is extremely unlikely)
-# --> so, no full configuration
-# max(std): Tractarian Movement (one possible variation which is extremely unlikely)
-# --> so, no full configuration
+case_studies
+# min: Warrau (not complete)
+# max(std): Warrau (not complete)
 # max: Ancient Egypt, ... 

@@ -1,6 +1,7 @@
 '''
 VMP 2022-01-09
 Plotting overview.
+Hamming, p(remain), p(config)
 '''
 import pandas as pd 
 import numpy as np 

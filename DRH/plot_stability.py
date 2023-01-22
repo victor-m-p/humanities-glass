@@ -61,8 +61,8 @@ annotations = annotations.drop_duplicates()
 ## now find the corresponding religions 
 pd.set_option('display.max_colwidth', None)
 entry_configuration = pd.read_csv('../data/analysis/entry_configuration_master.csv')
-entry_configuration = entry_configuration[['config_id', 'entry_drh']].drop_duplicates()
-entry_configuration = entry_configuration.groupby('config_id')['entry_drh'].unique().reset_index(name = 'entry_drh')
+entry_configuration = entry_configuration[['config_id', 'entry_name']].drop_duplicates()
+entry_configuration = entry_configuration.groupby('config_id')['entry_name'].unique().reset_index(name = 'entry_name')
 annotations = entry_configuration.merge(annotations, on = 'config_id', how = 'inner')
 annotations = annotations.sort_values('config_id')
 annotations
@@ -90,7 +90,7 @@ entries = pd.DataFrame({
                     ]})
 ## merge back in 
 annotations = annotations.merge(entries, on = 'config_id', how = 'inner')
-annotations = annotations.drop(columns = {'entry_drh'})
+annotations = annotations.drop(columns = {'entry_name'})
 
 ## prepare colors 
 annotations_id = annotations[['config_id']]
@@ -103,6 +103,8 @@ stability = stability.replace({'color': {'left_only': 'tab:blue',
                                          'both': 'tab:orange'}})
 stability = stability.sort_values('color')
 
+# median config
+median_config = stability['log_config_prob'].median()
 
 # plot
 fig, ax = plt.subplots(dpi = 300)
@@ -118,6 +120,10 @@ sns.regplot(data = stability,
            scatter = False, 
            color = 'tab:red')
 ## the annotations 
+plt.axvline(x = median_config,
+           ymin = 0,
+           ymax = 1,
+           color = 'tab:red')
 for _, row in annotations.iterrows(): 
     x = row['log_config_prob']
     y = row['remain_prob']
@@ -138,3 +144,56 @@ plt.ylabel('p(remain)', size = small_text)
 plt.xlim(-14, -3.6)
 ## save figure 
 plt.savefig('../fig/COGSCI23/overview/config_remain.pdf')
+
+
+## regression line  
+from sklearn.linear_model import LinearRegression
+log_config_prob = stability['log_config_prob'].values.reshape(-1, 1)
+remain_prob = stability['remain_prob'].values.reshape(-1, 1)
+
+linear_regressor = LinearRegression()  # create object for the class
+linear_regressor.fit(log_config_prob, remain_prob)  # perform linear regression
+Y_pred = linear_regressor.predict(log_config_prob)  # make predictions
+
+# color plot by this to be sure: 
+stability['pred_remain'] = Y_pred
+stability['above_line']= np.where((stability['pred_remain']-stability['remain_prob']) > 0, 1, 0)
+
+## above median config?
+stability['above_median'] = [1 if x>median_config else 0 for x in stability['log_config_prob']]
+
+## four combinations ## 
+#define conditions
+conditions = [
+    (stability['above_line'] == 1) & (stability['above_median'] == 1),
+    (stability['above_line'] == 1) & (stability['above_median'] == 0),
+    (stability['above_line'] == 0) & (stability['above_median'] == 1),
+    (stability['above_line'] == 0) & (stability['above_median'] == 0)
+]
+
+#define results
+results = ['Global Peak', 'Local Peak', 'Local Valley', 'Global Valley']
+
+#create new column based on conditions in column1 and column2
+stability['Landscape'] = np.select(conditions, results)
+stability
+## take out useful columns 
+stability = stability[['config_id', 'config_prob', 'Landscape']]
+
+## 
+entry_maxlikelihood = pd.read_csv('../data/analysis/entry_maxlikelihood.csv')
+entry_maxlikelihood = entry_maxlikelihood[['config_id', 'entry_name']]
+stability = stability.merge(entry_maxlikelihood, on = 'config_id', how = 'inner')
+
+## sort by stuff 
+stability = stability.sort_values(by = ['Landscape', 'config_prob'],
+                                  ascending = [True, False])
+
+stability['config_prob'] = [round(x*100, 2) for x in stability['config_prob']]
+
+## rename stuff
+stability = stability.rename(columns = {'config_id': 'Configuration',
+                                        'config_prob': 'p(Configuration)',
+                                        'entry_name': 'Entry Name'})
+
+stability

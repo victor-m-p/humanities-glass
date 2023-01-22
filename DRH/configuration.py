@@ -99,12 +99,12 @@ class Configuration:
         # return 
         return self.id_neighbor, self.p_neighbor         
     
-    # p_move: following the new schema 
+    # p_move: following the new schema. 
     def p_move(self, configurations,
                configuration_probabilities,
                summary = True):
         _, p_neighbor = self.pid_neighbors(configurations, 
-                                                configuration_probabilities)
+                                           configuration_probabilities)
         prob_moves = 1-(self.p/(self.p + p_neighbor))
         # either return the array or the mean 
         if not summary: 

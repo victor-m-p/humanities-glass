@@ -229,13 +229,14 @@ transition_probabilities
 
 # which religions do these correspond to?
 ## most likely 
-most_likely = transition_probabilities.head(3)
+most_likely = transition_probabilities.head(5)
 most_likely = most_likely[['config_id', 'question', 'transition_prob']]
 most_likely = entry_config_master.merge(most_likely, on = 'config_id', how = 'inner')
 most_likely = most_likely.sort_values('config_prob', ascending = False)
-## 1. Soutern Baptists
-## 2. Circumcellions
-## 3. Sachchai
+most_likely
+## 1. Soutern Baptists, 2 Circumcellions
+## 3. no-one. 
+## 4. Sachchai
 
 ## least likely 
 least_likely = transition_probabilities.tail(3)

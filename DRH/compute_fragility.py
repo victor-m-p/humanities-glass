@@ -23,12 +23,15 @@ for configuration in tqdm(unique_configurations):
     conf = cn.Configuration(configuration,
                             configurations, 
                             configuration_probabilities)
+    p_move = conf.p_move(configurations, 
+                         configuration_probabilities,
+                         summary = False)
+    p_move = sorted(p_move, reverse = True)
     for n_fixed in range(20): 
-        p_remain = conf.probability_remain(configurations, 
-                                           configuration_probabilities, 
-                                           n = n_fixed)
-        transition_list.append((configuration, n_fixed, p_remain))
+        p_move_n = p_move[n_fixed:]
+        p_mean_n = np.mean(p_move_n)
+        transition_list.append((configuration, n_fixed, p_mean_n))
 
 # save this 
-d = pd.DataFrame(transition_list, columns = ['config_id', 'n_fixed_traits', 'prob_remain'])
+d = pd.DataFrame(transition_list, columns = ['config_id', 'n_fixed_traits', 'prob_move'])
 d.to_csv('../data/COGSCI23/fragility_observed.csv', index = False)

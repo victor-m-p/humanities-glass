@@ -63,6 +63,7 @@ Z = model.children_
 leaves = dendrogram_dict.get('leaves')
 leaves_color = dendrogram_dict.get('leaves_color_list')
 
+
 ## try wes anderson
 color_dict = {
     'C1': "#34649e", 
