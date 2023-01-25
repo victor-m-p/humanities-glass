@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 import os 
 from tqdm import tqdm 
 
+# NBNBNB: fix "UserWarning: Glyph X missing from current font."
+
 files = os.listdir('../data/COGSCI23/attractors')
 for file in tqdm(files): 
     config_id = int(re.match(r't0.5_max100_idx(\d+).csv', file)[1])
