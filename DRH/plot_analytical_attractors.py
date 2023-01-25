@@ -51,6 +51,7 @@ for file in tqdm(files):
     node_attributes['node_color'] = ['tab:red' if x == config_id else y for x, y in zip(node_attributes['config_id'], node_attributes['node_color'])]
 
     source = node_attributes[node_attributes['node_color'] == 'tab:red']['entry_list'].values[0]
+    source = re.split('\n', source)[0]
 
     # create network 
     d = d.rename(columns = {'probability': 'weight'})
@@ -81,4 +82,4 @@ for file in tqdm(files):
     nx.draw_networkx_edges(G, pos, width = edge_size, edge_color = 'tab:grey')
     nx.draw_networkx_labels(G, pos, labels = labels, font_size = 6)
     plt.suptitle(f'{source}', size = 15)
-    plt.savefig(f'../fig/attractors/{config_id}.pdf')
+    plt.savefig(f'../fig/attractors/{source}_{config_id}.pdf')
