@@ -314,6 +314,7 @@ plot_net(d = d_edgelist_obs,
          node_labels = annotations)
 
 # based on the shifted 
+## why no labels?
 shifted = pd.read_csv('../data/COGSCI23/evo_clean/shift_weighted.csv')
 plot_net(d = shifted,
          n = 2, # often self / other
@@ -340,3 +341,82 @@ plot_net(d = shifted,
          alpha = False,
          k = 1,
          node_labels = annotations)
+
+## why are we not getting labels? ## 
+## fix later ## 
+d = shifted
+n = 3
+# only top two 
+d = d.sort_values('weight').groupby('config_from').tail(n)
+# try to just plot this as is ...
+G = nx.from_pandas_edgelist(d,
+                            source = 'config_from',
+                            target = 'config_to',
+                            edge_attr = 'weight',
+                            create_using=nx.DiGraph)
+# only GCC
+GCC = 0
+H = G.to_undirected()
+Gcc = sorted(nx.connected_components(H), key=len, reverse=True)
+G = G.subgraph(Gcc[GCC])
+
+# alpha 
+edge_weight = dict(nx.get_edge_attributes(G, 'weight'))
+edge_list = []
+edge_w = []
+for x, y in edge_weight.items(): 
+    edge_list.append(x)
+    edge_w.append(y)
+    
+# degree 
+degree = dict(G.degree(weight = 'weight')) # new change
+
+node_list = []
+node_deg = []
+for x, y in degree.items(): 
+    node_list.append(x)
+    node_deg.append(y)
+
+# color 
+uniq_from = np.unique([x for x, y, z in G.edges(data = True)])
+node_color = ['tab:red' if x in uniq_from else 'tab:orange' for x in node_list]
+
+# position 
+k = 1
+n = len(G.nodes())
+pos = nx.spring_layout(G, weight = 'weight',
+                        k = k/np.sqrt(n),
+                        seed = 4)
+
+# alpha 
+alpha_val = 1
+
+# plot 
+node_multiplier = 10
+edge_multiplier = 0.3
+
+fig, ax = plt.subplots(dpi = 300)
+plt.axis('off')
+nx.draw_networkx_nodes(G, pos, 
+                    nodelist = node_list, 
+                    node_size = [x*node_multiplier for x in node_deg],
+                    node_color = node_color,
+                    linewidths = 0.5,
+                    edgecolors = 'black')
+nx.draw_networkx_edges(G, pos, 
+                    edgelist = edge_list,
+                    width = [x*edge_multiplier for x in edge_w],
+                    alpha = alpha_val,
+                    edge_color = 'tab:blue')
+node_labels = annotations
+if node_labels: 
+    labels = {}
+    for i in G.nodes():
+        label = node_labels.get(i)
+        if label: 
+            labels[i] = label
+        else: 
+            labels[i] = ''
+    nx.draw_networkx_labels(G, pos, 
+                            labels = labels)
+plt.suptitle(f'test', size = large_text)

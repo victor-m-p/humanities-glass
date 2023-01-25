@@ -1,7 +1,7 @@
 '''
 VMP 2023-01-08: 
 updated and run on new parameter file.
-produces scatterplot of log(p(configuration)) x p(remain)
+produces scatterplot of log(P(configuration)) x p(remain)
 '''
 
 import pandas as pd 
@@ -65,7 +65,7 @@ entry_configuration = entry_configuration[['config_id', 'entry_name']].drop_dupl
 entry_configuration = entry_configuration.groupby('config_id')['entry_name'].unique().reset_index(name = 'entry_name')
 annotations = entry_configuration.merge(annotations, on = 'config_id', how = 'inner')
 annotations = annotations.sort_values('config_id')
-annotations
+
 ## short names for the entries 
 entries = pd.DataFrame({
     'config_id': [362374, 
@@ -123,13 +123,18 @@ sns.regplot(data = stability,
 plt.axvline(x = median_config,
            ymin = 0,
            ymax = 1,
+           ls = '--',
            color = 'tab:red')
 for _, row in annotations.iterrows(): 
     x = row['log_config_prob']
     y = row['remain_prob']
     label = row['entry_short']
-    # Cistercians break the plot currently
-    if label in ['Pauline', 'Astec', 'Samaritans',
+    # specifics 
+    if label == 'Samaritans': 
+        ax.annotate(label, xy = (x-0.1, y+0.01),
+                    horizontalalignment = 'right',
+                    verticalalignment = 'center')
+    elif label in ['Pauline', 'Astec', 
                  'Muslim Students US/CA', 'Muridiyya Senegal',
                  'Tang Tantrism', 'Soviet Atheism']: 
         ax.annotate(label, xy = (x-0.1, y),
@@ -139,12 +144,13 @@ for _, row in annotations.iterrows():
         ax.annotate(label, xy = (x+0.1, y),
                     horizontalalignment = 'left',
                     verticalalignment = 'center')
-plt.xlabel('log(p(configuration))', size = small_text)
-plt.ylabel('p(remain)', size = small_text)
+plt.xlabel('Log(P(configuration))', size = small_text)
+plt.ylabel('P(remain)', size = small_text)
 plt.xlim(-14, -3.6)
 ## save figure 
-plt.savefig('../fig/COGSCI23/overview/config_remain.pdf')
+plt.savefig('../fig/stability.pdf')
 
+''' create groups in the data '''
 
 ## regression line  
 from sklearn.linear_model import LinearRegression
@@ -172,11 +178,11 @@ conditions = [
 ]
 
 #define results
-results = ['Global Peak', 'Local Peak', 'Local Valley', 'Global Valley']
+results = ['Global Peak', 'Local Peak', 'Mountain Range', 'Valley']
 
 #create new column based on conditions in column1 and column2
 stability['Landscape'] = np.select(conditions, results)
-stability
+
 ## take out useful columns 
 stability = stability[['config_id', 'config_prob', 'Landscape']]
 
@@ -193,7 +199,139 @@ stability['config_prob'] = [round(x*100, 2) for x in stability['config_prob']]
 
 ## rename stuff
 stability = stability.rename(columns = {'config_id': 'Configuration',
-                                        'config_prob': 'p(Configuration)',
+                                        'config_prob': 'P(configuration)',
                                         'entry_name': 'Entry Name'})
 
-stability
+# to latex table
+stability_latex = stability.to_latex(index=False)
+with open('../tables/landscape_types.txt', 'w') as f: 
+    f.write(stability_latex)
+
+    
+''' create overview table '''
+# helper function
+def community_weight(d, 
+                     sort_column,
+                     configuration_id,
+                     configuration_prob):
+    config_dict = {}
+    weight_dict = {}
+    for comm in d[sort_column].unique(): 
+        config_list = []
+        weight_list = []
+        network_comm = d[d[sort_column] == comm]
+        for _, row in network_comm.iterrows():
+            config_id = int(row[configuration_id])
+            config_prob = row[configuration_prob]
+            CommObj = cn.Configuration(config_id, 
+                                       configurations,
+                                       configuration_probabilities)
+            conf = CommObj.configuration
+            config_list.append(conf)
+            weight_list.append(config_prob)
+        config_dict[comm] = config_list 
+        weight_dict[comm] = weight_list
+    return config_dict, weight_dict 
+
+# get the proper weighting 
+def clade_wrangling(c, w, question_reference):
+
+    # get values out 
+    c1, w1 = c.get(0), w.get(0)
+    c2, w2 = c.get(1), w.get(1)
+    # stack
+    s1, s2 = np.stack(c1, axis = 1), np.stack(c2, axis = 1)
+    # recode
+    s1[s1 == -1] = 0
+    s2[s2 == -1] = 0
+    # weights
+    wn1, wn2 = np.array(w1)/sum(w1), np.array(w2)/sum(w2)
+    # average
+    bit1 = np.average(s1, axis = 1, weights = wn1)
+    bit2 = np.average(s2, axis = 1, weights = wn2)
+    # turn this into dataframes
+    df = pd.DataFrame(
+        {f'Focal': bit1,
+         f'Other': bit2})
+    df['question_id'] = df.index + 1
+    # merge with question reference
+    df = df.merge(question_reference, on = 'question_id', how = 'inner')
+    # difference 
+    df = df.assign(absolute_difference = lambda x: 
+        np.abs(x['Focal']-x['Other']))
+    return df 
+
+def subset_groups(df, sub_list, remap_dict): 
+    df = df[df['Landscape'].isin(sub_list)]
+    df['Focal'] = [remap_dict.get(x) for x in df['Landscape']]
+    return df
+
+# ... 
+stability = stability[['Configuration', 'P(configuration)', 'Landscape']].drop_duplicates()
+
+import configuration as cn 
+question_reference = pd.read_csv('../data/analysis/question_reference.csv')
+
+# preprocessing 
+from fun import bin_states 
+configuration_probabilities = np.loadtxt('../data/analysis/configuration_probabilities.txt')
+n_nodes = 20
+configurations = bin_states(n_nodes) 
+
+### each community against the others ### 
+n_groups = 4
+subset_list = ['Global Peak', 'Local Peak', 'Mountain Range', 'Valley']
+A = np.zeros((n_groups, n_groups), int)
+np.fill_diagonal(A, 1)
+
+clade_list = []
+for row in A: 
+    dct = {group:val for group, val in zip(subset_list, row)}
+    df = subset_groups(stability, subset_list, dct)
+    cdict, wdict = community_weight(df, 
+                                    'Focal',
+                                    'Configuration',
+                                    'P(configuration)')
+    clade = clade_wrangling(cdict, wdict, question_reference)
+    clade_list.append(clade)
+
+def wrangle_subset(landscape_list, landscape_n, landscape_name, n_top):
+    subset = landscape_list[landscape_n] # Global Peak
+    subset['Landscape'] = landscape_name
+    subset = subset.sort_values('absolute_difference', ascending = False)
+    subset = subset.head(n_top)
+    return subset 
+
+global_peak = wrangle_subset(clade_list, 0, 'Global Peak', 5)
+local_peak = wrangle_subset(clade_list, 1, 'Local Peak', 5)
+mountain_range = wrangle_subset(clade_list, 2, 'Mountain Range', 5)
+valley = wrangle_subset(clade_list, 3, 'Valley', 5)
+
+landscapes = pd.concat([global_peak, local_peak, 
+                        mountain_range, valley])
+
+landscapes = landscapes.assign(focal_minus_other = lambda x: (x['Focal']-x['Other'])*100)
+
+# Global Peak: 
+## 20.39: distinct written language
+## 16.12: Co-sacrifices
+## -14.70: Large-scale rituals
+## -13.52: Formal Burials 
+
+# Local Peak
+## 29.01: Large-Scale 
+## 27.18: Supernatural monitoring
+## -24.38: Reincarnation this world
+## 22.45: Supernatural punishment
+
+# Mountain Range
+## -18.45: Distinct Written 
+## -14.00: Co-sacrifices
+## 10.41: Reincarnation this world
+## 8.45: Special treatment for corpses
+
+# Valley: 
+## 36.69: Supernatural punish
+## 34.63: Supernatural monitor
+## 24.25: Large-scale rituals
+## -23.45: Co-sacrifices 

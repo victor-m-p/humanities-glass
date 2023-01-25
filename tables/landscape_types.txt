@@ -1,0 +1,413 @@
+\begin{tabular}{rrll}
+\toprule
+ Configuration &  P(configuration) &      Landscape &                                                                                                                            Entry Name \\
+\midrule
+       1027974 &              1.39 &    Global Peak &                                                                                              Priests and Scholars of Hellenistic Uruk \\
+       1027974 &              1.39 &    Global Peak &                                                                                                 Polytheistic Pre-Islamic South Arabia \\
+       1027974 &              1.39 &    Global Peak &                                                                                                           Early Medieval Confucianism \\
+       1027974 &              1.39 &    Global Peak &                                                                                                               Religion in Roman Ostia \\
+       1027974 &              1.39 &    Global Peak &                                                                                                            Local Religion at Selinous \\
+       1027974 &              1.39 &    Global Peak &                                                                                             The Society of Jesus (Jesuits) in Britain \\
+       1044358 &              0.79 &    Global Peak &                                                                                               16th-17th c. Gauḍīya Vaiṣṇava Tradition \\
+       1044358 &              0.79 &    Global Peak &                                                                                                        Twofold Mystery (Chongxuan 重玄) \\
+       1044358 &              0.79 &    Global Peak &                                                                                                            Huayan School (Early Tang) \\
+        894854 &              0.61 &    Global Peak &                                                                                                                           The Essenes \\
+        894854 &              0.61 &    Global Peak &                                                                                                                    Tariqa Shadhiliyya \\
+        894854 &              0.61 &    Global Peak &                                                                                                                                  Teda \\
+        894854 &              0.61 &    Global Peak &                                                                           Monastic Communities of Lower Egypt: Nitria, Kellia, Scetis \\
+        501638 &              0.57 &    Global Peak &                                                                                                                              Opus Dei \\
+        501638 &              0.57 &    Global Peak &                                                                                                                               Zealots \\
+        501638 &              0.57 &    Global Peak &                                                                                                                              Donatism \\
+        501638 &              0.57 &    Global Peak &                                                                                            Ahmadi; Ahmadiyya Muslim Jama'at; Ahmadiya \\
+        501638 &              0.57 &    Global Peak &                                                                                                                  Mourides (Muridiyya) \\
+        501638 &              0.57 &    Global Peak &                                                                                                            Sino-Muslims in Qing China \\
+        501638 &              0.57 &    Global Peak &                                                                                                        Northern Irish Roman Catholics \\
+        493446 &              0.54 &    Global Peak &                                                                                                                       Qumran Movement \\
+       1027970 &              0.45 &    Global Peak &                                                                                                                      K’iche’ (Quiché) \\
+        503686 &              0.39 &    Global Peak &                                                                                                                              Haitians \\
+        503686 &              0.39 &    Global Peak &                                                                                                                              Donatism \\
+        765830 &              0.38 &    Global Peak &                                                                                                   Religion in the Old Assyrian Period \\
+        765830 &              0.38 &    Global Peak &                                                                                                                               Huichol \\
+        765830 &              0.38 &    Global Peak &                                                                             Ancient Egypt - Predynastic Period - Early Naqada Culture \\
+       1042311 &              0.37 &    Global Peak &                                                                                                        Sichuan Esoteric Buddhist Cult \\
+        520070 &              0.35 &    Global Peak &                                                                                                                      Peruvian Mormons \\
+        520070 &              0.35 &    Global Peak &                                                                                        Krishna Worship in North India - Modern Period \\
+        520070 &              0.35 &    Global Peak &                                                                                     Tibetan and Himalayan Mundane and Landscape Cults \\
+        520070 &              0.35 &    Global Peak &                                                                                                                  Worshipers of Śītalā \\
+        765831 &              0.30 &    Global Peak &                                                                                                                 Archaic Spartan Cults \\
+        362370 &              0.29 &    Global Peak &                                                                                                                     Southern Baptists \\
+       1017730 &              0.29 &    Global Peak &                                                                                                    Tijaniyya Order/ الطريقة التيجانية \\
+       1017730 &              0.29 &    Global Peak &                                                                                                                 The Church of England \\
+       1017730 &              0.29 &    Global Peak &                                                                                                 The Reformed Church (Early Orthodoxy) \\
+        372614 &              0.26 &    Global Peak &                                                                                                                               Trukese \\
+        651142 &              0.24 &    Global Peak &                                                                                                                                 Mende \\
+        651142 &              0.24 &    Global Peak &                                                                                                                                  Igbo \\
+        651142 &              0.24 &    Global Peak &                                                                                                                                 Twana \\
+        651142 &              0.24 &    Global Peak &                                                                                                                                Jivaro \\
+        651142 &              0.24 &    Global Peak &                                                                                                                                  Ainu \\
+        632710 &              0.23 &    Global Peak &                                                                                                                              Tallensi \\
+        110470 &              0.23 &    Global Peak &                                                                                                                   Mentawai (Rereiket) \\
+        110470 &              0.23 &    Global Peak &                                                                                                                                Papago \\
+        501634 &              0.23 &    Global Peak &                                                                                                                         Chishti Sufis \\
+        501634 &              0.23 &    Global Peak &                                                                                     Catholics in the People's Republic of China (PRC) \\
+        632706 &              0.22 &    Global Peak &                                                                                                                                Amhara \\
+        388998 &              0.20 &    Global Peak &                                                                                  Pushtimarg (The Path of Grace) in the UK and Gujarat \\
+       1027968 &              0.18 &    Global Peak &                                                                                                                        Cult of Thecla \\
+        493442 &              0.17 &    Global Peak &                                                                                                              Anglican Church of Korea \\
+        493442 &              0.17 &    Global Peak &                                                                                                               Nigerian Pentecostalism \\
+        493442 &              0.17 &    Global Peak &                                                                                                            African Initiated Churches \\
+        911238 &              0.16 &    Global Peak &                                                                                                                         Rwala Bedouin \\
+        911238 &              0.16 &    Global Peak &                                                                                                                             Exovedate \\
+        886658 &              0.16 &    Global Peak &                                                                                                     Sub Saharan Africa Pentecostalism \\
+       1044354 &              0.16 &    Global Peak &                                                                                                            Universal Salvation Ritual \\
+       1044354 &              0.16 &    Global Peak &                                                                                                   Chan Buddhists in early Qing period \\
+        638850 &              0.16 &    Global Peak &                                                                                                                           Gros Ventre \\
+       1042306 &              0.15 &    Global Peak &                                                                                                               The Dingxiang Wang Cult \\
+        782214 &              0.15 &    Global Peak &                                                                                                                              Popoluca \\
+        126854 &              0.12 &    Global Peak &                                                                                                             Kuy traditional religions \\
+        126854 &              0.12 &    Global Peak &                                                                                                     Postsocialist Mongolian Shamanism \\
+        362242 &              0.12 &    Global Peak &                                                                                                               American Evangelicalism \\
+        362242 &              0.12 &    Global Peak &                                                                                      Protestantism welcoming People with Disabilities \\
+        634502 &              0.12 &    Global Peak &                                                                                                                                Yapese \\
+        634498 &              0.12 &    Global Peak &                                                                                                                               Mapuche \\
+        503682 &              0.11 &    Global Peak &                                                                                                                      Society of Jesus \\
+       1041926 &              0.11 &    Global Peak &                                                                                                                                 Wogeo \\
+        632320 &              0.11 &    Global Peak &                                                                                                                                  Lesu \\
+        632320 &              0.11 &    Global Peak &                                                                                                                      Timbira (Canela) \\
+        100226 &              0.11 &    Global Peak &                                                                                                                                Mohism \\
+        108416 &              0.11 &    Global Peak &                                                                                                                                Yahgan \\
+        763778 &              0.10 &    Global Peak &                                                                                                                                 Kwoma \\
+        894855 &              0.10 &    Global Peak &                                                                                                                        The Roshaniyya \\
+        896903 &              0.09 &    Global Peak &                                                                                         The Sarna religion of the Oraons of Jharkhand \\
+        896903 &              0.09 &    Global Peak &                                                                                                                                 Bhils \\
+       1017606 &              0.09 &    Global Peak &                                                                                                                     Irish Catholicism \\
+       1043334 &              0.09 &    Global Peak &                                                                                                                   Nyingma (rnying ma) \\
+        886272 &              0.09 &    Global Peak &                                                                                                                            Xuanxue 玄學 \\
+       1025924 &              0.09 &    Global Peak &                                                                                                              Romanian Orthodox Church \\
+       1042304 &              0.09 &    Global Peak &                                                                                                                 Early Indian Buddhism \\
+       1042304 &              0.09 &    Global Peak &                                                                                                     Tibetan Nonsectarianism (ris med) \\
+       1041922 &              0.08 &    Global Peak &                                                                                                                               Tiantai \\
+        894598 &              0.08 &    Global Peak &                                                                                                                          Guglielmites \\
+       1044355 &              0.08 &    Global Peak &                                                                                                                               Sa skya \\
+        370564 &              0.08 &    Global Peak &                                                                                                        Matthew-James-Didache Movement \\
+        370564 &              0.08 &    Global Peak &                                                                                                       Russians (of Viriatino Village) \\
+        370564 &              0.08 &    Global Peak &                                                                                                            Northern Irish Protestants \\
+        896898 &              0.08 &    Global Peak &                                                                                                                                  Iban \\
+       1032066 &              0.07 &    Global Peak &                                                                                                                        Vestal Virgins \\
+       1017346 &              0.07 &    Global Peak &                                                                                                                       Anglican Church \\
+        786306 &              0.06 &    Global Peak &                                                                                                                                Lakher \\
+       1044230 &              0.06 &    Global Peak &                                                                                    Pure Land Buddhist Schools in Early Medieval Japan \\
+        372610 &              0.06 &    Global Peak &                                                                                                                       Yolngu religion \\
+       1042054 &              0.06 &    Global Peak &                                                                                                                                Lepcha \\
+        370438 &              0.06 &     Local Peak &                                                                                                                   Darul Uloom Deoband \\
+        370438 &              0.06 &     Local Peak &                                                                                                           Congregation of the Oratory \\
+        886660 &              0.06 &     Local Peak &                                                                                                                          The Bogomils \\
+       1041920 &              0.06 &     Local Peak &                                                                                                                 Baul Fakirs of Bengal \\
+        361346 &              0.06 &     Local Peak & """"""""Gaiwiio Religion,"""""""" """"""""Longhouse Religion,"""""""" or """"""""The Way of Handsome Lake"""""""" of the Seneca Tribe \\
+        910854 &              0.05 &     Local Peak &                                                                                                             Chan Buddhism in the Song \\
+        631680 &              0.05 &     Local Peak &                                                                                                                              Chukchee \\
+        631680 &              0.05 &     Local Peak &                                                                                                                                 Siuai \\
+        517638 &              0.05 &     Local Peak &                                                                                                            Chittagong Plain Buddhists \\
+        362112 &              0.05 &     Local Peak &                                                                                                                   Tractarian Movement \\
+       1017732 &              0.05 &     Local Peak &                                                                                                   Catholicism in contemporary Croatia \\
+       1041024 &              0.05 &     Local Peak &                                                                                                                Siamese (Central Thai) \\
+        501506 &              0.05 &     Local Peak &                                                                                  Church of Jesus Christ of Latter-day Saints (modern) \\
+        501506 &              0.05 &     Local Peak &                                                                                   Church of Jesus Christ of Latter-day Saints (early) \\
+        388999 &              0.04 &     Local Peak &                                                                                                           Lakota Religious Traditions \\
+        517632 &              0.04 &     Local Peak &                                                                                 The International Network of Engaged Buddhists - INEB \\
+       1044353 &              0.04 &     Local Peak &                                                                                                          Drukpa Kagyü School (Bhutan) \\
+       1027842 &              0.04 &     Local Peak &                                                                                                                Indonesian Catholicism \\
+        519686 &              0.04 &     Local Peak &                                                                                                                               Burmese \\
+        503558 &              0.04 &     Local Peak &                                                                                                                Ahl-e-Sunnat wa Jamaat \\
+        885632 &              0.04 &     Local Peak &                                                                               Universal Fellowship of Metropolitan Community Churches \\
+        765575 &              0.04 &     Local Peak &                                                                                                                                Ugarit \\
+        757638 &              0.04 &     Local Peak &                                                                                                                 Neo-Assyrian Scholars \\
+        500224 &              0.03 &     Local Peak &                                                                                                                 Thai Forest Tradition \\
+        910982 &              0.03 &     Local Peak &                                                                                                                       Nāth Sampradāya \\
+       1044356 &              0.03 &     Local Peak &                                                                                                                          Veerashaivas \\
+       1042305 &              0.03 &     Local Peak &                                                                                                                       Lan Na Buddhism \\
+       1017478 &              0.03 &     Local Peak &                                                                             Order of the Hermits of St Augustine (Augustinian friars) \\
+        508422 &              0.03 &     Local Peak &                                                                                                                            Reginistas \\
+        648070 &              0.03 &     Local Peak &                                                                                                                                  Toda \\
+        911239 &              0.03 &     Local Peak &                                                                                                               Medieval Śrīvaiṣṇavism \\
+        636806 &              0.02 &     Local Peak &                                                                                                                                Aymara \\
+        913282 &              0.02 &     Local Peak &                                                                                                                      Mising Community \\
+        369280 &              0.02 &     Local Peak &                                                                                                                  Rastafari of Jamaica \\
+        520065 &              0.02 &     Local Peak &                                                                              International Society for Krishna Consciousness (ISKCON) \\
+        126592 &              0.02 &     Local Peak &                                                                                                                                Warrau \\
+        507778 &              0.02 &     Local Peak &                                                                                                             Singaporean Mega-Churches \\
+        633728 &              0.02 &     Local Peak &                                                                                                                                  Buka \\
+        763522 &              0.02 &     Local Peak &                                                                                                                               Tikopia \\
+       1033990 &              0.02 &     Local Peak &                                                                                                                             Gāṇapatya \\
+        109440 &              0.02 &     Local Peak &                                                                                                                          Copper Inuit \\
+       1032068 &              0.02 &     Local Peak &                                                                                               Religion at Nippur in the Ur III period \\
+        522118 &              0.02 &     Local Peak &                                                                                                                       Newar Buddhists \\
+        364420 &              0.02 &     Local Peak &                                                                                                     Christian Base Community movement \\
+        511879 &              0.02 &     Local Peak &                                                                                                                               Umbanda \\
+        648838 &              0.02 &     Local Peak &                                                                                                                                Aranda \\
+       1033090 &              0.01 &     Local Peak &                                                                                                                          Sannō Shintō \\
+       1044097 &              0.01 &     Local Peak &                                                                                                                          Amdo Gelukpa \\
+        516995 &              0.01 &     Local Peak &                                                                                                          Sikhism in the United States \\
+        518918 &              0.01 &     Local Peak &                                                                                                         Karma Kagyu or Kamtsang Kagyu \\
+        125826 &              0.01 &     Local Peak &                                                                                                                                Gilyak \\
+        633472 &              0.01 &     Local Peak &                                                                                                                               Klamath \\
+        654976 &              0.01 &     Local Peak &                                                                                                                              Comanche \\
+        519815 &              0.01 &     Local Peak &                                                                                                                      Nyingma Treasure \\
+        515974 &              0.01 &     Local Peak &                                                                                                                   Liumen (Liu School) \\
+       1031046 &              0.01 &     Local Peak &                                                                                                                      Han Confucianism \\
+       1016322 &              0.01 &     Local Peak &                                                                                                                              Anomeans \\
+        239488 &              0.01 &     Local Peak &                                                                                                            Digital Shinto Communities \\
+        369543 &              0.01 &     Local Peak &                                                                                                    German Pietists (Hasidei Ashkenaz) \\
+       1025795 &              0.01 &     Local Peak &                                                                                                                        Ethiopian Jews \\
+        780167 &              0.01 &     Local Peak &                                                                                                                      Butonese Muslims \\
+        902020 &              0.01 &     Local Peak &                                                                                                                           Śaiva Magic \\
+        436102 &              0.01 &     Local Peak &                                                                                                        Meo Muslim, Mev, Mewati Muslim \\
+        754560 &              0.01 &     Local Peak &                                                                                                    Han Imperial Cult under Emperor Wu \\
+        501377 &              0.01 &     Local Peak &                                                                                                                          Uyghur Islam \\
+        118534 &              0.01 &     Local Peak &                                                                                                           Sámi pre-Christian religion \\
+        118534 &              0.01 &     Local Peak &                                                                                                                            Kimpa Vita \\
+        517126 &              0.00 &     Local Peak &                                                                                                                          Won-Buddhism \\
+        516865 &              0.00 &     Local Peak &                                                                                                                     Tamil Neo-Saivism \\
+        115332 &              0.00 &     Local Peak &                                                                                                                   The Cult of the Fox \\
+        759687 &              0.00 &     Local Peak &                                                                                                          Julio-Claudian Imperial Cult \\
+        774016 &              0.00 &     Local Peak &                                                                                                       Pagans under the Emperor Julian \\
+        692102 &              0.00 &     Local Peak &                                                                                                                          Demeter Cult \\
+        652162 &              0.00 &     Local Peak &                                                                                                                                Santal \\
+        123399 &              0.00 &     Local Peak &                                                                                                                        Early Śramaṇas \\
+       1031685 &              0.00 &     Local Peak &                                                                                                         Religion in Greco-Roman Egypt \\
+        929282 &              0.00 &     Local Peak &                                                                                                                             Sadducees \\
+       1025926 &              1.87 & Mountain Range &                                                                                                                 Pachomian Monasticism \\
+       1025926 &              1.87 & Mountain Range &                                                                       Naqshbandī Order, Naqshbandī Tarīqa, Naqshbandīyyah, Khwājagān, \\
+       1025926 &              1.87 & Mountain Range &                                                                                                                   The Knights Templar \\
+       1025926 &              1.87 & Mountain Range &                                                                                                                    Islamic modernists \\
+       1025926 &              1.87 & Mountain Range &                                                                                                 Greek Chalcedonian Christians, Nicaea \\
+       1025926 &              1.87 & Mountain Range &                                                                                            The Zapotec or Ben 'Zaa (The Cloud People) \\
+       1025926 &              1.87 & Mountain Range &                                                                                                  Moravian Missionaries in Nunatsiavut \\
+       1025926 &              1.87 & Mountain Range &                                                                                                                                   Fur \\
+       1025926 &              1.87 & Mountain Range &                                                               The Order of the Holy Trinity for the Redemption of Captives, 1198-1500 \\
+       1025926 &              1.87 & Mountain Range &                                                                                                                         Céli Dé monks \\
+       1025926 &              1.87 & Mountain Range &                                                                                                               Congregation of Savigny \\
+       1025926 &              1.87 & Mountain Range &                                                                                                                             Pharisees \\
+       1025926 &              1.87 & Mountain Range &                                                                                                             Bnay Qyāmā and Bnāt Qyāmā \\
+       1025926 &              1.87 & Mountain Range &                                                                                                                  Nahdlatul Ulama (NU) \\
+       1025926 &              1.87 & Mountain Range &                                                                                                 Monotheistic Pre-Islamic South Arabia \\
+       1025926 &              1.87 & Mountain Range &                                                                                                               12th-13th c Cistercians \\
+       1027975 &              1.47 & Mountain Range &                                                                                                                     Late Chosŏn Korea \\
+       1027975 &              1.47 & Mountain Range &                                                                                                           Ancient Egypt - Old Kingdom \\
+       1027975 &              1.47 & Mountain Range &                                                                                                                             Cham Bani \\
+       1027975 &              1.47 & Mountain Range &                                                                                                            Christianity in Tang China \\
+       1027975 &              1.47 & Mountain Range &                                                                                                            Religion at Deir el-Medina \\
+       1027975 &              1.47 & Mountain Range &                                                                                             Ancient Egypt - First Intermediate Period \\
+       1027975 &              1.47 & Mountain Range &                                                                                              The Late Bronze Age City-State of Ugarit \\
+       1027975 &              1.47 & Mountain Range &                                                                                                  Ancient Egypt - the Ramesside Period \\
+       1027975 &              1.47 & Mountain Range &                                                                                                                     Religion in Judah \\
+       1027975 &              1.47 & Mountain Range &                                                                                                                      Ancient Egyptian \\
+       1027975 &              1.47 & Mountain Range &                                                                                                      Cult of Isis (Mysteries of Isis) \\
+       1027975 &              1.47 & Mountain Range &                                                                                                    Religion in Greco-Roman Alexandria \\
+       1027975 &              1.47 & Mountain Range &                                                                                                                          Lingbao dafa \\
+        362374 &              1.20 & Mountain Range &                                                                                                               Christianity in Ephesus \\
+        362374 &              1.20 & Mountain Range &                                                                                                                        Gaengjeongyudo \\
+        362374 &              1.20 & Mountain Range &                                                                                         The New Prophecy or """"""""Montanism"""""""" \\
+        362374 &              1.20 & Mountain Range &                                                                                                                  The Branch Davidians \\
+        362374 &              1.20 & Mountain Range &                                                                                                   Pauline Christianity (ca. 45-60 CE) \\
+        362374 &              1.20 & Mountain Range &                                                                                     Anabaptist Mennonites in North America, 1683-2021 \\
+        362374 &              1.20 & Mountain Range &                                                                                                                   Jehovah's Witnesses \\
+        362374 &              1.20 & Mountain Range &                                                                               Egyptian Salafism (inluding North Africa and West Asia) \\
+        362374 &              1.20 & Mountain Range &                                                                                                                        Circumcellions \\
+        362374 &              1.20 & Mountain Range &                                                                                                     Churches of Christ- United States \\
+       1025927 &              1.12 & Mountain Range &                                                                                                                         Islam in Aceh \\
+       1025927 &              1.12 & Mountain Range &                                                                                           Early Christianity and Monasticism in Egypt \\
+       1044359 &              0.89 & Mountain Range &                                                                                  Shenxiao 神霄 (""""""""Divine Empyrean"""""""") Daoism \\
+       1044359 &              0.89 & Mountain Range &                                                                                          Pre-Christian Religion / Paganism in Ireland \\
+       1044359 &              0.89 & Mountain Range &                                                                                                                             Bön (Bon) \\
+       1017734 &              0.84 & Mountain Range &                                                                                                             Yiguan Dao/I-Kuan Tao 一貫道 \\
+       1025922 &              0.80 & Mountain Range &                                                                                               Middle-Class Migrant Muslims in the UAE \\
+       1025922 &              0.80 & Mountain Range &                                                                                                     Inquisitors of Goa's Santo Ofício \\
+        634758 &              0.73 & Mountain Range &                                                                                                                                Tsonga \\
+        634758 &              0.73 & Mountain Range &                                                                                                                                Kikuyu \\
+        634758 &              0.73 & Mountain Range &                                                                                                                                 Omaha \\
+        634758 &              0.73 & Mountain Range &                                                                                                                               Lakalai \\
+        634758 &              0.73 & Mountain Range &                                                                                                                                 Lamet \\
+        634758 &              0.73 & Mountain Range &                                                                                                                                  Kuna \\
+        634758 &              0.73 & Mountain Range &                                                                                                             Iban traditional religion \\
+        634758 &              0.73 & Mountain Range &                                                                                                                      Roman Divination \\
+        886662 &              0.60 & Mountain Range &                                                                                                         Calvinism (Early/Reformation) \\
+        886662 &              0.60 & Mountain Range &                                                                                                                            Edinoverie \\
+        769926 &              0.59 & Mountain Range &                                                                                                                               Natchez \\
+        769926 &              0.59 & Mountain Range &                                                                                                               Religion in Mesopotamia \\
+        769926 &              0.59 & Mountain Range &                                                                                                                              Kiribati \\
+        769926 &              0.59 & Mountain Range &                                                                                                                     Tell Afis (Syria) \\
+        769926 &              0.59 & Mountain Range &                                                                                                                   Ancient Thessalians \\
+        362368 &              0.55 & Mountain Range &                                                                                                    African Methodist Episcopal Church \\
+        362368 &              0.55 & Mountain Range &                                                                                                      The Religious Society of Friends \\
+        362368 &              0.55 & Mountain Range &                                                                                                                           Wesleyanism \\
+        362368 &              0.55 & Mountain Range &                                                             Charismatic Renewal Movement in Christianity - Second Wave Pentecostalism \\
+        362368 &              0.55 & Mountain Range &                                                                            Neo-Charismatic Movement - Third Wave Charismatic Movement \\
+        362368 &              0.55 & Mountain Range &                                                                                                                 Free Methodist Church \\
+        362368 &              0.55 & Mountain Range &                                                                                                 No-debt Movement in US Evangelicalism \\
+        634754 &              0.52 & Mountain Range &                                                                                                                                Badjau \\
+        638854 &              0.50 & Mountain Range &                                                                                                                                Luguru \\
+       1032070 &              0.48 & Mountain Range &                                                                                  Pontifex Maximus and Pontifices (Pontifical College) \\
+       1032071 &              0.44 & Mountain Range &                                                                                                                   Achaemenid Religion \\
+       1032071 &              0.44 & Mountain Range &                                                                                                                       Sargonic Empire \\
+       1025920 &              0.42 & Mountain Range &                                                                                                     19th century German Protestantism \\
+       1025920 &              0.42 & Mountain Range &                                                                                            Twelver Shi'ism in post-revolutionary Iran \\
+        769927 &              0.41 & Mountain Range &                                                                                                                         Yādiya/Sam'al \\
+        769927 &              0.41 & Mountain Range &                                                                           Religion at Tell el-Dab'a (ancient Avaris) in Ancient Egypt \\
+        769927 &              0.41 & Mountain Range &                                                                           Mesopotamian city-state cults of the Early Dynastic periods \\
+        769927 &              0.41 & Mountain Range &                                                                                                                   Roman Imperial Cult \\
+       1017735 &              0.33 & Mountain Range &                                                                                                                Nestorian Christianity \\
+       1017735 &              0.33 & Mountain Range &                                                                                                             Mohyla's Ukrainian Church \\
+       1017735 &              0.33 & Mountain Range &                                                                                                        Inhabitants of Medieval Kurgus \\
+        634752 &              0.33 & Mountain Range &                                                                                                                                Semang \\
+        634752 &              0.33 & Mountain Range &                                                                                                                               Kapauku \\
+       1041286 &              0.32 & Mountain Range &                                                                                                                                Dasara \\
+       1041286 &              0.32 & Mountain Range &                                                                                                               Shaiva World Renouncers \\
+       1041286 &              0.32 & Mountain Range &                                                                                                      Jain Digambara Tantra, Karnataka \\
+       1041286 &              0.32 & Mountain Range &                                                                                                                          Nechung Cult \\
+       1041286 &              0.32 & Mountain Range &                                                                                                 Balinese Śaiva priests (pedanda siwa) \\
+        503687 &              0.28 & Mountain Range &                                                                                                                    Korean Catholicism \\
+       1048454 &              0.28 & Mountain Range &                                                                                             Pre-Christian Religion / Paganism in Gaul \\
+        516998 &              0.28 & Mountain Range &                                                                                                                Swaminarayan Sampraday \\
+        516998 &              0.28 & Mountain Range &                                                                                Hindu Goddess Worship in Northwest India—Modern Period \\
+        516998 &              0.28 & Mountain Range &                                                                                                           Diasporic American Hinduism \\
+        520071 &              0.27 & Mountain Range &                                                                                    Mongolian Buddhism during the Revolutionary Period \\
+        520071 &              0.27 & Mountain Range &                                                                                                                   Taiping 太平 Movement \\
+        520071 &              0.27 & Mountain Range &                                                                                                      Postsocialist Mongolian Buddhism \\
+       1048455 &              0.27 & Mountain Range &                                                                                                                            Kaharingan \\
+        361984 &              0.27 & Mountain Range &                                                                                                                            Messalians \\
+        362246 &              0.26 & Mountain Range &                                                                                                                          Valentinians \\
+        769922 &              0.25 & Mountain Range &                                                                                                                     Old Norse Fornsed \\
+        361344 &              0.24 & Mountain Range &                                                                                                                              Sachchai \\
+        385536 &              0.23 & Mountain Range &                                                                                                                        Pythagoreanism \\
+        385926 &              0.22 & Mountain Range &                                                                                     Gaddi, a Hindu community of the Western Himalayas \\
+        378758 &              0.21 & Mountain Range &                                                                                                            Chinese Nunnery in Myanmar \\
+        378758 &              0.21 & Mountain Range &                                                                                                           Modern Mystery School (MMS) \\
+        361350 &              0.21 & Mountain Range &                                                                                                                  Pauline Christianity \\
+        361350 &              0.21 & Mountain Range &                                                                                                   Estado da Índia Renegades in Deccan \\
+        100224 &              0.20 & Mountain Range &                                                                                                         Tunisian Women's Associations \\
+       1041287 &              0.19 & Mountain Range &                                                                                                                      Ladakhi Buddhism \\
+       1041287 &              0.19 & Mountain Range &                                                                                                                    Tamil Śaiva Bhakti \\
+        634496 &              0.18 & Mountain Range &                                                                                                                                Trumai \\
+        634496 &              0.18 & Mountain Range &                                                                                                                             Mundurucu \\
+        114566 &              0.18 & Mountain Range &                                                                                                                                  Gond \\
+        114566 &              0.18 & Mountain Range &                                                                                                                               Goajiro \\
+       1025538 &              0.18 & Mountain Range &                                                                                                                                Sokoto \\
+        110464 &              0.18 & Mountain Range &                                                                                                                                 !Kung \\
+        110464 &              0.18 & Mountain Range &                                                                                                                                 Manus \\
+        110464 &              0.18 & Mountain Range &                                                                                                                    Barama River Carib \\
+        655238 &              0.17 & Mountain Range &                                                                                                                               Shilluk \\
+        655238 &              0.17 & Mountain Range &                                                                                                                                 Kaska \\
+        385920 &              0.17 & Mountain Range &                                                                                                                                Mādhva \\
+        634370 &              0.16 & Mountain Range &                                                                                                                               Hidatsa \\
+        626566 &              0.15 & Mountain Range &                                                                                                                               Fangshi \\
+        100230 &              0.15 & Mountain Range &                                                                                         The Ghost Dance Movement and the Lakota Sioux \\
+        632448 &              0.15 & Mountain Range &                                                                                                                                Lengua \\
+        493447 &              0.15 & Mountain Range &                                                                                                                    Hmong Christianity \\
+        493447 &              0.15 & Mountain Range &                                                                              Tribal Christianity (and allied castes) in the Himalayas \\
+        360960 &              0.15 & Mountain Range &                                                                                                              Temple of the Jedi Order \\
+        360960 &              0.15 & Mountain Range &                                                                             Peyote Religion (Peyotism) and the Native American Church \\
+        516608 &              0.13 & Mountain Range &                                                                                                                        Ilm-e-Khshnoom \\
+        769958 &              0.13 & Mountain Range &                                                                                                                       Classic Zapotec \\
+        769958 &              0.13 & Mountain Range &                                                                                                                          Mbau Fijians \\
+        769958 &              0.13 & Mountain Range &                                                                                                                            Marquesans \\
+        769958 &              0.13 & Mountain Range &                                                                                                                                 Creek \\
+         99840 &              0.12 & Mountain Range &                                                                                                                          Spiritualism \\
+       1041280 &              0.12 & Mountain Range &                                                                                             The Worship of Jagannath in Puri (Odisha) \\
+        632322 &              0.10 & Mountain Range &                                                                                                                        Nama Hottentot \\
+        632322 &              0.10 & Mountain Range &                                                                                                                                 Mbuti \\
+        632322 &              0.10 & Mountain Range &                                                                                                                                Azande \\
+       1024903 &              0.10 & Mountain Range &                                                                                                         Parsis, Zoroastrians of India \\
+       1027969 &              0.10 & Mountain Range &                                                                                            Third Intermediate Period in Ancient Egypt \\
+       1027969 &              0.10 & Mountain Range &                                                                                   Ancient Egyptian Religion in the Early 18th Dynasty \\
+        638848 &              0.10 & Mountain Range &                                                                                                                                Ifugao \\
+       1040896 &              0.10 & Mountain Range &                                                                                                                  Hinduism in Trinidad \\
+       1040896 &              0.10 & Mountain Range &                                                                         Worshippers at the Chidambaram Nataraja Temple, Modern Period \\
+        524167 &              0.10 & Mountain Range &                                                                                                                                Raglai \\
+        524167 &              0.10 & Mountain Range &                                                                                                       Contemporary West African Vodun \\
+       1027719 &              0.10 & Mountain Range &                                                                                                                        The Victorines \\
+       1027719 &              0.10 & Mountain Range &                                                                                                        Old Kingdom Religion at Abydos \\
+        886278 &              0.10 & Mountain Range &                                                                                                           The Monastic School of Gaza \\
+        886278 &              0.10 & Mountain Range &                                                                                         Eastern Christianity From Nicaea to Chalcedon \\
+        377350 &              0.09 & Mountain Range &                                                                                                                               Bishnoi \\
+        377350 &              0.09 & Mountain Range &                                                                                                                       Sethian Gnostic \\
+        638886 &              0.09 & Mountain Range &                                                                                                                                 Maori \\
+        634374 &              0.08 & Mountain Range &                                                                                                    Goodenough and Fergusson Islanders \\
+        376832 &              0.08 & Mountain Range &                                                                                                                         Beat Buddhism \\
+       1040902 &              0.08 & Mountain Range &                                                                                                         Xuanzang's Yogācāra Tradition \\
+        769975 &              0.08 & Mountain Range &                                                                                                                   Aztec Imperial Core \\
+        769975 &              0.08 & Mountain Range &                                                                                                                       Formative Olmec \\
+        769975 &              0.08 & Mountain Range &                                                                                                                   Late Shang Religion \\
+        769959 &              0.08 & Mountain Range &                                                                                                 Ancient Egypt - Early Dynastic Period \\
+        650754 &              0.08 & Mountain Range &                                                                                                                    Northern Saulteaux \\
+        508800 &              0.07 & Mountain Range &                                                                                                              Gujarati Mata Worshipers \\
+        650752 &              0.07 & Mountain Range &                                                                                                                              Orokaiva \\
+        886663 &              0.07 & Mountain Range &                                                                                                          Rabbinic Judaism (Babylonia) \\
+        114560 &              0.06 & Mountain Range &                                                                                                                             Havasupai \\
+        361472 &              0.06 & Mountain Range &                                                                                                                  The Oneida Community \\
+        361472 &              0.06 & Mountain Range &                                                                                                                Unitarian Universalism \\
+        377600 &              0.06 & Mountain Range &                                                                                                Supreme Master Ching Hai World Society \\
+        765442 &              0.06 & Mountain Range &                                                                                                                                Cayapa \\
+        126464 &              0.05 &         Valley &                                                                                                                                Nuxalk \\
+        126464 &              0.05 &         Valley &                                                                                                                                  Tiwi \\
+       1032102 &              0.05 &         Valley &                                                                                                                       Moche (Mochica) \\
+        508678 &              0.05 &         Valley &                                                                                                                              Varkaris \\
+        377348 &              0.05 &         Valley &                                                                                                                               Theurgy \\
+       1025665 &              0.04 &         Valley &                                                                                                                      Buginese Muslims \\
+        761734 &              0.04 &         Valley &                                                                                                                Roman private religion \\
+        761734 &              0.04 &         Valley &                                                                                                                Roman private religion \\
+        761734 &              0.04 &         Valley &                                                                                                                      Spartan Religion \\
+       1025539 &              0.03 &         Valley &                                                                                                                     Mandarese Muslims \\
+       1047431 &              0.03 &         Valley &                                                                                                                            Cham Ahiér \\
+        638470 &              0.03 &         Valley &                                                                                                                                  Dobu \\
+        516997 &              0.03 &         Valley &                                                                                          Sikhism: Guru Hargobind to Guru Gobind Singh \\
+        516997 &              0.03 &         Valley &                                                                                                     Sikhism: Guru Nanak to Guru Arjan \\
+        995207 &              0.02 &         Valley &                                                                                       The Samaritans (Persian to early Roman periods) \\
+        262144 &              0.02 &         Valley &                                                                                                                     Secular Buddhists \\
+        769943 &              0.02 &         Valley &                                                                                                                 Religion of Phoenicia \\
+        362382 &              0.02 &         Valley &                                                                                                                           Marcionites \\
+       1027982 &              0.02 &         Valley &                                                                                                Early Missionary Christianity in China \\
+       1031815 &              0.02 &         Valley &                                                                                                   Ptolemaic Egypt - Egyptian Religion \\
+        376838 &              0.02 &         Valley &                                                                                                    Adi Dravida/Valluva Sakya Buddhism \\
+        362376 &              0.02 &         Valley &                                                                                                                            Encratites \\
+        491520 &              0.02 &         Valley &                                                                                                       The Church of Christ, Scientist \\
+       1032119 &              0.02 &         Valley &                                                                                                               Mexica (Aztec) Religion \\
+        122758 &              0.02 &         Valley &                                                                                                                      Korean shamanism \\
+        311808 &              0.01 &         Valley &                                                                                                                  The Taizhou Movement \\
+       1016832 &              0.01 &         Valley &                                                                                                                  Solovetski monastery \\
+        507654 &              0.01 &         Valley &                                                  Enlace de Agentes de Pastoral Indígena (EAPI, Network of Indigenous Ministry Agents) \\
+             0 &              0.01 &         Valley &                                                                   Bahinabai Chaudhari's Songs: A Performance Tradition in Maharashtra \\
+        655286 &              0.01 &         Valley &                                                                                                                               Ashanti \\
+        650759 &              0.01 &         Valley &                                                                                                                                   Tiv \\
+        976775 &              0.01 &         Valley &                                                                                                    Sri Lankan Buddhism (1948-Present) \\
+        524165 &              0.01 &         Valley &                                                                                                                                 Haroi \\
+        117248 &              0.01 &         Valley &                                                                                                              The Church of All Worlds \\
+        296836 &              0.01 &         Valley &                                                                                                                Johannine Christianity \\
+       1032110 &              0.01 &         Valley &                                                                   The Classic Period Peripheral Coastal Lowlands Ritual Ballgame Cult \\
+       1016839 &              0.01 &         Valley &                                                                                                                  Muridiyya of Senegal \\
+         33792 &              0.01 &         Valley &                                                                                                                             Novatians \\
+        100225 &              0.01 &         Valley &                                                                                                                 Muscular Christianity \\
+        329222 &              0.01 &         Valley &                                                                                                                       Nation of Islam \\
+        260992 &              0.01 &         Valley &                                                                                                             Kelantanese Thai Religion \\
+        484230 &              0.01 &         Valley &                                                                                                                 Śākadvīpīya Brāhmaṇas \\
+       1016833 &              0.01 &         Valley &                                                                                                    Russian Orthodox Mission in Alaska \\
+        499462 &              0.01 &         Valley &                                                                                                           Confucianism - Eastern Zhou \\
+        558594 &              0.01 &         Valley &                                                                                                               Hesychastic Controversy \\
+        524175 &              0.01 &         Valley &                                                                                                           Batak Traditional Religions \\
+        370630 &              0.00 &         Valley &                                                                           Muslim Students Association of the United States and Canada \\
+        392710 &              0.00 &         Valley &                                                                                                                               Orphism \\
+        651170 &              0.00 &         Valley &                                                                                                                                 Huron \\
+       1041288 &              0.00 &         Valley &                                                                                                                             Pāśupatas \\
+        654262 &              0.00 &         Valley &                                                                                                                        Eastern Apache \\
+       1048230 &              0.00 &         Valley &                                                                                                             Late Classic Lowland Maya \\
+       1011200 &              0.00 &         Valley &                                                                                                                         Drikung Kagyu \\
+        347910 &              0.00 &         Valley &                                                                                                                              Tenrikyo \\
+         76672 &              0.00 &         Valley &                                                                                                                               Siriono \\
+        450567 &              0.00 &         Valley &                                                                                                                       Thai Bhikkhunis \\
+        978831 &              0.00 &         Valley &                                                                                             Chinese Esoteric Buddhism (Tang Tantrism) \\
+        944007 &              0.00 &         Valley &                                                                                                          Buddhism in the Mekong Delta \\
+        787334 &              0.00 &         Valley &                                                                                          The Fellowship of Goodness 同善社 (Tongshanshe) \\
+        525313 &              0.00 &         Valley &                                                                                                           Atheism in the Soviet Union \\
+       1036215 &              0.00 &         Valley &                                                                                                                   pre-Christian Irish \\
+\bottomrule
+\end{tabular}

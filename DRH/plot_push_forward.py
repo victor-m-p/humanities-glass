@@ -1,3 +1,7 @@
+'''
+VMP 2023-01-24: 
+find out whether this does anything. 
+'''
 import pandas as pd 
 import numpy as np 
 from fun import bin_states, hamming_distance, hamming_edges, edge_strength, edge_information
