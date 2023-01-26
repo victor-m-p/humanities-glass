@@ -16,6 +16,10 @@ config_ids = @chain entry_maxlikelihood begin _.config_id end
 unique_configs = unique(config_ids) # think right, but double check 
 unique_configs = unique_configs .+ 1 # because of 0-indexing in python 
 
+unique_configs = unique_configs[139:260]
+
+## check up on number 139...?
+
 # find id of neighbors
 function get_neighbor_idx(configuration, indices, configurations)
     neighbor_idx_above_threshold = []
@@ -30,7 +34,6 @@ end
 # setup
 max_timestep = 100
 threshold = 0.5 
-#max_neighbors = 3
 total_configs = length(unique_configs)
 
 # big loop 
