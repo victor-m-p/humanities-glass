@@ -7,7 +7,17 @@ import matplotlib.pyplot as plt
 import os 
 from tqdm import tqdm 
 
-# NBNBNB: fix "UserWarning: Glyph X missing from current font."
+# preprocessing 
+from fun import bin_states 
+configuration_probabilities = np.loadtxt('../data/analysis/configuration_probabilities.txt')
+n_nodes = 20
+configurations = bin_states(n_nodes) 
+
+text = 'Jeg ølsker én 你好'
+from unidecode import unidecode
+unidecode(text).strip()
+
+
 
 files = os.listdir('../data/COGSCI23/attractors')
 for file in tqdm(files): 
@@ -19,12 +29,6 @@ for file in tqdm(files):
     config_from = d['config_from'].unique().tolist()
     config_to = d['config_to'].unique().tolist()
     config_total = list(set(config_from + config_to))
-
-    # preprocessing 
-    from fun import bin_states 
-    configuration_probabilities = np.loadtxt('../data/analysis/configuration_probabilities.txt')
-    n_nodes = 20
-    configurations = bin_states(n_nodes) 
 
     # can take a litle bit 
     # could move to julia 
@@ -46,6 +50,7 @@ for file in tqdm(files):
     entry_maxlikelihood = entry_maxlikelihood[['config_id', 'entry_name']]
     entry_maxlikelihood = entry_maxlikelihood.groupby('config_id')['entry_name'].apply(lambda x: "\n".join(x)).reset_index(name = 'entry_list')
     entry_maxlikelihood['entry_list'] = [re.sub(r"(\(.*\))|(\[.*\])", "", x) for x in entry_maxlikelihood['entry_list']]
+    entry_maxlikelihood['entry_list'] = [unidecode(text).strip() for text in entry_maxlikelihood['entry_list']]
     node_attributes = remain_probability.merge(entry_maxlikelihood, on = 'config_id', how = 'left').fillna("")
     node_attributes['node_color'] = ['tab:blue' if x else 'tab:orange' for x in node_attributes['entry_list']]
     node_attributes['node_color'] = ['tab:red' if x == config_id else y for x, y in zip(node_attributes['config_id'], node_attributes['node_color'])]

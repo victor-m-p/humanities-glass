@@ -76,14 +76,17 @@ d_enforcement_lead = d_enforcement_lead.drop_duplicates()
 # find some candidates 
 ## go up a lot early 
 max_list = []
-for n in [1, 2, 3, 4, 5, 6]: 
+for n in [1, 3, 6]: 
     d_n = d_enforcement_lead[d_enforcement_lead['n_fixed_traits'] == n]
     d_n['increase'] = d_n['prob_remain_next'] - d_n['prob_remain']
     max_n = d_n[d_n['increase'] == d_n['increase'].max()]
-    max_list.append(max_n)
-## some other ones 
-d_n = d_enforcement_lead.sample(n = 5)
+    max_list.append(max_n) 
+d_n = d_enforcement_lead.sample(n = 3, random_state = 5)
 max_list.append(d_n)
+for n in [1, 3, 6]: 
+    d_n = d_enforcement_lead[d_enforcement_lead['n_fixed_traits'] == n]
+    d_n = d_n[d_n['prob_remain'] == d_n['prob_remain'].max()]
+    max_list.append(d_n)
 max_df = pd.concat(max_list)
 max_df = max_df[['config_id']].drop_duplicates()
 
@@ -91,6 +94,7 @@ max_df = max_df[['config_id']].drop_duplicates()
 max_df = d_enforcement_lead.merge(max_df, on = 'config_id', how = 'inner')
 entry_maxlikelihood = pd.read_csv('../data/analysis/entry_maxlikelihood.csv')
 entry_maxlikelihood = entry_maxlikelihood[['config_id', 'entry_name']]
+entry_maxlikelihood = entry_maxlikelihood.groupby('config_id').sample(n=1)
 entry_maxlikelihood = entry_maxlikelihood.merge(max_df, on = 'config_id', how = 'inner')
 
 ## plot each of them: 
