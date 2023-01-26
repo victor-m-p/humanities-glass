@@ -30,6 +30,7 @@ sample_list = [] # (timestep, focal_idx, neighbor_idx, probability)
 
 dataframe_list = []
 for focal_idx in tqdm(unique_configurations): 
+    original_idx = focal_idx
     sample_list = []
     for t in range(max_timestep):
         ConfObj = cn.Configuration(focal_idx,
@@ -54,6 +55,4 @@ for focal_idx in tqdm(unique_configurations):
     sample_df = pd.DataFrame(sample_list, 
                              columns = ['timestep', 'config_from', 
                                         'config_to', 'weight'])
-    dataframe_list.append(sample_df)
-df_overall = pd.concat(dataframe_list)
-df_overall.to_csv('../data/COGSCI23/max_attractor.csv', index = False)
+    sample_df.to_csv(f'../data/COGSCI23/max_attractor/idx{original_idx}.csv', index = False)

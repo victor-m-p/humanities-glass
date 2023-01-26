@@ -15,7 +15,6 @@ n_nodes = 20
 configurations = bin_states(n_nodes) 
 
 files = os.listdir('../data/COGSCI23/attractors')
-files = files[83:-1]
 
 for file in tqdm(files): 
     config_id = int(re.match(r't0.5_max5000_idx(\d+).csv', file)[1])
