@@ -33,4 +33,4 @@ for i, row in question_probability.iterrows():
     plt.scatter(x, i, color = 'tab:blue')
 plt.yticks(np.arange(0, 20, 1), question_probability['question'].values)
 plt.xlabel('Mean probability')
-plt.savefig('../fig/feature_stability.pdf')
+plt.savefig('../fig/feature_stability.pdf', bbox_inches = 'tight')
