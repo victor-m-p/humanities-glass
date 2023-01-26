@@ -26,11 +26,16 @@ question_reference = question_reference[['question_id', 'question']]
 question_probability = question_reference.merge(probability_df, on = 'question_id', how = 'inner')
 question_probability = question_probability.sort_values('mean(prob)').reset_index()
 
+global_mean = np.mean(configuration_probabilities)
+
 fig, ax = plt.subplots(dpi = 300)
 for i, row in question_probability.iterrows(): 
     x = row['mean(prob)']
     x_err = row['std(prob)']
     plt.scatter(x, i, color = 'tab:blue')
 plt.yticks(np.arange(0, 20, 1), question_probability['question'].values)
+plt.vlines(global_mean, ymin = 0, ymax = 20, color = 'tab:red', ls = '--')
 plt.xlabel('Mean probability')
 plt.savefig('../fig/feature_stability.pdf', bbox_inches = 'tight')
+
+## look at standard deviation (much larger than actual difference?) ##
