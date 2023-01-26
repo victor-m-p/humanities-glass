@@ -39,3 +39,7 @@ plt.xlabel('Mean probability')
 plt.savefig('../fig/feature_stability.pdf', bbox_inches = 'tight')
 
 ## look at standard deviation (much larger than actual difference?) ##
+
+
+# features for the top configurations 
+configuration_probabilities
