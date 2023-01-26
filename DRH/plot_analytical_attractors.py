@@ -11,7 +11,7 @@ from tqdm import tqdm
 
 files = os.listdir('../data/COGSCI23/attractors')
 for file in tqdm(files): 
-    config_id = int(re.match(r't0.5_max100_idx(\d+).csv', file)[1])
+    config_id = int(re.match(r't0.5_max5000_idx(\d+).csv', file)[1])
     d = pd.read_csv(f'../data/COGSCI23/attractors/{file}')
     d = d[['config_from', 'config_to', 'probability']].drop_duplicates()
 

@@ -68,85 +68,65 @@ plt.xlabel('Number of fixed traits', size = small_text)
 plt.ylabel('P(remain)', size = small_text)
 plt.savefig('../fig/enforcement_lines.pdf')
 
-############# old stuff ###########
+# label some points 
+d_enforcement_lead = d_enforcement
+d_enforcement_lead['prob_remain_next'] = d_enforcement_lead.groupby('config_id')['prob_remain'].shift(-1)
+d_enforcement_lead = d_enforcement_lead.drop_duplicates()
 
-# curves for each community 
-## either the two small ones are just different
-## or this might suggest that that curve is the MEDIAN
-## while for the other ones it is driven up a bit because
-## of outliers?
-network_information = pd.read_csv('../data/analysis/network_information_enriched.csv')
-community_information = network_information[['config_id', 'comm_label']]
-community_enforcement = d_enforcement.merge(community_information, on = 'config_id', how = 'inner')
-community_enforcement = community_enforcement.sort_values('comm_label', ascending = True)
+# find some candidates 
+## go up a lot early 
+max_list = []
+for n in [1, 2, 3, 4, 5, 6]: 
+    d_n = d_enforcement_lead[d_enforcement_lead['n_fixed_traits'] == n]
+    d_n['increase'] = d_n['prob_remain_next'] - d_n['prob_remain']
+    max_n = d_n[d_n['increase'] == d_n['increase'].max()]
+    max_list.append(max_n)
+## some other ones 
+d_n = d_enforcement_lead.sample(n = 5)
+max_list.append(d_n)
+max_df = pd.concat(max_list)
+max_df = max_df[['config_id']].drop_duplicates()
 
+## find their name
+max_df = d_enforcement_lead.merge(max_df, on = 'config_id', how = 'inner')
+entry_maxlikelihood = pd.read_csv('../data/analysis/entry_maxlikelihood.csv')
+entry_maxlikelihood = entry_maxlikelihood[['config_id', 'entry_name']]
+entry_maxlikelihood = entry_maxlikelihood.merge(max_df, on = 'config_id', how = 'inner')
+
+## plot each of them: 
 fig, ax = plt.subplots(figsize = (7, 5), dpi = 300)
-sns.pointplot(data = community_enforcement, x = 'n_fixed_traits', 
-              y = 'prob_remain', hue = 'comm_label')
-plt.suptitle('Stability (by community)', size = large_text)
-plt.xlabel('Number of fixed traits', size = small_text)
-plt.ylabel('Probability remain', size = small_text)
-plt.legend(title = 'Community')
-plt.savefig('../fig/COGSCI23/stability/community.pdf')
-
-# plot a couple of interesting ones (what is interesting?) 
-## (1) one that is just very stable 
-## (2) one that is very unstable, but where enforcement is effective
-## (3) one that is very unstable but where enforcement is effective 
-## ... find out which religions they correspond to ... 
-## (4) another way to find "interesting" of course is to look 
-## for theoretically interesting religions. 
-## NB: lowest std. removed because that equals highest sum. 
-
-# find based on overall sum
-config_group_sum = d_enforcement.groupby('config_id')['prob_remain'].sum().reset_index(name = 'sum')
-## lowest sum
-config_min_sum = config_group_sum.sort_values('sum', ascending = True).head(1)
-## highest sum
-config_max_sum = config_group_sum.sort_values('sum', ascending = False).head(1)
-# find based on overall std 
-config_group_std = d_enforcement.groupby('config_id')['prob_remain'].std().reset_index(name = 'std')
-## highest std
-config_max_std = config_group_std.sort_values('std', ascending = False).head(1)
-
-# preparation
-configs = [config_min_sum,
-           config_max_sum, 
-           config_max_std]
-
-colors = ['tab:blue',
-          'tab:orange',
-          'tab:red']
-
-# plot these four 
-fig, ax = plt.subplots(figsize = (7, 5), dpi = 300)
-for config, color in zip(configs, colors):
-    tmp_config = d_enforcement.merge(config, on = 'config_id', how = 'inner')
-    x = tmp_config['n_fixed_traits'].tolist()
-    y = tmp_config['prob_remain'].tolist()
-    ax.plot(x, y, color = color, linewidth = 2)
-# title, 
-custom_legend = [Line2D([0], [0], color = 'tab:blue', lw=4),
-                 Line2D([0], [0], color = 'tab:orange', lw=4),
-                 Line2D([0], [0], color = 'tab:red', lw=4)]
-ax.legend(custom_legend, ['min', 'max', 'max(std)'])
+plt.fill_between(n_fixed_traits, hdi_95_l, hdi_95_u, color = 'tab:blue', alpha = 0.3)
+plt.fill_between(n_fixed_traits, hdi_50_l, hdi_50_u, color = 'tab:blue', alpha = 0.6)
+#plt.plot(n_fixed_traits, median_remain, color = 'tab:red', linewidth = 2)
+sns.lineplot(data = entry_maxlikelihood, x = 'n_fixed_traits',
+             y = 'prob_remain', hue = 'entry_name')
 plt.xticks(np.arange(0, 20, 1))
-plt.suptitle('Examples', size = large_text)
 plt.xlabel('Number of fixed traits', size = small_text)
-plt.ylabel('Probability remain', size = small_text)
-plt.savefig('../fig/COGSCI23/stability/case_study.pdf')
+plt.ylabel('P(remain)', size = small_text)
+ax.legend(bbox_to_anchor=(0.9, -0.2))
+plt.savefig('../fig/enforcement_hdi_labels.pdf', bbox_inches = 'tight')
 
-# what do they correspond to? 
-entry_conf = pd.read_csv('../data/analysis/entry_configuration_master.csv')
-config_min_sum = config_min_sum[['config_id']]
-config_min_sum['type'] = 'min'
-config_max_sum = config_max_sum[['config_id']]
-config_max_sum['type'] = 'max'
-config_max_std = config_max_std[['config_id']]
-config_max_std['type'] = 'max(std)'
-case_studies = pd.concat([config_min_sum, config_max_sum, config_max_std])
-case_studies = entry_conf.merge(case_studies, on = 'config_id', how = 'inner')
-case_studies
-# min: Warrau (not complete)
-# max(std): Warrau (not complete)
-# max: Ancient Egypt, ... 
+### check the Buddhism ### 
+x = entry_maxlikelihood[entry_maxlikelihood['n_fixed_traits'] == 19]
+x = x[x['prob_remain'] == x['prob_remain'].min()]
+buddhism_idx = 978831
+
+import configuration as cn 
+from fun import bin_states 
+configuration_probabilities = np.loadtxt('../data/analysis/configuration_probabilities.txt')
+n_nodes = 20
+configurations = bin_states(n_nodes) 
+
+buddhism = cn.Configuration(buddhism_idx, 
+                            configurations,
+                            configuration_probabilities)
+
+                            
+p_self = buddhism.p
+neighbor_id, neighbor_p = buddhism.pid_neighbors(configurations, 
+                                configuration_probabilities)
+
+x = sorted(neighbor_p)
+y = x[0]
+p_self/(p_self+y)
+p_self
