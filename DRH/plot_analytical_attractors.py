@@ -6,6 +6,7 @@ import re
 import matplotlib.pyplot as plt 
 import os 
 from tqdm import tqdm 
+from unidecode import unidecode
 
 # preprocessing 
 from fun import bin_states 
@@ -13,13 +14,9 @@ configuration_probabilities = np.loadtxt('../data/analysis/configuration_probabi
 n_nodes = 20
 configurations = bin_states(n_nodes) 
 
-text = 'Jeg ølsker én 你好'
-from unidecode import unidecode
-unidecode(text).strip()
-
-
-
 files = os.listdir('../data/COGSCI23/attractors')
+files = files[50:-1]
+
 for file in tqdm(files): 
     config_id = int(re.match(r't0.5_max5000_idx(\d+).csv', file)[1])
     d = pd.read_csv(f'../data/COGSCI23/attractors/{file}')
@@ -50,6 +47,7 @@ for file in tqdm(files):
     entry_maxlikelihood = entry_maxlikelihood[['config_id', 'entry_name']]
     entry_maxlikelihood = entry_maxlikelihood.groupby('config_id')['entry_name'].apply(lambda x: "\n".join(x)).reset_index(name = 'entry_list')
     entry_maxlikelihood['entry_list'] = [re.sub(r"(\(.*\))|(\[.*\])", "", x) for x in entry_maxlikelihood['entry_list']]
+    entry_maxlikelihood['entry_list'] = [re.sub(r"\/", " ", x) for x in entry_maxlikelihood['entry_list']]
     entry_maxlikelihood['entry_list'] = [unidecode(text).strip() for text in entry_maxlikelihood['entry_list']]
     node_attributes = remain_probability.merge(entry_maxlikelihood, on = 'config_id', how = 'left').fillna("")
     node_attributes['node_color'] = ['tab:blue' if x else 'tab:orange' for x in node_attributes['entry_list']]
@@ -88,3 +86,4 @@ for file in tqdm(files):
     nx.draw_networkx_labels(G, pos, labels = labels, font_size = 6)
     plt.suptitle(f'{source}', size = 15)
     plt.savefig(f'../fig/attractors/{source}_{config_id}.pdf')
+    plt.close()
