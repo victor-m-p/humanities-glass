@@ -132,6 +132,10 @@ entry_maxlikelihood = entry_maxlikelihood[['config_id', 'entry_name']]
 lower_line = entry_maxlikelihood[entry_maxlikelihood['config_id'] == lower_id]
 upper_line = entry_maxlikelihood[entry_maxlikelihood['config_id'] == upper_id]
 
+lower_line
+upper_line
+
+########### OLD ###########
 ### check the Buddhism ### 
 x = entry_maxlikelihood[entry_maxlikelihood['n_fixed_traits'] == 19]
 x = x[x['prob_remain'] == x['prob_remain'].min()]

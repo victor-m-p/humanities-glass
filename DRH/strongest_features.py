@@ -2,6 +2,8 @@ import pandas as pd
 import numpy as np 
 import seaborn as sns 
 import matplotlib.pyplot as plt 
+import configuration as cn
+from tqdm import tqdm 
 
 # preprocessing 
 from fun import bin_states 
@@ -39,7 +41,39 @@ plt.xlabel('Mean probability')
 plt.savefig('../fig/feature_stability.pdf', bbox_inches = 'tight')
 
 ## look at standard deviation (much larger than actual difference?) ##
+# ...
 
+# most enforced practices
+d_enforcement = pd.read_csv('../data/COGSCI23/enforcement_observed.csv')
+question_reference = pd.read_csv('../data/analysis/question_reference.csv')
+observed_configs = d_enforcement['config_id'].unique().tolist()
 
-# features for the top configurations 
-configuration_probabilities
+# takes a couple of minutes
+# not the most efficient approach
+top_five_list = []
+for config_idx in tqdm(observed_configs): 
+    ConfObj = cn.Configuration(config_idx, 
+                            configurations, 
+                            configuration_probabilities)
+
+    df = ConfObj.neighbor_probabilities(configurations,
+                                        configuration_probabilities,
+                                        question_reference,
+                                        top_n = 5)
+
+    df = df[['question_id', 'question']]
+    df['config_id'] = config_idx 
+    top_five_list.append(df)
+
+top_five_df = pd.concat(top_five_list)
+top_five_df = top_five_df.groupby('question').size().reset_index(name = 'count')
+top_five_df = top_five_df.sort_values('count', ascending = True).reset_index()
+
+# plot this 
+fig, ax = plt.subplots(dpi = 300)
+for i, row in top_five_df.iterrows(): 
+    x = row['count']
+    plt.scatter(x, i, color = 'tab:blue')
+plt.yticks(np.arange(0, 20, 1), top_five_df['question'].values)
+plt.xlabel('n(enforced first five)')
+plt.savefig('../fig/number_enforced_first_five.pdf', bbox_inches = 'tight')
