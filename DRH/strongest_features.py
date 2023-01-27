@@ -77,3 +77,53 @@ for i, row in top_five_df.iterrows():
 plt.yticks(np.arange(0, 20, 1), top_five_df['question'].values)
 plt.xlabel('n(enforced first five)')
 plt.savefig('../fig/number_enforced_first_five.pdf', bbox_inches = 'tight')
+
+# tables
+question_reference = pd.read_csv('../data/analysis/question_reference.csv')
+
+### sacrifice ###
+adult = configurations[:, 14]
+child = configurations[:, 15]
+
+adult_on = np.where(adult == 1)
+adult_off = np.where(adult == -1)
+child_on = np.where(child == 1)
+child_off = np.where(child == -1)
+
+## get the four quadrants
+both_on = np.intersect1d(adult_on, child_on)
+both_off = np.intersect1d(adult_off, child_off)
+child_only = np.intersect1d(adult_off, child_on)
+adult_only = np.intersect1d(adult_on, child_off)
+
+## get probabilities
+p_both_on = configuration_probabilities[both_on].mean()
+p_both_off = configuration_probabilities[both_off].mean()
+p_child_only = configuration_probabilities[child_only].mean()
+p_adult_only = configuration_probabilities[adult_only].mean()
+
+### big gods ###
+monitor = configurations[:, 11]
+punish = configurations[:, 12]
+
+monitor_on = np.where(monitor == 1) 
+monitor_off = np.where(monitor == -1)
+punish_on = np.where(punish == 1)
+punish_off = np.where(punish == -1)
+
+## get the four quadrants 
+both_on = np.intersect1d(monitor_on, punish_on)
+both_off = np.intersect1d(monitor_off, punish_off)
+monitor_only = np.intersect1d(monitor_on, punish_off)
+punish_only = np.intersect1d(monitor_off, punish_on)
+
+## get probabilities
+p_both_on = configuration_probabilities[both_on].mean()
+p_both_off = configuration_probabilities[both_off].mean()
+p_monitor_only = configuration_probabilities[monitor_only].mean()
+p_punish_only = configuration_probabilities[punish_only].mean()
+
+p_both_on
+p_both_off
+p_monitor_only
+p_punish_only
