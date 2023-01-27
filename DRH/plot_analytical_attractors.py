@@ -14,10 +14,17 @@ configuration_probabilities = np.loadtxt('../data/analysis/configuration_probabi
 n_nodes = 20
 configurations = bin_states(n_nodes) 
 
+entry_maxlikelihood = pd.read_csv('../data/analysis/entry_maxlikelihood.csv')
+entry_maxlikelihood = entry_maxlikelihood[['config_id', 'entry_name']]
+entry_maxlikelihood = entry_maxlikelihood.groupby('config_id')['entry_name'].apply(lambda x: "\n".join(x)).reset_index(name = 'entry_list')
+entry_maxlikelihood['entry_list'] = [re.sub(r"(\(.*\))|(\[.*\])", "", x) for x in entry_maxlikelihood['entry_list']]
+entry_maxlikelihood['entry_list'] = [re.sub(r"\/", " ", x) for x in entry_maxlikelihood['entry_list']]
+entry_maxlikelihood['entry_list'] = [unidecode(text).strip() for text in entry_maxlikelihood['entry_list']]
+
 files = os.listdir('../data/COGSCI23/attractors')
 
 for file in tqdm(files): 
-    config_id = int(re.match(r't0.5_max5000_idx(\d+).csv', file)[1])
+    config_orig = int(re.match(r't0.5_max5000_idx(\d+).csv', file)[1])
     d = pd.read_csv(f'../data/COGSCI23/attractors/{file}')
     d = d[['config_from', 'config_to', 'probability']].drop_duplicates()
     
@@ -42,16 +49,9 @@ for file in tqdm(files):
         remain_probability = pd.DataFrame(remain_probability, columns = ['config_id', 'P(remain)'])
 
         # observed maximum-likelihood state & label 
-        pd.set_option('display.max_colwidth', None) 
-        entry_maxlikelihood = pd.read_csv('../data/analysis/entry_maxlikelihood.csv')
-        entry_maxlikelihood = entry_maxlikelihood[['config_id', 'entry_name']]
-        entry_maxlikelihood = entry_maxlikelihood.groupby('config_id')['entry_name'].apply(lambda x: "\n".join(x)).reset_index(name = 'entry_list')
-        entry_maxlikelihood['entry_list'] = [re.sub(r"(\(.*\))|(\[.*\])", "", x) for x in entry_maxlikelihood['entry_list']]
-        entry_maxlikelihood['entry_list'] = [re.sub(r"\/", " ", x) for x in entry_maxlikelihood['entry_list']]
-        entry_maxlikelihood['entry_list'] = [unidecode(text).strip() for text in entry_maxlikelihood['entry_list']]
         node_attributes = remain_probability.merge(entry_maxlikelihood, on = 'config_id', how = 'left').fillna("")
         node_attributes['node_color'] = ['tab:blue' if x else 'tab:orange' for x in node_attributes['entry_list']]
-        node_attributes['node_color'] = ['tab:red' if x == config_id else y for x, y in zip(node_attributes['config_id'], node_attributes['node_color'])]
+        node_attributes['node_color'] = ['tab:red' if x == config_orig else y for x, y in zip(node_attributes['config_id'], node_attributes['node_color'])]
 
         source = node_attributes[node_attributes['node_color'] == 'tab:red']['entry_list'].values[0]
         source = re.split('\n', source)[0]
@@ -85,5 +85,5 @@ for file in tqdm(files):
         nx.draw_networkx_edges(G, pos, width = edge_size, edge_color = 'tab:grey')
         nx.draw_networkx_labels(G, pos, labels = labels, font_size = 6)
         plt.suptitle(f'{source}', size = 15)
-        plt.savefig(f'../fig/attractors/{source}_{config_id}.pdf')
+        plt.savefig(f'../fig/attractors/{source}_{config_orig}.pdf')
         plt.close()

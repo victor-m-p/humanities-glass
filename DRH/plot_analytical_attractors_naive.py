@@ -24,7 +24,7 @@ entry_maxlikelihood['entry_name'] = [unidecode(text).strip() for text in entry_m
 files = os.listdir('../data/COGSCI23/attractors')
 
 for file in tqdm(files): 
-    config_id = int(re.match(r't0.5_max5000_idx(\d+).csv', file)[1])
+    config_orig = int(re.match(r't0.5_max5000_idx(\d+).csv', file)[1])
     d = pd.read_csv(f'../data/COGSCI23/attractors/{file}')
     d = d[['config_from', 'config_to', 'probability']].drop_duplicates()
     
@@ -35,7 +35,7 @@ for file in tqdm(files):
         config_total = list(set(config_from + config_to))
 
         # add data
-        naive_path = pd.read_csv(f'../data/COGSCI23/max_attractor/idx{config_id}.csv')
+        naive_path = pd.read_csv(f'../data/COGSCI23/max_attractor/idx{config_orig}.csv')
         naive_path = naive_path[['config_from', 'config_to']]
         naive_path['edge_color'] = 'tab:red'
         d = d.merge(naive_path, on = ['config_from', 'config_to'], how = 'left').fillna('tab:grey')
@@ -58,7 +58,7 @@ for file in tqdm(files):
         attractors = list(set(config_to) - set(config_from))
         node_attributes = remain_probability.merge(entry_maxlikelihood, on = 'config_id', how = 'left').fillna("")
         node_attributes['node_color'] = ['tab:blue' if x else 'tab:orange' for x in node_attributes['entry_name']]
-        node_attributes['node_color'] = ['tab:red' if x == config_id else y for x, y in zip(node_attributes['config_id'], node_attributes['node_color'])]
+        node_attributes['node_color'] = ['tab:red' if x == config_orig else y for x, y in zip(node_attributes['config_id'], node_attributes['node_color'])]
         node_attributes['node_color'] = ['tab:olive' if x in attractors else y for x, y in zip(node_attributes['config_id'], node_attributes['node_color'])]
 
         source = node_attributes[node_attributes['node_color'] == 'tab:red']['entry_name'].values[0]
@@ -99,5 +99,5 @@ for file in tqdm(files):
         nx.draw_networkx_edges(G, pos, width = edge_size, edge_color = edge_color)
         nx.draw_networkx_labels(G, pos, labels = labels, font_size = 6)
         plt.suptitle(f'{source}', size = 15)
-        plt.savefig(f'../fig/naive_attractors/{source}_{config_id}.pdf')
+        plt.savefig(f'../fig/naive_attractors/{source}_{config_orig}.pdf')
         plt.close()
