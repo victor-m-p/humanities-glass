@@ -8,6 +8,7 @@ np.random.seed(0)              # set seed for reproducibility
 import configuration as cn 
 from fun import * 
 from tqdm import tqdm 
+from unidecode import unidecode
 
 # https://www.color-hex.com/color-palette/68785
 clrs = [
@@ -20,6 +21,9 @@ clrs = [
 entry_maxlikelihood = pd.read_csv('../data/analysis/entry_maxlikelihood.csv')
 entry_maxlikelihood = entry_maxlikelihood[['config_id', 'entry_name']]
 entry_maxlikelihood = entry_maxlikelihood.groupby('config_id').sample(n=1, random_state=1)
+entry_maxlikelihood['entry_name'] = [re.sub(r"(\(.*\))|(\[.*\])", "", x) for x in entry_maxlikelihood['entry_name']]
+entry_maxlikelihood['entry_name'] = [re.sub(r"\/", " ", x) for x in entry_maxlikelihood['entry_name']]
+entry_maxlikelihood['entry_name'] = [unidecode(text).strip() for text in entry_maxlikelihood['entry_name']]
 
 files = os.listdir('../data/COGSCI23/attractors')
 

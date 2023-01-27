@@ -94,21 +94,43 @@ max_df = max_df[['config_id']].drop_duplicates()
 max_df = d_enforcement_lead.merge(max_df, on = 'config_id', how = 'inner')
 entry_maxlikelihood = pd.read_csv('../data/analysis/entry_maxlikelihood.csv')
 entry_maxlikelihood = entry_maxlikelihood[['config_id', 'entry_name']]
-entry_maxlikelihood = entry_maxlikelihood.groupby('config_id').sample(n=1)
+entry_maxlikelihood = entry_maxlikelihood.groupby('config_id').sample(n=1, random_state = 1)
 entry_maxlikelihood = entry_maxlikelihood.merge(max_df, on = 'config_id', how = 'inner')
+
+## now we pick a couple only ... 
+upper_line = entry_maxlikelihood[entry_maxlikelihood['config_id'] == 1027975]
+lower_line = entry_maxlikelihood[entry_maxlikelihood['config_id'] == 652162]
 
 ## plot each of them: 
 fig, ax = plt.subplots(figsize = (7, 5), dpi = 300)
 plt.fill_between(n_fixed_traits, hdi_95_l, hdi_95_u, color = 'tab:blue', alpha = 0.3)
-plt.fill_between(n_fixed_traits, hdi_50_l, hdi_50_u, color = 'tab:blue', alpha = 0.6)
-#plt.plot(n_fixed_traits, median_remain, color = 'tab:red', linewidth = 2)
-sns.lineplot(data = entry_maxlikelihood, x = 'n_fixed_traits',
-             y = 'prob_remain', hue = 'entry_name')
+plt.fill_between(n_fixed_traits, hdi_50_l, hdi_50_u, color = 'tab:blue', alpha = 0.5)
+plt.plot(upper_line['n_fixed_traits'].values,
+         upper_line['prob_remain'].values, 
+         color = '#152238',
+         ls = '--')
+plt.plot(lower_line['n_fixed_traits'].values, 
+         lower_line['prob_remain'].values, 
+         color = '#152238',
+         ls = '--'
+         )
+#sns.lineplot(data = entry_maxlikelihood, x = 'n_fixed_traits',
+#             y = 'prob_remain', hue = 'entry_name')
+plt.plot(n_fixed_traits, median_remain, color = '#152238', linewidth = 2)
 plt.xticks(np.arange(0, 20, 1))
 plt.xlabel('Number of fixed traits', size = small_text)
 plt.ylabel('P(remain)', size = small_text)
 ax.legend(bbox_to_anchor=(0.9, -0.2))
 plt.savefig('../fig/enforcement_hdi_labels.pdf', bbox_inches = 'tight')
+
+### which religions inhabit the space
+lower_id = lower_line['config_id'].tolist()[0]
+upper_id = upper_line['config_id'].tolist()[0]
+entry_maxlikelihood = pd.read_csv('../data/analysis/entry_maxlikelihood.csv')
+entry_maxlikelihood = entry_maxlikelihood[['config_id', 'entry_name']]
+
+lower_line = entry_maxlikelihood[entry_maxlikelihood['config_id'] == lower_id]
+upper_line = entry_maxlikelihood[entry_maxlikelihood['config_id'] == upper_id]
 
 ### check the Buddhism ### 
 x = entry_maxlikelihood[entry_maxlikelihood['n_fixed_traits'] == 19]
