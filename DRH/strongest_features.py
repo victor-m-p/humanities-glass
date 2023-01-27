@@ -127,3 +127,41 @@ p_both_on
 p_both_off
 p_monitor_only
 p_punish_only
+
+### Dynamics ###
+adult = 14
+child = 15
+
+x_configurations = np.delete(configurations, [14, 15], 1)
+x_configurations = np.unique(x_configurations, axis = 0)
+
+
+transition_probabilities = []
+for x in tqdm(x_configurations): 
+    # get the configurations 
+    conf_both = np.insert(x, adult, [1, 1])
+    conf_none = np.insert(x, adult, [-1, -1])
+    conf_cs = np.insert(x, adult, [-1, 1])
+    conf_as = np.insert(x, adult, [1, -1])
+    # get the configuration ids 
+    idx_both = np.where(np.all(configurations == conf_both, axis = 1))[0][0]
+    idx_none = np.where(np.all(configurations == conf_none, axis = 1))[0][0]
+    idx_cs = np.where(np.all(configurations == conf_cs, axis = 1))[0][0]
+    idx_as = np.where(np.all(configurations == conf_as, axis = 1))[0][0]
+    # get probabilities
+    p_both = configuration_probabilities[idx_both]
+    p_none = configuration_probabilities[idx_none]
+    p_cs = configuration_probabilities[idx_cs]
+    p_as = configuration_probabilities[idx_as]
+    # put this together
+    for p_focal, type_focal in zip([p_both, p_none, p_cs, p_as], ['both', 'none', 'cs', 'as']): 
+        if type_focal == 'both' or type_focal == 'none': 
+            p_neighbors = [p_cs, p_as]
+            type_neighbors = ['cs', 'as']
+        else: 
+            p_neighbors = [p_both, p_none]
+            type_neighbors = ['both', 'none']
+        for p_neighbor, type_neighbor in zip(p_neighbors, type_neighbors): 
+            flow = p_neighbor / (p_focal + sum(p_neighbors))
+            transition_probabilities.append((x, type_focal, type_neighbor, flow))
+            
