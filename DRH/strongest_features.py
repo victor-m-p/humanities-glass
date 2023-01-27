@@ -128,16 +128,21 @@ p_both_off
 p_monitor_only
 p_punish_only
 
-### Dynamics ###
+# Dynamics: child sacrifice and adult sacrifice 
 adult = 14
 child = 15
 
 x_configurations = np.delete(configurations, [14, 15], 1)
 x_configurations = np.unique(x_configurations, axis = 0)
 
-
+np.random.seed(seed=1)
+idx = len(x_configurations)
+sample_idx = np.random.choice(idx,
+                              size = 1000, 
+                              replace = False)
+sample_configs = x_configurations[[sample_idx]]
 transition_probabilities = []
-for x in tqdm(x_configurations): 
+for num, x in tqdm(enumerate(sample_configs)): 
     # get the configurations 
     conf_both = np.insert(x, adult, [1, 1])
     conf_none = np.insert(x, adult, [-1, -1])
@@ -154,14 +159,108 @@ for x in tqdm(x_configurations):
     p_cs = configuration_probabilities[idx_cs]
     p_as = configuration_probabilities[idx_as]
     # put this together
-    for p_focal, type_focal in zip([p_both, p_none, p_cs, p_as], ['both', 'none', 'cs', 'as']): 
-        if type_focal == 'both' or type_focal == 'none': 
+    for p_focal, type_focal in zip([p_both, p_none, p_cs, p_as], ['CS, AS', '~CS, ~AS', 'CS, ~AS', '~CS, AS']): 
+        if type_focal == 'CS, AS' or type_focal == '~CS, ~AS': 
             p_neighbors = [p_cs, p_as]
-            type_neighbors = ['cs', 'as']
+            type_neighbors = ['CS, ~AS', '~CS, AS'] # none = (~CS, ~AS)
         else: 
             p_neighbors = [p_both, p_none]
-            type_neighbors = ['both', 'none']
+            type_neighbors = ['CS, AS', '~CS, ~AS']
         for p_neighbor, type_neighbor in zip(p_neighbors, type_neighbors): 
             flow = p_neighbor / (p_focal + sum(p_neighbors))
-            transition_probabilities.append((x, type_focal, type_neighbor, flow))
-            
+            transition_probabilities.append((num, type_focal, type_neighbor, flow))
+
+
+x = [(x, y, z) for a, x, y, z in transition_probabilities]
+df = pd.DataFrame(x, columns = ['type_from', 'type_to', 'probability'])
+df = df.groupby(['type_from', 'type_to'])['probability'].mean().reset_index(name = 'probability')
+
+# make a plot 
+import networkx as nx 
+G = nx.from_pandas_edgelist(df,
+                            source = 'type_from',
+                            target = 'type_to',
+                            edge_attr = 'probability',
+                            create_using = nx.DiGraph)
+
+
+edge_width = []
+edge_labels = {}
+
+for x, y, attr in G.edges(data = True): 
+    weight = attr['probability']
+    edge_width.append(weight)
+    edge_labels[(x, y)] = round(weight, 2)
+
+
+G.edges(data=True)
+edge_labels
+
+pos = {'CS, AS': (2, 2),
+       '~CS, ~AS': (2, 0),
+       '~CS, AS': (0, 1),
+       'CS, ~AS': (4, 1)}
+
+node_labels = {}
+for i in G.nodes(): 
+    node_labels[i] = i
+node_labels
+
+### FIX!! 
+label_pos = [(-0.2, -0.2, 3, 1.5, '0.22'), # (CS, AS) -> (CS, ~AS) [x] []
+             (-0.65, 0.65, 1, 1.5, '0.23'), # (CS, AS) -> (~CS, AS) [x]
+             (0.1, 0.1, 3, 1.5, '0.4'), # (CS, ~AS) -> (CS, AS) [x]
+             (-0.65, 0.65, 3, 0.5, '0.53'), # (CS, ~AS) -> (~CS, ~AS) [x]
+             (0, 0, 1, 1.5, '0.4'), # (~CS, AS) -> (CS, AS) [x]
+             (-0.2, -0.2, 1, 0.5, '0.53'), # (~CS, AS) -> (~CS, ~AS) [x]
+             (0, 0, 3, 0.5, '0.16'), # (~CS, ~AS) -> (CS, ~AS) [x]
+             (0.05, 0.05, 1, 0.5, '0.19')] # (~CS, ~AS) -> (~CS, AS) [x]
+
+fig, ax = plt.subplots(dpi = 300, figsize = (8, 8))
+nx.draw_networkx_nodes(G, pos, node_size = 4500, linewidths = 2,
+                       edgecolors = 'k',
+                       node_color = 'white')
+nx.draw_networkx_edges(G, pos, width = [x*5 for x in edge_width],
+                       connectionstyle = "arc3,rad=0.2",
+                       node_size = 5500)
+nx.draw_networkx_labels(G, pos, node_labels)
+
+for num, ele in enumerate(label_pos): 
+    x_add, y_add, x, y, text = ele
+    if num in [0, 2, 5, 7]:
+        ax.text(x = x+x_add, y = y+y_add, s = text, 
+                rotation = -50, 
+                fontsize = 20, 
+                color = 'black')
+    else:
+        ax.text(x = x+x_add, y = y, s = text, 
+            rotation = 50, 
+            fontsize = 20, 
+            color = 'black')
+        
+plt.show();
+
+
+# find monitor, but not punish 
+pd.set_option('display.max_colwidth', None)
+d = pd.read_csv('/home/vmp/humanities-glass/data/analysis/entry_maxlikelihood.csv')
+unique_config_idx = d['config_id'].unique().tolist()
+unique_configs = configurations[[unique_config_idx]]
+
+monitor = np.where(unique_configs[:, 11] == -1) 
+punish = np.where(unique_configs[:, 12] == 1)
+
+obs_cases = np.intersect1d(monitor, punish)
+unique_config_idx = np.array(unique_config_idx)
+cases = unique_config_idx[obs_cases]
+
+d_case = d[d['config_id'].isin(cases)]
+
+# double check one 
+config_id = 362112
+ConfObj = cn.Configuration(config_id,
+                           configurations,
+                           configuration_probabilities)
+
+question_reference = pd.read_csv('../data/analysis/question_reference.csv')
+question_reference['sanity_check'] = ConfObj.configuration
