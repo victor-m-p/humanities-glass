@@ -10,7 +10,7 @@ configurations = np.loadtxt('../data/analysis/configurations.txt')
 configuration_probabilities = np.loadtxt('../data/analysis/configuration_probabilities.txt')
 
 # setup 
-labels = ['SM, SP', '~SM, ~SP', 'SM, ~SP', '~SM, SP']
+labels = ['MG, PG', '~MG, ~PG', 'MG, ~PG', '~MG, PG']
 label_type = [1, 2, 3, 4]
 idx_first = 11 # monitoring
 n_samples = 10000
