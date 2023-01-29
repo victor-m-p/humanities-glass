@@ -150,7 +150,7 @@ pos_nudges = {1017606: (0.2, 0), # Irish Catholics
               1025798: (0.1, 0), # empty
               1017734: (0.50, 0), # Yiguan Dao
               362246: (-0.25, 0), # Valentinians
-              493446: (0.25, 0), # Qumran
+              493446: (0.22, 0), # Qumran
               1025542: (-0.25, 0), # empty
               1025926: (0.35, 0), # Cistercians
               362374: (-0.2, 0), # Jehovah
@@ -181,7 +181,7 @@ for x in list(edge_dict_sorted.values()):
     edge_color.append(x[1])
     
 # scale stuff
-nodesize_scaled = [(x+1)*200 for x in node_size]
+nodesize_scaled = [(x+1)*220 for x in node_size]
 weights = [x*4 for x in edge_width]
 
 # visualize the graph
@@ -201,8 +201,11 @@ arrows = nx.draw_networkx_edges(G,
                        node_size = [x*1.1 for x in nodesize_scaled],
                        width = weights,
                        arrowstyle = '-|>')
+
+label_options = {"ec": "k", "fc": "white", "alpha": 0.7}                       
 nx.draw_networkx_labels(G, pos, annotations, 
-                        font_size = 10)
+                        font_size = 10,
+                        bbox = label_options)
 for a, w in zip(arrows, weights):
     a.set_joinstyle('miter')
     a.set_capstyle('butt')
@@ -212,3 +215,35 @@ ax.margins(0.15, 0.05)
 
 plt.savefig(f'../fig/{source}_{config_orig}.pdf',
             bbox_inches = 'tight')
+
+# What bit-flips trace the paths? # 
+question_reference = pd.read_csv('../data/analysis/question_reference.csv')
+
+bit_flip_list = []
+for index, row in d.iterrows(): 
+    idx_from = row['config_from']
+    idx_to = row['config_to']
+    conf_from = cn.Configuration(idx_from,
+                                 configurations,
+                                 configuration_probabilities)
+    conf_to = cn.Configuration(idx_to,
+                               configurations,
+                               configuration_probabilities)
+    bit_flip = conf_from.diverge(conf_to, 
+                                 question_reference)
+    bit_flip = bit_flip[['question', idx_to]]
+    bit_flip['config_from'] = idx_from 
+    bit_flip['config_to'] = idx_to
+    bit_flip = bit_flip.rename(columns = {idx_to: 'change'})
+    bit_flip_list.append(bit_flip)
+bit_flip_df = pd.concat(bit_flip_list)
+
+# make it easier to read
+node_attr = node_attr[['config_id', 'entry_name']]
+node_attr = node_attr.rename(columns = {'config_id': 'config_from',
+                                        'entry_name': 'entry_name_from'})
+bit_flip_df = bit_flip_df.merge(node_attr, on = 'config_from', how = 'inner')
+node_attr = node_attr.rename(columns = {'config_from': 'config_to',
+                                        'entry_name_from': 'entry_name_to'})
+bit_flip_df = bit_flip_df.merge(node_attr, on = 'config_to', how = 'inner')
+bit_flip_df
