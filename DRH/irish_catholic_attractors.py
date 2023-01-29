@@ -12,15 +12,23 @@ from unidecode import unidecode
 
 # https://www.color-hex.com/color-palette/68785
 clrs = [
-    '#0097c3',
-    '#9be3f9',
-    '#ffef55',
-    '#f24f26',
+    '#0097c3', # dark blue
+    '#9be3f9', # light blue
+    '#ffef55', # yellow
+    '#f24f26', # red
 ] 
+
+clrs_nodeedge = [
+    '#006b8a', # dark blue
+    '#6da4b5', # light blue
+    '#b5a93a', # yellow
+    '#a83619' # red
+]
 
 entry_maxlikelihood = pd.read_csv('../data/analysis/entry_maxlikelihood.csv')
 entry_maxlikelihood = entry_maxlikelihood[['config_id', 'entry_name']]
-entry_maxlikelihood = entry_maxlikelihood.groupby('config_id').sample(n=1, random_state=1)
+
+#entry_maxlikelihood = entry_maxlikelihood.groupby('config_id').sample(n=1, random_state=1)
 entry_maxlikelihood['entry_name'] = [re.sub(r"(\(.*\))|(\[.*\])", "", x) for x in entry_maxlikelihood['entry_name']]
 entry_maxlikelihood['entry_name'] = [re.sub(r"\/", " ", x) for x in entry_maxlikelihood['entry_name']]
 entry_maxlikelihood['entry_name'] = [unidecode(text).strip() for text in entry_maxlikelihood['entry_name']]
@@ -65,9 +73,34 @@ hamming_distances = pd.DataFrame(hamming_distances,
 attractors = list(set(config_to) - set(config_from))
 unique_config_df = pd.DataFrame({'config_id': config_uniq})
 node_attributes = unique_config_df.merge(entry_maxlikelihood, on = 'config_id', how = 'left').fillna("")
+node_attributes.sort_values('config_id')
+
+# decide on specific labels to include 
+entry_names = [(362246, 'Valentinians'),
+               (362374, "Jehovah's Witnesses"), # Pauline Christianity, Churches of Christ, Gaengjeongyudo, Monatism, Branch Davidians, Mennonites, Circumcellions, Christianity Ephesus, Jehovah, Egyptian Salafism
+               (493318, ''),
+               (493446, 'Qumran Movement'),
+               (501638, 'Donatism'), # Zealots, Muslim, Mourides, Sino-Muslims, Opus Dei, Northern Irish Roman Catholics
+               (1017606, 'Irish Catholics'),
+               (1017734, 'Yiguan Dao'),
+               (1025538, 'Sokoto'),
+               (1025542, ''),
+               (1025798, ''),
+               (1025926, 'Cistercians') # ....
+               ]
+
+node_attributes = node_attributes[['config_id']].drop_duplicates()
+entry_names = pd.DataFrame(entry_names, columns = ['config_id', 'entry_name'])
+node_attributes = node_attributes.merge(entry_names, on = 'config_id', how = 'inner')
+
 node_attributes['node_color'] = [clrs[0] if x else clrs[1] for x in node_attributes['entry_name']]
 node_attributes['node_color'] = [clrs[2] if x == config_orig else y for x, y in zip(node_attributes['config_id'], node_attributes['node_color'])]
 node_attributes['node_color'] = [clrs[3] if x in attractors else y for x, y in zip(node_attributes['config_id'], node_attributes['node_color'])]
+
+node_attributes['nodeedge_color'] = [clrs_nodeedge[0] if x else clrs_nodeedge[1] for x in node_attributes['entry_name']]
+node_attributes['nodeedge_color'] = [clrs_nodeedge[2] if x == config_orig else y for x, y in zip(node_attributes['config_id'], node_attributes['nodeedge_color'])]
+node_attributes['nodeedge_color'] = [clrs_nodeedge[3] if x in attractors else y for x, y in zip(node_attributes['config_id'], node_attributes['nodeedge_color'])]
+
 
 # for logging
 source = node_attributes[node_attributes['config_id'] == config_orig]['entry_name'].tolist()[0]
@@ -77,7 +110,7 @@ naive_path = pd.read_csv(f'../data/COGSCI23/max_attractor/idx{config_orig}.csv')
 naive_path = naive_path[['config_from', 'config_to']]
 naive_path['edge_color'] = 'k'
 d = d.merge(naive_path, on = ['config_from', 'config_to'], how = 'left').fillna('tab:grey')
-d['edge_width'] = [x*3 if y == 'k' else x*1.5 for x, y in zip(d['probability'], d['edge_color'])]
+d['edge_width'] = [x*1.5 if y == 'k' else x*1.5 for x, y in zip(d['probability'], d['edge_color'])]
 
 G = nx.from_pandas_edgelist(d, 
                             source = 'config_from',
@@ -92,33 +125,38 @@ for _, row in node_attr.iterrows():
     config_id = int(row['config_id'])
     G.nodes[config_id]['log_config_prob'] = row['log_config_prob']
     G.nodes[config_id]['node_color'] = row['node_color']
+    G.nodes[config_id]['nodeedge_color'] = row['nodeedge_color']
     G.nodes[config_id]['hamming'] = row['hamming']
+    G.nodes[config_id]['entry_name'] = row['entry_name']
+    
 
 # get node attributes out 
 pos = {}
 nodelist = []
 node_color = []
 node_size = []
+nodeedge_color = []
 annotations = {}
 for node, attr in G.nodes(data = True): 
     pos[node] = np.array([np.random.normal(0, 0.1), attr['log_config_prob']]) 
     nodelist.append(node)
     node_color.append(attr['node_color'])
     node_size.append(attr['hamming'])
-    annotations[node] = node
+    nodeedge_color.append(attr['nodeedge_color'])
+    annotations[node] = attr['entry_name']
 
 # better positions
-pos_nudges = {1017606: (0, 0), # Irish Catholics
-              493318: (0, 0),
-              1025798: (0, 0),
-              1017734: (0, 0),
-              362246: (0, 0),
-              493446: (0, 0),
-              1025542: (0, 0),
-              1025926: (0, 0),
-              362374: (0, 0),
-              501638: (0, 0),
-              1025538: (0, 0)}
+pos_nudges = {1017606: (0.2, 0), # Irish Catholics
+              493318: (0.25, 0), # empty
+              1025798: (0.1, 0), # empty
+              1017734: (0.50, 0), # Yiguan Dao
+              362246: (-0.25, 0), # Valentinians
+              493446: (0.25, 0), # Qumran
+              1025542: (-0.25, 0), # empty
+              1025926: (0.35, 0), # Cistercians
+              362374: (-0.2, 0), # Jehovah
+              501638: (0.3, 0), # Donatism
+              1025538: (-0.40, 0)} # Sokoto 
 
 for key, val in pos.items(): 
     print(key)
@@ -142,20 +180,28 @@ edge_width = []
 for x in list(edge_dict_sorted.values()):
     edge_width.append(x[0])
     edge_color.append(x[1])
+    
+# scale stuff
+nodesize_scaled = [(x+1)*200 for x in node_size]
+
 # visualize the graph
-plt.figure(dpi = 300, figsize = (4, 6))
+fig, ax = plt.subplots(dpi = 300, figsize = (6, 8))
 plt.axis('off')
 nx.draw_networkx_nodes(G, 
                     pos = pos, 
                     nodelist = nodelist,
                     node_color = node_color,
-                    node_size = [(x+1)*20 for x in node_size],
-                    edgecolors = 'k',
-                    linewidths = 1)
-nx.draw_networkx_edges(G, 
-                    pos = pos,
-                    edgelist = edgelist_sorted,
-                    edge_color = edge_color,
-                    width = edge_width)
-nx.draw_networkx_labels(G, pos, annotations)
-plt.savefig(f'../fig/{source}_{config_orig}.pdf')
+                    node_size = nodesize_scaled,
+                    edgecolors = nodeedge_color,
+                    linewidths = [x+1 for x in node_size])
+nx.draw_networkx_edges(G,
+                       pos = pos,
+                       edgelist = edgelist_sorted,
+                       edge_color = edge_color,
+                       node_size = nodesize_scaled,
+                       width = [x*5 for x in edge_width])
+nx.draw_networkx_labels(G, pos, annotations, 
+                        font_size = 16)
+plt.subplots_adjust(left=0, right=1.3, top=1, bottom=0)
+plt.savefig(f'../fig/{source}_{config_orig}.pdf',
+            bbox_inches = 'tight')
