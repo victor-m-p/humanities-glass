@@ -13,7 +13,7 @@ configuration_probabilities = np.loadtxt('../data/analysis/configuration_probabi
 labels = ['AS, CS', '~AS, ~CS', 'AS, ~CS', '~AS, CS']
 label_type = [1, 2, 3, 4]
 idx_first = 14 # adult sacrifice  
-n_samples = 100
+n_samples = 10000
 df = transition_probabilities(configurations, 
                               configuration_probabilities,
                               idx_first,
@@ -92,7 +92,7 @@ for text, nudge in zip(x.values(), nudge_list):
             verticalalignment = 'center',
             color = 'black')
     num += 1
-plt.savefig('../fig/dynamics/sacrifice_transitions.pdf')
+plt.savefig(f'../fig/dynamics/sacrifice_transitions_{n_samples}.pdf')
 
 # specifically spartan 
 ## only the maximum likelihood configuration
