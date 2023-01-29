@@ -101,7 +101,6 @@ node_attributes['nodeedge_color'] = [clrs_nodeedge[0] if x else clrs_nodeedge[1]
 node_attributes['nodeedge_color'] = [clrs_nodeedge[2] if x == config_orig else y for x, y in zip(node_attributes['config_id'], node_attributes['nodeedge_color'])]
 node_attributes['nodeedge_color'] = [clrs_nodeedge[3] if x in attractors else y for x, y in zip(node_attributes['config_id'], node_attributes['nodeedge_color'])]
 
-
 # for logging
 source = node_attributes[node_attributes['config_id'] == config_orig]['entry_name'].tolist()[0]
 
@@ -183,9 +182,10 @@ for x in list(edge_dict_sorted.values()):
     
 # scale stuff
 nodesize_scaled = [(x+1)*200 for x in node_size]
+weights = [x*4 for x in edge_width]
 
 # visualize the graph
-fig, ax = plt.subplots(dpi = 300, figsize = (6, 8))
+fig, ax = plt.subplots(dpi = 300, figsize = (4, 4)) # (6, 8)
 plt.axis('off')
 nx.draw_networkx_nodes(G, 
                     pos = pos, 
@@ -194,14 +194,21 @@ nx.draw_networkx_nodes(G,
                     node_size = nodesize_scaled,
                     edgecolors = nodeedge_color,
                     linewidths = [x+1 for x in node_size])
-nx.draw_networkx_edges(G,
+arrows = nx.draw_networkx_edges(G,
                        pos = pos,
                        edgelist = edgelist_sorted,
                        edge_color = edge_color,
-                       node_size = nodesize_scaled,
-                       width = [x*5 for x in edge_width])
+                       node_size = [x*1.1 for x in nodesize_scaled],
+                       width = weights,
+                       arrowstyle = '-|>')
 nx.draw_networkx_labels(G, pos, annotations, 
-                        font_size = 16)
-plt.subplots_adjust(left=0, right=1.3, top=1, bottom=0)
+                        font_size = 10)
+for a, w in zip(arrows, weights):
+    a.set_joinstyle('miter')
+    a.set_capstyle('butt')
+
+plt.subplots_adjust(left=0, right=1, top=1, bottom=0)
+ax.margins(0.15, 0.05)
+
 plt.savefig(f'../fig/{source}_{config_orig}.pdf',
             bbox_inches = 'tight')
