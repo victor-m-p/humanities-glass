@@ -80,7 +80,7 @@ entry_names = [(362246, 'Valentinians'),
                (362374, "Jehovah's Witnesses"), # Pauline Christianity, Churches of Christ, Gaengjeongyudo, Monatism, Branch Davidians, Mennonites, Circumcellions, Christianity Ephesus, Jehovah, Egyptian Salafism
                (493318, ''),
                (493446, 'Qumran Movement'),
-               (501638, 'Donatism'), # Zealots, Muslim, Mourides, Sino-Muslims, Opus Dei, Northern Irish Roman Catholics
+               (501638, 'Opus Dei'), # Zealots, Muslim, Mourides, Sino-Muslims, Donatism, Northern Irish Roman Catholics
                (1017606, 'Irish Catholics'),
                (1017734, 'Yiguan Dao'),
                (1025538, 'Sokoto'),
@@ -246,4 +246,3 @@ bit_flip_df = bit_flip_df.merge(node_attr, on = 'config_from', how = 'inner')
 node_attr = node_attr.rename(columns = {'config_from': 'config_to',
                                         'entry_name_from': 'entry_name_to'})
 bit_flip_df = bit_flip_df.merge(node_attr, on = 'config_to', how = 'inner')
-bit_flip_df

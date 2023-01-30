@@ -1,3 +1,7 @@
+'''
+VMP 2022-01-30: this is the one we actually use. 
+'''
+
 import networkx as nx             # graph manipulation
 import numpy as np                # numerical utilities
 import matplotlib.pyplot as plt   # plotting

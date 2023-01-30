@@ -30,12 +30,14 @@ question_probability = question_probability.sort_values('mean(prob)').reset_inde
 
 global_mean = np.mean(configuration_probabilities)
 
-fig, ax = plt.subplots(dpi = 300)
+fig, ax = plt.subplots(dpi = 300, figsize = (4, 6))
 for i, row in question_probability.iterrows(): 
     x = row['mean(prob)']
     x_err = row['std(prob)']
     plt.scatter(x, i, color = 'tab:blue')
-plt.yticks(np.arange(0, 20, 1), question_probability['question'].values)
+plt.yticks(np.arange(0, 20, 1), 
+           question_probability['question'].values,
+           size = 15)
 plt.vlines(global_mean, ymin = 0, ymax = 20, color = 'tab:red', ls = '--')
 plt.xlabel('Mean probability')
 plt.savefig('../fig/feature_stability.pdf', bbox_inches = 'tight')
@@ -70,17 +72,20 @@ top_five_df = top_five_df.groupby('question').size().reset_index(name = 'count')
 top_five_df = top_five_df.sort_values('count', ascending = True).reset_index()
 
 # plot this 
-fig, ax = plt.subplots(dpi = 300)
+fig, ax = plt.subplots(dpi = 300, figsize = (4, 6))
 for i, row in top_five_df.iterrows(): 
     x = row['count']
     plt.scatter(x, i, color = 'tab:blue')
-plt.yticks(np.arange(0, 20, 1), top_five_df['question'].values)
+plt.yticks(np.arange(0, 20, 1), 
+           top_five_df['question'].values, 
+           size = 15)
 plt.xlabel('n(enforced first five)')
 plt.savefig('../fig/number_enforced_first_five.pdf', bbox_inches = 'tight')
 
 # tables
 question_reference = pd.read_csv('../data/analysis/question_reference.csv')
 
+'''
 ### sacrifice ###
 adult = configurations[:, 14]
 child = configurations[:, 15]
@@ -127,3 +132,4 @@ p_both_on
 p_both_off
 p_monitor_only
 p_punish_only
+'''
