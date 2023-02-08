@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1690">
+    <name>Central Java</name>
+    <description>The shaded area highlights the location of the mausoleum of Sunan Kudus and the Masjid Al-Aqsha Menara Kudus.</description>
+    <visibility>1</visibility>
+    <Placemark id="1690">
+      <name>Central Java</name>
+      <description>The shaded area highlights the location of the mausoleum of Sunan Kudus and the Masjid Al-Aqsha Menara Kudus.</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>110.845751,-6.775520 110.842490,-6.780463 110.836997,-6.776883 110.834078,-6.781827 110.823607,-6.788134 110.825324,-6.792054 110.800433,-6.795463 110.818286,-6.800236 110.815024,-6.803475 110.810046,-6.801088 110.807128,-6.805179 110.814166,-6.804668 110.818457,-6.814554 110.811934,-6.823928 110.819316,-6.819838 110.827727,-6.820349 110.821376,-6.833303 110.828757,-6.836882 110.827555,-6.841484 110.831160,-6.837393 110.833392,-6.841654 110.836997,-6.841825 110.838713,-6.830576 110.842147,-6.834496 110.844721,-6.839950 110.849356,-6.837053 110.851245,-6.829042 110.853648,-6.824610 110.848498,-6.819326 110.843692,-6.816940 110.858798,-6.817111 110.862403,-6.804156 110.864119,-6.795634 110.862746,-6.793077 110.858111,-6.781315 110.856738,-6.776713 110.850901,-6.781827 110.845751,-6.775520</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1642">
+    <name>The Khazneh</name>
+    <description>The Khazneh lies at the entrance to Petra, the capital city of the Nabataean Kingdom.</description>
+    <visibility>1</visibility>
+    <Placemark id="1642">
+      <name>The Khazneh</name>
+      <description>The Khazneh lies at the entrance to Petra, the capital city of the Nabataean Kingdom.</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>35.451475,30.322484 35.451652,30.322512 35.451823,30.322452 35.451861,30.322318 35.451904,30.322063 35.451893,30.321822 35.451555,30.321799 35.451432,30.321919 35.451405,30.322146 35.451453,30.322350 35.451475,30.322484</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

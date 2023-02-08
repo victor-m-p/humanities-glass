@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1801">
+    <name>Alchi village</name>
+    <description>The Alchi temple complex is located in a village of the same name in the Leh district of Ladakh in the present-day state of Jammu-Kashmir, India. Alchi lies next to the Indus River and is surrounded by mountains of the Karakoram Range.</description>
+    <visibility>1</visibility>
+    <Placemark id="1801">
+      <name>Alchi village</name>
+      <description>The Alchi temple complex is located in a village of the same name in the Leh district of Ladakh in the present-day state of Jammu-Kashmir, India. Alchi lies next to the Indus River and is surrounded by mountains of the Karakoram Range.</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>77.174980,34.223427 77.174827,34.223460 77.174656,34.223427 77.174562,34.223582 77.174487,34.223628 77.174471,34.223673 77.174843,34.223812 77.175023,34.223864 77.175251,34.224034 77.175688,34.224218 77.175852,34.224001 77.175881,34.223724 77.175533,34.223677 77.175409,34.223575 77.174980,34.223427</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

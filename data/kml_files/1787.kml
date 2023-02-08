@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1787">
+    <name>Bucharest, Romania</name>
+    <description>The location of the People's Salvation Cathedral. Currently under construction, it will serve as the patriarchal cathedral of the Romanian Orthodox Church.</description>
+    <visibility>1</visibility>
+    <Placemark id="1787">
+      <name>Bucharest, Romania</name>
+      <description>The location of the People's Salvation Cathedral. Currently under construction, it will serve as the patriarchal cathedral of the Romanian Orthodox Church.</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>26.078465,44.425603 26.078566,44.425447 26.078705,44.425355 26.078995,44.425317 26.083538,44.425033 26.083941,44.425915 26.083673,44.426681 26.079070,44.426965 26.078465,44.425603</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

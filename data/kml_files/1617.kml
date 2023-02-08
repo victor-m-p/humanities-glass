@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1617">
+    <name>Fufeng County outside of Xi'an, Shaanxi Province</name>
+    <description>Famen Monastery was in Fufeng 扶风 district outside of Chang'an, present-day Xi'an. It was said to be south of Mount Qi 岐山 near a place called Pheonix Springs.</description>
+    <visibility>1</visibility>
+    <Placemark id="1617">
+      <name>Fufeng County outside of Xi'an, Shaanxi Province</name>
+      <description>Famen Monastery was in Fufeng 扶风 district outside of Chang'an, present-day Xi'an. It was said to be south of Mount Qi 岐山 near a place called Pheonix Springs.</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>107.857830,34.480171 107.873279,34.373975 107.887699,34.386159 107.897998,34.385876 107.901088,34.383326 107.906238,34.383609 107.910358,34.379359 107.925807,34.449883 107.914478,34.482718 107.887355,34.473944 107.857830,34.480171</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

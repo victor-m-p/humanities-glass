@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1459">
+    <name>Methoni, Peloponnese, south-western Greece</name>
+    <description>Hill on the mountain of Agios (saint) Nicholaos (Nicholas), north-east of Methoni at Peloponnese periphery, south-western Greece</description>
+    <visibility>1</visibility>
+    <Placemark id="1459">
+      <name>Methoni, Peloponnese, south-western Greece</name>
+      <description>Hill on the mountain of Agios (saint) Nicholaos (Nicholas), north-east of Methoni at Peloponnese periphery, south-western Greece</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>21.691777,36.888099 21.721989,36.890845 21.718556,36.827115 21.683537,36.828764 21.691777,36.888099</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1751">
+    <name>Gamla synagogue</name>
+    <description>The location of the Gamla synagogue, located at the north-east end of the ancient settlement.</description>
+    <visibility>1</visibility>
+    <Placemark id="1751">
+      <name>Gamla synagogue</name>
+      <description>The location of the Gamla synagogue, located at the north-east end of the ancient settlement.</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>35.740638,32.902628 35.740917,32.902267 35.740316,32.902177 35.740144,32.902520 35.740638,32.902628</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

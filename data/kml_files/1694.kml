@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1694">
+    <name>Java, Indonesia</name>
+    <description>The tomb of Sunan Gunung Jati is located in northeastern Cirebon, West Java. Both the mausoleum and the city of Cirebon are highlighted.</description>
+    <visibility>1</visibility>
+    <Placemark id="1694">
+      <name>Java, Indonesia</name>
+      <description>The tomb of Sunan Gunung Jati is located in northeastern Cirebon, West Java. Both the mausoleum and the city of Cirebon are highlighted.</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>108.590212,-6.750115 108.569612,-6.735795 108.558626,-6.761025 108.573046,-6.756934 108.542147,-6.793754 108.523607,-6.750797 108.529787,-6.726930 108.513994,-6.721475 108.494768,-6.769889 108.463869,-6.761707 108.497515,-6.729658 108.489961,-6.720793 108.480348,-6.736477 108.474855,-6.726930 108.454943,-6.752842 108.442583,-6.747387 108.432970,-6.759661 108.428850,-6.751479 108.414430,-6.748751 108.406877,-6.731704 108.415804,-6.718747 108.413744,-6.706472 108.400011,-6.709882 108.400011,-6.702381 108.366365,-6.701699 108.354692,-6.709882 108.362932,-6.681240 108.413744,-6.698289 108.433657,-6.667600 108.468675,-6.676466 108.447389,-6.690787 108.460436,-6.700335 108.462496,-6.720111 108.478975,-6.679194 108.474855,-6.720793 108.491335,-6.690787 108.540773,-6.700335 108.539400,-6.679876 108.511247,-6.673738 108.526354,-6.653959 108.514681,-6.608944 108.590212,-6.750115</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

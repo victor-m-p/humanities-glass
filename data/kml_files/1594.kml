@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1594">
+    <name>Ayanis fortress (ancient Rusahinili Eidurukai)</name>
+    <description>Armenian highlands, eastern shore of Lake Van</description>
+    <visibility>1</visibility>
+    <Placemark id="1594">
+      <name>Ayanis fortress (ancient Rusahinili Eidurukai)</name>
+      <description>Armenian highlands, eastern shore of Lake Van</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>43.211289,38.708339 43.211413,38.708040 43.211954,38.708174 43.211826,38.708481 43.211289,38.708339</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

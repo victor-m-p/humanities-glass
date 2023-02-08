@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1804">
+    <name>ancient medina of Tunis</name>
+    <description>In the middle of the ancient medina of Tunis</description>
+    <visibility>1</visibility>
+    <Placemark id="1804">
+      <name>ancient medina of Tunis</name>
+      <description>In the middle of the ancient medina of Tunis</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>10.169842,36.801629 10.174520,36.796612 10.167181,36.794069 10.163662,36.799224 10.169842,36.801629</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

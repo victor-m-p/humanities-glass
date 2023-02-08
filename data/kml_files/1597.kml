@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1597">
+    <name>Thessaloniki, Basilica of Saint Demetrios</name>
+    <description>The basilica of saint Demetrios in Thessaloniki</description>
+    <visibility>1</visibility>
+    <Placemark id="1597">
+      <name>Thessaloniki, Basilica of Saint Demetrios</name>
+      <description>The basilica of saint Demetrios in Thessaloniki</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>22.947173,40.638762 22.947961,40.638359 22.948385,40.638834 22.947559,40.639214 22.947173,40.638762</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

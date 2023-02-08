@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1533">
+    <name>Kom Bawit</name>
+    <description>Bawit, Monastery of Apa Apollo</description>
+    <visibility>1</visibility>
+    <Placemark id="1533">
+      <name>Kom Bawit</name>
+      <description>Bawit, Monastery of Apa Apollo</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>30.708143,27.554594 30.704281,27.554384 30.706791,27.547612 30.709366,27.547497 30.710396,27.553699 30.708143,27.554594</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

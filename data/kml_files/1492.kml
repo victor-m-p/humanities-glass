@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1492">
+    <name>Temple of Thutmose III</name>
+    <description>Mortuary Temple (Temple of Millions of Years) of Thutmose III in Luxor.</description>
+    <visibility>1</visibility>
+    <Placemark id="1492">
+      <name>Temple of Thutmose III</name>
+      <description>Mortuary Temple (Temple of Millions of Years) of Thutmose III in Luxor.</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>32.613585,25.730427 32.612985,25.730360 32.612555,25.730089 32.612416,25.729770 32.612609,25.729422 32.613081,25.729480 32.613521,25.729645 32.613703,25.729906 32.613832,25.730060 32.613725,25.730311 32.613585,25.730427</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

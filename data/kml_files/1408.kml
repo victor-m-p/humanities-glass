@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1408">
+    <name>Anyang</name>
+    <description>territory of Shang Dynasty region: Hebei, Hennan, Hubei, Anhui, Shandong province</description>
+    <visibility>1</visibility>
+    <Placemark id="1408">
+      <name>Anyang</name>
+      <description>territory of Shang Dynasty region: Hebei, Hennan, Hubei, Anhui, Shandong province</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>114.319750,36.128470 114.329148,36.128192 114.329878,36.115643 114.319578,36.115747 114.319750,36.128470</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

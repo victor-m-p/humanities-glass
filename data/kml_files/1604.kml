@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1604">
+    <name>Amarna, private chapels at the Workmen's Village</name>
+    <description>Location of the Amarna Workmen's Village</description>
+    <visibility>1</visibility>
+    <Placemark id="1604">
+      <name>Amarna, private chapels at the Workmen's Village</name>
+      <description>Location of the Amarna Workmen's Village</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>30.912143,27.634356 30.912569,27.634411 30.912808,27.633294 30.912306,27.633204 30.912089,27.634347 30.912143,27.634356</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1786">
+    <name>Dornogovi province Mongolia</name>
+    <description>Dornogovi province Mongolia near the Sainshand soum center</description>
+    <visibility>1</visibility>
+    <Placemark id="1786">
+      <name>Dornogovi province Mongolia</name>
+      <description>Dornogovi province Mongolia near the Sainshand soum center</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>110.086076,44.953271 109.709794,44.559298 110.635392,44.044304 111.267106,44.079829 110.662858,44.791716 110.086076,44.953271</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

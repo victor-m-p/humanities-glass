@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1826">
+    <name>Qayrawan</name>
+    <description>La plus célèbre Mosquée de l'Afrique du nord au Qayrawan</description>
+    <visibility>1</visibility>
+    <Placemark id="1826">
+      <name>Qayrawan</name>
+      <description>La plus célèbre Mosquée de l'Afrique du nord au Qayrawan</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>10.104032,35.682622 10.105019,35.681802 10.103366,35.681044 10.102787,35.682177 10.104032,35.682622</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

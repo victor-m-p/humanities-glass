@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1725">
+    <name>Kairouan</name>
+    <description>Kairouan is the first Islamic religious city in North Africa. The Maqam of Sidi Sahbi is linked to this area</description>
+    <visibility>1</visibility>
+    <Placemark id="1725">
+      <name>Kairouan</name>
+      <description>Kairouan is the first Islamic religious city in North Africa. The Maqam of Sidi Sahbi is linked to this area</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>10.090550,35.682548 10.089778,35.682251 10.089638,35.682007 10.089853,35.681877 10.089981,35.681833 10.090067,35.681955 10.090325,35.681711 10.090507,35.681685 10.091108,35.682251 10.090550,35.682548</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

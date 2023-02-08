@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1532">
+    <name>Island of Ireland</name>
+    <description>This region describes the island of Ireland, which is the primary  location of the Sídhe.</description>
+    <visibility>1</visibility>
+    <Placemark id="1532">
+      <name>Island of Ireland</name>
+      <description>This region describes the island of Ireland, which is the primary  location of the Sídhe.</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-7.370100,55.411229 -6.842756,55.236214 -6.095686,55.236214 -5.744123,54.833271 -5.348616,54.426266 -6.051741,54.002266 -6.150617,53.840521 -6.117659,53.338403 -6.007795,52.916506 -6.403303,52.329618 -6.469221,52.141227 -6.842756,52.127740 -7.457991,52.087255 -8.281965,51.693996 -9.281721,51.461864 -9.809065,51.420776 -10.490217,51.816410 -10.600080,52.168189 -10.254011,52.309471 -9.907942,52.343043 -9.831037,52.624045 -9.259748,53.233317 -9.809065,53.088401 -10.138655,53.390849 -10.006819,53.801610 -10.226545,54.105454 -9.809065,54.439047 -9.457502,54.400693 -8.842268,54.336690 -8.490705,54.464596 -8.886213,54.719213 -8.358869,55.098159 -7.370100,55.411229</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1687">
+    <name>The Church of the Holy Sepulchre</name>
+    <description>The footprint of the current church</description>
+    <visibility>1</visibility>
+    <Placemark id="1687">
+      <name>The Church of the Holy Sepulchre</name>
+      <description>The footprint of the current church</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>35.229380,31.778708 35.229397,31.778549 35.229303,31.778416 35.229359,31.777981 35.230306,31.778068 35.230413,31.778204 35.230333,31.778802 35.229380,31.778708</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

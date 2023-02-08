@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1747">
+    <name>Tunis Médina</name>
+    <description>In the middle of the historic city of Tunis</description>
+    <visibility>1</visibility>
+    <Placemark id="1747">
+      <name>Tunis Médina</name>
+      <description>In the middle of the historic city of Tunis</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>10.169125,36.804721 10.168508,36.804712 10.168487,36.804268 10.169197,36.804345 10.169128,36.804736 10.169125,36.804721</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

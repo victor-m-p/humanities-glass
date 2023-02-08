@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1621">
+    <name>Church of Panagia Angeloktisti</name>
+    <description>Church of Panagia (Our Lady) Angeloktisti</description>
+    <visibility>1</visibility>
+    <Placemark id="1621">
+      <name>Church of Panagia Angeloktisti</name>
+      <description>Church of Panagia (Our Lady) Angeloktisti</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>33.570741,34.847648 33.570889,34.847322 33.571211,34.847428 33.571074,34.847738 33.570741,34.847648</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

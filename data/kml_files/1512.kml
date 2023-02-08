@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1512">
+    <name>Al Balayzah</name>
+    <description>Deir el-Bala’izah - Monastery of Abba Apollo near Balayzah</description>
+    <visibility>1</visibility>
+    <Placemark id="1512">
+      <name>Al Balayzah</name>
+      <description>Deir el-Bala’izah - Monastery of Abba Apollo near Balayzah</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>31.233905,27.033662 31.235300,27.030881 31.229989,27.030336 31.229828,27.032926 31.233905,27.033662</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

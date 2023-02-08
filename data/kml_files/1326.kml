@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1326">
+    <name>Numinous Cliff Mountain Temple (Lingyan shan si 靈岩山寺)</name>
+    <description>The mountain at Lingyan, and surrounding region (Lake Tai).</description>
+    <visibility>1</visibility>
+    <Placemark id="1326">
+      <name>Numinous Cliff Mountain Temple (Lingyan shan si 靈岩山寺)</name>
+      <description>The mountain at Lingyan, and surrounding region (Lake Tai).</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>120.489620,31.269329 120.490821,31.255242 120.510906,31.255389 120.509017,31.270209 120.489620,31.269329</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1638">
+    <name>Petra Great Temple in Nabataean Capital</name>
+    <description>Though debate continues about its function, the Great Temple is the largest free-standing structure in the capital city of the Nabataean Kingdom. Sitting near the colonnaded thoroughfare of the city and connected to grandiose free-standing complexes, this building dominated the landscape of the city center.</description>
+    <visibility>1</visibility>
+    <Placemark id="1638">
+      <name>Petra Great Temple in Nabataean Capital</name>
+      <description>Though debate continues about its function, the Great Temple is the largest free-standing structure in the capital city of the Nabataean Kingdom. Sitting near the colonnaded thoroughfare of the city and connected to grandiose free-standing complexes, this building dominated the landscape of the city center.</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>35.441702,30.329323 35.441456,30.328711 35.441252,30.328082 35.441584,30.327813 35.442282,30.327582 35.442722,30.327582 35.443022,30.327934 35.443172,30.328313 35.443269,30.328721 35.443290,30.329110 35.443161,30.329175 35.442485,30.329221 35.441981,30.329313 35.441702,30.329323</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

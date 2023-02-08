@@ -1,0 +1,28 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1474">
+    <name>East Java Province</name>
+    <description>The tomb of Sufi saint Maulana Malik Ibrahim alias Sunan Gresik is located 200 meters from the alun-alun or town hall of Gresik in the city of Gresik, East Java province, Indonesia.</description>
+    <visibility>1</visibility>
+    <Placemark id="1474">
+      <name>East Java Province</name>
+      <description>The tomb of Sufi saint Maulana Malik Ibrahim alias Sunan Gresik is located 200 meters from the alun-alun or town hall of Gresik in the city of Gresik, East Java province, Indonesia.</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>111.694553,-6.764944 111.573703,-6.932654 111.584690,-7.143910 111.419895,-7.337362 111.123264,-7.282877 111.263340,-7.851910 110.909031,-8.224495 111.535251,-8.349518 112.057102,-8.349518 112.672336,-8.458202 113.386448,-8.414732 114.529026,-8.805781 114.627903,-8.729776 114.320285,-8.371257 114.441135,-8.045044 114.463108,-7.778442 113.968723,-7.615131 113.040378,-7.669575 112.859104,-7.473545 112.861850,-7.214761 113.172214,-7.244733 113.518283,-7.239284 113.878086,-7.236559 114.095066,-7.092127 114.215915,-6.969460 114.106052,-6.879484 113.850963,-6.874712 113.409107,-6.875394 112.846401,-6.892436 112.690189,-7.018531 112.537754,-6.846761 112.155979,-6.863123 111.969211,-6.751307 111.853855,-6.790855 111.694553,-6.764944</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>112.647904,-7.139608 112.617692,-7.167201 112.663697,-7.194451 112.680520,-7.180145 112.661294,-7.138927 112.647904,-7.139608</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

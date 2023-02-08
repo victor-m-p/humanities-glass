@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1569">
+    <name>Amathous, Cyprus</name>
+    <description>Amathous, Cyprus</description>
+    <visibility>1</visibility>
+    <Placemark id="1569">
+      <name>Amathous, Cyprus</name>
+      <description>Amathous, Cyprus</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>33.138740,34.709816 33.136745,34.715108 33.146358,34.717489 33.148053,34.711651 33.139341,34.708617 33.138740,34.709816</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1523">
+    <name>Simitthus (Chemtou, Tunisia)</name>
+    <description>Site of the town of Simitthus, which came to be a prime marble (yellow marble) extraction zone in the early Roman Empire.</description>
+    <visibility>1</visibility>
+    <Placemark id="1523">
+      <name>Simitthus (Chemtou, Tunisia)</name>
+      <description>Site of the town of Simitthus, which came to be a prime marble (yellow marble) extraction zone in the early Roman Empire.</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>8.549426,36.494315 8.549769,36.474716 8.598092,36.478167 8.593629,36.500593 8.549426,36.494315</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

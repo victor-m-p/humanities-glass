@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1689">
+    <name>'Pashupati Kshetra'</name>
+    <description>The Area of Pashupati</description>
+    <visibility>1</visibility>
+    <Placemark id="1689">
+      <name>'Pashupati Kshetra'</name>
+      <description>The Area of Pashupati</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>85.360769,27.711545 85.363172,27.706757 85.365318,27.705693 85.362572,27.700298 85.363602,27.697182 85.356478,27.699614 85.352701,27.701742 85.348667,27.701134 85.349354,27.702730 85.347294,27.705693 85.343345,27.707821 85.339741,27.708201 85.336822,27.708125 85.337766,27.711772 85.339140,27.717395 85.340942,27.718915 85.342401,27.719751 85.341114,27.721194 85.342916,27.722638 85.345749,27.722030 85.347036,27.717015 85.346092,27.715420 85.349439,27.713140 85.352100,27.712684 85.353988,27.712228 85.355963,27.709721 85.357765,27.712760 85.360340,27.712836 85.360769,27.711545</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

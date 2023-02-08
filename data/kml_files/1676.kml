@@ -1,0 +1,42 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1676">
+    <name>Tuban, East Java; Bonang Village, Lasem Subdistrict (Central Java)</name>
+    <description>The shaded regions on the map indicate: 
+
+(a) Tomb of Sunan Bonang, Tuban (East Java).
+
+
+(b) Tomb of Sunan Bonang, Bonang Village, Lasem Subdistrict (Central Java, disputed).
+
+Note: Both sites are located 79.7 kilometers apart from each other and are linked by Jalan Raya Pantura. The dotted line represents the provincial border between East and Central Java provinces.</description>
+    <visibility>1</visibility>
+    <Placemark id="1676">
+      <name>Tuban, East Java; Bonang Village, Lasem Subdistrict (Central Java)</name>
+      <description>The shaded regions on the map indicate: 
+
+(a) Tomb of Sunan Bonang, Tuban (East Java).
+
+
+(b) Tomb of Sunan Bonang, Bonang Village, Lasem Subdistrict (Central Java, disputed).
+
+Note: Both sites are located 79.7 kilometers apart from each other and are linked by Jalan Raya Pantura. The dotted line represents the provincial border between East and Central Java provinces.</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>112.079803,-6.895785 112.072593,-6.878402 112.035857,-6.871926 112.017661,-6.877038 112.004272,-6.884537 112.011138,-6.889650 111.998435,-6.905328 112.013541,-6.913508 112.028304,-6.904306 112.030021,-6.901579 112.021094,-6.895444 112.032767,-6.889991 112.036887,-6.903624 112.067786,-6.905328 112.079803,-6.895785</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>111.467201,-6.650075 111.467888,-6.651268 111.480934,-6.671899 111.454327,-6.708384 111.419136,-6.690142 111.412956,-6.684686 111.467201,-6.650075</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1761">
+    <name>Altiplano central</name>
+    <description>Área en la que se localizan los sitios arqueológicos más representativos del periodo Epiclásico.</description>
+    <visibility>1</visibility>
+    <Placemark id="1761">
+      <name>Altiplano central</name>
+      <description>Área en la que se localizan los sitios arqueológicos más representativos del periodo Epiclásico.</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-101.570678,19.250110 -101.287780,19.668344 -100.609375,19.920313 -100.087524,20.175748 -98.977905,20.283988 -98.483520,20.273683 -97.923217,19.891906 -97.448059,19.458714 -97.436386,18.942875 -97.743316,18.644184 -98.906494,18.264456 -99.600692,18.088965 -100.338836,18.080480 -101.035095,18.480802 -101.401764,18.741097 -101.570678,19.250110</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

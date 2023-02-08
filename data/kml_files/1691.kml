@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1691">
+    <name>The site of Najran, South Arabia, including the archaological site of Hima.</name>
+    <description>The site of Najran, South Arabia, including the archaological site of Hima.</description>
+    <visibility>1</visibility>
+    <Placemark id="1691">
+      <name>The site of Najran, South Arabia, including the archaological site of Hima.</name>
+      <description>The site of Najran, South Arabia, including the archaological site of Hima.</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>44.390354,18.287918 44.556523,18.295090 44.298344,17.522808 44.106083,17.522808 44.390354,18.287918</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

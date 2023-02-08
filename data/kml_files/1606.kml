@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1606">
+    <name>Central Mexico</name>
+    <description>The Temple R was located within the ceremonial complex of the Aztec-Mexica city-state of Mexico-Tlatelolco, sister city of Mexico-Tenochtitlan, which thrived in the Late Postclassic period (1337-1521 CE). The map illustrates the extent of the Tlatelolco ceremonial complex.</description>
+    <visibility>1</visibility>
+    <Placemark id="1606">
+      <name>Central Mexico</name>
+      <description>The Temple R was located within the ceremonial complex of the Aztec-Mexica city-state of Mexico-Tlatelolco, sister city of Mexico-Tenochtitlan, which thrived in the Late Postclassic period (1337-1521 CE). The map illustrates the extent of the Tlatelolco ceremonial complex.</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-99.146646,19.458696 -99.136218,19.456915 -99.130253,19.454285 -99.135188,19.447649 -99.151582,19.454042 -99.146646,19.458696</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

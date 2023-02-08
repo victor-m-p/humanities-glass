@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1655">
+    <name>Eastern Java</name>
+    <description>The shaded area includes the political core of the Majapahit Empire at the turn of the 16th c, centered on the eastern half of the island of Java. The Shrine of Sunan Ampel is situated in the city of Surabaya.</description>
+    <visibility>1</visibility>
+    <Placemark id="1655">
+      <name>Eastern Java</name>
+      <description>The shaded area includes the political core of the Majapahit Empire at the turn of the 16th c, centered on the eastern half of the island of Java. The Shrine of Sunan Ampel is situated in the city of Surabaya.</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>114.117702,-6.895538 111.052517,-6.540935 111.253017,-7.470516 111.298336,-7.880172 110.882229,-8.235062 112.425808,-8.305731 114.617580,-8.740330 114.208340,-7.935942 116.085629,-7.105448 115.524639,-6.847818 114.117702,-6.895538</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1582">
+    <name>Erlitou Yanshi,Henan</name>
+    <description>The site of Erlitou is located south of the Luo River. It covers the modern-day village Erlitou and overlaps with a few other neighbouring villages under the Yanshi city.</description>
+    <visibility>1</visibility>
+    <Placemark id="1582">
+      <name>Erlitou Yanshi,Henan</name>
+      <description>The site of Erlitou is located south of the Luo River. It covers the modern-day village Erlitou and overlaps with a few other neighbouring villages under the Yanshi city.</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>112.682556,34.702091 112.682213,34.680566 112.711567,34.680990 112.711138,34.702443 112.682556,34.702091</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1262">
+    <name>Karnak Temple Region</name>
+    <description>Karnak Temple in modern Luxor, Egypt</description>
+    <visibility>1</visibility>
+    <Placemark id="1262">
+      <name>Karnak Temple Region</name>
+      <description>Karnak Temple in modern Luxor, Egypt</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>32.655879,25.725327 32.663260,25.721306 32.658110,25.715274 32.651416,25.719296 32.655879,25.725327</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

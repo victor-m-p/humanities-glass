@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1605">
+    <name>Thessaloniki</name>
+    <description>Church of Hagia Sophia (Holy Wisdom) in Thessaloniki</description>
+    <visibility>1</visibility>
+    <Placemark id="1605">
+      <name>Thessaloniki</name>
+      <description>Church of Hagia Sophia (Holy Wisdom) in Thessaloniki</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>22.947494,40.632842 22.947569,40.632647 22.947338,40.632415 22.947102,40.632415 22.945914,40.633125 22.946225,40.633451 22.947494,40.632842</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

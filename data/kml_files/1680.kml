@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1680">
+    <name>Java</name>
+    <description>The shaded region highlights the tomb of Sunan Kalijaga, situated in the desa (village) of Kadilangu, located about a mile away from the Grand Mosque of Demak (Masjid Agung Demak).</description>
+    <visibility>1</visibility>
+    <Placemark id="1680">
+      <name>Java</name>
+      <description>The shaded region highlights the tomb of Sunan Kalijaga, situated in the desa (village) of Kadilangu, located about a mile away from the Grand Mosque of Demak (Masjid Agung Demak).</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>110.637676,-6.873783 110.663508,-6.882304 110.647715,-6.891507 110.652522,-6.906504 110.644625,-6.895938 110.637759,-6.907186 110.611323,-6.908549 110.595873,-6.900710 110.600680,-6.888780 110.610293,-6.887417 110.624369,-6.886054 110.613040,-6.866284 110.637676,-6.873783</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1499">
+    <name>Marmaria</name>
+    <description>A terrace (150 m x 40 m) on which the Sanctuary of Athena Pronaia at Delphi stood. It is located on the southern slopes of Mount Parnassos. The terrace is called "Marmaria" ("place of marble") in modern times, referring to the stone blocks scattered throughout the site prior to excavation.</description>
+    <visibility>1</visibility>
+    <Placemark id="1499">
+      <name>Marmaria</name>
+      <description>A terrace (150 m x 40 m) on which the Sanctuary of Athena Pronaia at Delphi stood. It is located on the southern slopes of Mount Parnassos. The terrace is called "Marmaria" ("place of marble") in modern times, referring to the stone blocks scattered throughout the site prior to excavation.</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>22.507508,38.480688 22.507262,38.480224 22.507385,38.480088 22.508195,38.479924 22.508729,38.479891 22.509104,38.479884 22.509182,38.480166 22.509080,38.480254 22.508662,38.480460 22.507508,38.480688</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

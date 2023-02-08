@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1413">
+    <name>Jingmen, Hubei Province, China</name>
+    <description>The heartland of Chu Kingdom (ca. 1050-223 BCE) in the 4th century BCE.</description>
+    <visibility>1</visibility>
+    <Placemark id="1413">
+      <name>Jingmen, Hubei Province, China</name>
+      <description>The heartland of Chu Kingdom (ca. 1050-223 BCE) in the 4th century BCE.</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>112.420211,31.546534 112.109388,31.267966 111.948483,31.118968 111.974346,30.979155 111.951000,30.592189 111.587078,30.255880 111.840221,30.088084 112.087871,30.000907 113.038188,29.375769 114.109355,29.996150 113.745433,30.317939 113.084880,30.458909 113.034069,30.762662 113.455669,31.037222 113.072522,31.287528 112.883696,31.388989 112.420211,31.546534</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

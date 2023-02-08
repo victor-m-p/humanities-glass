@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1623">
+    <name>Nimrud</name>
+    <description>The ancient site of Kalhu (modern Nimrud) is situated 35 kilometers south of the modern city of Mosul in Northern Iraq. The city itself covers an area of approximately 890 acres, or 3.5 sq km.</description>
+    <visibility>1</visibility>
+    <Placemark id="1623">
+      <name>Nimrud</name>
+      <description>The ancient site of Kalhu (modern Nimrud) is situated 35 kilometers south of the modern city of Mosul in Northern Iraq. The city itself covers an area of approximately 890 acres, or 3.5 sq km.</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>43.326963,36.100788 43.327022,36.100532 43.327645,36.100610 43.327564,36.100914 43.326963,36.100788</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

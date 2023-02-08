@@ -1,0 +1,40 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1448">
+    <name>Gowa Regency, South Sulawesi, Indonesia</name>
+    <description>Masjid Al-Hilal or Masjid Tua Katangka is a royal mosque (built in 1603 during the reign of Sultan Alauddin of Gowa). 
+
+The mosque is located in today's kabupaten (district) of Gowa, a constituent kabupaten of South Sulawesi [a province of Indonesia].
+
+This map represents Gowa Regency, along with the City of Makassar, as the outer polygon. 
+
+The inner polygon, which will appear as a dot when zoomed out a bit more, represents the location of the mosque.</description>
+    <visibility>1</visibility>
+    <Placemark id="1448">
+      <name>Gowa Regency, South Sulawesi, Indonesia</name>
+      <description>Masjid Al-Hilal or Masjid Tua Katangka is a royal mosque (built in 1603 during the reign of Sultan Alauddin of Gowa). 
+
+The mosque is located in today's kabupaten (district) of Gowa, a constituent kabupaten of South Sulawesi [a province of Indonesia].
+
+This map represents Gowa Regency, along with the City of Makassar, as the outer polygon. 
+
+The inner polygon, which will appear as a dot when zoomed out a bit more, represents the location of the mosque.</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>119.446247,-5.087079 119.527271,-5.061089 119.633187,-5.176669 119.788540,-5.211544 119.874027,-5.114436 119.999684,-5.143160 120.073841,-5.186927 119.939259,-5.345556 119.779957,-5.571122 119.649494,-5.431691 119.587696,-5.297698 119.487789,-5.290861 119.473026,-5.390676 119.352863,-5.366066 119.409855,-5.329148 119.387196,-5.128114 119.446247,-5.087079</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>119.450866,-5.190476 119.450786,-5.191085 119.451392,-5.190957 119.451419,-5.190636 119.450866,-5.190476</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

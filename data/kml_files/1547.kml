@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1547">
+    <name>Limnai</name>
+    <description>Location of the remains of the sanctuary of Artemis Orthia in the ancient village of Limnai near the Eurotas River.</description>
+    <visibility>1</visibility>
+    <Placemark id="1547">
+      <name>Limnai</name>
+      <description>Location of the remains of the sanctuary of Artemis Orthia in the ancient village of Limnai near the Eurotas River.</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>22.434816,37.082546 22.435717,37.082802 22.435760,37.083556 22.434601,37.083590 22.434451,37.083059 22.434816,37.082546</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

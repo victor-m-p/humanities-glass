@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1668">
+    <name>Gresik, East Java</name>
+    <description>The tomb of Sunan Giri is located on a hillock in Sidomukti Village, Gresik regency (East Java), 2.9 km from the city of Gresik. The shaded area of this map depicts the location of the Tomb of Sunan Giri and the jurisdiction of Gresik regency.</description>
+    <visibility>1</visibility>
+    <Placemark id="1668">
+      <name>Gresik, East Java</name>
+      <description>The tomb of Sunan Giri is located on a hillock in Sidomukti Village, Gresik regency (East Java), 2.9 km from the city of Gresik. The shaded area of this map depicts the location of the Tomb of Sunan Giri and the jurisdiction of Gresik regency.</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>112.574968,-7.160109 112.605524,-7.137966 112.616853,-7.128428 112.637796,-7.133197 112.648782,-7.128428 112.676592,-7.181228 112.611017,-7.208818 112.591791,-7.171009 112.583208,-7.173734 112.561922,-7.167944 112.575655,-7.163856 112.574968,-7.160109</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

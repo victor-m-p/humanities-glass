@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1467">
+    <name>Thalames, Mani, Messinia, Greece</name>
+    <description>Thalames, a village existing from ancient era, with a continuous habitation up to present day.</description>
+    <visibility>1</visibility>
+    <Placemark id="1467">
+      <name>Thalames, Mani, Messinia, Greece</name>
+      <description>Thalames, a village existing from ancient era, with a continuous habitation up to present day.</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>22.330997,36.787767 22.336040,36.787458 22.333980,36.784588 22.330375,36.785740 22.330997,36.787767</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

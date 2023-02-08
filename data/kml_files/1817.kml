@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1817">
+    <name>Urfa region</name>
+    <description>This is the region surrounding the city of Şanlıurfa (Turkey), including the Harran plain</description>
+    <visibility>1</visibility>
+    <Placemark id="1817">
+      <name>Urfa region</name>
+      <description>This is the region surrounding the city of Şanlıurfa (Turkey), including the Harran plain</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>38.914289,37.232662 38.923044,37.234575 38.925104,37.233892 38.928108,37.231090 38.930168,37.227536 38.929395,37.221043 38.926133,37.216122 38.921155,37.213046 38.914375,37.213183 38.905877,37.213593 38.902959,37.215234 38.901843,37.219403 38.903045,37.224324 38.905191,37.227810 38.909311,37.229996 38.914289,37.232662</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

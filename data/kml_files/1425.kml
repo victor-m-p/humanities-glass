@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1425">
+    <name>The Xiaotaoyuan Mosque in Shanghai</name>
+    <description>The location and its neighbouring community of the Xiaotaoyuan Mosque.</description>
+    <visibility>1</visibility>
+    <Placemark id="1425">
+      <name>The Xiaotaoyuan Mosque in Shanghai</name>
+      <description>The location and its neighbouring community of the Xiaotaoyuan Mosque.</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>121.485639,31.223851 121.488814,31.224108 121.490831,31.219961 121.487055,31.219154 121.485639,31.223851</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

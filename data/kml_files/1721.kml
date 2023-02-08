@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1721">
+    <name>Tunis medina</name>
+    <description>The maqam is located in the Zawiyya (Zaouia) of Sidi Brahim Riahi in the Tunis medina.</description>
+    <visibility>1</visibility>
+    <Placemark id="1721">
+      <name>Tunis medina</name>
+      <description>The maqam is located in the Zawiyya (Zaouia) of Sidi Brahim Riahi in the Tunis medina.</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>10.167476,36.802639 10.167664,36.802738 10.167873,36.802502 10.167611,36.802377 10.167423,36.802493 10.167476,36.802639</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

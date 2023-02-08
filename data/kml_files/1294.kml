@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1294">
+    <name>Temples of Abu Simbel</name>
+    <description>The Temples of Abu Simbel</description>
+    <visibility>1</visibility>
+    <Placemark id="1294">
+      <name>Temples of Abu Simbel</name>
+      <description>The Temples of Abu Simbel</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>31.624954,22.337835 31.624300,22.337676 31.624139,22.337219 31.624579,22.336554 31.625426,22.336445 31.626231,22.336713 31.626263,22.337368 31.625780,22.337745 31.624954,22.337835</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

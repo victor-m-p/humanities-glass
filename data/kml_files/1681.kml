@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1681">
+    <name>Central Java, Indonesia</name>
+    <description>The shaded region on the map includes the tomb of Sunan Muria, located in Colo village, on the slopes of Mount Muria in the Kudus district of Central Java in Indonesia.</description>
+    <visibility>1</visibility>
+    <Placemark id="1681">
+      <name>Central Java, Indonesia</name>
+      <description>The shaded region on the map includes the tomb of Sunan Muria, located in Colo village, on the slopes of Mount Muria in the Kudus district of Central Java in Indonesia.</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>110.878256,-6.492852 110.794485,-6.812038 110.832937,-6.855671 110.900229,-6.874760 111.096609,-6.678387 110.878256,-6.492852</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

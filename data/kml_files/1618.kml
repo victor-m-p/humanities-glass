@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1618">
+    <name>Thessaloniki, Greece</name>
+    <description>Church of Acheiropoietos in Thessaloniki, Greece</description>
+    <visibility>1</visibility>
+    <Placemark id="1618">
+      <name>Thessaloniki, Greece</name>
+      <description>Church of Acheiropoietos in Thessaloniki, Greece</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>22.947514,40.634996 22.948118,40.634668 22.948426,40.635022 22.947804,40.635363 22.947514,40.634996</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

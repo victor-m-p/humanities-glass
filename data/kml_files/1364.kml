@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1364">
+    <name>Mawangdui  馬王堆, Changsha 長沙, Hunan 湖南</name>
+    <description>Mawangdui 馬王堆 tombs #1-3, built in the kingdom of Changsha 長沙, during the Western Han 西漢 (202 BCE-9CE), located present day Changsha 長沙, Hunan 湖南.</description>
+    <visibility>1</visibility>
+    <Placemark id="1364">
+      <name>Mawangdui  馬王堆, Changsha 長沙, Hunan 湖南</name>
+      <description>Mawangdui 馬王堆 tombs #1-3, built in the kingdom of Changsha 長沙, during the Western Han 西漢 (202 BCE-9CE), located present day Changsha 長沙, Hunan 湖南.</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>113.026622,28.205942 113.026579,28.204840 113.027025,28.204788 113.027507,28.204736 113.028274,28.205209 113.028140,28.205828 113.028081,28.206136 113.027588,28.206169 113.026901,28.206107 113.026622,28.205942</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

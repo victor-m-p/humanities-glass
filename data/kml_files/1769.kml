@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1769">
+    <name>The Temple at Tell Afis</name>
+    <description>The Temple at Tell Afis</description>
+    <visibility>1</visibility>
+    <Placemark id="1769">
+      <name>The Temple at Tell Afis</name>
+      <description>The Temple at Tell Afis</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>36.798173,35.905024 36.798143,35.904956 36.798106,35.904844 36.798125,35.904720 36.798181,35.904624 36.798296,35.904533 36.798522,35.904533 36.798741,35.904561 36.798827,35.904648 36.798841,35.904752 36.798822,35.904928 36.798725,35.905046 36.798594,35.905087 36.798377,35.905115 36.798277,35.905080 36.798173,35.905024</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

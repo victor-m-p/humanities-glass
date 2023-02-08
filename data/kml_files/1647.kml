@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1647">
+    <name>Laojun Shan, Xinjin, Sichuan</name>
+    <description>Area of Mt. Laojun in Xinjin district, Chengdu, Sichuan (present)</description>
+    <visibility>1</visibility>
+    <Placemark id="1647">
+      <name>Laojun Shan, Xinjin, Sichuan</name>
+      <description>Area of Mt. Laojun in Xinjin district, Chengdu, Sichuan (present)</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>103.801491,30.395640 103.812928,30.395640 103.813078,30.389421 103.801255,30.389458 103.801126,30.395695 103.801491,30.395640</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

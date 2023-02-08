@@ -1,0 +1,35 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1455">
+    <name>Three Tianzhu Monasteries</name>
+    <description>The regions represent the current location and the size of the Three Tianzhu Monasteries. The Upper Tianzhu Monastery is in the south, the Middle Tianzhu Monastery is at the center of the map, and the Lower Tianzhu Monastery is in the north. Three monasteries were named based on their geographical location in Tianzhu Mountain 天竺山.</description>
+    <visibility>1</visibility>
+    <Placemark id="1455">
+      <name>Three Tianzhu Monasteries</name>
+      <description>The regions represent the current location and the size of the Three Tianzhu Monasteries. The Upper Tianzhu Monastery is in the south, the Middle Tianzhu Monastery is at the center of the map, and the Lower Tianzhu Monastery is in the north. Three monasteries were named based on their geographical location in Tianzhu Mountain 天竺山.</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>120.090534,30.227554 120.094074,30.224365 120.094396,30.224013 120.098677,30.227007 120.098967,30.228231 120.096917,30.229955 120.092261,30.229992 120.090609,30.230048 120.090534,30.227554</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>120.100309,30.234859 120.100191,30.232570 120.100599,30.232366 120.101758,30.233070 120.102594,30.233395 120.103313,30.233784 120.104043,30.234822 120.104000,30.234915 120.103249,30.234934 120.102251,30.234739 120.100309,30.234859</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>120.103552,30.237679 120.104904,30.236243 120.106696,30.237216 120.105344,30.238551 120.103552,30.237679</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

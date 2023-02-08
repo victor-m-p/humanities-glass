@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1616">
+    <name>Barāqish</name>
+    <description>This is the current name of the site, which corresponds to ancient Yathill, a Minaean urban settlement within the Jawf valley, the region where the pre-Islamic South Arabian kingdom of Maʿīn flourished.</description>
+    <visibility>1</visibility>
+    <Placemark id="1616">
+      <name>Barāqish</name>
+      <description>This is the current name of the site, which corresponds to ancient Yathill, a Minaean urban settlement within the Jawf valley, the region where the pre-Islamic South Arabian kingdom of Maʿīn flourished.</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>44.795261,16.026721 44.795089,16.012696 44.809852,16.012531 44.809809,16.026762 44.795261,16.026721</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

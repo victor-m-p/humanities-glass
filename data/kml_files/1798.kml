@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1798">
+    <name>Ancient Aksum</name>
+    <description>Modern Ethiopia and Eritrea</description>
+    <visibility>1</visibility>
+    <Placemark id="1798">
+      <name>Ancient Aksum</name>
+      <description>Modern Ethiopia and Eritrea</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>36.080782,8.008012 44.738008,8.399472 39.376680,19.386729 34.410860,19.262321 35.465547,7.920969 36.080782,8.008012</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

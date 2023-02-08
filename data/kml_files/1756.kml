@@ -1,0 +1,28 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1756">
+    <name>Basin of Mexico</name>
+    <description>Tenayuca was located in the north part of the Basin of Mexico (800-1521 CE). The map shows the excavated area and the current archaeological zone, where the main temple is located.</description>
+    <visibility>1</visibility>
+    <Placemark id="1756">
+      <name>Basin of Mexico</name>
+      <description>Tenayuca was located in the north part of the Basin of Mexico (800-1521 CE). The map shows the excavated area and the current archaeological zone, where the main temple is located.</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-99.167788,19.532485 -99.168732,19.532748 -99.168786,19.532743 -99.169118,19.531838 -99.168281,19.531585 -99.167788,19.532485</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>-99.168831,19.535337 -99.169389,19.535494 -99.169717,19.535079 -99.169510,19.534442 -99.168662,19.534870 -99.168711,19.534956 -99.168767,19.535087 -99.168831,19.535337</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1303">
+    <name>Tomb of Meryre II</name>
+    <description>The tomb of Meryra II is located among the Northern rock-cut tombs of Amarna in Middle Egypt equidistant from Thebes and Memphis.</description>
+    <visibility>1</visibility>
+    <Placemark id="1303">
+      <name>Tomb of Meryre II</name>
+      <description>The tomb of Meryra II is located among the Northern rock-cut tombs of Amarna in Middle Egypt equidistant from Thebes and Memphis.</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>30.924390,27.665010 30.927801,27.665029 30.927973,27.663527 30.924132,27.663584 30.924390,27.665010</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

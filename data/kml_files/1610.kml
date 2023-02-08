@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1610">
+    <name>Monastery of Saint Neophytos</name>
+    <description>The Monastery of Saint Neophytos in Paphos, Cyprus</description>
+    <visibility>1</visibility>
+    <Placemark id="1610">
+      <name>Monastery of Saint Neophytos</name>
+      <description>The Monastery of Saint Neophytos in Paphos, Cyprus</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>32.445072,34.846306 32.446510,34.845984 32.446939,34.846724 32.445340,34.847072 32.445072,34.846306</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

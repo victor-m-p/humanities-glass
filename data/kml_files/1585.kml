@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1585">
+    <name>Provinces of Medieval Japan</name>
+    <description>Japan's provinces ca. 794 CE to 1868 CE</description>
+    <visibility>1</visibility>
+    <Placemark id="1585">
+      <name>Provinces of Medieval Japan</name>
+      <description>Japan's provinces ca. 794 CE to 1868 CE</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>139.529976,41.007002 138.914741,38.404261 137.025093,37.538205 135.311226,36.520837 133.333686,36.024833 131.795601,35.382498 130.784858,34.481824 129.686226,33.717656 129.027046,33.204393 129.598335,32.057145 129.730171,31.121320 130.477241,30.744371 131.531929,30.782133 131.971382,31.609122 132.147163,32.502985 132.806343,32.502985 133.377632,32.909739 134.124702,32.725080 134.739936,33.167615 135.618843,33.057189 136.585640,33.277902 136.937202,33.900226 138.035835,34.118795 139.529976,34.009581 140.760444,34.445592 141.243843,35.811296 141.375679,37.677460 142.474311,39.497840 141.990913,41.073293 141.507515,41.699729 139.529976,41.007002</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

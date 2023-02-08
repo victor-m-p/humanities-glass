@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1559">
+    <name>Judean Desert oasis</name>
+    <description>West Bank of the Dead Sea</description>
+    <visibility>1</visibility>
+    <Placemark id="1559">
+      <name>Judean Desert oasis</name>
+      <description>West Bank of the Dead Sea</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>35.388224,31.468957 35.387688,31.468774 35.387259,31.468354 35.387151,31.467731 35.387559,31.467164 35.388160,31.467036 35.388911,31.467072 35.389297,31.467567 35.389490,31.468299 35.388911,31.468793 35.388224,31.468957</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

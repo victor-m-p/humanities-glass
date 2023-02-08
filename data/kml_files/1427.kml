@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1427">
+    <name>Peak Sanctuary of Petsofas</name>
+    <description>The Bronze Age peak-top sanctuary of Petsofas, Crete.</description>
+    <visibility>1</visibility>
+    <Placemark id="1427">
+      <name>Peak Sanctuary of Petsofas</name>
+      <description>The Bronze Age peak-top sanctuary of Petsofas, Crete.</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>26.279346,35.186890 26.279233,35.186982 26.279120,35.187070 26.278898,35.187226 26.278772,35.187232 26.278616,35.187136 26.278525,35.187048 26.278292,35.186971 26.278002,35.186822 26.277836,35.186596 26.277868,35.186397 26.278115,35.186279 26.278573,35.186287 26.279088,35.186377 26.279330,35.186445 26.279442,35.186498 26.279563,35.186577 26.279566,35.186649 26.279528,35.186721 26.279464,35.186785 26.279346,35.186890</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

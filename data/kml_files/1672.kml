@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1672">
+    <name>East Java, Indonesia</name>
+    <description>The shaded region indicates the tomb of Sunan Drajat and its immediate neighborhood in the district of Lamongan, East Java province (including the tomb of Sunan Sendang, Sunan Drajat's pupil).</description>
+    <visibility>1</visibility>
+    <Placemark id="1672">
+      <name>East Java, Indonesia</name>
+      <description>The shaded region indicates the tomb of Sunan Drajat and its immediate neighborhood in the district of Lamongan, East Java province (including the tomb of Sunan Sendang, Sunan Drajat's pupil).</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>112.412243,-6.921763 112.344437,-6.900120 112.342205,-6.869955 112.392845,-6.875238 112.400398,-6.868932 112.439194,-6.874897 112.412243,-6.921763</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

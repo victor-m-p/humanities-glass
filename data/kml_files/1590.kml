@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1590">
+    <name>Istanbul/Constantinople</name>
+    <description>Saint Sophia/Hagia Sophia cathedral</description>
+    <visibility>1</visibility>
+    <Placemark id="1590">
+      <name>Istanbul/Constantinople</name>
+      <description>Saint Sophia/Hagia Sophia cathedral</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>28.979968,41.009502 28.981073,41.008716 28.980912,41.008279 28.979689,41.007445 28.978423,41.008174 28.979635,41.009696 28.979968,41.009502</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

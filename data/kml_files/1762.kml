@@ -1,0 +1,28 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1762">
+    <name>Labrang</name>
+    <description>Labrang Trashi Khyi Monastery</description>
+    <visibility>1</visibility>
+    <Placemark id="1762">
+      <name>Labrang</name>
+      <description>Labrang Trashi Khyi Monastery</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>102.408500,35.143943 102.529350,35.253918 102.823234,35.231486 102.809501,35.164154 102.438713,35.105754 102.403007,35.109124 102.408500,35.143943</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>102.506690,35.196319 102.501884,35.187622 102.518020,35.193233 102.518707,35.198844 102.506690,35.196319</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

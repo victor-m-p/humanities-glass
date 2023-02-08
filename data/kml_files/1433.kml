@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1433">
+    <name>Southern Egypt</name>
+    <description>Abu Simbel map from the Great Temple entry</description>
+    <visibility>1</visibility>
+    <Placemark id="1433">
+      <name>Southern Egypt</name>
+      <description>Abu Simbel map from the Great Temple entry</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>31.625510,22.337722 31.624781,22.337732 31.624319,22.337523 31.624180,22.337245 31.624309,22.336809 31.624716,22.336571 31.625285,22.336471 31.626057,22.336690 31.626261,22.337027 31.626068,22.337464 31.625703,22.337652 31.625510,22.337722</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

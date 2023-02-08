@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1595">
+    <name>Nomitsi, Messinia (Outer Mani), Peloponnese, southern Greece</name>
+    <description>Nomitsi, a village existing probably from ancient era, with a continuous habitation up to present day. A large number of byzantine and post-byzantine churches are still preserved within its setting.</description>
+    <visibility>1</visibility>
+    <Placemark id="1595">
+      <name>Nomitsi, Messinia (Outer Mani), Peloponnese, southern Greece</name>
+      <description>Nomitsi, a village existing probably from ancient era, with a continuous habitation up to present day. A large number of byzantine and post-byzantine churches are still preserved within its setting.</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>22.325472,36.788732 22.332103,36.788869 22.332038,36.786584 22.325258,36.785742 22.325472,36.788732</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>

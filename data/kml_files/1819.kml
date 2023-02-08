@@ -1,0 +1,21 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="1819">
+    <name>Kalampaka, Thessaly</name>
+    <description>The monasteries of Meteora at Kalampaka, Thessaly</description>
+    <visibility>1</visibility>
+    <Placemark id="1819">
+      <name>Kalampaka, Thessaly</name>
+      <description>The monasteries of Meteora at Kalampaka, Thessaly</description>
+      <visibility>1</visibility>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>21.610447,39.729347 21.642290,39.729347 21.642977,39.705117 21.618687,39.711918 21.610447,39.729347</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Document>
+</kml>
