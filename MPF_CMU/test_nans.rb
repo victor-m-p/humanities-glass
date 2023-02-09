@@ -6,6 +6,14 @@
 # sbatch -N 1 -o NAN_TESTS/new_NAN_TESTS_experiments_8 -t 48:00:00 -p RM ./test_nans.rb 20 8 NAN_TESTS_FINAL_experiments_8
 # sbatch -N 1 -o NAN_TESTS/new_NAN_TESTS_experiments_6 -t 48:00:00 -p RM ./test_nans.rb 20 6 NAN_TESTS_FINAL_experiments_6
 
+# sbatch -N 1 -o DATA/new_NAN_TESTS_20nodes_5NAN_0_DDLONG -t 24:00:00 -p RM ./test_nans.rb 20 5 0_20_5_DDLONG
+# sbatch -N 1 -o DATA/new_NAN_TESTS_20nodes_5NAN_1_DDLONG -t 24:00:00 -p RM ./test_nans.rb 20 5 1_20_5_DDLONG
+# sbatch -N 1 -o DATA/new_NAN_TESTS_20nodes_5NAN_2_DDLONG -t 24:00:00 -p RM ./test_nans.rb 20 5 2_20_5_DDLONG
+# sbatch -N 1 -o DATA/new_NAN_TESTS_20nodes_5NAN_3_DDLONG -t 24:00:00 -p RM ./test_nans.rb 20 5 3_20_5_DDLONG
+# sbatch -N 1 -o DATA/new_NAN_TESTS_20nodes_5NAN_4_DDLONG -t 24:00:00 -p RM ./test_nans.rb 20 5 4_20_5_DDLONG
+# sbatch -N 1 -o DATA/new_NAN_TESTS_20nodes_5NAN_5_DDLONG -t 24:00:00 -p RM ./test_nans.rb 20 5 5_20_5_DDLONG
+# sbatch -N 1 -o DATA/new_NAN_TESTS_20nodes_5NAN_6_DDLONG -t 24:00:00 -p RM ./test_nans.rb 20 5 6_20_5_DDLONG
+
 n=ARGV[0].to_i
 nan=ARGV[1].to_i
 label=ARGV[2]
@@ -97,7 +105,7 @@ require 'parallel'
   print "bad_data=#{bad_data}\n"
 }
 
-# 3.times { |label|
+# 3.upto(6) { |label|
 #   [20].each { |nodes|
 #     [5].each { |nan|
 #       print "sbatch -N 1 -o DATA/new_NAN_TESTS_#{nodes}nodes_#{nan}NAN_#{label}_DDLONG -t #{nodes == 10 ? "02:00" : "24:00"}:00 -p RM ./test_nans.rb #{nodes} #{nan} #{label}_#{nodes}_#{nan}_DDLONG\n"
