@@ -1,35 +1,12 @@
 ## Overview
 
-Pre-review code for "Inferring Cultural Landscapes with the Inverse Ising Model"
+Code for "Inferring Cultural Landscapes with the Inverse Ising Model" (https://www.mdpi.com/1099-4300/25/2/264/html)
+has been migrated to https://github.com/victor-m-p/cultural-landscapes. See that repository for documentation.
+For related work on the DRH, see also: https://github.com/victor-m-p/cognitive-attractors. 
+This workspace contains the most up-to-date implementation of ```/MPF_CMU``` and some core preprocessing of the DRH data
+used across different analyses efforts. 
 
 Victor Møller Poulsen and Simon DeDeo
-
-submitted to *Entropy*, 9 December 2022
-
-This is *pre-review* code, not intended for general public circulation. We would be very grateful for comments, questions, and thoughts.
-
-We are very happy to take requests. Our experience has been that iterating with potential users is the best way to make our code and data clear, reusable, and efficient to use. On re-submission and review, we will release general code, intended for consumer use, and a full guide.
-
-## Components
-
-### ```/data```
-* ```data/mdl_final```: processed DRH data (post-MPF).
-* ```data/clean```: processed DRH data (pre-MPF).
-* ```data/reference```: reference files (i.e. ensuring links between questions and cultures). 
-* ```data/analysis```: files used for the DRH analysis in ```/DRH```. 
-
-Raw data from the DRH (i.e. pre-curation) is not provided given size limits. 
-This might be available upon request. 
-
-### ```/fig```
-Figures for "Inferring Cultural Landscapes with the Inverse Ising Model". Currently only the figures for ```5. Results: The Database of Religious History``` (see ```/DRH``` for code). 
-
-
-### ```/tables```
-Tables for "Inferring Cultural Landscapes with the Inverse Ising Model". In particular, tables documenting the DRH dataset used in the article. See ```/DRH``` for code. 
-
-### ```/DRH```
-```DRH``` contains the ```Python``` (and ```Julia```) code to reproduce the DRH analysis as presented in "Inferring Cultural Landscapes with the Inverse Ising Model". It contains both the preprocessing, data-curation, creation of tables (for ```/tables```) and creation of figures (for ```/fig```). See ```/DRH``` for more details. 
 
 ### ```/MPF_CMU``` 
 
@@ -86,7 +63,6 @@ Victor Poulsen (for other questions):
 * Twitter: [@vic_moeller](https://twitter.com/vic_moeller) 
 * GitHub: [@victor-m-p](https://github.com/victor-m-p)
 * Mail: victormoeller@gmail.com
-
 
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
