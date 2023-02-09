@@ -1,6 +1,6 @@
 #include "mpf.h"
 // mpf -l [filename] [logsparsity] [NN] // load in data, fit
-// mpf -c [filename] [NN] // load in data, fit, using cross-validation to pick best sparsity
+// mpf -c [filename] // load in data, fit, using cross-validation to pick best sparsity
 // mpf -g [filename] [n_nodes] [n_obs] [beta] // generate data, save both parameters and data to files
 // mpf -t [filename] [paramfile] [NN] // load in test data, fit, get KL divergence from truth
 // mpf -o [filename_prefix] [NN] // load in data (_data.dat suffix), find best lambda using _params.dat to determine KL
