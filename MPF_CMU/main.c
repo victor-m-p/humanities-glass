@@ -64,11 +64,7 @@ int main (int argc, char *argv[]) {
 			data=new_data();
 			read_data(argv[2], data);
 			best_fit=NULL;
-<<<<<<< Updated upstream
-			nn=data->n;
-=======
 			nn=data->n; // number of nodes -- save this
->>>>>>> Stashed changes
 			
 			has_nans=0;
 			for(i=0;i<data->m;i++) {
@@ -125,11 +121,7 @@ int main (int argc, char *argv[]) {
 				// now do cross-validation on the no NA data...
 				cv=(cross_val *)malloc(sizeof(cross_val));
 				cv->filename=filename_sav;
-<<<<<<< Updated upstream
 				cv->nn=nn; // atoi(argv[3])
-=======
-				cv->nn=nn; // TKTK not argv[3]
->>>>>>> Stashed changes
 				cv->best_fit=NULL;
 				best_log_sparsity=minimize_kl(cv, 0);
 				printf("Found a best sparsity without NaNs (%lf)\n", best_log_sparsity);
@@ -157,11 +149,7 @@ int main (int argc, char *argv[]) {
 				// now need to find best sparsity for Nans, using the best fit minimum...
 				cv=(cross_val *)malloc(sizeof(cross_val));
 				cv->filename=argv[2];
-<<<<<<< Updated upstream
 				cv->nn=nn; // atoi(argv[3]);
-=======
-				cv->nn=nn; // TKTK atoi(argv[3])
->>>>>>> Stashed changes
 				cv->best_fit=best_fit;
 				best_log_sparsity=minimize_kl(cv, 0); // don't use fast version, just for safety
 
@@ -169,11 +157,7 @@ int main (int argc, char *argv[]) {
 			} else {
 				cv=(cross_val *)malloc(sizeof(cross_val));
 				cv->filename=argv[2];
-<<<<<<< Updated upstream
 				cv->nn=nn; // atoi(argv[3]);
-=======
-				cv->nn=nn; // TKTK atoi(argv[3])
->>>>>>> Stashed changes
 				cv->best_fit=best_fit;
 				best_log_sparsity=minimize_kl(cv, 0); // don't use fast version, just for safety
 			}
@@ -187,11 +171,7 @@ int main (int argc, char *argv[]) {
 						
 			init_params(data);
 			data->log_sparsity=best_log_sparsity;
-<<<<<<< Updated upstream
 			create_near(data, nn); // atoi(argv[3])
-=======
-			create_near(data, nn); // TKTK atoi(argv[3])
->>>>>>> Stashed changes
 			
 			printf("Now doing %i\n", data->m);			
 			simple_minimizer(data);
