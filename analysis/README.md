@@ -28,8 +28,6 @@ Working installation of ```Python``` (tested with vXXX) and ```Julia``` (tested 
 
 3. Install the ```Julia``` environment  
 
-## Main part missing here 
-
 <!-- CONTACT -->
 ## Contact
 
