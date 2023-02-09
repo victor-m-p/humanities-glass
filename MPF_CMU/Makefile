@@ -11,6 +11,11 @@ SHELL=/bin/bash
 # CFLAGS=-O3 -fopenmp `gsl-config --cflags`
 # LFLAGS=`gsl-config --libs`
 
+# for Ganesha
+# CC=gcc
+# CFLAGS=-O3 -fopenmp `gsl-config --cflags`
+# LFLAGS=`gsl-config --libs`
+
 # for PSC with AMD compiler
 # time tests suggest that AMD is 10%±2% faster than GCC
 # run `module load aocc aocl` first!
