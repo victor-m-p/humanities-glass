@@ -1,6 +1,6 @@
 #include "mpf.h"
 // mpf -l [filename] [logsparsity] [NN] // load in data, fit
-// mpf -c [filename] [NN] // load in data, fit, using cross-validation to pick best sparsity
+// mpf -c [filename] // load in data, fit, using cross-validation to pick best sparsity
 // mpf -g [filename] [n_nodes] [n_obs] [beta] // generate data, save both parameters and data to files
 // mpf -t [filename] [paramfile] [NN] // load in test data, fit, get KL divergence from truth
 // mpf -o [filename_prefix] [NN] // load in data (_data.dat suffix), find best lambda using _params.dat to determine KL
@@ -10,7 +10,7 @@
 int main (int argc, char *argv[]) {
 	double t0, beta, *big_list, *truth, *inferred, logl_ans, glob_nloops, best_log_sparsity, kl_cv, kl_cv_sp, kl_true, kl_true_sp, ent, *best_fit;
 	all *data;
-	int i, n, thread_id, last_pos, in, j, count, pos, n_obs, n_nodes, kfold, num_no_na, tot_uniq, has_nans;
+	int i, n, nn, thread_id, last_pos, in, j, count, pos, n_obs, n_nodes, kfold, num_no_na, tot_uniq, has_nans;
 	sample *sav, **sav_list;
 	cross_val *cv;
 	unsigned long int config;
@@ -64,6 +64,7 @@ int main (int argc, char *argv[]) {
 			data=new_data();
 			read_data(argv[2], data);
 			best_fit=NULL;
+			nn=data->n; // number of nodes -- save this
 			
 			has_nans=0;
 			for(i=0;i<data->m;i++) {
@@ -72,7 +73,7 @@ int main (int argc, char *argv[]) {
 				}
 			}
 			if (has_nans > 0) {
-				// first, clean out the blanks...
+				// first, make a reduced data set that does not have the blanks...
 				sav_list=(sample **)malloc((data->m-has_nans)*sizeof(sample *));
 				count=0;
 				for(i=0;i<data->m;i++) {
@@ -103,7 +104,7 @@ int main (int argc, char *argv[]) {
 				fprintf(fp, "%i\n%i\n", data->m, data->n);
 				for(i=0;i<data->m;i++) {
 					for(j=0;j<data->n;j++) {
-						if (data->obs_raw[i]->config_base[j] == 0) {
+						if (data->obs_raw[i]->config_base[j] == 0) { // this will not be written
 							fprintf(fp, "X");
 						}
 						if (data->obs_raw[i]->config_base[j] == 1) {
@@ -117,13 +118,15 @@ int main (int argc, char *argv[]) {
 				}
 			    fclose(fp);
 
+				// now do cross-validation on the no NA data...
 				cv=(cross_val *)malloc(sizeof(cross_val));
 				cv->filename=filename_sav;
-				cv->nn=atoi(argv[3]);
+				cv->nn=nn; // atoi(argv[3])
 				cv->best_fit=NULL;
 				best_log_sparsity=minimize_kl(cv, 0);
 				printf("Found a best sparsity without NaNs (%lf)\n", best_log_sparsity);
 
+				// now find the best fit with that best log-sparsity...
 				data=new_data();
 				read_data(filename_sav, data);
 				process_obs_raw(data);
@@ -146,7 +149,7 @@ int main (int argc, char *argv[]) {
 				// now need to find best sparsity for Nans, using the best fit minimum...
 				cv=(cross_val *)malloc(sizeof(cross_val));
 				cv->filename=argv[2];
-				cv->nn=atoi(argv[3]);
+				cv->nn=nn; // atoi(argv[3]);
 				cv->best_fit=best_fit;
 				best_log_sparsity=minimize_kl(cv, 0); // don't use fast version, just for safety
 
@@ -154,7 +157,7 @@ int main (int argc, char *argv[]) {
 			} else {
 				cv=(cross_val *)malloc(sizeof(cross_val));
 				cv->filename=argv[2];
-				cv->nn=atoi(argv[3]);
+				cv->nn=nn; // atoi(argv[3]);
 				cv->best_fit=best_fit;
 				best_log_sparsity=minimize_kl(cv, 0); // don't use fast version, just for safety
 			}
@@ -163,12 +166,12 @@ int main (int argc, char *argv[]) {
 						
 			data=new_data();
 			read_data(argv[2], data);
-			data->best_fit=best_fit;
+			data->best_fit=best_fit; // will either be NULL (for the no NAN case, or the saved values)
 			process_obs_raw(data);
 						
 			init_params(data);
 			data->log_sparsity=best_log_sparsity;
-			create_near(data, atoi(argv[3]));
+			create_near(data, nn); // atoi(argv[3])
 			
 			printf("Now doing %i\n", data->m);			
 			simple_minimizer(data);

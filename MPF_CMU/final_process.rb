@@ -1,7 +1,7 @@
 #!/usr/bin/ruby
 #!/opt/local/bin/ruby
 
-# sbatch -N 1 -o UPDATED_FITS -t 48:00:00 -p RM ./final_process.rb
+# sbatch -N 1 -o UPDATED_FITS -t 12:00:00 -p RM ./final_process.rb
 
 prefix="/jet/home/sdedeo/humanities-glass/data/clean/"
 new_prefix="/jet/home/sdedeo/humanities-glass/data/mdl_experiments/"

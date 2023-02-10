@@ -155,6 +155,7 @@ void compute_probs(int n, double *big_list, char *filename) {
 		fprintf(fn, " %.10e %.10e\n", e_inferred, exp(e_inferred-z_inferred));	
 	}
 	
+	printf("log(Z) is %lf\n", z_inferred);
     fclose(fn);
 }
 
