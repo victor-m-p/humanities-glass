@@ -1,0 +1,12 @@
+matplotlib
+networkx
+numpy
+pandas
+scikit_learn
+tqdm
+seaborn
+pymc3
+arviz
+unidecode
+ptitprince
+geopandas
