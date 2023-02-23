@@ -48,5 +48,4 @@ nsb.o: nsb.c
 clean:
 	rm -f *.o
 	rm -f mpf
-	rm -f mpf_simple
 	

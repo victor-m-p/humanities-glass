@@ -623,28 +623,17 @@ void update_mult_sim(all *data) {
 	
 }
 
-double cross(char *filename, double log_sparsity, int nn, double *best_fit) {
+double cross(char *filename, double log_sparsity, int nn, double *best_fit) { // do cross validation WITHOUT leaving out missing data...
 	all *data;
 	double glob_nloops, logl_ans;
-	int i, thread_id, last_pos, in, j, count, pos, n_obs, n_nodes, kfold, num_no_na;
+	int i, thread_id, last_pos, in, j, count, pos, n_obs, n_nodes, kfold, num_data;
 	unsigned long int config;
 	sample *sav;
 	double t0;
 	
 	data=new_data();
 	read_data(filename, data);
-	
-	// here's what we'll do -- we'll cycle through a bunch of samples where we leave out one data point
-	num_no_na=0;
-	for(i=0;i<data->m;i++) {
-		if (data->obs_raw[i]->n_blanks == 0) {
-			num_no_na++;
-		}
-	}
-	printf("%i observations can be cross-validated.\n", num_no_na);
-	// if (num_no_na > 128) { // for the Pittsburgh Supercomputer Center, each node has a max of 128 cores, so let's restrict to this for the most efficient use of computer time
-	// 	num_no_na=128;
-	// }
+	num_data=data->m;
 	
 	glob_nloops=0;
 	t0=clock();
@@ -653,30 +642,18 @@ double cross(char *filename, double log_sparsity, int nn, double *best_fit) {
 
 		// parallelize this for loop
 #pragma omp for
-		for(in=0;in<num_no_na;in++) {
+		for(in=0;in<num_data;in++) {
 			data=new_data();
 			read_data(filename, data);
 			data->best_fit=best_fit; // will either be NULL or a best guess
 			
 			data->m = data->m-1; // remove one data point
 
-			pos=0;
-			last_pos=0;
-			count=0;
-			while(count < (in+1)) {
-				if(data->obs_raw[pos]->n_blanks == 0) { // if you see a good one, count it
-					count++;
-					last_pos=pos;
-				}
-				pos++; // move forward one unit
-			}
-			pos=last_pos;
-
-			sav=data->obs_raw[pos]; // the pointer to the data we'll leave out
-			data->obs_raw[pos]=data->obs_raw[data->m]; //
+			sav=data->obs_raw[in]; // the pointer to the data we'll leave out
+			data->obs_raw[in]=data->obs_raw[data->m];
 			data->obs_raw[data->m]=sav;
 			
-			process_obs_raw(data);				
+			process_obs_raw(data);
 			init_params(data);
 			data->log_sparsity=log_sparsity;
 			create_near(data, nn);
@@ -689,22 +666,17 @@ double cross(char *filename, double log_sparsity, int nn, double *best_fit) {
 					config += (1 << i);
 				}
 			}
-			if (data->n <= 20) {
-				logl_ans=log_l(data, config, data->big_list, 0);
-			} else {
-				logl_ans=log_l(data, config, data->big_list, 1);
-			}
+			logl_ans=log_l(data, config, data->big_list, data->obs_raw[data->m]->n_blanks, data->obs_raw[data->m]->blanks);
 
 			glob_nloops += logl_ans;
 			thread_id = omp_get_thread_num();
-			// printf("LogL of left-out point %i, computed in thread %i: %lf\n", in, thread_id, logl_ans);
 		}
 		
 	}
-	printf("For log-sparsity=%lf, Log-l of held-out data is: %lf\n", log_sparsity, glob_nloops*1.0/num_no_na);
+	printf("For log-sparsity=%lf, Log-l of held-out data is: %lf\n", log_sparsity, glob_nloops*1.0/num_data);
 	printf("Clock time for one iteration: %14.12lf seconds.\n", (clock() - t0)/CLOCKS_PER_SEC);
 	
-	return glob_nloops*1.0/num_no_na;
+	return glob_nloops*1.0/num_data;
 }
 
 void compute_k_general(all *data, int do_derivs) {

@@ -66,101 +66,11 @@ int main (int argc, char *argv[]) {
 			best_fit=NULL;
 			nn=data->n; // number of nodes -- save this
 			
-			has_nans=0;
-			for(i=0;i<data->m;i++) {
-				if (data->obs_raw[i]->n_blanks > 0) {
-					has_nans++;
-				}
-			}
-			if (has_nans > 0) {
-				// first, make a reduced data set that does not have the blanks...
-				sav_list=(sample **)malloc((data->m-has_nans)*sizeof(sample *));
-				count=0;
-				for(i=0;i<data->m;i++) {
-					if (data->obs_raw[i]->n_blanks == 0) {
-						sav_list[count]=(sample *)malloc(sizeof(sample));
-						sav_list[count]->config_base=(int *)malloc(data->n*sizeof(int));
-						sav_list[count]->n_blanks=0;
-						sav_list[count]->blanks=NULL;
-						for(j=0;j<data->n;j++) {
-							sav_list[count]->config_base[j]=data->obs_raw[i]->config_base[j];
-						}
-						sav_list[count]->mult=data->obs_raw[i]->mult;
-						count++;
-					}
-					free(data->obs_raw[i]->config_base);
-					if (data->obs_raw[i]->blanks != NULL) {
-						free(data->obs_raw[i]->blanks);
-					}
-				}
-				free(data->obs_raw);
-				data->obs_raw=sav_list;
-				data->m=data->m-has_nans;
-				// then, write the new thing to a temporary file
-								
-				strcpy(filename_sav, argv[2]);
-				strcat(filename_sav, "_noNA.dat");
-			    fp = fopen(filename_sav, "w+");
-				fprintf(fp, "%i\n%i\n", data->m, data->n);
-				for(i=0;i<data->m;i++) {
-					for(j=0;j<data->n;j++) {
-						if (data->obs_raw[i]->config_base[j] == 0) { // this will not be written
-							fprintf(fp, "X");
-						}
-						if (data->obs_raw[i]->config_base[j] == 1) {
-							fprintf(fp, "1");							
-						}
-						if (data->obs_raw[i]->config_base[j] == -1) {
-							fprintf(fp, "0");														
-						}
-					}
-					fprintf(fp, " %lf\n", data->obs_raw[i]->mult);
-				}
-			    fclose(fp);
-
-				// now do cross-validation on the no NA data...
-				cv=(cross_val *)malloc(sizeof(cross_val));
-				cv->filename=filename_sav;
-				cv->nn=nn; // atoi(argv[3])
-				cv->best_fit=NULL;
-				best_log_sparsity=minimize_kl(cv, 0);
-				printf("Found a best sparsity without NaNs (%lf)\n", best_log_sparsity);
-
-				// now find the best fit with that best log-sparsity...
-				data=new_data();
-				read_data(filename_sav, data);
-				process_obs_raw(data);
-						
-				init_params(data);
-				data->log_sparsity=best_log_sparsity;
-				create_near(data, cv->nn);
-												
-				simple_minimizer(data);
-				
-				// save the best fit for no-Nans
-				printf("Found a best-fit solution without NaNs (%i; %lf): ", data->m, data->k);
-				best_fit=(double *)malloc(data->n_params*sizeof(double));
-				for(i=0;i<data->n_params;i++) {
-					best_fit[i]=data->big_list[i];
-					printf("%lf ", best_fit[i]);
-				}
-				printf("\n");
-				
-				// now need to find best sparsity for Nans, using the best fit minimum...
-				cv=(cross_val *)malloc(sizeof(cross_val));
-				cv->filename=argv[2];
-				cv->nn=nn; // atoi(argv[3]);
-				cv->best_fit=best_fit;
-				best_log_sparsity=minimize_kl(cv, 0); // don't use fast version, just for safety
-
-				printf("Found a best sparsity with NaNs (%lf): ", best_log_sparsity);
-			} else {
-				cv=(cross_val *)malloc(sizeof(cross_val));
-				cv->filename=argv[2];
-				cv->nn=nn; // atoi(argv[3]);
-				cv->best_fit=best_fit;
-				best_log_sparsity=minimize_kl(cv, 0); // don't use fast version, just for safety
-			}
+			cv=(cross_val *)malloc(sizeof(cross_val));
+			cv->filename=argv[2];
+			cv->nn=nn; // atoi(argv[3]);
+			cv->best_fit=best_fit;
+			best_log_sparsity=minimize_kl(cv, 0); // don't use fast version, just for safety
 						
 			printf("Best log_sparsity: %lf\n", best_log_sparsity);
 						
