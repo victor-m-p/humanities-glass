@@ -1,5 +1,5 @@
 #include "mpf.h"
-// mpf -l [filename] [logsparsity] [NN] // load in data, fit
+// mpf -l [filename] [logsparsity] // load in data, fit
 // mpf -c [filename] // load in data, fit, using cross-validation to pick best sparsity
 // mpf -g [filename] [n_nodes] [n_obs] [beta] // generate data, save both parameters and data to files
 // mpf -t [filename] [paramfile] [NN] // load in test data, fit, get KL divergence from truth
@@ -33,7 +33,7 @@ int main (int argc, char *argv[]) {
 						
 			init_params(data);
 			data->log_sparsity=atof(argv[3]);
-			create_near(data, atoi(argv[4]));
+			create_near(data, 1); 
 			
 			printf("%i data vectors; %i total; %i NNs\n", data->uniq, data->n_all, data->near_uniq);
 									
