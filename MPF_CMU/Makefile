@@ -1,9 +1,9 @@
 SHELL=/bin/bash
 
 # for mac...
-# CC=/opt/local/bin/clang
-# CFLAGS=-O3 -fopenmp `gsl-config --cflags`
-# LFLAGS=-lm `gsl-config --libs`
+CC=/opt/local/bin/clang
+CFLAGS=-O3 -fopenmp `gsl-config --cflags`
+LFLAGS=-lm `gsl-config --libs`
 
 # for Ganesha
 # CC=gcc
@@ -12,9 +12,9 @@ SHELL=/bin/bash
 
 # for PSC with GCC
 # run `module load gcc` first!
-CC=gcc
-CFLAGS=-O3 -fopenmp `gsl-config --cflags`
-LFLAGS=`gsl-config --libs`
+# CC=gcc
+# CFLAGS=-O3 -fopenmp `gsl-config --cflags`
+# LFLAGS=`gsl-config --libs`
 
 # for Ganesha
 # CC=gcc

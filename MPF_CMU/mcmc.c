@@ -218,11 +218,11 @@ double log_l(all *data, unsigned long int config, double *inferred, int n_blanks
 						count++;
 					}
 				}
-				e_loc_running += exp(e_loc);
+				e_loc_running += e_loc;
 
 			}
 		}
-		return log(e_loc_running)-log(z_inferred);			
+		return e_loc_running/((double)(1 << n_blanks))-log(z_inferred);			
 	}
 }
 
