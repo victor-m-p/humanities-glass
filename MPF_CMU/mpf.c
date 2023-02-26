@@ -645,13 +645,12 @@ double cross(char *filename, double log_sparsity, int nn, double *best_fit) { //
 		for(in=0;in<num_data;in++) {
 			data=new_data();
 			read_data(filename, data);
-			data->best_fit=best_fit; // will either be NULL or a best guess
+			data->best_fit=NULL; // will either be NULL or a best guess
 			
 			data->m = data->m-1; // remove one data point
 
 			sav=data->obs_raw[in]; // the pointer to the data we'll leave out
 			data->obs_raw[in]=data->obs_raw[data->m];
-			data->obs_raw[data->m]=sav;
 			
 			process_obs_raw(data);
 			init_params(data);
@@ -662,11 +661,11 @@ double cross(char *filename, double log_sparsity, int nn, double *best_fit) { //
 
 			config=0;
 			for(i=0;i<data->n;i++) {
-				if (data->obs_raw[data->m]->config_base[i] > 0) {
+				if (sav->config_base[i] > 0) {
 					config += (1 << i);
 				}
 			}
-			logl_ans=log_l(data, config, data->big_list, data->obs_raw[data->m]->n_blanks, data->obs_raw[data->m]->blanks);
+			logl_ans=log_l(data, config, data->big_list, sav->n_blanks, sav->blanks);
 
 			glob_nloops += logl_ans;
 			thread_id = omp_get_thread_num();
