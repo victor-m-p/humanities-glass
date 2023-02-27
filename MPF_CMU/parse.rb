@@ -22,6 +22,7 @@ file.each_line { |line|
 }
 file_out.close
 file_out_removed.close
+file_out_added.close
 
 val=`OMP_NUM_THREADS=128 ./mpf -c #{filename+"_ADDED"}`
 print "ADDED FINISHED\n"
