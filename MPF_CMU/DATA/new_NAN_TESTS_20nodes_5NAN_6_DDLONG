@@ -97,3 +97,4 @@ KL: 0.241815
 Clock time: 0.490893000000 seconds.
 
 NA data -- 512: 0.241815
+slurmstepd: error: *** JOB 14137252 ON r246 CANCELLED AT 2023-01-22T10:07:48 ***
