@@ -1,5 +1,7 @@
 #!/usr/bin/ruby
 
+# sbatch -N 1 -o EXPERIMENTS -t 48:00:00 -p RM ./parse.rb
+
 filename="../data/mdl_experiments/matrix_questions_20_maxna_5_nrows_455_entries_407.txt.mpf"
 
 file=File.new(filename, 'r')
