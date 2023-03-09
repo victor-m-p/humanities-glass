@@ -41,10 +41,11 @@ geography_centroid.plot(ax=base, marker='o', color='red', markersize=5)
 plt.show();
 
 # remove the weird point (n = 626)
+fig, ax = plt.subplots(dpi=300)
 geography_filtered = geography_centroid[geography_centroid['Name'] != 'Unitarian Univeralist Organizations']
 base = world.plot(color = 'white', edgecolor = 'black')
 geography_filtered.plot(ax=base, marker='o', color='red', markersize=5)
-plt.show();
+plt.savefig('../fig/geography.svg', bbox_inches='tight')
 
 # merge with our full data set (n = 755 so some overlap)
 geography_merge = geography_filtered.merge(data_geography, on = 'region_id', how = 'inner')

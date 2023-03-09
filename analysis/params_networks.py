@@ -99,7 +99,6 @@ def plot_network(n_nodes, parameters, question_reference, threshold = 0.15, n_qu
         edge_cmap = cmap, edge_vmin = vmin_e, edge_vmax = vmax_e)
     nx.draw_networkx_labels(G, pos, font_size = 8, labels = labeldict)
     plt.show(); 
-    #plt.savefig('../figures/reference_params.pdf', bbox_inches = 'tight')
        
 # setup 
 seed = 1
