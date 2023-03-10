@@ -149,3 +149,19 @@ compare_hi(d = coupling_level_sorted,
            y2 = 'probability',
            y2lab = 'probability mass',
            outname = 'correlation_pmass_sortby_pmass')
+
+# sanity check the figure from Simon
+macro_pairs = pd.read_csv('../data/analysis/macro_pairs.csv')
+question_reference = pd.read_csv('../data/analysis/question_reference.csv')
+question_reference = question_reference[['question_id', 'question']]
+question_q1 = question_reference.rename(columns={'question_id': 'q1', 'question': 'question1'})
+question_q2 = question_reference.rename(columns={'question_id': 'q2', 'question': 'question2'})
+macro_pairs = macro_pairs.merge(question_q1, on = 'q1', how = 'inner')
+macro_pairs = macro_pairs.merge(question_q2, on = 'q2', how = 'inner')
+
+monitor_punish = macro_pairs[(macro_pairs['q1'] == 12) & (macro_pairs['q2'] == 13)]
+monitor_punish # this seems correct 
+
+adult_child = macro_pairs[(macro_pairs['q1'] == 15) & (macro_pairs['q2'] == 16)]
+adult_child # this also seems good 
+

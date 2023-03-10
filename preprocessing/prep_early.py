@@ -42,12 +42,39 @@ question_shorthand = {
     5220: 'Distinct written language'
 }
 
+question_shorter = {
+    4676: 'Political support',
+    4729: 'Scriptures',
+    4745: 'Monuments',
+    4776: 'Spirit-body',
+    4780: 'Afterlife belief',
+    4787: 'Reincarnation this world',
+    4794: 'Special corpse treatment',
+    4808: 'Grave co-sacrifices',
+    4814: 'Grave goods',
+    4821: 'Formal burials',
+    4827: 'Supernatural presence',
+    4954: 'Supernatural monitoring',
+    4983: 'Supernatural punishment',
+    5127: 'Castration',
+    5132: 'Adult sacrifice',
+    5137: 'Child sacrifice',
+    5142: 'Suicide',
+    5152: 'Small-scale rituals',
+    5154: 'Large-scale rituals',
+    5220: 'Written language'
+}
+
 ## assign question shorthand, and new ID
+question_reference = question_reference.rename(columns={'question_id': 'question_id_drh',
+                                                        'question_name': 'question_drh'})
 question_reference['question'] = question_reference['question_id_drh'].apply(lambda x: question_shorthand.get(x))
+question_reference['question_short'] = question_reference['question_id_drh'].apply(lambda x: question_shorter.get(x))
 question_reference['question_id'] = question_reference.index + 1   
 
+
 ## re-order columns and save 
-question_reference = question_reference[['question_id', 'question_id_drh', 'question', 'question_drh']]
+question_reference = question_reference[['question_id', 'question_id_drh', 'question_short', 'question', 'question_drh']]
 question_reference.to_csv('../data/preprocessing/question_reference.csv', index = False)
 
 # move entry_reference to a new location

@@ -248,3 +248,49 @@ def transition_probabilities(configurations, configuration_probabilities,
     df = pd.DataFrame(x, columns = ['type_from', 'type_to', 'probability'])
     df = df.groupby(['type_from', 'type_to'])['probability'].mean().reset_index(name = 'probability')
     return df 
+
+def sort_edge_attributes(Graph, weight_attribute, filter_attribute, scaling = 1): 
+    """Return list of edges and list of edge weights, both sorted by edge weights (filtered, scaled)
+
+    Args:
+        Graph (nx.Graph): networkx graph object with weight_attribute and filter_attribute
+        weight_attribute (str): weight attribute (could be other attribute, but should be numeric)
+        filter_attribute (str): filter attribute (e.g. only hamming distance == 1).
+        scaling (numeric): scaling of weights (for visualization purposes). Defaults to 1 (not scaled).
+
+    Returns:
+        lists: list of edges, list of edge weights. 
+    """
+    ## get edge attributes
+    edge_weight = nx.get_edge_attributes(Graph, weight_attribute)
+    edge_hdist = nx.get_edge_attributes(Graph, filter_attribute)
+
+    ## sort edge weights by value
+    edge_weights_sorted = sorted(edge_weight.items(), key=lambda x: x[1])
+    edge_weights_filtered = [(k, v) for k, v in edge_weights_sorted if edge_hdist[k] == 1]
+    
+    # scale edge weights
+    edge_weights_scaled = [(k, v * scaling) for k, v in edge_weights_filtered]
+    
+    # return edge list and scaled weights
+    edge_list = [k for k, _ in edge_weights_scaled]
+    edge_weights = [v for _, v in edge_weights_scaled]
+    
+    return edge_list, edge_weights
+
+def sort_node_attributes(Graph, sorting_attribute, value_attribute):
+    """Sort nodes based on attribute and return sorted node list and value list
+
+    Args:
+        Graph (nx.Graph): networkx graph object
+        sorting_attribute (str): string containing sorting attribute
+        value_attribute (str): string containing value attribute
+
+    Returns:
+        lst: list of sorted nodes and values
+    """
+    sorting_attr = nx.get_node_attributes(Graph, sorting_attribute)
+    nodelist_sorted = [k for k, v in sorted(sorting_attr.items(), key=lambda item: item[1])]
+    value_attr = nx.get_node_attributes(Graph, value_attribute)
+    value_sorted = [v for k, v in sorted(value_attr.items(), key=lambda pair: nodelist_sorted.index(pair[0]))]
+    return nodelist_sorted, value_sorted
