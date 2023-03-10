@@ -105,5 +105,5 @@ for q1, q2 in tqdm(combinations_list): # should be a minute
                f'{q1_label} = no, {q2_label} = no']
 
     ax.legend(custom_lines, handles, bbox_to_anchor=(0.89, 0.05), fontsize = 8)
-    plt.savefig(f'../fig/network_splits/{q1_label}_{q2_label}.pdf', bbox_inches = 'tight')
+    plt.savefig(f'../fig/network_splits_png/{q1_label}_{q2_label}.png', bbox_inches = 'tight')
     plt.clf()
