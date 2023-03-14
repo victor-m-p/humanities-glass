@@ -10,3 +10,4 @@ arviz
 unidecode
 ptitprince
 geopandas
+statsmodels

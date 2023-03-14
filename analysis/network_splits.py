@@ -16,18 +16,17 @@ import itertools
 question_reference = pd.read_csv('../data/preprocessing/question_reference.csv')
 number_questions = len(question_reference)
 combinations_list = list(itertools.combinations(range(number_questions), 2))
+# read data
+network_information = pd.read_csv('../data/analysis/top_configurations_network.csv')
+hamming_information = pd.read_csv('../data/analysis/top_configurations_hamming.csv')
+configurations = np.loadtxt('../data/preprocessing/configurations.txt', dtype = int)
 
 for q1, q2 in tqdm(combinations_list): # should be a minute  
 
     q1_label = question_reference[question_reference['question_id'] == q1+1]['question_short'].values[0]
     q2_label = question_reference[question_reference['question_id'] == q2+1]['question_short'].values[0]
 
-    # read data
-    network_information = pd.read_csv('../data/analysis/top_configurations_network.csv')
-    hamming_information = pd.read_csv('../data/analysis/top_configurations_hamming.csv')
-
     # find the actual configurations
-    configurations = np.loadtxt('../data/preprocessing/configurations.txt', dtype = int)
     top_configs = configurations[network_information['config_id'].values, :]
 
     q1_yes_q2_yes = list(np.where((top_configs[:, q1] == 1) & (top_configs[:, q2] == 1))[0])
