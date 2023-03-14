@@ -167,8 +167,8 @@ n_steps_to_first = max_grid.merge(n_steps_to_first, on = 'steps', how = 'left').
 fig, ax = plt.subplots()
 sns.lineplot(data=n_steps_to_first, x='steps', y='count')
 plt.suptitle('Number of (taken) steps to first acquisition')
-plt.xlabel('n(simulations)')
-plt.ylabel('n(steps)')
+plt.xlabel('n(steps)')
+plt.ylabel('n(simulations)')
 plt.tight_layout()
 plt.savefig('../fig/intervention/messalians_first_takenstep.png') 
 
@@ -199,10 +199,6 @@ for idx, p in zip(idx_neighbors, p_neighbors):
     neighbor_list.append((idx, question, p))
 neighbor_data = pd.DataFrame(neighbor_list, columns = ['config_id', 'question', 'probability'])
 
-#neighbor_data.dtypes
-#first_transition.dtypes
-
-#first_transition = first_transition.convert_dtypes()
 first_transition = neighbor_data.merge(first_transition, on = 'config_id', how = 'left').fillna(0)
 first_transition = first_transition.sort_values('count', ascending = False)
 fig, ax = plt.subplots()
@@ -223,23 +219,3 @@ plt.savefig('../fig/intervention/messalians_traits.png')
 # test for which paths lead to stability (not just attainment)
 # move on to the other part of the puzzle (RCT). 
 # (need more direct interpretation) and potentially visualization (e.g. network). 
-
-### check why no n=2 path ###
-# they are indeed separated by n = 2
-# so there should be SOME path
-# where this happens 
-# might just be random though 
-import configuration as cn 
-idx_start = 361984
-idx_goal = 362368
-ConfStart = cn.Configuration(idx_start, configurations, configuration_probabilities)
-entry_maxlik = pd.read_csv('../data/analysis/entry_maxlikelihood.csv')
-entry_maxlik[entry_maxlik['entry_name'].str.contains('Free')]
-ConfFree = cn.Configuration(idx_goal, configurations, configuration_probabilities)
-ConfStart.diverge(ConfFree, question_reference)
-
-
-
-goal_idx = 362368
-ConfGood = cn.Configuration(362240, configurations, configuration_probabilities)
-x, y = ConfGood.id_and_prob_of_neighbors()
