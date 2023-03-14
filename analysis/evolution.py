@@ -127,8 +127,8 @@ sns.lineplot(data=first_occurrence, x='steps', y='count')
 #            scatter=False, color='tab:orange',
 #            lowess=True)
 plt.suptitle('Number of (time) steps to first acquisition')
-plt.xlabel('n(simulations)')
-plt.ylabel('n(steps)')
+plt.xlabel('n(steps)')
+plt.ylabel('n(simulations)')
 plt.tight_layout()
 plt.savefig('../fig/intervention/messalians_first_timestep.png')
 
