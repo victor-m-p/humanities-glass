@@ -17,8 +17,8 @@ data_year = data_raw[['entry_id', 'start_year', 'end_year']]
 data_year = data_year.groupby('entry_id').agg({'start_year': 'min', 'end_year': 'max'}).reset_index()
 
 # inner join with the data we already have
-entry_reference = entry_reference[['entry_id_drh', 'entry_drh']]
-entry_reference = entry_reference.rename(columns = {'entry_id_drh': 'entry_id'})
+entry_reference = entry_reference[['entry_id', 'entry_name']]
+#entry_reference = entry_reference.rename(columns = {'entry_id_drh': 'entry_id'})
 year_reference = entry_reference.merge(data_year, on = 'entry_id', how = 'inner')
 
 # sort by start year
@@ -43,7 +43,8 @@ plt.tick_params(left=False, labelleft=False)
 plt.xlabel('Year', size = small_text)
 plt.suptitle('Religion age', y = 1.0, size = big_text, x = mid)
 plt.title('407 entries included in analysis', size = small_text)
-plt.savefig('../fig/timeperiod/religion_age_included_lineplot.pdf')
+plt.savefig('../fig/religion_age_included_lineplot.pdf')
+plt.savefig('../fig/religion_age_included_lineplot.svg')
 
 # color by inclusion exclusion
 ## prep 
@@ -68,7 +69,7 @@ plt.xlabel('Year', size = small_text)
 plt.legend(lines, labels, frameon=False, fontsize = small_text)
 plt.suptitle('Religion age', y = 1.0, size = big_text, x = mid)
 plt.title('838 entries (colored by inclusion)', size = small_text)
-plt.savefig('../fig/timeperiod/religion_age_included_excluded_lineplot.pdf')
+plt.savefig('../fig/religion_age_included_excluded_lineplot.pdf')
 
 # color by inclusion / exclusion (violin)
 dx="condition"; dy="start_year"; ort="v"; pal = "Set2"; sigma = .2
