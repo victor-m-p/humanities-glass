@@ -1,5 +1,5 @@
 #include "mpf.h"
-// mpf -l [filename] [logsparsity] // load in data, fit
+// mpf -l [filename] [logsparsity] [p norm (optional)] // load in data, fit
 // mpf -c [filename] [p norm (optional)] // load in data, fit, using cross-validation to pick best sparsity
 // if [p norm] is specified, it will determine the exponent in the sparsity norm; the default is p=2 (Gaussian prior on coefficients); p=1 will select the Exponential (LASSO) prior on coefficients
 // mpf -g [filename] [n_nodes] [n_obs] [beta] // generate data, save both parameters and data to files
@@ -34,6 +34,13 @@ int main (int argc, char *argv[]) {
 						
 			init_params(data);
 			data->log_sparsity=atof(argv[3]);
+			if (argc == 5) {
+				data->p_norm=atof(argv[4]);
+				printf("P norm set; p=%lf\n", data->p_norm);
+			} else {
+				data->p_norm=2.0;
+				printf("P norm default; p=%lf\n", data->p_norm);
+			}
 			create_near(data, 1); 
 			
 			printf("%i data vectors; %i total; %i NNs\n", data->uniq, data->n_all, data->near_uniq);

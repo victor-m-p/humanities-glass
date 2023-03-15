@@ -625,7 +625,7 @@ void update_mult_sim(all *data) {
 
 double cross(cross_val *cv, double log_sparsity) { // do cross validation WITHOUT leaving out missing data...
 	all *data;
-	double glob_nloops, logl_ans;
+	double glob_nloops, logl_ans, penalty;
 	int i, thread_id, last_pos, in, j, count, pos, n_obs, n_nodes, kfold, num_data;
 	unsigned long int config;
 	sample *sav;
@@ -683,7 +683,7 @@ void compute_k_general(all *data, int do_derivs) {
 	int d, dp, k, a, i, j, f, ip, jp, loc_p, n, count, term, loc, d_count, fixed, changed;
 	int **ij;
 	unsigned long int config1, config2;
-	double **obs, **cross_terms;
+	double **obs, **cross_terms, penalty;
 	double max_val, min_val, *ei, energy, running, big_running, *big_running_k, *running_k, multiplier;
 		
 	ij=data->ij; // save typing
@@ -863,7 +863,11 @@ void compute_k_general(all *data, int do_derivs) {
 	
 	if (do_derivs == 1) {
 		for(i=0;i<data->n_params;i++) {
-			data->dk[i] += data->sparsity*exp((data->p_norm-1)*log(fabs(data->big_list[i]))); // don't forget that this also impacts the derivatives!
+			penalty=data->sparsity*exp((data->p_norm-1)*log(fabs(data->big_list[i])));
+			if (data->big_list[i] < 0) {
+				penalty=-1*penalty;
+			}
+			data->dk[i] += penalty; // don't forget that this also impacts the derivatives!
 		}
 	}
 	
@@ -942,11 +946,11 @@ void simple_minimizer(all *data) {
 		status = gsl_multimin_test_gradient(s->gradient, 1e-6);
 		
 		// if (data->best_fit != NULL) {
-			// printf ("%i %li (%lf) : ", status, iter, s->f);
-			// for(i=0;i<data->n_params;i++) {
-			// 	printf("%.10le ", gsl_vector_get (s->x, i));
-			// }
-			// printf("\n");
+		// 	printf ("%i %li (%lf) : ", status, iter, s->f);
+		// 	for(i=0;i<data->n_params;i++) {
+		// 		printf("%.10le ", gsl_vector_get (s->x, i));
+		// 	}
+		// 	printf("\n");
 		// }
 		// printf("Derivs: ");
 		// for(i=0;i<data->n_params;i++) {
