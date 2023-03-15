@@ -123,28 +123,28 @@ takensteps_first = takensteps_first.groupby('simulation').filter(lambda x: (x['b
 # we need more simulations for sure
 # e.g. n = 10K or something crazy higher than current. 
 # could start with n = 1K but still might be sparse...
-takensteps_plot = takensteps_first.groupby('simulation').size().reset_index(name = 'steps')
-takensteps_plot = takensteps_plot.groupby('steps').size().reset_index(name = 'count')
-takensteps_plot = takensteps_plot.sort_values('steps', ascending = True)
+takensteps_first = takensteps_first.groupby('simulation').size().reset_index(name = 'steps')
+takensteps_first = takensteps_first.groupby('steps').size().reset_index(name = 'count')
+takensteps_first = takensteps_first.sort_values('steps', ascending = True)
 
 # create grid 
-max_n_steps = takensteps_plot['steps'].max()
+max_n_steps = takensteps_first['steps'].max()
 max_grid = pd.DataFrame({'steps': np.arange(0, max_n_steps + 1)})
-takensteps_plot = takensteps_plot.convert_dtypes()
-takensteps_plot = max_grid.merge(takensteps_plot, on = 'steps', how = 'left').fillna(0)
-takensteps_plot['percent'] = (takensteps_plot['count'] / n_simulations)*100
+takensteps_first = takensteps_first.convert_dtypes()
+takensteps_first = max_grid.merge(takensteps_first, on = 'steps', how = 'left').fillna(0)
+takensteps_first['percent'] = (takensteps_first['count'] / n_simulations)*100
 
 fig, ax = plt.subplots()
-sns.lineplot(data=takensteps_plot, x='steps', y='percent')
+sns.lineplot(data=takensteps_first, x='steps', y='percent')
 plt.suptitle('Number of (taken) steps to first acquisition')
 plt.xlabel('n(steps)')
-plt.ylabel('%(simulations)')
+plt.ylabel('n(simulations)')
 plt.tight_layout()
 plt.savefig('../fig/intervention/messalians_takensteps_first.png') 
 
 ## plot 3 (first transition most often leading to target) 
-### is this correct now?
-first_transition = takensteps_first.groupby('simulation').first().reset_index()
+### issue here ... 
+first_transition = shift_data.groupby('simulation').first().reset_index()
 first_transition = first_transition.groupby('config_to').size().reset_index(name = 'count')
 first_transition = first_transition.sort_values('count', ascending = False)
 first_transition = first_transition.rename(columns = {'config_to': 'config_id'})
@@ -166,50 +166,13 @@ neighbor_data = pd.DataFrame(neighbor_list, columns = ['config_id', 'question', 
 
 first_transition = neighbor_data.merge(first_transition, on = 'config_id', how = 'left').fillna(0)
 first_transition = first_transition.sort_values('count', ascending = False)
+first_transition['percent'] = (first_transition['count'] / n_simulations)*100
 
 ### plot 
 fig, ax = plt.subplots()
-sns.barplot(data=first_transition, x='count', y='question')
+sns.barplot(data=first_transition, x='percent', y='question')
 plt.suptitle('Most common first transition towards target')
 plt.xlabel('n(simulations)')
 plt.ylabel('')
 plt.tight_layout()
 plt.savefig('../fig/intervention/messalians_first_flip.png')
-
-## plot 4 (% time spent at target)
-first_probability = takensteps_first.groupby('simulation').first().reset_index()
-first_probability = first_probability[['simulation', 'starting_config', 'config_to']]
-first_probability = first_probability.rename({'config_to': 'config_change'}, axis=1)
-sim_subset = first_probability.merge(sim_data, on = ['simulation', 'starting_config'], how = 'inner')
-sum_binary_coding = sim_subset.groupby('config_change')['binary_coding'].sum().reset_index(name = 'sum_binary_coding')
-
-sum_binary_coding = sum_binary_coding.rename(columns = {'config_change': 'config_id'})
-sum_binary_coding = sum_binary_coding.merge(neighbor_data, on = 'config_id', how = 'inner')
-sum_binary_coding = sum_binary_coding.sort_values('sum_binary_coding', ascending = False)
-
-
-
-
-fig, ax = plt.subplots()
-sns.barplot(data=sum_binary_coding, x='sum_binary_coding', y='question')
-plt.suptitle('Most common first transition towards target')
-plt.xlabel('n(simulations)')
-plt.ylabel('')
-plt.tight_layout()
-plt.savefig('../fig/intervention/messalians_mean_time.png')
-
-
-### unique paths ###
-# find out what to do with this
-unique_paths = takensteps_first.groupby('simulation')['config_to'].agg(lambda x: ' '.join(str(i) for i in x)).reset_index()
-unique_paths = unique_paths.groupby('config_to').size().reset_index(name = 'count')
-unique_paths = unique_paths.sort_values('count', ascending=False) # still very sparse 
-unique_paths.head(5)
-
-### stability?
-### overall % of time spend at yy 
-
-## todo: 
-# * fix the bug
-# * convert from e.g. number of simulations to % of simulations
-# * summary statistics (mean, median, std, etc.)
