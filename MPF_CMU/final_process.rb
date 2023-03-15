@@ -1,12 +1,12 @@
 #!/usr/bin/ruby
 #!/opt/local/bin/ruby
 
-# sbatch -N 1 -o UPDATED_FITS_NoNA -t 48:00:00 -p RM ./final_process.rb
+# sbatch -N 1 -o UPDATED_FITS_noNA -t 48:00:00 -p RM ./final_process.rb
 
 prefix="/jet/home/sdedeo/humanities-glass/data/clean/"
 new_prefix="/jet/home/sdedeo/humanities-glass/data/mdl_experiments/"
 
-[1.0, 1.01, 1.1, 1.25, 1.5, 2.0].each { |p_norm|
+[1.0, 1.25, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0].each { |p_norm|
   `ls #{prefix}`.split("\n").each { |filename|
     print "Doing #{filename}\n"
     filename_out=filename+".mpf_p=#{p_norm}"
