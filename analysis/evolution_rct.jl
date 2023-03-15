@@ -52,6 +52,7 @@ global n_neighbors = 1
 
 @time begin 
 for unique_config in idx_neighbors
+    intervention_config = unique_config 
     for sim_number in 1:n_simulation
         x = findfirst(isequal(unique_config), [x for (x, y) in conf_list]) # is this what we want?
         if x isa Number 
@@ -61,7 +62,7 @@ for unique_config in idx_neighbors
         end 
         id = ConfObj.id 
         for time_step in 1:n_timestep
-            push!(sample_list, [sim_number, time_step, starting_config_id, id])
+            push!(sample_list, [sim_number, time_step, starting_config_id, intervention_config, id])
             if id ∉ [x for (x, y) in conf_list]
                 push!(conf_list, [id, ConfObj]) 
             end 
@@ -74,10 +75,11 @@ end
 
 println("saving file")
 df = DataFrame(
-simulation = [a for (a, _, _, _) in sample_list],
-timestep = [b for (_, b, _, _) in sample_list],
-starting_config = [c-1 for (_, _, c, _) in sample_list],
-config_id = [d-1 for (_, _, _, d) in sample_list] # -1 for python indexing
+simulation = [a for (a, _, _, _, _) in sample_list],
+timestep = [b for (_, b, _, _, _) in sample_list],
+starting_config = [c-1 for (_, _, c, _, _) in sample_list],
+intervention_config = [d-1 for (_, _, _, d, _) in sample_list],
+config_id = [e-1 for (_, _, _, _, e) in sample_list] # -1 for python indexing
 )
 
 outpath = replace(dir, "analysis" => f"data/sim/rct_messalians.csv")
