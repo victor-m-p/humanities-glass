@@ -29,6 +29,7 @@ typedef struct {
 	double *big_list_true;
 	double kl_true;
 	double *best_fit;
+	double p_norm;
 	int nn;
 } cross_val;
 
@@ -71,6 +72,7 @@ typedef struct {
 	
 	double log_sparsity;
 	double sparsity;
+	double p_norm;
 	
 	int n_all;
 	
@@ -115,7 +117,7 @@ double log_l(all *data, unsigned long int config, double *inferred, int n_blanks
 	// double log_l(all *data, unsigned long int config, double *inferred, int do_approx);
 void compute_probs(int n, double *big_list, char *filename);
 
-double cross(char *filename, double log_sparsity, int nn, double *best_fit);
+double cross(cross_val *cv, double log_sparsity);
 double minimize_kl(cross_val *cv, int fast_version);
 void update_sparsity(all *data);
 

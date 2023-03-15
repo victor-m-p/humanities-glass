@@ -623,7 +623,7 @@ void update_mult_sim(all *data) {
 	
 }
 
-double cross(char *filename, double log_sparsity, int nn, double *best_fit) { // do cross validation WITHOUT leaving out missing data...
+double cross(cross_val *cv, double log_sparsity) { // do cross validation WITHOUT leaving out missing data...
 	all *data;
 	double glob_nloops, logl_ans;
 	int i, thread_id, last_pos, in, j, count, pos, n_obs, n_nodes, kfold, num_data;
@@ -632,7 +632,7 @@ double cross(char *filename, double log_sparsity, int nn, double *best_fit) { //
 	double t0;
 	
 	data=new_data();
-	read_data(filename, data);
+	read_data(cv->filename, data);
 	num_data=data->m;
 	
 	glob_nloops=0;
@@ -644,9 +644,10 @@ double cross(char *filename, double log_sparsity, int nn, double *best_fit) { //
 #pragma omp for
 		for(in=0;in<num_data;in++) {
 			data=new_data();
-			read_data(filename, data);
+			read_data(cv->filename, data);
 			data->best_fit=NULL; // will either be NULL or a best guess
 			
+			data->p_norm=cv->p_norm;
 			data->m = data->m-1; // remove one data point
 
 			sav=data->obs_raw[in]; // the pointer to the data we'll leave out
@@ -655,7 +656,7 @@ double cross(char *filename, double log_sparsity, int nn, double *best_fit) { //
 			process_obs_raw(data);
 			init_params(data);
 			data->log_sparsity=log_sparsity;
-			create_near(data, nn);
+			create_near(data, cv->nn);
 
 			simple_minimizer(data);
 
@@ -857,12 +858,12 @@ void compute_k_general(all *data, int do_derivs) {
 	}
 
 	for(i=0;i<data->n_params;i++) {
-		data->k += data->sparsity*data->big_list[i]*data->big_list[i]/2; // put in a sparse prior...
+		data->k += data->sparsity*exp(data->p_norm*log(fabs(data->big_list[i])))/data->p_norm; // put in a sparse prior...
 	}
 	
 	if (do_derivs == 1) {
 		for(i=0;i<data->n_params;i++) {
-			data->dk[i] += data->sparsity*data->big_list[i]; // don't forget that this also impacts the derivatives!
+			data->dk[i] += data->sparsity*exp((data->p_norm-1)*log(fabs(data->big_list[i]))); // don't forget that this also impacts the derivatives!
 		}
 	}
 	
