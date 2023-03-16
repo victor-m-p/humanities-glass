@@ -111,7 +111,7 @@ double minimize_kl(cross_val *cv, int fast_version) {
   } else {
 	  T=gsl_min_fminimizer_goldensection;  	
   }
-  T=gsl_min_fminimizer_brent; 
+  T=gsl_min_fminimizer_brent;
   s = gsl_min_fminimizer_alloc (T);
   gsl_min_fminimizer_set(s, &F, m, a, b);
 
