@@ -23,7 +23,7 @@ new_prefix="/jet/home/sdedeo/humanities-glass/data/mdl_experiments/"
       num_na=filename.split("_")[4].to_i
       
       print "Doing #{filename} at #{Time.now} with #{p_norm} and #{hidden} hidden nodes\n"
-      filename_out=filename+".mpf"
+      filename_out=filename+".mpf"+"p=#{p_norm}_hidden#{hidden}"
     
       file=File.new(prefix+filename, 'r')
       str=""
