@@ -20,7 +20,8 @@ ans=Array.new(21) { |i|
     (n == 20) and (num_na == 0)
   }.collect { |filename|
     print "Doing #{filename}\n"
-
+    filename_out=filename+".mpf"
+    
     file=File.new(prefix+filename, 'r')
     str=""
     file.each_line { |set|
