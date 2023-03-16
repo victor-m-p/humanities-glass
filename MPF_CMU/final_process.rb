@@ -17,7 +17,7 @@ ans=Array.new(21) { |i|
     n=filename.split("_")[2].to_i
     num_na=filename.split("_")[4].to_i
     
-    (n == 20) and (num_na == 0)
+    (n == 20) and (num_na == 5)
   }.collect { |filename|
     print "Doing #{filename}\n"
     filename_out=filename+".mpf"
