@@ -19,7 +19,7 @@ ans=Array.new(21) { |i|
     
     (n == 20) and (num_na == 5)
   }.collect { |filename|
-    print "Doing #{filename}\n"
+    print "Doing #{filename} at #{Time.now}\n"
     filename_out=filename+".mpf"
     
     file=File.new(prefix+filename, 'r')
@@ -41,6 +41,7 @@ ans=Array.new(21) { |i|
     
     sparsity=ans.scan(/Best\ log\_sparsity\:[^\n]+\n/)[0].split(" ")[-1].to_f
     logl=ans.scan(Regexp.new(Regexp.escape(sparsity.to_s)+"[^\\n]+\\n"))[0].split(" ")[-1].to_f
+    print "FINISHED AT #{Time.now}\n"
     [p_norm, sparsity, logl]
   }
 }
