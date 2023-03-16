@@ -40,7 +40,7 @@ ans=Array.new(21) { |i|
     file_out.close
     
     sparsity=ans.scan(/Best\ log\_sparsity\:[^\n]+\n/)[0].split(" ")[-1].to_f
-    logl=ans.scan(Regexp.new(Regexp.escape(sparsity.to_s)+"[\\n]+\\n"))[0].split(" ")[-1].to_f
+    logl=ans.scan(Regexp.new(Regexp.escape(sparsity.to_s)+"[^\\n]+\\n"))[0].split(" ")[-1].to_f
     [p_norm, sparsity, logl]
   }
 }
