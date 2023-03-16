@@ -453,3 +453,15 @@ params=[-2.5384690318e-01, 2.8393230892e-01, -5.2273025316e-02, 6.4790528580e-02
 Clock time: 426816.724097999977 seconds.
 
 
+To github.com:victor-m-p/humanities-glass
+   a06e1c8a..cf0c35c1  main -> main
+Doing matrix_questions_30_maxna_0_nrows_183_entries_149.txt
+Doing matrix_questions_30_maxna_10_nrows_507_entries_417.txt
+Doing matrix_questions_30_maxna_5_nrows_416_entries_336.txt
+Doing matrix_questions_40_maxna_0_nrows_183_entries_133.txt
+Doing matrix_questions_40_maxna_10_nrows_500_entries_347.txt
+Doing matrix_questions_40_maxna_5_nrows_413_entries_277.txt
+Doing matrix_questions_20_maxna_0_nrows_201_entries_181.txt
+Doing matrix_questions_20_maxna_10_nrows_551_entries_495.txt
+Doing matrix_questions_20_maxna_5_nrows_455_entries_407.txt
+slurmstepd: error: *** JOB 15146949 ON r271 CANCELLED AT 2023-03-16T13:16:51 ***

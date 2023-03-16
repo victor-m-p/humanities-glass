@@ -1,0 +1,6 @@
+/var/spool/slurm/d/job15158155/slurm_script:32:in `block (2 levels) in <main>': undefined local variable or method `n_lines' for main:Object (NameError)
+	from /var/spool/slurm/d/job15158155/slurm_script:21:in `collect'
+	from /var/spool/slurm/d/job15158155/slurm_script:21:in `block in <main>'
+	from /var/spool/slurm/d/job15158155/slurm_script:12:in `collect'
+	from /var/spool/slurm/d/job15158155/slurm_script:12:in `<main>'
+Doing matrix_questions_20_maxna_5_nrows_455_entries_407.txt at 2023-03-16 13:34:55 -0400
