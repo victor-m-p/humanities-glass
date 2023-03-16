@@ -6,7 +6,10 @@
 prefix="/jet/home/sdedeo/humanities-glass/data/clean/"
 new_prefix="/jet/home/sdedeo/humanities-glass/data/mdl_experiments/"
 
-[1.0, 1.25, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0].each { |p_norm|
+#[1.0, 1.25, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0]
+Array.new(21) { |i|
+  2+i/20.0
+}.each { |p_norm|
   `ls #{prefix}`.split("\n").each { |filename|
     print "Doing #{filename}\n"
     filename_out=filename+".mpf_p=#{p_norm}"
