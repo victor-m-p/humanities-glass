@@ -19,8 +19,12 @@ ans=Array.new(21) { |i|
     
     (n == 20) and (num_na == 5)
   }.collect { |filename|
+    n_lines=`wc -l #{prefix+filename}`.split(" ")[0].to_i
+    n=filename.split("_")[2].to_i
+    num_na=filename.split("_")[4].to_i
+    
     print "Doing #{filename} at #{Time.now}\n"
-    filename_out=filename+".mpf"
+    filename_out=filename+".mpf"+"p=#{p_norm}"
     
     file=File.new(prefix+filename, 'r')
     str=""
