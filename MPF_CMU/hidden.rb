@@ -1,7 +1,7 @@
 #!/usr/bin/ruby
 #!/opt/local/bin/ruby
 
-# sbatch -N 1 -o HIDDEN_FITS_noNA -t 48:00:00 -p RM ./final_process.rb
+# sbatch -N 1 -o HIDDEN_FITS_noNA -t 48:00:00 -p RM ./hidden.rb
 
 prefix="/jet/home/sdedeo/humanities-glass/data/clean/"
 new_prefix="/jet/home/sdedeo/humanities-glass/data/mdl_experiments/"
@@ -18,9 +18,12 @@ new_prefix="/jet/home/sdedeo/humanities-glass/data/mdl_experiments/"
     
       (n == 20) and (num_na == 0)
     }.collect { |filename|
+      n_lines=`wc -l #{prefix+filename}`.split(" ")[0].to_i
+      n=filename.split("_")[2].to_i
+      num_na=filename.split("_")[4].to_i
       
       print "Doing #{filename} at #{Time.now} with #{p_norm} and #{hidden} hidden nodes\n"
-      filename_out=filename+".mpf"
+      filename_out=filename+".mpf"+"p=#{p_norm}_hidden#{hidden}"
     
       file=File.new(prefix+filename, 'r')
       str=""
