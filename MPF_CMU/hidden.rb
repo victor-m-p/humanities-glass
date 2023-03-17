@@ -1,7 +1,7 @@
 #!/usr/bin/ruby
 #!/opt/local/bin/ruby
 
-# sbatch -N 1 -o HIDDEN_FITS_SCAN_noNA -t 48:00:00 -p RM ./hidden.rb
+# sbatch -N 1 -o HIDDEN_FITS_SCAN -t 48:00:00 -p RM ./hidden.rb
 
 prefix="/jet/home/sdedeo/humanities-glass/data/clean/"
 new_prefix="/jet/home/sdedeo/humanities-glass/data/mdl_experiments/"
@@ -18,7 +18,7 @@ p_norm=2.0
       n=filename.split("_")[2].to_i
       num_na=filename.split("_")[4].to_i
   
-      (n == 20) and (num_na == 0)
+      (n == 20) and (num_na == 5)
     }.collect { |filename|
       n_lines=`wc -l #{prefix+filename}`.split(" ")[0].to_i
       n=filename.split("_")[2].to_i
