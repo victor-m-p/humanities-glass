@@ -46,9 +46,10 @@ p_norm=2.0
   
       sparsity=ans.scan(/Best\ log\_sparsity\:[^\n]+\n/)[0].split(" ")[-1].to_f
       logl=ans.scan(Regexp.new(Regexp.escape(sparsity.to_s)+"[^\\n]+\\n"))[0].split(" ")[-1].to_f
+      overall=ans.scan(/parameters\:[^\n]+\n/)[0].split(" ")[-1].to_f
       print "FINISHED AT #{Time.now}\n"
     
-      ans=[p_norm, hidden, sparsity, logl]
+      ans=[p_norm, hidden, sparsity, logl, overall]
       print "#{ans}\n"
     
     }  

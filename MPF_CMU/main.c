@@ -9,7 +9,7 @@
 // mpf -z [paramfile] [n_nodes]  // print out probabilities of all configurations under paramfile
 
 int main (int argc, char *argv[]) {
-	double t0, beta, *big_list, *truth, *inferred, logl_ans, glob_nloops, best_log_sparsity, kl_cv, kl_cv_sp, kl_true, kl_true_sp, ent, *best_fit;
+	double t0, running_logl, beta, *big_list, *truth, *inferred, logl_ans, glob_nloops, best_log_sparsity, kl_cv, kl_cv_sp, kl_true, kl_true_sp, ent, *best_fit;
 	all *data;
 	int i, n, nn, thread_id, last_pos, in, j, count, pos, n_obs, n_nodes, kfold, num_no_na, tot_uniq, has_nans;
 	sample *sav, **sav_list;
@@ -121,6 +121,17 @@ int main (int argc, char *argv[]) {
 			}
 		    fclose(fp);	
 			
+			running_logl=0;
+			for(i=0;i<data->uniq;i++) {
+				config=0;
+				for(j=0;j<data->n;j++) {
+					if (data->obs[i]->config_base[j] > 0) {
+						config += (1 << j);
+					}
+				}
+				running_logl += data->obs[i]->mult*log_l(data, config, data->big_list, data->obs[i]->n_blanks, data->obs[i]->blanks);
+			}
+			printf("Total LogL for data, given parameters: %lf\n", running_logl);
 		}
 
 		if (argv[1][1] == 'o') { // optimal lambda -- to be written
