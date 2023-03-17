@@ -2,6 +2,7 @@
 #!/opt/local/bin/ruby
 
 # sbatch -N 1 -o HIDDEN_FITS_SCAN -t 48:00:00 -p RM ./hidden.rb
+require 'parallel'
 
 prefix="/jet/home/sdedeo/humanities-glass/data/clean/"
 new_prefix="/jet/home/sdedeo/humanities-glass/data/mdl_experiments/"
