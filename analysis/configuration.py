@@ -53,16 +53,16 @@ class Configuration:
     
     def move(self, N): 
         targets = random.sample(range(self.len), N)
-        prob_move = self.p_move(summary = False)
+        prob_move = self.p_move(summary = False) 
         prob_targets = prob_move[targets]
         move_bin = prob_targets >= np.array([random.uniform(0, 1) for _ in range(N)])
-        
+        # this is definitely not correct...
         if not any(move_bin):
             return Configuration(self.id, self.states, self.probabilities)
-        if N == 1: 
+        if N == 1: # this also seems weird 
             new_id = self.id_neighbor[targets][0]
             return Configuration(new_id, self.states, self.probabilities)
-        else: 
+        else: # this should be correct 
             feature_changes = [x for x, y in zip(targets, move_bin) if y]
             new_configuration = self.flip_at_indices(feature_changes)
             new_id = np.where(np.all(self.states == new_configuration,
@@ -97,3 +97,22 @@ class Configuration:
         df[self.id] = self.configuration
         df['transition_prob'] = df['config_prob'] / df['config_prob'].sum()
         return df.sort_values('transition_prob', ascending=False)
+    
+    def new_move(self, fixed_idx=None): 
+        # find the neighbor idx
+        proposed_flip = random.randint(0, self.len - 1)
+        flipped_conf = self.flip_at_index(proposed_flip)
+        flipped_idx = np.where(np.all(self.states == flipped_conf, axis = 1))[0][0]
+        # if neighbor idx fixed return current state
+        if fixed_idx == proposed_flip:
+            # can we just return self here???? 
+            return Configuration(self.id, self.states, self.probabilities)
+
+        # else move based on Glauber dynamics                 
+        p_flip = self.probabilities[flipped_idx]
+        move_bin = 1 - (self.p / (self.p + p_flip)) >= random.uniform(0, 1)
+        if move_bin: 
+            return Configuration(flipped_idx, self.states, self.probabilities) 
+        else: 
+            return Configuration(self.id, self.states, self.probabilities)
+        
