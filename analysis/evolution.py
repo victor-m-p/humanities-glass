@@ -187,9 +187,6 @@ sum_binary_coding = sum_binary_coding.rename(columns = {'config_change': 'config
 sum_binary_coding = sum_binary_coding.merge(neighbor_data, on = 'config_id', how = 'inner')
 sum_binary_coding = sum_binary_coding.sort_values('sum_binary_coding', ascending = False)
 
-
-
-
 fig, ax = plt.subplots()
 sns.barplot(data=sum_binary_coding, x='sum_binary_coding', y='question')
 plt.suptitle('Most common first transition towards target')
