@@ -634,6 +634,9 @@ double cross(cross_val *cv, double log_sparsity) { // do cross validation WITHOU
 	data=new_data();
 	read_data(cv->filename, data);
 	num_data=data->m;
+	if (num_data > 512) {
+		num_data=512;
+	}
 	
 	glob_nloops=0;
 	t0=clock();
