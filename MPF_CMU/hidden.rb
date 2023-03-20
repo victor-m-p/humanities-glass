@@ -1,13 +1,13 @@
 #!/usr/bin/ruby
 #!/opt/local/bin/ruby
 
-# sbatch -N 1 -o HIDDEN_FITS_SCAN_noNA -t 48:00:00 -p RM ./hidden.rb
+# sbatch -N 1 -o HIDDEN_FITS_SCAN_p2 -t 48:00:00 -p RM ./hidden.rb
 require 'parallel'
 
 prefix="/jet/home/sdedeo/humanities-glass/data/clean/"
 new_prefix="/jet/home/sdedeo/humanities-glass/data/mdl_experiments/"
 
-ans=[1.0,2.0].collect { |p_norm|
+ans=[2.0].collect { |p_norm|
   
   [1,2,3].collect { |hidden|
 
@@ -18,7 +18,7 @@ ans=[1.0,2.0].collect { |p_norm|
       n=filename.split("_")[2].to_i
       num_na=filename.split("_")[4].to_i
 
-      (n == 20) and (num_na == 0)
+      (n == 20) and (num_na == 5)
     }[0]
 
     n_lines=`wc -l #{prefix+filename}`.split(" ")[0].to_i
