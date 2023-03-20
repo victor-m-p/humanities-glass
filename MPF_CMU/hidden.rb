@@ -9,7 +9,7 @@ new_prefix="/jet/home/sdedeo/humanities-glass/data/mdl_experiments/"
 
 ans=[2.0].collect { |p_norm|
   
-  [1,2,3].collect { |hidden|
+  [0,1,2,3].collect { |hidden|
 
     filename=`ls #{prefix}`.split("\n").select { |filename|
       filename_out=filename+".mpf_p=#{p_norm}"
@@ -21,7 +21,7 @@ ans=[2.0].collect { |p_norm|
       (n == 20) and (num_na == 5)
     }[0]
 
-    n_lines=`wc -l #{prefix+filename}`.split(" ")[0].to_i
+    n_lines=`wc -l #{prefix+filename}`.split(" ")[0].to_i-1
     n=filename.split("_")[2].to_i
     num_na=filename.split("_")[4].to_i
 
