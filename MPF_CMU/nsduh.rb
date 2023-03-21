@@ -20,6 +20,8 @@ ans=[2.0].collect { |p_norm|
     filename_out=filename+".mpf"+"p=#{p_norm}_hidden#{hidden}"
 
     file=File.new(prefix+filename, 'r')
+    file.readline
+    file.readline
     str=""
     file.each_line { |set|
       str << ("X"*hidden)+set.split(" ")[0..-2].collect { |i| (i.to_i == 0) ? "X" : ((i.to_i < 0) ? "0" : "1") }.join()+" "+set.split(" ")[-1]+"\n"
