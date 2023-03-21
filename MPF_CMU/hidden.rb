@@ -21,7 +21,7 @@ ans=[2.0].collect { |p_norm|
       (n == 20) and (num_na == 5)
     }[0]
 
-    n_lines=`wc -l #{prefix+filename}`.split(" ")[0].to_i-1
+    n_lines=`wc -l #{prefix+filename}`.split(" ")[0].to_i
     n=filename.split("_")[2].to_i
     num_na=filename.split("_")[4].to_i
 
