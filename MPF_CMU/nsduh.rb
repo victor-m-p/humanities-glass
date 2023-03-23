@@ -24,7 +24,7 @@ ans=[2.0].collect { |p_norm|
     file.readline
     str=""
     file.each_line { |set|
-      str << ("X"*hidden)+set.split(" ")[0..-2].collect { |i| (i.to_i == 0) ? "X" : ((i.to_i < 0) ? "0" : "1") }.join()+" "+set.split(" ")[-1]+"\n"
+      str << ("X"*hidden)+set
     }
     file.close
     file_out=File.new(new_prefix+filename_out, 'w')
