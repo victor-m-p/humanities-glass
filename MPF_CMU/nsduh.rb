@@ -1,20 +1,20 @@
 #!/usr/bin/ruby
 #!/opt/local/bin/ruby
 
-# sbatch -N 1 -o HIDDEN_FITS_SCAN_p2_NSDUH -t 48:00:00 -p RM ./nsduh.rb
+# sbatch -N 1 -o HIDDEN_FITS_SCAN_p2_NSDUH_LARGE -t 48:00:00 -p RM ./nsduh.rb
 require 'parallel'
 
 prefix=""
 new_prefix=""
 
-ans=[2.0].collect { |p_norm|
+ans=[2.0, 1.0].collect { |p_norm|
   
-  [0,1,2,3].collect { |hidden|
+  [0,1,2].collect { |hidden|
 
-    filename="nsduh_test.dat"
+    filename="NSDUH_full.txt"
 
-    n_lines=`wc -l #{prefix+filename}`.split(" ")[0].to_i-1
-    n=16
+    n_lines=673605 #`wc -l #{prefix+filename}`.split(" ")[0].to_i-2
+    n=22
 
     print "Doing #{filename} at #{Time.now} with #{p_norm} and #{hidden} hidden nodes\n"
     filename_out=filename+".mpf"+"p=#{p_norm}_hidden#{hidden}"
@@ -55,5 +55,3 @@ ans=[2.0].collect { |p_norm|
   }
   
 }
-
-print "#{ans}\n"
