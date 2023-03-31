@@ -13,12 +13,13 @@ ans=[2.0, 1.0].collect { |p_norm|
 
     filename="NSDUH_full.txt"
 
-    n_lines=673605 #`wc -l #{prefix+filename}`.split(" ")[0].to_i-2
-    n=22
+    file=File.new(prefix+filename, 'r')
+    n_linesfile.readline.to_i
+    n=file.readline.to_i
 
     print "Doing #{filename} at #{Time.now} with #{p_norm} and #{hidden} hidden nodes\n"
-    filename_out=filename+".mpf"+"p=#{p_norm}_hidden#{hidden}"
-
+    filename_out=filename+".mpf"+"_p=#{p_norm}_hidden#{hidden}"
+    
     file=File.new(prefix+filename, 'r')
     file.readline
     file.readline

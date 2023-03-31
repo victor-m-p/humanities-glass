@@ -20,7 +20,7 @@ int main (int argc, char *argv[]) {
 	prob *p;
 	
 	t0=clock();
-
+    
 	if ((argc == 1) || (argv[1][0] != '-')) {
 
 		printf("Greetings, Professor Falken. Please specify a command-line option.\n");
