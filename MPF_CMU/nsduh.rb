@@ -14,7 +14,7 @@ ans=[2.0, 1.0].collect { |p_norm|
     filename="NSDUH_full.txt"
 
     file=File.new(prefix+filename, 'r')
-    n_linesfile.readline.to_i
+    n_lines=file.readline.to_i
     n=file.readline.to_i
 
     print "Doing #{filename} at #{Time.now} with #{p_norm} and #{hidden} hidden nodes\n"
