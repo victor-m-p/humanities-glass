@@ -7,6 +7,7 @@
 // mpf -o [filename_prefix] [NN] // load in data (_data.dat suffix), find best lambda using _params.dat to determine KL
 // mpf -k [filename] [paramfile_truth] [paramfile_inferred] // load data, compare truth to inferred
 // mpf -z [paramfile] [n_nodes]  // print out probabilities of all configurations under paramfile
+// mpf -p [filename] [n_nodes] [paramfile] // print out log l of data given parameters
 
 int main (int argc, char *argv[]) {
 	double t0, running_logl, beta, *big_list, *truth, *inferred, logl_ans, glob_nloops, best_log_sparsity, kl_cv, kl_cv_sp, kl_true, kl_true_sp, ent, *best_fit;
@@ -27,6 +28,37 @@ int main (int argc, char *argv[]) {
 		
 	} else {
 		
+        if (argv[1][1] == 'p') {
+			data=new_data();
+			read_data(argv[2], data);
+			process_obs_raw(data);
+            
+			n=atoi(argv[3]);
+			truth=(double *)malloc((n*(n+1)/2)*sizeof(double));
+		    fp = fopen(argv[4], "r");
+			for(j=0;j<n*(n+1)/2;j++) {
+				fscanf(fp, "%le ", &(truth[j]));
+			}
+		    fclose(fp);
+            
+			init_params(data);
+            data->big_list=truth;
+            
+			running_logl=0;
+			for(i=0;i<data->uniq;i++) {
+				config=0;
+				for(j=0;j<data->n;j++) {
+					if (data->obs[i]->config_base[j] > 0) {
+						config += (1 << j);
+					}
+				}
+                // printf("%i: ", i);
+                // print_vec(config);
+                // printf("\n");
+				running_logl += data->obs[i]->mult*log_l(data, config, data->big_list, data->obs[i]->n_blanks, data->obs[i]->blanks);
+			}
+			printf("Total LogL for data, given parameters: %lf\n", running_logl);            
+        }
 		if (argv[1][1] == 'l') {
 			data=new_data();
 			read_data(argv[2], data);
@@ -320,7 +352,7 @@ int main (int argc, char *argv[]) {
 				fscanf(fp, "%le ", &(inferred[j]));
 			}
 		    fclose(fp);
-			
+            
 			printf("KL: %lf\n", full_kl(data, inferred, truth));
 			// n=atoi(argv[3]);
 			// truth=(double *)malloc((n*(n+1)/2)*sizeof(double));

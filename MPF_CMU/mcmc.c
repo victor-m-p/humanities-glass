@@ -161,7 +161,7 @@ void compute_probs(int n, double *big_list, char *filename) {
 }
 
 double log_l(all *data, unsigned long int config, double *inferred, int n_blanks, int *loc_blanks) {
-	int i, n, ip, ipos, jp, sig_ip, sig_jp, hits, count=0, mc_iter=1000000;
+	int i, n, ip, ipos, jp, sig_ip, sig_jp, sav, hits, count=0, mc_iter=1000000;
 	double z_inferred=0;
 	double e_inferred, e_loc, e_loc_running;
 	unsigned long int config_sample, blank_config;
@@ -169,7 +169,8 @@ double log_l(all *data, unsigned long int config, double *inferred, int n_blanks
 
 	n=data->n;
 
-		// t0=clock();		
+		// t0=clock();	
+    z_inferred=0;	
 	for(i=0;i<(1 << n);i++) {
 	
 		e_inferred=0;
@@ -197,7 +198,6 @@ double log_l(all *data, unsigned long int config, double *inferred, int n_blanks
 		return e_loc-log(z_inferred);			
 	} else {
 		e_loc_running=0;
-		
 		for(blank_config=0;blank_config<(1 << n_blanks);blank_config++) { // cycle through all choices for the blanks
 			for(i=0;i<n_blanks;i++) {
 				ipos=loc_blanks[i];
@@ -208,19 +208,19 @@ double log_l(all *data, unsigned long int config, double *inferred, int n_blanks
 						config=(config ^ (1 << ipos)); // do an XOR
 					}
 				}
-				
-				e_loc=0;
-				count=0;
-				for(ip=0;ip<n;ip++) {
-					e_loc += VAL(config, ip)*inferred[data->h_offset+ip];
-					for(jp=(ip+1);jp<n;jp++) {
-						e_loc += VAL(config, ip)*VAL(config, jp)*inferred[count]; // data->ij[ip][jp] -- for super-speed, we'll live on the edge
-						count++;
-					}
-				}
-				e_loc_running += exp(e_loc);
-
 			}
+            
+			e_loc=0;
+			count=0;
+			for(ip=0;ip<n;ip++) {
+				e_loc += VAL(config, ip)*inferred[data->h_offset+ip];
+				for(jp=(ip+1);jp<n;jp++) {
+					e_loc += VAL(config, ip)*VAL(config, jp)*inferred[count]; // data->ij[ip][jp] -- for super-speed, we'll live on the edge
+					count++;
+				}
+			}
+            
+			e_loc_running += exp(e_loc);
 		}
 		return log(e_loc_running)-log(z_inferred);			
 		//		return e_loc_running/((double)(1 << n_blanks))-log(z_inferred);			

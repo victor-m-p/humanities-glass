@@ -4,6 +4,7 @@
 #define MIN(a,b) ((a)<(b)?(a):(b))
 #define VAL(a, pos) ((a & (1 << pos)) ? 1.0 : -1.0)
 // macros for extracting the pos^th bit from unsigned long int a, and turning it into +1 or -1
+
 int global_length;
 
 unsigned long int convert(int *list) {
@@ -553,6 +554,7 @@ void update_sparsity(all *data) {
 	}
 	data->sparsity *= running;
 	data->sparsity *= (1.0/data->n_params);
+    printf("Sparsity is %lf\n", data->sparsity);
 }
 
 void update_mult_sim(all *data) {
@@ -673,6 +675,7 @@ double cross(cross_val *cv, double log_sparsity) { // do cross validation WITHOU
 
 			glob_nloops += logl_ans;
 			thread_id = omp_get_thread_num();
+            // delete_data(data); // this is tricky -- we may have to do it.
 		}
 		
 	}
@@ -948,24 +951,25 @@ void simple_minimizer(all *data) {
 
 		status = gsl_multimin_test_gradient(s->gradient, 1e-6);
 		
-		// if (data->best_fit != NULL) {
-		// 	printf ("%i %li (%lf) : ", status, iter, s->f);
-		// 	for(i=0;i<data->n_params;i++) {
-		// 		printf("%.10le ", gsl_vector_get (s->x, i));
-		// 	}
-		// 	printf("\n");
-		// }
-		// printf("Derivs: ");
-		// for(i=0;i<data->n_params;i++) {
-		// 	printf("%lf ", data->dk[i]);
-		// }
-		// printf("\n");
+        // if (data->best_fit != NULL) {
+            // printf ("%i %li (%lf) : ", status, iter, s->f);
+            // for(i=0;i<data->n_params;i++) {
+            //     printf("%.10le ", gsl_vector_get (s->x, i));
+            // }
+            // printf("\n");
+        // }
+        // printf("Derivs: ");
+        // for(i=0;i<data->n_params;i++) {
+        //     printf("%lf ", data->dk[i]);
+        // }
+        // printf("\n");
 		
-		num=0;
-		for(i=0;i<data->n_params;i++) {
-			num += fabs(data->big_list[i]);
-		}
+        num=0;
+        for(i=0;i<data->n_params;i++) {
+            num += fabs(data->big_list[i]);
+        }
 		
+        // printf("%lf %lf %lf\n", prev, num, fabs(prev-num));
 		if ((fabs(prev-num) < 1e-16) && ((iter % 20) == 19)) {
 			break;
 		}
