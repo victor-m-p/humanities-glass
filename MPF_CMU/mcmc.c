@@ -237,6 +237,7 @@ double full_kl(all *data, double *inferred, double *truth) { // intense, full-en
 	
 	n=data->n;
 	// first compute the partition function -- we could actually save all the values to memory but it's faster not to; we have to do two loops; one calculates the two partition functions (normalizations) -- the second uses that normalization to compute the probabilities. Beware we are NOT doing checks for underflows/overflows in the exp calculation
+        
 	for(i=0;i<(1 << n);i++) {
 		
 		e_inferred=0;
@@ -279,6 +280,117 @@ double full_kl(all *data, double *inferred, double *truth) { // intense, full-en
 		
 		e_inferred=0;
 		e_truth=0;
+		count=0;
+		for(ip=0;ip<n;ip++) {
+			sig_ip=(i & (1 << ip));
+			if (sig_ip) {
+				sig_ip=1;
+			} else {
+				sig_ip=-1;
+			}
+			e_inferred += sig_ip*inferred[data->h_offset+ip];
+			e_truth += sig_ip*truth[data->h_offset+ip];
+			for(jp=(ip+1);jp<n;jp++) {
+				sig_jp=(i & (1 << jp));
+				if (sig_jp) {
+					sig_jp=1;
+				} else {
+					sig_jp=-1;
+				}
+				e_inferred += sig_ip*sig_jp*inferred[count];
+				e_truth += sig_ip*sig_jp*truth[count];
+				count++;
+			}
+		}
+		// printf("%i %lf %lf %lf\n", i, kl, e_truth, e_inferred);
+		kl += exp(e_truth-z_truth)*(e_truth-z_truth-e_inferred+z_inferred);
+			// log(exp(e_truth+max_catch-z_truth)/exp(e_inferred+max_catch-z_inferred));
+	}
+	// printf("Clock time KL: %14.12lf seconds.\n", (clock() - t0)/CLOCKS_PER_SEC);
+	
+	return kl;
+}
+
+double full_kl_hidden(all *data, double *inferred, double *truth) { // intense, full-enumeration kl calculation... explodes exponentially
+	int i, n, ip, jp, sig_ip, sig_jp, count=0, found, hid, vis;
+    int n_blanks, *loc_blanks;
+    unsigned long int config; 
+	double z_inferred=0, z_truth=0, kl=0, max_catch=0;
+	double e_inferred, e_truth;
+	double t0;
+
+	t0=clock();
+	
+	n=data->n;
+	// first compute the partition function -- we could actually save all the values to memory but it's faster not to; we have to do two loops; one calculates the two partition functions (normalizations) -- the second uses that normalization to compute the probabilities. Beware we are NOT doing checks for underflows/overflows in the exp calculation
+        
+	for(i=0;i<(1 << n);i++) {
+		
+		e_inferred=0;
+		e_truth=0;
+		count=0;
+		for(ip=0;ip<n;ip++) {
+			sig_ip=(i & (1 << ip));
+			if (sig_ip) {
+				sig_ip=1;
+			} else {
+				sig_ip=-1;
+			}
+			e_inferred += sig_ip*inferred[data->h_offset+ip];
+			e_truth += sig_ip*truth[data->h_offset+ip];
+			for(jp=(ip+1);jp<n;jp++) {
+				sig_jp=(i & (1 << jp));
+				if (sig_jp) {
+					sig_jp=1;
+				} else {
+					sig_jp=-1;
+				}
+				e_inferred += sig_ip*sig_jp*inferred[count]; // data->ij[ip][jp] -- for super-speed, we'll live on the edge
+				e_truth += sig_ip*sig_jp*truth[count];
+				count++;
+			}
+		}
+		// if (i == 0) { // check to see if we're exploding over our range
+		// 	if ((fabs(e_inferred) > 30) || (fabs(e_truth) > 30)) {
+		// 		max_catch=-(fabs(e_inferred)/e_inferred)*MAX(e_inferred, e_truth);
+		// 	}
+		// }
+		z_inferred += exp(e_inferred);
+		z_truth += exp(e_truth);
+	}
+	z_inferred=log(z_inferred);
+	z_truth=log(z_truth);
+	
+	// then compute the kl function
+	for(vis=0;vis<(1 << (n-n_blanks));vis++) {
+		e_inferred=0;
+		e_truth=0;
+		for(hid=0;hid<(1 << n_blanks);hid++) {
+		    
+            config=0;
+            for(i=0;i<n;i++) { // assemble config
+                found=0;
+                for(j=0;j<n_blanks;j++) {
+                    if (loc_blanks[j] == i) {
+                        if (VALZ(hid, i) == 1) {
+					        config=(config | (1 << i)); // do an OR
+				        }
+                        found=1;
+                        break;
+                    }
+                }
+                if (found == 0) {
+                    if (VALZ(vis, i) == 1) {
+				        config=(config | (1 << i)); // do an OR
+			        }
+                }
+            }
+            
+            
+            
+		}
+        
+    }
 		count=0;
 		for(ip=0;ip<n;ip++) {
 			sig_ip=(i & (1 << ip));
