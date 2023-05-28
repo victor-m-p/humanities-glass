@@ -2,7 +2,7 @@
 
 VENVNAME=glassenv
 
-python3 -m venv $VENVNAME
+python3.10 -m venv $VENVNAME
 source $VENVNAME/bin/activate
 
 pip --version

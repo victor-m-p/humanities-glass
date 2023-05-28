@@ -115,4 +115,3 @@ class Configuration:
             return Configuration(flipped_idx, self.states, self.probabilities) 
         else: 
             return Configuration(self.id, self.states, self.probabilities)
-        

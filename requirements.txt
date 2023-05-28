@@ -11,3 +11,5 @@ unidecode
 ptitprince
 geopandas
 statsmodels
+Cython
+numba
