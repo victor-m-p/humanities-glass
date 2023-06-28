@@ -3,6 +3,7 @@
 #define flip(X)  ((X) < 0 ? 1 : -1)
 #define MIN(a,b) ((a)<(b)?(a):(b))
 #define VAL(a, pos) ((a & (1 << pos)) ? 1.0 : -1.0)
+#define VALZ(a, pos) ((a & (1 << pos)) ? 1 : 0)
 // macros for extracting the pos^th bit from unsigned long int a, and turning it into +1 or -1
 
 int global_length;
@@ -339,10 +340,8 @@ void init_params(all *data) {
 	double running;
 	gsl_rng *r;
 	
-	if (data->n_params < 0) {
-		data->n_params=data->n*(data->n+1)/2;
-		data->h_offset=data->n*(data->n-1)/2;
-	}
+    data->n_params=data->n*(data->n+1)/2;
+    data->h_offset=data->n*(data->n-1)/2;
 	
 	if (data->big_list == NULL) {
 		data->big_list=(double *)malloc(data->n_params*sizeof(double));
@@ -371,7 +370,7 @@ void init_params(all *data) {
 		}		
 	} else {
 		for(i=0;i<data->n_params;i++) {
-			data->big_list[i]=data->best_fit[i]; // initiatize for tests
+			data->big_list[i]=data->best_fit[i]+gsl_ran_gaussian(data->r, 1.0)/10000.0; // initiatize for tests
 			data->old_list[i]=0; // initiatize for tests
 		}
 	}
@@ -723,6 +722,18 @@ void compute_k_general(all *data, int do_derivs) {
 		}
 	}
 	
+            //     for(d=0;d<data->uniq;d++) {
+            //         printf("DATA POSITION %i\n", d);
+            //         for(dp=0;dp<data->obs[d]->n_config;dp++) {
+            //             printf("CONFIG %i: ", dp);
+            // for(i=0;i<data->n;i++) {
+            //                 printf("%i", VALZ(data->obs[d]->config[dp], i));
+            // }
+            //             printf(" --- weighting is: %le\n", data->obs[d]->mult_sim[dp]);
+            //         }
+            //     }
+            //     printf("\n");
+    
 	d_count=0;
 	for(d=0;d<data->uniq;d++) { // for each unique datapoint...
 		for(dp=0;dp<data->obs[d]->n_config;dp++) { // for each of the configurations
@@ -943,26 +954,28 @@ void simple_minimizer(all *data) {
 	compute_k_general(data, 1);
 
 	gsl_multimin_fdfminimizer_set(s, &k_func, x, 0.01, 1e-6);
-	
+		
+    
 	prev=1e300;
 	do {
 		iter++;
+
 		status = gsl_multimin_fdfminimizer_iterate(s);
 
 		status = gsl_multimin_test_gradient(s->gradient, 1e-6);
 		
         // if (data->best_fit != NULL) {
-            // printf ("%i %li (%lf) : ", status, iter, s->f);
-            // for(i=0;i<data->n_params;i++) {
-            //     printf("%.10le ", gsl_vector_get (s->x, i));
-            // }
-            // printf("\n");
+        //     printf ("%i %li (%lf) : ", status, iter, s->f);
+        //     for(i=0;i<data->n_params;i++) {
+        //         printf("%.10le ", gsl_vector_get (s->x, i));
+        //     }
+        //     printf("\n");
         // }
-        // printf("Derivs: ");
+        // printf("\n\nDerivs: ");
         // for(i=0;i<data->n_params;i++) {
         //     printf("%lf ", data->dk[i]);
         // }
-        // printf("\n");
+        // printf("\n\n\n");
 		
         num=0;
         for(i=0;i<data->n_params;i++) {

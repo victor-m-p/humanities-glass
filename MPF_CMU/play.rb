@@ -37,3 +37,48 @@ Array.new(31) { |sp_i|
   print "#{final}\n"
   final
 }
+
+[20].each { |n|
+  n_samp=500 #+2*10
+
+  str="#{n_samp}\n#{n+1}\n"
+  n_samp.times { |i|
+    str << "X#{"#{i.modulo(2)}" * n} 1.0\n"
+  }
+  # str << ("1"*(n+1)+" 1.0\n")*10
+  # str << ("0"*(n+1)+" 1.0\n")*10
+  
+  file=File.new("test.dat", 'w'); file.write(str); file.close
+
+  lookup=Hash.new
+  count=0
+  (n).times { |i|
+    (i+1).upto(n) { |j|
+      lookup[[i,j]]=count
+      count += 1
+    }
+  }
+
+  print "DOING #{n}: \n"
+  final=Array.new(11) { |spp|
+    sp=4*(spp/10.0)-2
+    ans=Parallel.map(Array.new(10) { |i| i },  :in_process=>10) { |i|
+      params=eval(`./mpf -l test.dat #{sp} 1.0`.split("\n")[-3])
+      hid=lookup.keys.select { |j| j.include?(0) }.collect { |p|
+       params[lookup[p]].abs 
+      }.mean
+      vis=lookup.keys.select { |j| !j.include?(0) }.collect { |p|
+       params[lookup[p]].abs
+      }.mean
+      [hid, vis, params[(n+1)*n/2..-1].collect { |j| j }.mean]
+    }.transpose.collect { |i| i.mean }
+    tot=ans+[sp]
+    print "#{tot}\n"
+    tot
+  }
+}
+
+
+
+
+

@@ -63,8 +63,26 @@ int main (int argc, char *argv[]) {
 			data=new_data();
 			read_data(argv[2], data);
 			process_obs_raw(data);
-						
-			init_params(data);
+			            
+            data->n_params=data->n*(data->n+1)/2;
+    		data->best_fit=(double *)malloc(data->n_params*sizeof(double));
+            count=0;
+            for(i=0;i<data->n-1;i++) {
+                for(j=(i+1);j<data->n;j++) {
+                    if (i == 0) {
+                        data->best_fit[count]=0.0;
+                    } else {
+                        data->best_fit[count]=0.0;
+                    }
+                    count++;
+                }
+            }
+            for(i=count;i<data->n_params;i++) {
+                data->best_fit[i]=0.0;
+            }
+            
+            init_params(data);
+            
 			data->log_sparsity=atof(argv[3]);
 			if (argc == 5) {
 				data->p_norm=atof(argv[4]);
@@ -74,6 +92,15 @@ int main (int argc, char *argv[]) {
 				printf("P norm default; p=%lf\n", data->p_norm);
 			}
 			create_near(data, 1); 
+
+            // printf("\n\nparams=[");
+            // for(i=0;i<data->n_params;i++) {
+            //     if (i < (data->n_params-1)) {
+            //         printf("%.10e, ", data->big_list[i]);
+            //     } else {
+            //         printf("%.10e]\n", data->big_list[i]);
+            //     }
+            // }
 			
 			printf("%i data vectors; %i total; %i NNs\n", data->uniq, data->n_all, data->near_uniq);
 									
