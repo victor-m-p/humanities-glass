@@ -9,31 +9,33 @@ require 'parallel'
 
 n=ARGV[0].to_i
 
-filename=`ls ../data/religious-landscapes/*`.split("\n")[n]
+filename=`ls RAW/*`.split("\n")[n]
+
+transform="WORK/"+filename.split("/")[-1]
 
 Parallel.map(Array.new(128) { |i| i }, :in_process=>128) { |i|
   lam=-1+2*(i+1)/128.0
-  `cp #{filename} #{filename+"_lam#{lam}_PNORM1"}`
-  ans=`./mpf -l #{filename+"_lam#{lam}_PNORM1"} #{lam} 1.0`
-  `rm #{filename+"_lam#{lam}_PNORM1"}`
+  `cp #{filename} #{transform+"_lam#{lam}_PNORM1"}`
+  ans=`./mpf -l #{transform+"_lam#{lam}_PNORM1"} #{lam} 1.0`
+  `rm #{transform+"_lam#{lam}_PNORM1"}`
   print "lam=#{lam}\n#{ans}\n"
 }
 
-`cp #{filename} #{filename+"_lam_CV_PNORM1"}`
-ans=`./mpf -c #{filename+"_lam_CV_PNORM1"} 1.0`
-`rm #{filename+"_lam_CV_PNORM1"}`
+`cp #{filename} #{transform+"_lam_CV_PNORM1"}`
+ans=`./mpf -c #{transform+"_lam_CV_PNORM1"} 1.0`
+`rm #{transform+"_lam_CV_PNORM1"}`
 print "CV\n#{ans}\n"
 
 Parallel.map(Array.new(128) { |i| i }, :in_process=>128) { |i|
   lam=-1+2*(i+1)/128.0
-  `cp #{filename} #{filename+"_lam#{lam}_PNORM2"}`
-  ans=`./mpf -l #{filename+"_lam#{lam}_PNORM2"} #{lam} 2.0`
-  `rm #{filename+"_lam#{lam}_PNORM2"}`
+  `cp #{filename} #{transform+"_lam#{lam}_PNORM2"}`
+  ans=`./mpf -l #{transform+"_lam#{lam}_PNORM2"} #{lam} 2.0`
+  `rm #{transform+"_lam#{lam}_PNORM2"}`
   print "lam=#{lam}\n#{ans}\n"
 }
 
-`cp #{filename} #{filename+"_lam_CV_PNORM2"}`
-`./mpf -c #{filename+"_lam_CV_PNORM2"} 2.0`
-`rm #{filename+"_lam_CV_PNORM1"}`
+`cp #{filename} #{transform+"_lam_CV_PNORM2"}`
+`./mpf -c #{transform+"_lam_CV_PNORM2"} 2.0`
+`rm #{transform+"_lam_CV_PNORM1"}`
 print "CV\n#{ans}\n"
 
