@@ -1,0 +1,11 @@
+Doing NSDUH_full.txt at 2023-03-31 12:20:45 -0400 with 2.0 and 0 hidden nodes
+executing: OMP_NUM_THREADS=128 ./mpf -c NSDUH_full.txt.mpf_p2.0_hidden0 2.0
+/var/spool/slurm/d/job15324056/slurm_script:39:in `block (2 levels) in <main>': undefined method `split' for nil:NilClass (NoMethodError)
+	from /var/spool/slurm/d/job15324056/slurm_script:12:in `collect'
+	from /var/spool/slurm/d/job15324056/slurm_script:12:in `block in <main>'
+	from /var/spool/slurm/d/job15324056/slurm_script:10:in `collect'
+	from /var/spool/slurm/d/job15324056/slurm_script:10:in `<main>'
+FINAL VERSION for NSDUH_full.txt.mpf_p2.0_hidden0:
+ 
+
+slurmstepd: error: Detected 1 oom-kill event(s) in StepId=15324056.batch cgroup. Some of your processes may have been killed by the cgroup out-of-memory handler.

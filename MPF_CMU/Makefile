@@ -12,9 +12,9 @@ LFLAGS=-lm `gsl-config --libs`
 
 # for PSC with GCC
 # run `module load gcc` first!
-# CC=gcc
-# CFLAGS=-O3 -fopenmp `gsl-config --cflags`
-# LFLAGS=`gsl-config --libs`
+CC=gcc
+CFLAGS=-O3 -fopenmp `gsl-config --cflags`
+LFLAGS=`gsl-config --libs`
 
 # for Ganesha
 # CC=gcc
