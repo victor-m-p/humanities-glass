@@ -12,10 +12,10 @@ require 'parallel'
 # sbatch -N 1 -o JUNE_FITS_N2 -t 24:00:00 -p RM ./simple_fits.rb 2
 # sbatch -N 1 -o JUNE_FITS_N3 -t 24:00:00 -p RM ./simple_fits.rb 3
 
-sbatch -N 1 -o JUNE_FITS_NN0 -t 48:00:00 -p RM ./simple_fits.rb 0
-sbatch -N 1 -o JUNE_FITS_NN1 -t 48:00:00 -p RM ./simple_fits.rb 1
-sbatch -N 1 -o JUNE_FITS_NN2 -t 48:00:00 -p RM ./simple_fits.rb 2
-sbatch -N 1 -o JUNE_FITS_NN3 -t 48:00:00 -p RM ./simple_fits.rb 3
+# sbatch -N 1 -o JUNE_FITS_NN0 -t 48:00:00 -p RM ./simple_fits.rb 0
+# sbatch -N 1 -o JUNE_FITS_NN1 -t 48:00:00 -p RM ./simple_fits.rb 1
+# sbatch -N 1 -o JUNE_FITS_NN2 -t 48:00:00 -p RM ./simple_fits.rb 2
+# sbatch -N 1 -o JUNE_FITS_NN3 -t 48:00:00 -p RM ./simple_fits.rb 3
 
 n=ARGV[0].to_i
 
