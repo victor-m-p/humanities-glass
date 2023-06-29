@@ -43,7 +43,7 @@ int main (int argc, char *argv[]) {
             
 			init_params(data);
             data->big_list=truth;
-            
+
 			running_logl=0;
 			for(i=0;i<data->uniq;i++) {
 				config=0;
