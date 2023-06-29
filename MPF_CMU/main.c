@@ -44,20 +44,30 @@ int main (int argc, char *argv[]) {
 			init_params(data);
             data->big_list=truth;
 
+            // running_logl=0;
+            // for(i=0;i<data->uniq;i++) {
+            //     config=0;
+            //     for(j=0;j<data->n;j++) {
+            //         if (data->obs[i]->config_base[j] > 0) {
+            //             config += (1 << j);
+            //         }
+            //     }
+            //     running_logl += data->obs[i]->mult*log_l(data, config, data->big_list, data->obs[i]->n_blanks, data->obs[i]->blanks);
+            // }
+            // printf("Total LogL for data, given parameters: %lf\n", running_logl);
+
 			running_logl=0;
-			for(i=0;i<data->uniq;i++) {
+            i=0;
+            // for(i=0;i<data->uniq;i++) {
 				config=0;
 				for(j=0;j<data->n;j++) {
 					if (data->obs[i]->config_base[j] > 0) {
 						config += (1 << j);
 					}
 				}
-                // printf("%i: ", i);
-                // print_vec(config);
-                // printf("\n");
-				running_logl += data->obs[i]->mult*log_l(data, config, data->big_list, data->obs[i]->n_blanks, data->obs[i]->blanks);
-			}
-			printf("Total LogL for data, given parameters: %lf\n", running_logl);            
+				running_logl += data->obs[i]->mult*log_l_approx(data, config, data->big_list, data->obs[i]->n_blanks, data->obs[i]->blanks);
+            // }
+			printf("Total LogL for data, given parameters, approx: %lf\n (%i)", running_logl, data->uniq);            
         }
 		if (argv[1][1] == 'l') {
 			data=new_data();
@@ -191,17 +201,17 @@ int main (int argc, char *argv[]) {
 			}
 		    fclose(fp);	
 			
-			running_logl=0;
-			for(i=0;i<data->uniq;i++) {
-				config=0;
-				for(j=0;j<data->n;j++) {
-					if (data->obs[i]->config_base[j] > 0) {
-						config += (1 << j);
-					}
-				}
-				running_logl += data->obs[i]->mult*log_l(data, config, data->big_list, data->obs[i]->n_blanks, data->obs[i]->blanks);
-			}
-			printf("Total LogL for data, given parameters: %lf\n", running_logl);
+            // running_logl=0;
+            // for(i=0;i<data->uniq;i++) {
+            //     config=0;
+            //     for(j=0;j<data->n;j++) {
+            //         if (data->obs[i]->config_base[j] > 0) {
+            //             config += (1 << j);
+            //         }
+            //     }
+            //     running_logl += data->obs[i]->mult*log_l(data, config, data->big_list, data->obs[i]->n_blanks, data->obs[i]->blanks);
+            // }
+            // printf("Total LogL for data, given parameters: %lf\n", running_logl);
 		}
 
 		if (argv[1][1] == 'o') { // optimal lambda -- to be written

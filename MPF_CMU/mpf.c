@@ -664,13 +664,18 @@ double cross(cross_val *cv, double log_sparsity) { // do cross validation WITHOU
 
 			simple_minimizer(data);
 
-			config=0;
-			for(i=0;i<data->n;i++) {
-				if (sav->config_base[i] > 0) {
-					config += (1 << i);
-				}
-			}
-			logl_ans=log_l(data, config, data->big_list, sav->n_blanks, sav->blanks);
+            if (data->n > 20) {
+    			config=0;
+    			for(i=0;i<data->n;i++) {
+    				if (sav->config_base[i] > 0) {
+    					config += (1 << i);
+    				}
+    			}
+    			logl_ans=log_l(data, config, data->big_list, sav->n_blanks, sav->blanks);                
+            } else {
+                // SIMULATION VERSION
+                
+            }
 
 			glob_nloops += logl_ans;
 			thread_id = omp_get_thread_num();

@@ -160,6 +160,66 @@ void compute_probs(int n, double *big_list, char *filename) {
     fclose(fn);
 }
 
+double log_l_approx(all *data, unsigned long int config, double *inferred, int n_blanks, int *loc_blanks) {
+	int i, j, n, ip, ipos, jp, sig_ip, sig_jp, sav, hits, count=0, mc_iter;
+	double z_inferred=0;
+	double e_inferred, e_loc, e_loc_running;
+	unsigned long int config_sample, blank_config;
+    int match;
+	double t0;
+    unsigned long int *good_hits;
+    
+	n=data->n;
+    mc_iter=10000000;
+
+	if (n_blanks == 0) {
+		hits=0;
+		for(i=0;i<mc_iter;i++) {
+			config_sample=gsl_rng_uniform_int(data->r, (1 << data->n));
+			mcmc_sampler(&config_sample, 10, data);
+			if (config_sample == config) {
+				hits++;
+			}
+		}
+	} else {
+        good_hits=(unsigned long int *)malloc((data->n-n_blanks)*sizeof(unsigned long int));
+        count=0;
+        for(i=0;i<data->n;i++) {
+            match=1;
+            for(j=0;j<n_blanks;j++) {
+                if (i == loc_blanks[j]) {
+                    match=0;
+                    break;
+                }
+            }
+            if (match == 1) {
+                good_hits[count]=(1 << i);
+                count++;
+            }
+        }
+        
+		hits=0;
+		for(i=0;i<mc_iter;i++) {
+			config_sample=gsl_rng_uniform_int(data->r, (1 << data->n));
+			mcmc_sampler(&config_sample, 10, data);
+            match=1;
+            for(j=0;j<(data->n-n_blanks);j++) {
+                if ((config_sample & good_hits[j]) != (config & good_hits[j])) {
+                    match=0;
+                    break;
+                }
+            }
+            if (match == 1) {
+                hits++;
+            }
+		}
+        free(good_hits);  
+	}
+    
+    return log((hits+1.0)/((double)mc_iter+1));
+}
+
+
 double log_l(all *data, unsigned long int config, double *inferred, int n_blanks, int *loc_blanks) {
 	int i, n, ip, ipos, jp, sig_ip, sig_jp, sav, hits, count=0, mc_iter=1000000;
 	double z_inferred=0;

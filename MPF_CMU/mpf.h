@@ -115,6 +115,7 @@ void mcmc_sampler(unsigned long int *config, int iter, all *data);
 double full_kl(all *data, double *inferred, double *truth);
 double log_l(all *data, unsigned long int config, double *inferred, int n_blanks, int *loc_blanks);
 	// double log_l(all *data, unsigned long int config, double *inferred, int do_approx);
+double log_l_approx(all *data, unsigned long int config, double *inferred, int n_blanks, int *loc_blanks);
 void compute_probs(int n, double *big_list, char *filename);
 
 double cross(cross_val *cv, double log_sparsity);
