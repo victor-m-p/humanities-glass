@@ -664,7 +664,7 @@ double cross(cross_val *cv, double log_sparsity) { // do cross validation WITHOU
 
 			simple_minimizer(data);
 
-            if (data->n > 20) {
+            if (data->n <= 20) {
     			config=0;
     			for(i=0;i<data->n;i++) {
     				if (sav->config_base[i] > 0) {
@@ -674,7 +674,13 @@ double cross(cross_val *cv, double log_sparsity) { // do cross validation WITHOU
     			logl_ans=log_l(data, config, data->big_list, sav->n_blanks, sav->blanks);                
             } else {
                 // SIMULATION VERSION
-                
+    			config=0;
+    			for(i=0;i<data->n;i++) {
+    				if (sav->config_base[i] > 0) {
+    					config += (1 << i);
+    				}
+    			}
+    			logl_ans=log_l_approx(data, config, data->big_list, sav->n_blanks, sav->blanks);                                
             }
 
 			glob_nloops += logl_ans;
