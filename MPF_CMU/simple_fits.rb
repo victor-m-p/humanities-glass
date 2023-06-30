@@ -22,4 +22,4 @@ print "#{filename}\n"
 `cp #{filename} #{transform+"_lam_CV_PNORM1"}`
 ans=`./mpf -c #{transform+"_lam_CV_PNORM1"} 1.0`
 `rm #{transform+"_lam_CV_PNORM2"}`
-print "CV\n#{ans}\n"c
+print "CV\n#{ans}\n"
