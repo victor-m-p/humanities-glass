@@ -553,7 +553,6 @@ void update_sparsity(all *data) {
 	}
 	data->sparsity *= running;
 	data->sparsity *= (1.0/data->n_params);
-    printf("Sparsity is %lf\n", data->sparsity);
 }
 
 void update_mult_sim(all *data) {
@@ -635,8 +634,8 @@ double cross(cross_val *cv, double log_sparsity) { // do cross validation WITHOU
 	data=new_data();
 	read_data(cv->filename, data);
 	num_data=data->m;
-	if (num_data > 512) {
-		num_data=512;
+	if (num_data > 128) {
+		num_data=128;
 	}
 	
 	glob_nloops=0;
@@ -682,7 +681,6 @@ double cross(cross_val *cv, double log_sparsity) { // do cross validation WITHOU
     			}
     			logl_ans=log_l_approx(data, config, data->big_list, sav->n_blanks, sav->blanks);                                
             }
-
 			glob_nloops += logl_ans;
 			thread_id = omp_get_thread_num();
             // delete_data(data); // this is tricky -- we may have to do it.

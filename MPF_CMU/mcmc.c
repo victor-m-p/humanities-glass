@@ -170,8 +170,9 @@ double log_l_approx(all *data, unsigned long int config, double *inferred, int n
     unsigned long int *good_hits;
     
 	n=data->n;
-    mc_iter=10000000;
+    mc_iter=1000000;
 
+    // t0=clock();
 	if (n_blanks == 0) {
 		hits=0;
 		for(i=0;i<mc_iter;i++) {
@@ -215,6 +216,7 @@ double log_l_approx(all *data, unsigned long int config, double *inferred, int n
 		}
         free(good_hits);  
 	}
+    // printf("Clock time MCMC Sampling: %14.12lf seconds.\n", (clock() - t0)/CLOCKS_PER_SEC);
     
     return log((hits+1.0)/((double)mc_iter+1));
 }
