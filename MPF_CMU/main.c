@@ -133,22 +133,22 @@ int main (int argc, char *argv[]) {
 			}
 		    fclose(fp);
 			
-			running_logl=0;
-			for(i=0;i<data->uniq;i++) {
-				config=0;
-				for(j=0;j<data->n;j++) {
-					if (data->obs[i]->config_base[j] > 0) {
-						config += (1 << j);
-					}
-				}
-                if (data->n <= 20) {
-                    running_logl += data->obs[i]->mult*log_l(data, config, data->big_list, data->obs[i]->n_blanks, data->obs[i]->blanks);   
-                } else {
-                    running_logl += data->obs[i]->mult*log_l_approx(data, config, data->big_list, data->obs[i]->n_blanks, data->obs[i]->blanks);
-                }
-				
-			}
-			printf("Total LogL for data, given parameters: %lf\n", running_logl);
+            // running_logl=0;
+            // for(i=0;i<data->uniq;i++) {
+            //     config=0;
+            //     for(j=0;j<data->n;j++) {
+            //         if (data->obs[i]->config_base[j] > 0) {
+            //             config += (1 << j);
+            //         }
+            //     }
+            //                 if (data->n <= 20) {
+            //                     running_logl += data->obs[i]->mult*log_l(data, config, data->big_list, data->obs[i]->n_blanks, data->obs[i]->blanks);
+            //                 } else {
+            //                     running_logl += data->obs[i]->mult*log_l_approx(data, config, data->big_list, data->obs[i]->n_blanks, data->obs[i]->blanks);
+            //                 }
+            //
+            // }
+            // printf("Total LogL for data, given parameters: %lf\n", running_logl);
 		}
 
 		if (argv[1][1] == 'c') { // cross validation
