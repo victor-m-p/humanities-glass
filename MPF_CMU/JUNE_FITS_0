@@ -1278,3 +1278,4 @@ params=[-3.5324880988e-07, 1.4995906042e-06, 1.2684235119e-05, -1.9966674634e-06
 Total LogL for data, given parameters: -6980.404168
 Clock time: 11155.269563000000 seconds.
 
+slurmstepd: error: *** JOB 17143423 ON r470 CANCELLED AT 2023-06-30T07:41:23 DUE TO TIME LIMIT ***
