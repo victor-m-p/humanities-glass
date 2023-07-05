@@ -8,6 +8,7 @@
 // mpf -k [filename] [paramfile_truth] [paramfile_inferred] // load data, compare truth to inferred
 // mpf -z [paramfile] [n_nodes]  // print out probabilities of all configurations under paramfile
 // mpf -p [filename] [n_nodes] [paramfile] // print out log l of data given parameters
+// mpf -s [paramfile] [n_nodes] [n_samples] // sample from the distribution many times
 
 int main (int argc, char *argv[]) {
 	double t0, running_logl, beta, *big_list, *truth, *inferred, logl_ans, glob_nloops, best_log_sparsity, kl_cv, kl_cv_sp, kl_true, kl_true_sp, ent, *best_fit;
@@ -423,6 +424,22 @@ int main (int argc, char *argv[]) {
 			
 			compute_probs(n, truth, filename_sav);
 		}
+        // if (argv[1][1] == 's') {
+        //     n=atoi(argv[3]);
+        //     truth=(double *)malloc((n*(n+1)/2)*sizeof(double));
+        //     fp = fopen(argv[2], "r");
+        //     for(j=0;j<n*(n+1)/2;j++) {
+        //         fscanf(fp, "%le ", &(truth[j]));
+        //     }
+        //     fclose(fp);
+        //
+        //     strcpy(filename_sav, argv[2]);
+        //     strcat(filename_sav, "_samples.dat");
+        //
+        //             for(i=0;i<n=atoi(argv[4]);i++) {
+        //
+        //             }
+        // }
 	}
 	printf("Clock time: %14.12lf seconds.\n", (clock() - t0)/CLOCKS_PER_SEC);
 	exit(1);
