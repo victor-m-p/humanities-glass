@@ -663,7 +663,7 @@ double cross(cross_val *cv, double log_sparsity) { // do cross validation WITHOU
 
 			simple_minimizer(data);
 
-            if (data->n <= 20) {
+            if (data->n <= 21) {
     			config=0;
     			for(i=0;i<data->n;i++) {
     				if (sav->config_base[i] > 0) {

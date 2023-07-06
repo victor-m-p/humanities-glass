@@ -13,12 +13,12 @@
 int main (int argc, char *argv[]) {
 	double t0, running_logl, beta, *big_list, *truth, *inferred, logl_ans, glob_nloops, best_log_sparsity, kl_cv, kl_cv_sp, kl_true, kl_true_sp, ent, *best_fit;
 	all *data;
-	int i, n, nn, thread_id, last_pos, in, j, count, pos, n_obs, n_nodes, kfold, num_no_na, tot_uniq, has_nans;
+	int i, ip, n, nn, thread_id, last_pos, in, j, count, pos, n_obs, n_nodes, kfold, num_no_na, tot_uniq, has_nans;
 	sample *sav, **sav_list;
 	cross_val *cv;
 	unsigned long int config;
 	char filename_sav[1000];
-    FILE *fp;
+    FILE *fp, *fn;
 	prob *p;
 	
 	t0=clock();
@@ -164,7 +164,7 @@ int main (int argc, char *argv[]) {
 			cv->filename=argv[2];
 			cv->nn=nn; // atoi(argv[3]);
 			cv->best_fit=best_fit;
-			
+			            
 			if (argc == 4) {
 				cv->p_norm=atof(argv[3]);
 				printf("P norm set; p=%lf\n", cv->p_norm);
@@ -181,6 +181,7 @@ int main (int argc, char *argv[]) {
 			data->best_fit=best_fit; // will either be NULL (for the no NAN case, or the saved values)
 			data->p_norm=cv->p_norm;
 			
+            
 			process_obs_raw(data);
 						
 			init_params(data);
@@ -424,22 +425,38 @@ int main (int argc, char *argv[]) {
 			
 			compute_probs(n, truth, filename_sav);
 		}
-        // if (argv[1][1] == 's') {
-        //     n=atoi(argv[3]);
-        //     truth=(double *)malloc((n*(n+1)/2)*sizeof(double));
-        //     fp = fopen(argv[2], "r");
-        //     for(j=0;j<n*(n+1)/2;j++) {
-        //         fscanf(fp, "%le ", &(truth[j]));
-        //     }
-        //     fclose(fp);
-        //
-        //     strcpy(filename_sav, argv[2]);
-        //     strcat(filename_sav, "_samples.dat");
-        //
-        //             for(i=0;i<n=atoi(argv[4]);i++) {
-        //
-        //             }
-        // }
+        if (argv[1][1] == 's') {
+            n=atoi(argv[3]);
+            truth=(double *)malloc((n*(n+1)/2)*sizeof(double));
+            fp = fopen(argv[2], "r");
+            for(j=0;j<n*(n+1)/2;j++) {
+                fscanf(fp, "%le ", &(truth[j]));
+            }
+            fclose(fp);
+            
+			data=new_data();
+            data->n=n;
+            init_params(data);
+            data->big_list=truth;
+
+            strcpy(filename_sav, argv[2]);
+            strcat(filename_sav, "_samples.dat");
+            fn = fopen(filename_sav, "w+");
+
+            for(i=0;i<atoi(argv[4]);i++) {
+                mcmc_sampler(&config, 6, data);
+        		for(ip=0;ip<n;ip++) {
+        			if (config & (1 << ip)) {
+        				fprintf(fn, "1");
+        			} else {
+        				fprintf(fn, "0");
+        			}
+        		}
+                fprintf(fn, "\n");
+            }
+            fclose(fn);
+            
+        }
 	}
 	printf("Clock time: %14.12lf seconds.\n", (clock() - t0)/CLOCKS_PER_SEC);
 	exit(1);
